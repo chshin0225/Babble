@@ -1,6 +1,8 @@
 ### 팀원 소개
 팀장 [강슬기](https://github.com/cocony12)
 
+팀원 신채원  [@chshin0225](https://github.com/chshin0225)
+
 **All of Your Face**
 
 - 얼이 깃드는 굴, 얼굴 => 한 사람의 마음이 드러나는 곳
