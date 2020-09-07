@@ -2,9 +2,9 @@
 
 ## 팀원 소개
 
-##### Seulki Kang
+##### **Seulki Kang**
 
-- 🍺Github: [@Cocony12](https://github.com/cocony12)
+- 🍺Github: [@cocony12](https://github.com/cocony12)
 
 ##### **SunHwan Park**
 
@@ -22,7 +22,7 @@
 
 - 🥨Github: [@bbangso](https://github.com/bbangso)
 
-##### **Geunwoo Lee**
+##### **Keunwoo Lee**
 
 - 💪Github: [@dlrmsdn135](https://github.com/dlrmsdn135)
 
