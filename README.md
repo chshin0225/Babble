@@ -18,9 +18,9 @@
 
 - 🍒Github: [@scl2589](https://github.com/scl2589)
 
-##### **SoYoon Bang**
+##### **SoYun Bang**
 
-- 🥨Github: [@scl2589](https://github.com/scl2589)
+- 🥨Github: [@bbangso](https://github.com/bbangso)
 
 ##### **Geunwoo Lee**
 
