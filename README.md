@@ -1,6 +1,10 @@
 ### 팀원 소개
 팀장 [강슬기](https://github.com/cocony12)
 
+**SunHwan Park**
+
+- 🧙‍♂️Github: [@SunHwan-Park](https://github.com/SunHwan-Park)
+
 **All of Your Face**
 
 - 얼이 깃드는 굴, 얼굴 => 한 사람의 마음이 드러나는 곳
