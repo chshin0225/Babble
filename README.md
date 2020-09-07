@@ -1,7 +1,13 @@
 ### 팀원 소개
 팀장 [강슬기](https://github.com/cocony12)
 
+
+**SunHwan Park**
+
+- 🧙‍♂️Github: [@SunHwan-Park](https://github.com/SunHwan-Park)
+
 팀원 신채원  [@chshin0225](https://github.com/chshin0225)
+
 
 **All of Your Face**
 
