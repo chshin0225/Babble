@@ -27,6 +27,8 @@
 - 💪Github: [@lkwoo](https://github.com/lkwoo)
 
 
+- ERD: [https://www.erdcloud.com/d/gWqJhsXvpqD9qBvi9](https://www.erdcloud.com/d/gWqJhsXvpqD9qBvi9)
+
 ### 👶🏻 **AI를 활용한 육아일기 서비스**
 ### **내 아이의 기록을 스마트하게 남기기, [ insert service name here ]**
 
