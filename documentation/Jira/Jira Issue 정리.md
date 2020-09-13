@@ -127,9 +127,117 @@
 
 ### [Backend] 개발환경 세팅 - Epic
 
+- Django 프로젝트 생성 - Story
+- Django 프로젝트 ec2 배포 - Story
+- Django DB 연결 - Story
+- Django Nginx 연동 - Story
+- Django https 설정 - Story
 
+### [Backend] User - Epic
 
+- 로그인  - Story
+  - 자체 로그인 - Task
+  - OAuth 로그인(상의 필요) - Task
+- 회원가입  - Story
+  - 자체 회원가입 - Task
+  - OAuth 회원가입(상의 필요) - Task
+- 비밀번호 찾기(상의 필요) - Story
+  - 이메일 검증 - Task
+  - 비밀번호 재설정 - Task
+- 마이페이지 - Story
+  - 계정 정보 조회 - Task
+  - 계정 정보 수정 - Task
+  - 계정 삭제 - Task
 
+### [Backend] Baby - Epic
 
+- Baby CRUD - Story
+  - Baby 생성 - Task
+  - Baby List 조회 - Task
+  - Baby Detail 조회 - Task
+  - Baby 수정 - Task
+  - Baby 삭제 - Task
+- Baby 성장 통계 - Story
+  - 성장 통계 조회
+- Baby 공유 - Story
+  - 공유 URL 생성 - Task
+  - 공유 유저 등록 - Task
+  - 공유 유저 조회 - Task
+  - 공유 유저 권한 수정 - Task
+  - 공유 유저 삭제 - Task
 
+### [Backend] Photo - Epic
 
+- Repo CRUD - Story
+  - Repo 생성 - Task
+  - Repo 조회 - Task
+  - Repo 수정 - Task
+  - Repo 삭제 - Task
+- Photo CRUD - Story
+  - Photo 생성 - Task
+  - Photo List 조회 - Task
+  - Photo Detail 조회 - Task
+  - Photo 수정 - Task
+  - Photo 삭제 - Task
+- Photo 검색 - Story
+  - Tag 검색 조회 - Task
+- Photo 북마크 - Story
+  - Photo 북마크 정보 입력 - Task
+  - 북마크된 Photo 조회 - Task
+- Photo_Comment CRUD - Story
+  - Photo_Comment 생성 - Task
+  - Photo_Comment List 조회 - Task
+  - Photo_Comment 수정 - Task
+  - Photo_Comment 삭제 - Task
+- Photo Content - Story
+  - 요약 비디오 생성 - Task
+  - 아이 얼굴 성장과정 비디오 생성 - Task
+  - 성인이 된 아이 얼굴 이미지 생성 - Task
+
+### [Backend] Album - Epic
+
+- Album CRUD - Story
+  - Album 생성 - Task
+  - Album List 조회 - Task
+  - Album Detail 조회 - Task
+  - Album 수정 - Task
+  - Album 삭제 - Task
+
+### [Backend] Diary - Epic
+
+- Diary CRUD - Story
+  - Diary 생성 - Task
+  - Diary List 조회 - Task
+  - Diary Detail 조회 - Task
+  - Diary 수정 - Task
+  - Diary 삭제 - Task
+- Diary 검색 - Story
+  - Tag 검색 조회 - Task
+  - 제목/내용 검색 조회 - Task
+- Diary 북마크 - Story
+  - Diary 북마크 정보 입력 - Task
+  - 북마크된 Photo 조회 - Task
+- Diary_Comment CRUD - Story
+  - Diary_Comment 생성 - Task
+  - Diary_Comment List 조회 - Task
+  - Diary_Comment 수정 - Task
+  - Diary_Comment 삭제 - Task
+- Diary 모음집 - Story
+  - Diary 모음집 생성 - Task
+
+### [Backend] Tag - Epic
+
+- Tag CRUD - Story
+  - Tag 생성 - Task
+  - Tag List 조회 - Task
+  - Tag 수정 - Task
+  - Tag 삭제 - Task
+
+### [Backend] Notification - Epic(상의 필요)
+
+- Firestore를 활용한 알림 - Story
+  - 새로운 Photo 등록 알림 - Task
+  - 새로운 Baby 공유 유저 등록 알림 - Task
+  - 새로운 Diary 등록 알림 -  Task
+  - Photo 댓글 알림 - Task
+  - Diary 댓글 알림 - Task
