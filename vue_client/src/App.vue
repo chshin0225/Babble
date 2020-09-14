@@ -8,8 +8,8 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </nav>
-      <Sidebar class="d-flex justify-content-between" style="clear:both;">
-        <div class="d-flex flex-column justify-content-between h-100">
+      <Sidebar class=" d-flex justify-content-between" style="clear:both;">
+        <div class="side d-flex flex-column justify-content-between h-100">
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
             <div class="upper bg-pink">
@@ -156,17 +156,21 @@ export default {
 }
 
 /* sidebar */
+.side {
+  overflow:hidden;
+}
+
 .upper {
   padding: 20px;
 }
 
 .menu-container {
-  padding: 40px;
+ padding: 20px 0 40px 40px;
   list-style: none;
 }
 
 .sidebar-bottom {
-  padding: 40px;
+  padding: 0 20px 40px 40px;
 }
 
 .list:hover {
