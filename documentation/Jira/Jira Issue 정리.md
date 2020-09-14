@@ -12,12 +12,12 @@
 
 
 
-### [Frontend] Navbar/Sidebar- Story
+### [Frontend] Navbar/Sidebar- Epic
 
-- Navbar에 각 메뉴 및 아이콘 추가해서 넣기 - Task
+- Navbar에 각 메뉴 및 아이콘 추가해서 넣기 - Story
 
-- Sidebar 완성하기 - Task
-- 아이들 더보기 페이지 생성 - Task
+- Sidebar 완성하기 - Story
+- 아이들 더보기 페이지 생성 - Story
 
 <br>
 
