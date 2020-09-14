@@ -1,60 +1,82 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+  <div>
+    <div id="app">
+      <router-view></router-view>
+      <!-- footer -->
+      <div class="footer row no-gutters">
+        <div class="col-4 color-gray" :class="{'color-pink' : isAlbum()}">
+          <p><i class="fas fa-images"></i></p>
+          <p>Album</p>
+        </div>
+        <div class="col-4 color-gray" :class="{'color-pink' : isDiary()}">
+          <p><i class="fas fa-book"></i></p>
+          <p>Diary</p>
+        </div>
+        <div class="col-4 color-gray" :class="{'color-pink' : isProfile()}">
+          <p><i class="fas fa-user"></i></p>
+          <p>Profile</p>
+        </div>
       </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
-    </v-main>
-  </v-app>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
 
-  components: {
-    HelloWorld,
+  data(){
+    return {
+      // isAlbum: true,
+      // isDiary: false,
+      // isProfile: false,
+    }
   },
+  methods: {
+    isAlbum() {
+      console.log(this.$route.name)
+      if (this.$route.name === 'Album') {
+        return true
+      } else {
+        return false
+      }
+    },
+    isDiary() {
+      if (this.$route.name === 'Diary') {
+        return true
+      } else {
+        return false
+      }
+    },
+    isProfile() {
+      if (this.$route.name === 'Profile') {
+        return true
+      } else {
+        return false
+      }
+    }
+  }
 
-  data: () => ({
-    //
-  }),
+
 };
 </script>
+
+<style scoped>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: ;
+  color: black;
+  text-align: center;
+  -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
+}
+
+p {
+  margin: 0;
+}
+</style>
