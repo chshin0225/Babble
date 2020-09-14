@@ -1,8 +1,14 @@
 <template>
   <div>
     <div id="app">
-      <Burger></Burger>
-      <Sidebar>
+      <nav class="nav">
+        <Burger class="left-align d-flex align-items-center"></Burger>
+        <div class="logo-sect center-align d-flex align-items-center">
+          <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
+          <span class="logo-title">Babble</span>
+        </div>
+      </nav>
+      <Sidebar style="clear:both;">
         <div class="sidebar-panel-nav">
           <!-- 현재 babble box info -->
           <div class="upper bg-pink">
@@ -96,6 +102,38 @@ export default {
 </script>
 
 <style scoped>
+/* top-navbar */
+.nav {
+  -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+}
+
+.logo-sect img {
+  max-width: 10vw;
+  height: auto;
+}
+/* @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap'); */
+ /* @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap'); */
+ /* @import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap'); */
+ @import url('https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap');
+.logo-sect .logo-title {
+  font-size: 6vw;
+  font-family: 'Rammetto One', cursive;
+}
+
+.left-align {
+  float: left;
+  width: 33.3333%;
+  text-align: left;
+}
+
+.center-align {
+  float: left;
+  width: 33.3333%;
+  text-align: center;
+}
+
 /* sidebar */
 .upper {
   padding: 20px;
