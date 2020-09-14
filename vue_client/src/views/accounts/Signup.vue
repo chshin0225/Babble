@@ -180,7 +180,7 @@ h3 {
 }
 .inputs {
   border-style: none;
-  border-bottom: 1px solid #FEA59C;
+  border-bottom: 1px solid #aea4a3;
   background-color: transparent;
   width: 100%;
   padding: 10px;
