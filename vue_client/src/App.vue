@@ -5,7 +5,7 @@
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div class="logo-sect center-align d-flex align-items-center">
           <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
-          <span class="logo-title">Babble</span>
+          <span class="logo-title color-pink">Babble</span>
         </div>
       </nav>
       <Sidebar style="clear:both;">
