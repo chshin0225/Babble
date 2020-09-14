@@ -17,13 +17,14 @@ import Babblebox from '@/views/common/Babblebox'
 Vue.use(VueRouter)
 
   const routes = [
+    // photos
   {
     path: '/photo',
     name: 'PhotoMain',
     component: PhotoMain,
     children: [
       {
-        path: 'list',
+        path: '',
         component: PhotoList,
         name: 'PhotoList'
       },
@@ -44,7 +45,7 @@ Vue.use(VueRouter)
     name: 'Signup',
     component: Signup
   },
-  // Child List
+  // Babble Box
   {
     path: '/babblebox',
     name: 'Babblebox',
