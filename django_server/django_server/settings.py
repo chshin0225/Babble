@@ -55,8 +55,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # my app
+    # Django REST framework
+    'rest_framework',
+
+    # our apps
     'accounts',
+    'photos',
+    'diaries',
+    
 ]
 
 MIDDLEWARE = [
@@ -96,8 +102,13 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'babble',
+        'USER': 'root',
+        # local mysql database 비밀번호를 여기에 쓸 것
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
