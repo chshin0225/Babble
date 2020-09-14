@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Signup from '@/views/accounts/Signup.vue'
 import Diary from '@/views/diaries/Diary.vue'
 
 Vue.use(VueRouter)
@@ -10,7 +11,11 @@ Vue.use(VueRouter)
     name: 'Diary',
     component: Diary
   },
-
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup
+  },
 ]
 
 const router = new VueRouter({
