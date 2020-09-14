@@ -103,7 +103,7 @@ export default {
     },
     // navbar
     isAlbum() {
-      if (this.$route.name === 'PhotoMain') {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch'   ) {
         return true
       } else {
         return false
