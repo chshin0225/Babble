@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="text-right mt-3">
-              <p class="color-pink pointer">아이들 더보기</p>
+              <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
             </div>
           </div>
         </div>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+// import { mutations } from '@/store/index.js'
 import Sidebar from './views/common/Sidebar.vue';
 import Burger from './views/common/Burger.vue';
 export default {
@@ -118,6 +119,12 @@ export default {
         return false
       }
     },
+    clickBabblebox() {
+      // mutations.toggleNav
+      let backdrop = document.querySelector(".sidebar-backdrop")
+      backdrop.click()
+      this.$router.push({name: 'Babblebox'})
+    }
   }
 };
 </script>
@@ -212,7 +219,7 @@ a:hover {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: ;
+  background-color: white;
   color: black;
   text-align: center;
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
