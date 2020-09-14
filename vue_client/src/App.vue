@@ -8,29 +8,52 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </nav>
-      <Sidebar style="clear:both;">
-        <div class="sidebar-panel-nav">
-          <!-- 현재 babble box info -->
-          <div class="upper bg-pink">
-            <div class="profile float-left mr-3">
-              <img src="http://bit.do/babbleprofile">
+      <Sidebar class="d-flex justify-content-between" style="clear:both;">
+        <div class="d-flex flex-column justify-content-between h-100">
+          <div class="sidebar-panel-nav">
+            <!-- 현재 babble box info -->
+            <div class="upper bg-pink">
+              <div class="profile float-left mr-3">
+                <img src="http://bit.do/babbleprofile">
+              </div>
+              <div class="babble-box">
+                <p>아롱이 (아기 이름)</p>
+                <p>D + 73</p>
+              </div>
             </div>
-            <div class="babble-box">
-              <p>아롱이 (아기 이름)</p>
-              <p>D + 73</p>
-            </div>
-          </div>
 
-          <div class="menu-container">
-            <li class="list invite"><a href="#home"><i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</a></li>
-            <hr>
-            <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-cog mr-3"></i> 설정</a></li>
+            <div class="menu-container">
+              <li class="list invite"><a href="#home"><i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</a></li>
+              <hr>
+              <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-cog mr-3"></i> 설정</a></li>
+            </div>
+            
           </div>
-          
+          <div class="sidebar-bottom">
+            <hr>
+            <div class="d-flex justify-content-between">
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">사랑이</p>
+              </div>
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">럭키</p>
+              </div>
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">다롱이</p>
+              </div>
+            </div>
+            <div class="text-right mt-3">
+              <p class="color-pink pointer">아이들 더보기</p>
+            </div>
+          </div>
         </div>
+        
       </Sidebar>
       
       <router-view></router-view>
@@ -94,10 +117,8 @@ export default {
       } else {
         return false
       }
-    }
+    },
   }
-
-
 };
 </script>
 
@@ -144,6 +165,18 @@ export default {
   list-style: none;
 }
 
+.sidebar-bottom {
+  padding: 40px;
+}
+
+.list:hover {
+  left: 20px;
+  transform-origin: left;
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
 .menu {
   margin-bottom: 20px;
 }
@@ -156,13 +189,16 @@ export default {
   color: #FEA59C !important;
 }
 
-.profile img{
+.profile img, .other-profile img{
   max-width: 50px;
   height: auto;
   border-radius: 50%;
 }
 
-/*  fotter */
+
+
+
+/*  footer */
 .footer {
   position: fixed;
   left: 0;
