@@ -3,7 +3,7 @@
     <div id="app">
       <nav class="nav">
         <Burger class="left-align d-flex align-items-center"></Burger>
-        <div class="logo-sect center-align d-flex align-items-center">
+        <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
           <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
           <span class="logo-title color-pink">Babble</span>
         </div>
@@ -92,14 +92,17 @@ export default {
     }
   },
   methods: {
+    // Logo
+    clickLogo() {
+      this.$router.push({name: 'PhotoMain'})
+    },
     // sidebar
     toggle() {
       this.isBurgerActive = !this.isBurgerActive
     },
     // navbar
     isAlbum() {
-      console.log(this.$route.name)
-      if (this.$route.name === 'Album') {
+      if (this.$route.name === 'PhotoMain') {
         return true
       } else {
         return false
