@@ -55,14 +55,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Django REST framework
-    'rest_framework',
-
     # our apps
     'accounts',
     'photos',
     'diaries',
-    
 ]
 
 MIDDLEWARE = [
