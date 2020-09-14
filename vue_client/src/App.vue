@@ -57,6 +57,7 @@
       </Sidebar>
       
       <router-view></router-view>
+      <div style="height:100px"></div>
       <!-- footer -->
       <div class="footer row no-gutters">
         <div class="col-4 color-gray" :class="{'color-pink' : isAlbum()}">
