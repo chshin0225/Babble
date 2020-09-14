@@ -177,6 +177,10 @@ export default {
   transform: scale(1.2);
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 .menu {
   margin-bottom: 20px;
 }
