@@ -1,7 +1,7 @@
 <template>
-  <div class="background">
+  <div class="background1">
     <div class="container p-3 mt-5 bg-light-ivory signup-form">
-      <h3>회원가입</h3>
+      <h3 class="color-pink">회원가입</h3>
 
       <div class="input-with-label">
         <input 
@@ -171,31 +171,31 @@ export default {
 
 <style scoped>
 .container {
-  width: 30%;
+  width: 80%;
   border-radius: 25px;
 }
 h3 {
-  color: #88a498;
+  color: #FEA59C;
   font-weight: 800;
 }
 .inputs {
   border-style: none;
-  border-bottom: 1px solid #88A498;
+  border-bottom: 1px solid #aea4a3;
   background-color: transparent;
-  width: 80%;
+  width: 100%;
   padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
   margin-top: 20px;
 }
 .signup-button{
-  background-color: #88A498;
+  background-color: #FEA59C;
   color: #F8F8F8;
-  width: 70%;
+  width: 100%;
 }
 .divide {
   width: 10%;
-  border-top: 1px solid #88A498;
+  border-top: 1px solid #FEA59C;
   margin-left: auto;
   margin-right: auto;
 }
@@ -226,11 +226,13 @@ input[type="password"] {
   padding-left: 30px;
 }
 .signup-button:hover {
-  background-color: #3c755a;
+  /*background-color: #3c755a;*/
+  background-color: #A05E58;
   color: #F8F8F8;
 }
 .disabled, .disabled:hover {
-  background-color: rgb(136, 154, 152, 0.25);
+  /*background-color: rgb(136, 154, 152, 0.25);*/
+  background-color: rgb(176, 127, 122, 0.25);
   color: #F8F8F8;
   cursor: inherit;
 }
@@ -244,7 +246,7 @@ input[type="password"] {
   background-repeat: repeat;
 }
 .signup-form {
-  margin-top: 20vh !important;
+  margin-top: 15vh !important;
   opacity: 0.9;
 }
 .items:hover {

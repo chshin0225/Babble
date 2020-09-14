@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Signup from '@/views/accounts/Signup'
 
 // Photos
 import PhotoMain from '@/views/photos/PhotoMain'
@@ -13,6 +12,10 @@ import PhotoSearch from '@/views/photos/PhotoSearch'
 
 // Babble Box
 import Babblebox from '@/views/common/Babblebox'
+
+// Authentication
+import Login from '@/views/accounts/Login.vue'
+import Signup from '@/views/accounts/Signup.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +42,11 @@ Vue.use(VueRouter)
         name: 'PhotoSearch'
       },
     ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/signup',
