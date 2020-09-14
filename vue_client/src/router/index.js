@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Signup from '@/views/accounts/Signup.vue'
-import Diary from '@/views/diaries/Diary.vue'
+import Signup from '@/views/accounts/Signup'
+import Diary from '@/views/diaries/Diary'
+// Babble Box
+import Babblebox from '@/views/common/Babblebox'
 
 Vue.use(VueRouter)
 
@@ -16,6 +18,12 @@ Vue.use(VueRouter)
     name: 'Signup',
     component: Signup
   },
+  // Child List
+  {
+    path: '/babblebox',
+    name: 'Babblebox',
+    component: Babblebox
+  }
 ]
 
 const router = new VueRouter({
