@@ -1,5 +1,5 @@
 <template>
-  <div class="background">
+  <div class="background1">
     <div class="container p-3 mt-5 bg-light-ivory signup-form">
       <h3>회원가입</h3>
 
@@ -171,7 +171,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 30%;
+  width: 80%;
   border-radius: 25px;
 }
 h3 {
@@ -182,7 +182,7 @@ h3 {
   border-style: none;
   border-bottom: 1px solid #88A498;
   background-color: transparent;
-  width: 80%;
+  width: 100%;
   padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
@@ -191,7 +191,7 @@ h3 {
 .signup-button{
   background-color: #88A498;
   color: #F8F8F8;
-  width: 70%;
+  width: 100%;
 }
 .divide {
   width: 10%;
@@ -244,7 +244,7 @@ input[type="password"] {
   background-repeat: repeat;
 }
 .signup-form {
-  margin-top: 20vh !important;
+  margin-top: 15vh !important;
   opacity: 0.9;
 }
 .items:hover {
