@@ -1,35 +1,38 @@
 
 <template>
-<v-app class="h-100">
+<div>
   <div>
     <p class="main-title text-center color-pink">아롱이의 9월</p>
     <!-- Date Picker -->
-    <v-row class="d-flex justify-content-center">
-      <v-col cols="3" sm="3" class="erase-padding">
-        <v-dialog
-          ref="dialog"
-          v-model="modal"
-          :return-value.sync="date"
-          persistent
-          width="290px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="date"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-              class="text-center"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="date" type="month" scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-    </v-row>
+    <v-app>
+      <v-row class="d-flex justify-content-center">
+        <v-col cols="3" sm="3" class="erase-padding">
+          <v-dialog
+            ref="dialog"
+            v-model="modal"
+            :return-value.sync="date"
+            persistent
+            width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="date"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+                class="centered-date"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="date" type="month" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+            </v-date-picker>
+          </v-dialog>
+        </v-col>
+      </v-row>
+    </v-app>
+
     <!-- Swiper -->
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide v-for="n in 10" :key=n> 
@@ -47,7 +50,7 @@
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
   </div>
-</v-app>
+</div>
 
 
 </template>
@@ -82,28 +85,15 @@ import 'swiper/swiper-bundle.css'
       }
     },
     methods: {
-      lastday(){ //년과 월에 따라 마지막 일 구하기 
-      var Year=document.getElementById('select_year').value; 
-      var Month=document.getElementById('select_month').value; 
-      var day=new Date(new Date(Year,Month,1)-86400000).getDate(); 
-      var dayindex_len=document.getElementById('select_day').length; 
-      if(day>dayindex_len){ 
-        for(var i=(dayindex_len+1); i<=day; i++){ 
-          document.getElementById('select_day').options[i-1] = new Option(i, i); 
-        } 
-      } else if(day<dayindex_len){ 
-          for(var j=dayindex_len; j>=day; j--){ 
-            document.getElementById('select_day').options[j]=null; 
-          } 
-        } 
-  }
     }
   }
 </script>
 
 <style scoped>
-.v-application--wrap {
+#app {
   min-height: 0px !important;
+  height: 6vh !important;
+  overflow: hidden;
 }
 
 .main-title {
@@ -147,6 +137,10 @@ import 'swiper/swiper-bundle.css'
   padding: 0 !important;
 }
 
+.centered-date >>> input {
+  text-align: center !important;
+}
+
 #input-14 {
   padding: 0 !important;
   text-align: center !important;
@@ -156,4 +150,5 @@ import 'swiper/swiper-bundle.css'
   color: white;
   text-shadow: 2px 2px black;
 }
+
 </style>
