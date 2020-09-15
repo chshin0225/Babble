@@ -104,7 +104,7 @@ DATABASES = {
         'NAME': 'babble',
         'USER': 'root',
         # local mysql database 비밀번호를 여기에 쓸 것
-        'PASSWORD': '',
+        'PASSWORD': '6Dragons!',
         'HOST': '',
         'PORT': '3306',
     }
