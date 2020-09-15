@@ -12,6 +12,7 @@ import Diary from '@/views/diaries/Diary'
 import DiaryPhoto from '@/views/diaries/DiaryPhoto'
 import DiaryCalendar from '@/views/diaries/DiaryCalendar'
 import DiaryTimeline from '@/views/diaries/DiaryTimeline'
+import DiaryCreate from '@/views/diaries/DiaryCreate'
 
 
 // Babble Box
@@ -86,6 +87,11 @@ Vue.use(VueRouter)
         name: 'DiaryTimeline'
       },
     ]
+  },
+  {
+    path: '/diary/create', 
+    name: 'DiaryCreate',
+    component: DiaryCreate
   }
 ]
 
