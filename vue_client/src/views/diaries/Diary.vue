@@ -1,17 +1,23 @@
 <template>
   <div class="box">
-    <div class="nav">
-      <div class="nav-container d-flex bg-pink">
-        <router-link :to="{ name: 'DiaryPhoto'}" class="view right-outline pointer">
-          <i class="fas fa-file-image fa-2x"></i>
-        </router-link>
-        <router-link :to="{ name: 'DiaryTimeline'}" class="view right-outline pointer">
-          <i class="fas fa-stream fa-2x"></i>
-        </router-link>
-        <router-link :to="{ name: 'DiaryCalendar'}" class="view pointer">
-          <i class="fas fa-calendar-alt fa-2x"></i>
-        </router-link>
-      </div>
+    <div class="nav d-flex justify-content-between">
+        <!-- 좌측 형태 정렬 -->
+        <div class="nav-container bg-pink">
+          <router-link :to="{ name: 'DiaryPhoto'}" class="view right-outline pointer">
+            <i class="fas fa-file-image fa"></i>
+          </router-link>
+          <router-link :to="{ name: 'DiaryTimeline'}" class="view right-outline pointer">
+            <i class="fas fa-stream fa"></i>
+          </router-link>
+          <router-link :to="{ name: 'DiaryCalendar'}" class="view pointer">
+            <i class="fas fa-calendar-alt fa"></i>
+          </router-link>
+        </div>
+
+        <!-- 우측 검색 -->
+        <div>
+          <i class="fas fa-search pointer"></i>
+        </div>
     </div>
     
     <!-- router-view -->
@@ -50,7 +56,7 @@ export default {
 
 
 .nav-container .router-link-exact-active {
-  color: #9BC7FF
+  color: #ff6454;
 }
 
 
