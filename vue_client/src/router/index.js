@@ -8,7 +8,11 @@ import PhotoLibrary from '@/views/photos/PhotoLibrary'
 import PhotoSearch from '@/views/photos/PhotoSearch'
 
 // Diary
-// import Diary from '@/views/diaries/Diary'
+import Diary from '@/views/diaries/Diary'
+import DiaryPhoto from '@/views/diaries/DiaryPhoto'
+import DiaryCalendar from '@/views/diaries/DiaryCalendar'
+import DiaryTimeline from '@/views/diaries/DiaryTimeline'
+
 
 // Babble Box
 import Babblebox from '@/views/common/Babblebox'
@@ -43,6 +47,7 @@ Vue.use(VueRouter)
       },
     ]
   },
+  // Authentication
   {
     path: '/login',
     name: 'Login',
@@ -58,6 +63,29 @@ Vue.use(VueRouter)
     path: '/babblebox',
     name: 'Babblebox',
     component: Babblebox
+  },
+  // Diary
+  {
+    path: '/diary',
+    name: 'Diary',
+    component: Diary,
+    children: [
+      {
+        path: '',
+        component: DiaryPhoto,
+        name: 'DiaryPhoto'
+      },
+      {
+        path: 'calendar',
+        component: DiaryCalendar,
+        name: 'DiaryCalendar'
+      },
+      {
+        path: 'timeline',
+        component: DiaryTimeline,
+        name: 'DiaryTimeline'
+      },
+    ]
   }
 ]
 
