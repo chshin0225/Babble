@@ -1,5 +1,5 @@
 <template>
-  <div class="grid">
+  <div class="grid" data-app>
     <div>
       <h5 class="date">2020-09-15 화</h5>
       <div class="photos d-flex">
@@ -67,13 +67,39 @@
     </div>
 
     <!-- 날짜 선택 -->
-    <h4>날자 선택</h4>
+    <!-- <h4>날짜 선택</h4>
+    <div class="date-picking">
+      <span @click.stop="dialog = true">YYYY</span>
+      <v-dialog
+        v-model="dialog"
+        max-width="290"
+      >
+        <v-row align="center">
+          <v-date-picker 
+            v-model="picker" 
+            color="green lighten-1"
+            type="month"
+            year-icon="mdi-calendar-blank"
+            prev-icon="mdi-skip-previous"
+            next-icon="mdi-skip-next"
+          ></v-date-picker>
+        </v-row>
+      </v-dialog>
+    </div> -->
   </div>
 </template>
 
 <script>
 export default {
   name: 'PhotoList',
+  data() {
+    return {
+      // picker: new Date().toISOString().substr(0, 7),
+      // dialog: false,
+    }
+  },
+  methods: {
+  } 
 }
 </script>
 
