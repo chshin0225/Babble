@@ -116,7 +116,7 @@ img {
 
 .photo-container{
   object-fit: cover;
-  object-position: 100% 0;
+  object-position: 50% 50%;
   width: 30vw; 
   height: 30vw;
   overflow:hidden;
