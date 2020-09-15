@@ -60,15 +60,24 @@
       <div style="height:100px"></div>
       <!-- footer -->
       <div class="footer row no-gutters">
-        <div class="col-4 color-gray" :class="{'color-pink' : isAlbum()}">
+        <div 
+        class="col-4 color-gray" 
+        :class="{'color-pink' : isAlbum()}"
+        @click="clickPhoto">
           <p><i class="fas fa-images"></i></p>
-          <p>Album</p>
+          <p>Photo</p>
         </div>
-        <div class="col-4 color-gray" :class="{'color-pink' : isDiary()}">
+        <div 
+          class="col-4 color-gray" 
+          :class="{'color-pink' : isDiary()}"
+          @click="clickDiary">
           <p><i class="fas fa-book"></i></p>
           <p>Diary</p>
         </div>
-        <div class="col-4 color-gray" :class="{'color-pink' : isProfile()}">
+        <div 
+          class="col-4 color-gray"
+          :class="{'color-pink' : isProfile()}"
+          @click="clickProfile">
           <p><i class="fas fa-user"></i></p>
           <p>Profile</p>
         </div>
@@ -123,11 +132,21 @@ export default {
         return false
       }
     },
+    // 페이지 이동
     clickBabblebox() {
       // mutations.toggleNav
       let backdrop = document.querySelector(".sidebar-backdrop")
       backdrop.click()
       this.$router.push({name: 'Babblebox'})
+    },
+    clickPhoto() {
+      this.$router.push({ name: 'PhotoList'})
+    },
+    clickDiary() {
+      this.$router.push({ name: 'Diary'})
+    },
+    clickProfile() {
+      this.$router.push({ name: 'Profile'})
     }
   }
 };
