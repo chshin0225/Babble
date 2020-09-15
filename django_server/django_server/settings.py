@@ -55,14 +55,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Django REST framework
-    'rest_framework',
-
     # our apps
     'accounts',
     'photos',
     'diaries',
-    
+    'babies',
 ]
 
 MIDDLEWARE = [
@@ -107,7 +104,7 @@ DATABASES = {
         'USER': 'root',
         # local mysql database 비밀번호를 여기에 쓸 것
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': '',
         'PORT': '3306',
     }
 }
