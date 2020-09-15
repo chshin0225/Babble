@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'accounts',
     'photos',
     'diaries',
+    'babies',
 ]
 
 MIDDLEWARE = [
