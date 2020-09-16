@@ -1,8 +1,11 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory signup-form">
-      <h3 class="color-pink">아기등록</h3>
-      <div class="mt-5" style="font-size:14px; font-weight:bold; text-align:center">
+    <div class="container p-3 mt-5 enroll-form">
+      <h3 class="color-pink">아기 등록</h3>
+      <div class="image-sect" style="text-align:center;">
+        <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png">
+      </div>
+      <div class="mt-4" style="font-size:14px; font-weight:bold; text-align:center">
         아기의 정보를 등록해볼까요?</div>
         <div class="mt-3" style="font-size:12px; text-align:center">
           아기를 새로 등록하시거나<br>
@@ -11,105 +14,32 @@
           만들어갈 수 있습니다.
         </div>
       <div class="buttons mt-5">
-        <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickSignup">아기를 새로 등록합니다.</button>
+        <button class="btn btn-pink" @click="clickNewBaby">아기를 새로 등록합니다.</button>
       </div>
       <div class="buttons mt-3">
-        <button class="btn link-button" :class="{disabled: !isSubmit}" @click="clickSignup">링크로 초대받았습니다.</button>
+        <button class="btn btn-blue" @click="clickInviteLink">링크로 초대받았습니다.</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 export default {
-  name: 'Signup',
+  name: 'HowToRegisterBaby',
   data() {
     return {
-      signupData: {
-        email: "",
-        password: "",
-        passwordConfirm: "",
-        nickName: "",
-      },
-      error: {
-        email: false,
-        nickName: false,
-        password: false,
-        passwordConfirm: false,
-      },
-      isSubmit: false,
     };
   },
   created() {
     this.component = this;
   },
-  watch: {
-    signupData: {
-      deep: true,
-      handler() {
-        this.checknickNameForm();
-        this.checkEmailForm();
-        this.checkPasswordForm();
-        this.checkPasswordConfirmationForm();
-      }
-    }
-  },
   methods: {
-    checknickNameForm() {
-      if ( this.signupData.nickName.length > 0) {
-        this.error.nickName = false;
-      }
-      else this.error.nickName="닉네임을 입력해주세요."
+    clickNewBaby() {
+      this.$router.push({ name: "RegisterBaby" });
     },
-    checkEmailForm() {
-      if ( this.signupData.email.length > 0 && !this.validEmail(this.signupData.email) ) {
-        this.error.email = "올바른 이메일 형식이 아니에요"   
-      }
-      else this.error.email = false;
+    clickInviteLink() {
+      this.$router.push({ name: "RegisterInviteLink" });
     },
-    validEmail(email) {
-      // eslint-disable-next-line
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    },
-    checkPasswordForm() {
-      if (this.signupData.password.length > 0 && this.signupData.password.length < 8) {
-          this.error.password = "비밀번호가 너무 짧아요"
-        } else if ( this.signupData.password.length >= 8 && !this.validPassword(this.signupData.password) ) {
-          this.error.password = "영문, 숫자 포함 8 자리 이상이어야 해요.";
-        } else this.error.password = false;
-    },
-    validPassword(password) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
-      return va.test(password);
-    },
-    checkPasswordConfirmationForm() {
-      if (this.signupData.password.length >= 8 && this.validPassword(this.signupData.password)) {
-         if (this.signupData.password !== this.signupData.passwordConfirm )
-        this.error.passwordConfirm = "비밀번호가 일치하지 않아요."
-      else this.error.passwordConfirm = false;
-      }
-      
-      // 버튼 활성화
-      if (this.signupData.nickName.length > 0 && this.signupData.email.length > 0 && this.signupData.password.length > 0 && this.signupData.passwordConfirm.length > 0){
-        let isSubmit = true;
-        Object.values(this.error).map(v => {
-          if (v) isSubmit = false;
-        });
-        this.isSubmit = isSubmit;
-      }
-     
-    },
-    clickSignup() {
-      if ( this.isSubmit ){
-        this.signup(this.signupData)
-      }
-    },
-    toLogin() {
-      this.$router.push({name: "Login"});
-    },
-    ...mapActions('accountStore', ['signup'])
   }
 }
 </script>
@@ -123,67 +53,8 @@ h3 {
   color: #FEA59C;
   font-weight: 800;
 }
-.inputs {
-  border-style: none;
-  border-bottom: 1px solid #aea4a3;
-  background-color: transparent;
-  width: 100%;
-  padding: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-top: 20px;
-}
-.new-button{
-  background-color: #FEA59C;
-  color: #F8F8F8;
-  width: 100%;
-}
-.link-button{
-  background-color: #9BC7FF;
-  color: #F8F8F8;
-  width: 100%;
-}
-.divide {
-  width: 10%;
-  border-top: 1px solid #FEA59C;
-  margin-left: auto;
-  margin-right: auto;
-}
-.kakao {
-  background-color: #ffe812;
-  border-radius: 5px;
-  width: 70%;
-}
-.google {
-  background-color:  #FFFFFF;
-  border-radius: 5px;
-  width: 70%;
-}
-.inputs:focus {
-  border-style: none;
-  border-bottom: 2px solid #D6CBBD;
-  outline-style: none;
-}
-input[type="password"] {
-  font-family:sans-serif;
-}
-.error, .error:focus {
-  border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
-}
-.error-text {
-  color: rgb(250, 25, 59, 0.7);
-  text-align: left;
-  padding-left: 30px;
-}
-.new-button:hover {
-  /*background-color: #3c755a;*/
-  background-color: #A05E58;
-  color: #F8F8F8;
-}
-.link-button:hover {
-  /*background-color: #3c755a;*/
-  background-color: #5C83B4;
-  color: #F8F8F8;
+.btn {
+  width:100%;
 }
 .background {
   background-image: url("https://user-images.githubusercontent.com/25967949/90751489-27ce4480-e311-11ea-93aa-2ab9d1f41b4e.png");
@@ -194,12 +65,12 @@ input[type="password"] {
   right: 0;
   background-repeat: repeat;
 }
-.signup-form {
-  margin-top: 15vh !important;
+.enroll-form {
+  margin-top: 10vh !important;
   opacity: 0.9;
 }
-.items:hover {
-  cursor: pointer;
-  color: #d6cbbd;
+.image-sect img {
+  max-width: 40vw;
+  height: auto;
 }
 </style>
