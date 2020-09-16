@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "swiper": "^6.2.0",
     "vue": "^2.6.11",
+    "vue-awesome-swiper": "^4.1.1",
     "vue-cookies": "^1.7.4",
     "vue-router": "^3.4.3",
     "vuetify": "^2.3.10",
