@@ -9,7 +9,7 @@ class DiaryListSerializer(serializers.ModelSerializer):
     # modifier = UserSerializer(required=False)
     class Meta:
         model = Diary
-        fields = ['baby', 'title', 'content', 'creator', 'create_date', 'modifier', 'modify_date']
+        fields = ['id', 'baby', 'title', 'content', 'creator', 'create_date', 'modifier', 'modify_date']
 
 class DiarySerializer(serializers.ModelSerializer):
     # baby = BabySerializer(required=False)

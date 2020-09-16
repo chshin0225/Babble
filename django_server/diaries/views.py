@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import get_user_model
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -10,17 +11,23 @@ from babies.models import Baby
 # Create your views here.
 class DiaryListView(APIView):
     def get(self, request):
-        baby_id = request.user.current_baby
+        # baby_id = request.user.current_baby
+        baby_id = 1
         diaries = Diary.objects.filter(baby=baby_id)
         serializer = DiaryListSerializer(diaries, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        baby_id = request.user.current_baby
+        # baby_id = request.user.current_baby
+        baby_id = 1
         baby = get_object_or_404(Baby, id=baby_id)
         serializer = DiarySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(creator=request.user, baby=baby)
+            # 유저 정보 필요!!
+            User = get_user_model()
+            admin = User.objects.get(id=1)
+            serializer.save(creator=admin, baby=baby)
+            # serializer.save(creator=request.user, baby=baby)
             return Response(serializer.data)
         return Response(serializer.errors)
 
