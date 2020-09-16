@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 
 from accounts.models import Group
+# from accounts.models import Group, UserBabyRelationship
 from babies.models import Baby
 
 # Create your models here.
@@ -18,7 +19,7 @@ class Photo(models.Model):
     owner_id = 1
     creator_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner_id, related_name='created_photos')
     # 사진의 metadata?
-    create_date = models.DateField(default='9999-12-31')
+    create_date = models.DateField(auto_now_add=True)
     modifier_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner_id, related_name='modified_photos')
     modify_date = models.DateField(auto_now=True)
 

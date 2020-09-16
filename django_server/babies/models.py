@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 
 # from accounts.models import UserBabyRelationship
-# from babies.models import Baby
 
 # Create your models here.
 class Baby(models.Model):

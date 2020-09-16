@@ -2,12 +2,12 @@ from django.db import models
 from django.conf import settings
 
 from accounts.models import Group
+# from accounts.models import Group, UserBabyRelationship
 from babies.models import Baby
 from photos.models import Photo
 
 # Create your models here.
 class Diary(models.Model):
-    # Baby 모델 가져오기
     baby_id = models.ForeignKey(Baby, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()

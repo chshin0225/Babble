@@ -6,11 +6,7 @@ from babies.models import Baby
 
 class User(AbstractUser):
     profile_image = models.CharField(max_length=200) 
-
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
-    # ranks = models.ManyToManyField(Rank, through='UserBabyRelationship', related_name='rank_members')
-    # groups = models.ManyToManyField(Group, through='UserBabyRelationship', related_name='group_participants')
-    # babies = models.ManyToManyField(Baby, through='UserBabyRelationship', related_name='invited_users')
 
 
 class BabyAccess(models.Model):
@@ -36,7 +32,3 @@ class UserBabyRelationship(models.Model):
     # default값은 무소속?
     group_id = models.ForeignKey(Group, on_delete=models.SET_DEFAULT, default=1)
     relationship_name = models.CharField(max_length=50)
-    # creator_id =
-    # create_date =
-    # modifier_id = 
-    # modify_date = 
