@@ -1,91 +1,114 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory signup-form">
+    <div class="container p-3 mt-5 bg-light-ivory enroll-form">
       <h3 class="color-pink">아기 등록</h3>
 
+      <div class="mt-4 guide-text">
+        아기의 이름을 입력해 주세요.
+      </div>
       <div class="input-with-label">
         <input 
-          v-model="signupData.nickName"
-          v-bind:class="{error: error.nickName, complete:!error.nickName&&signupData.nickName.length!==0}"
+          v-model="enrollData.babyName"
+          v-bind:class="{error: error.babyName, complete:!error.babyName&&enrollData.babyName.length!==0}"
           class="inputs"
-          id="nickName"
+          style="margin-top:0px"
+          id="babyName"
           placeholder="이름, 별명, 태명 등" 
           type="text" 
           autocapitalize="none"
           autocorrect="none"
-          style="text-transform:lowercase"
         />
-        <label for="nickName"></label>
-        <div class="error-text ml-3" v-if="error.nickName">{{error.nickName}}</div>
-      </div>
-      <div class="buttons mt-3">
-        <button class="btn girl-button" style="float:left;" :class="{disabled: !isSubmit}" @click="clickSignup">여자 아기</button>
-        <button class="btn boy-button" style="float:right;" :class="{disabled: !isSubmit}" @click="clickSignup">남자 아기</button>
+        <label for="babyName"></label>
+        <div class="error-text ml-2" v-if="error.babyName">{{error.babyName}}</div>
       </div>
 
+      <div class="mt-4 guide-text">
+        아기의 성별을 선택해 주세요.
+      </div>{{this.gender}}
+      <div class="buttons" style="margin-top:10px">
+        <button class="btn girl-button" style="float:left; margin-bottom:30px;" :class="{selected: gender=='girl'}" @click="clickEnroll">여자 아기</button>
+        <button class="btn boy-button" style="float:right; margin-bottom:30px;" :class="{selected: gender=='boy'}" @click="clickEnroll">남자 아기</button>
+      </div>
+
+      <div class="mt-4 guide-text">
+        아기의 출생일자를 선택해 주세요.
+      </div>
       <div class="input-with-label">
         <input 
-          v-model="signupData.email" 
-          v-bind:class="{error : error.email, complete:!error.email&&signupData.email.length!==0}"
+          v-model="enrollData.birth" 
+          v-bind:class="{error : error.birth, complete:!error.birth&&enrollData.birth.length!==0}"
           class="inputs"
-          id="email" 
+          id="birth" 
           placeholder="년 월 일" 
-          type="text" 
+          type="date" 
           autocapitalize="none"
           autocorrect="none"
-          style="text-transform:lowercase"
           required
           />
-        <label for="email"></label>
-        <div class="error-text ml-3" v-if="error.email">{{error.email}}</div>
+        <label for="birth"></label>
+        <div class="error-text ml-2" v-if="error.birth">{{error.birth}}</div>
       </div>
 
+      <div class="mt-4 guide-text">
+        아기와의 관계를 입력해 주세요.
+      </div>
       <div class="input-with-label">
         <input 
-          v-model="signupData.password" 
+          v-model="enrollData.relationShip" 
           
-          v-bind:class="{error : error.password, complete:!error.password&&signupData.password.length!==0}"
+          v-bind:class="{error: error.relationship, complete:!error.relationship&&enrollData.relationship.length!==0}"
           class="inputs"
-          id="password" 
-          type="password"
+          id="relationship" 
+          type="text"
           placeholder="관계" 
           required
         />
-        <label for="password"></label>
-        <div class="error-text ml-3" v-if="error.password">{{error.password}}</div>
+        <label for="relationship"></label>
+        <div class="error-text ml-2" v-if="error.relationship">{{error.relationship}}</div>
       </div>
 
+        <div class="mt-4" style="font-size:20px; color:#bbbbbb;">
+          선택사항
+        </div>
+
+      <div class="mt-3 guide-text">
+        출생 시 아기의 키를 입력해 주세요.
+      </div>
       <div class="input-with-label">
         <input
-          v-model="signupData.passwordConfirm"
-          type="password"
+          v-model="enrollData.passwordConfirm"
+          type="number"
           id="password-confirm"
-          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&signupData.passwordConfirm.length!==0}"
+          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&enrollData.passwordConfirm.length!==0}"
           placeholder="키"
           class="inputs"
           required
-          @keyup.enter="clickSignup"
+          @keyup.enter="clickEnroll"
         />
         <label for="password-confirm"></label>
-        <div class="error-text ml-3" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
+        <div class="error-text ml-2" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
       </div>
+      
+        <div class="mt-4 guide-text">
+          출생 시 아기의 몸무게를 입력해 주세요.
+        </div>
       <div class="input-with-label">
         <input
-          v-model="signupData.passwordConfirm"
-          type="password"
+          v-model="enrollData.passwordConfirm"
+          type="number"
           id="password-confirm"
-          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&signupData.passwordConfirm.length!==0}"
+          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&enrollData.passwordConfirm.length!==0}"
           placeholder="몸무게"
           class="inputs"
           required
-          @keyup.enter="clickSignup"
+          @keyup.enter="clickEnroll"
         />
         <label for="password-confirm"></label>
-        <div class="error-text ml-3" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
+        <div class="error-text ml-2" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
       </div>
       
       <div class="buttons mt-5">
-        <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickSignup">아기를 새로 등록합니다.</button>
+        <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
       </div>
     </div>
   </div>
@@ -97,47 +120,63 @@ export default {
   name: 'Signup',
   data() {
     return {
-      signupData: {
-        email: "",
-        password: "",
+      enrollData: {
+        babyName: "",
+        birth: "",
+        relationship: "",
         passwordConfirm: "",
-        nickName: "",
       },
       error: {
-        email: false,
-        nickName: false,
-        password: false,
+        birth: false,
+        babyName: false,
+        relationship: false,
         passwordConfirm: false,
       },
       isSubmit: false,
+      gender:"",
     };
   },
   created() {
     this.component = this;
   },
   watch: {
-    signupData: {
+    enrollData: {
       deep: true,
       handler() {
-        this.checknickNameForm();
-        this.checkEmailForm();
-        this.checkPasswordForm();
+        this.checkbabyNameForm();
+        this.checkBirthForm();
+        this.checkRelationshipForm();
         this.checkPasswordConfirmationForm();
       }
     }
   },
   methods: {
-    checknickNameForm() {
-      if ( this.signupData.nickName.length > 0) {
-        this.error.nickName = false;
+    checkbabyNameForm() {
+      if ( this.enrollData.babyName.length > 0) {
+        this.error.babyName = false;
       }
-      else this.error.nickName="닉네임을 입력해주세요."
+      else this.error.babyName = "아기의 이름을 입력해 주세요."
     },
-    checkEmailForm() {
-      if ( this.signupData.email.length > 0 && !this.validEmail(this.signupData.email) ) {
-        this.error.email = "올바른 이메일 형식이 아니에요"   
+    checkBirthForm() {
+      if ( this.enrollData.birth.length > 0) {
+        this.error.birth = false;
       }
-      else this.error.email = false;
+      else this.error.birth = "아기의 출생일자를 선택해 주세요."
+    },
+    checkRelationshipForm() {
+      if ( this.enrollData.relationship.length > 0) {
+        this.error.relationship = false;
+      }
+      else this.error.relationship = "아기와의 관계를 입력해 주세요."
+
+      // 버튼 활성화
+      if (this.enrollData.babyName.length > 0 && this.enrollData.birth.length > 0 && this.enrollData.relationship.length > 0 && this.enrollData.passwordConfirm.length > 0){
+        let isSubmit = true;
+        Object.values(this.error).map(v => {
+          if (v) isSubmit = false;
+        });
+        this.isSubmit = isSubmit;
+      }
     },
     validEmail(email) {
       // eslint-disable-next-line
@@ -145,9 +184,9 @@ export default {
       return re.test(email);
     },
     checkPasswordForm() {
-      if (this.signupData.password.length > 0 && this.signupData.password.length < 8) {
+      if (this.enrollData.password.length > 0 && this.enrollData.password.length < 8) {
           this.error.password = "비밀번호가 너무 짧아요"
-        } else if ( this.signupData.password.length >= 8 && !this.validPassword(this.signupData.password) ) {
+        } else if ( this.enrollData.password.length >= 8 && !this.validPassword(this.enrollData.password) ) {
           this.error.password = "영문, 숫자 포함 8 자리 이상이어야 해요.";
         } else this.error.password = false;
     },
@@ -156,31 +195,23 @@ export default {
       return va.test(password);
     },
     checkPasswordConfirmationForm() {
-      if (this.signupData.password.length >= 8 && this.validPassword(this.signupData.password)) {
-         if (this.signupData.password !== this.signupData.passwordConfirm )
+      if (this.enrollData.password.length >= 8 && this.validPassword(this.enrollData.password)) {
+         if (this.enrollData.password !== this.enrollData.passwordConfirm )
         this.error.passwordConfirm = "비밀번호가 일치하지 않아요."
       else this.error.passwordConfirm = false;
       }
       
-      // 버튼 활성화
-      if (this.signupData.nickName.length > 0 && this.signupData.email.length > 0 && this.signupData.password.length > 0 && this.signupData.passwordConfirm.length > 0){
-        let isSubmit = true;
-        Object.values(this.error).map(v => {
-          if (v) isSubmit = false;
-        });
-        this.isSubmit = isSubmit;
-      }
      
     },
-    clickSignup() {
+    clickEnroll() {
       if ( this.isSubmit ){
-        this.signup(this.signupData)
+        this.enrollBaby(this.enrollData)
       }
     },
     toLogin() {
       this.$router.push({name: "Login"});
     },
-    ...mapActions('accountStore', ['signup'])
+    ...mapActions('accountStore', ['enrollBaby'])
   }
 }
 </script>
@@ -202,7 +233,7 @@ h3 {
   padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 .new-button{
   background-color: #FEA59C;
@@ -261,7 +292,7 @@ input[type="password"] {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  padding-left: 30px;
+  padding-left: 0px;
 }
 .new-button:hover {
   /*background-color: #3c755a;*/
@@ -283,12 +314,17 @@ input[type="password"] {
   right: 0;
   background-repeat: repeat;
 }
-.signup-form {
-  margin-top: 15vh !important;
+.enroll-form {
+  margin-top: 10vh !important;
   opacity: 0.9;
 }
 .items:hover {
   cursor: pointer;
   color: #d6cbbd;
+}
+
+.guide-text{
+  font-size:15px;
+  padding-left:10px;
 }
 </style>
