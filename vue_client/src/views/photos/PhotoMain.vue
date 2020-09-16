@@ -16,9 +16,9 @@
 
 export default {
   name: 'PhotoMain',
-  mounted() {
+  /*mounted() {
     this.$router.push({name: 'PhotoList'})
-  }
+  }*/
 }
 </script>
 
