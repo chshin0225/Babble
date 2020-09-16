@@ -50,6 +50,10 @@
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
   </div>
+  <!-- 다이어리 추가 버튼 구현 -->
+  <div @click="clickAdd" class="add-button color-pink">
+    <i class="fas fa-plus-circle fa-2x"></i>
+  </div>
 </div>
 
 
@@ -60,33 +64,36 @@
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 
-  export default {
-    name: 'DiaryPhoto',
-    title: 'Centered slides',
-    components: {
-      Swiper,
-      SwiperSlide,
-    },
-    data() {
-      return {
-        swiperOption: {
-          slidesPerView: 1,
-          spaceBetween: 30,
-          centeredSlides: true,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          }
-        },
-        selectedDate: '',
-        date: new Date().toISOString().substr(0, 7),
-        menu: false,
-        modal: false,
-      }
-    },
-    methods: {
+export default {
+  name: 'DiaryPhoto',
+  title: 'Centered slides',
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  data() {
+    return {
+      swiperOption: {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        }
+      },
+      selectedDate: '',
+      date: new Date().toISOString().substr(0, 7),
+      menu: false,
+      modal: false,
+    }
+  },
+  methods: {
+    clickAdd() {
+      this.$router.push({name: 'DiaryCreate'})
     }
   }
+}
 </script>
 
 <style scoped>
@@ -94,6 +101,10 @@ import 'swiper/swiper-bundle.css'
   min-height: 0px !important;
   height: 6vh !important;
   overflow: hidden;
+}
+
+p {
+  margin: 0;
 }
 
 .main-title {
@@ -149,6 +160,15 @@ import 'swiper/swiper-bundle.css'
 .diary-text {
   color: white;
   text-shadow: 2px 2px black;
+}
+
+/* 추가 버튼 */
+.add-button {
+  position: absolute;
+  bottom: 10vh;
+  right: 5vw;
+  text-shadow: 5px 5px 20px rgba(0,0,0,0.6);
+  z-index: 1000;
 }
 
 </style>
