@@ -5,7 +5,7 @@ from .models import Baby, BabyMeasurement
 class BabyListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Baby
-        fields = ['baby_name', 'birth', 'profile_image']
+        fields = ['id', 'baby_name', 'birth', 'profile_image']
 
 class BabySerializer(serializers.ModelSerializer):
     class Meta:
