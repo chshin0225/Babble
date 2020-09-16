@@ -18,7 +18,7 @@ class Diary(models.Model):
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_diaries')
     create_date = models.DateField(auto_now_add=True)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_diaries')
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_diaries')
     modify_date = models.DateField(auto_now=True)
 
     permitted_groups = models.ManyToManyField(Group, related_name='allowed_diaries')
@@ -26,8 +26,8 @@ class Diary(models.Model):
 
 
 class DiaryComment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    diary = models.ForeignKey(Diary, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='diary_comments')
+    diary = models.ForeignKey(Diary, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     create_date = models.DateField(auto_now_add=True)
     modify_date = models.DateField(auto_now=True)

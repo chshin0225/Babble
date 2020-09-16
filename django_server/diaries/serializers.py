@@ -19,7 +19,7 @@ class DiarySerializer(serializers.ModelSerializer):
         model = Diary
         fields = '__all__'
 
-class DiaryCommentListSerializer(serializers.ModelSerializer):
+class DiaryCommentSerializer(serializers.ModelSerializer):
     # user = UserSerializer(required=False)
     # diary = DiarySerializer(required=False)
     class Meta:
