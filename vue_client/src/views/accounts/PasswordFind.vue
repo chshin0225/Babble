@@ -176,7 +176,7 @@ input[type="password"] {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  padding-left: 30px;
+  /*padding-left: 30px;*/
 }
 .done-button{
   background-color: #FEA59C;
