@@ -223,7 +223,7 @@ input[type="password"] {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  padding-left: 30px;
+  /*padding-left: 30px;*/
 }
 .signup-button:hover {
   /*background-color: #3c755a;*/

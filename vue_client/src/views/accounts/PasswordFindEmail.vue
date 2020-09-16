@@ -5,10 +5,10 @@
       <div>이메일을 확인해주세요.</div>
       <!-- <h5 class="bold">{{ passwordFindData.data.email }}</h5> -->
       <div class="button-container d-flex justify-content-center mt-5 mx-auto">
-        <button class="bg-green green-btn btn " type="button" @click="resendPasswordEmail(passwordFindData, type)">메일 재발송하기</button>
+        <button class="bg-pink btn-pink btn " type="button" @click="resendPasswordEmail(passwordFindData, type)">메일 재발송하기</button>
       </div>
       <div class="button-container d-flex justify-content-center mt-3 mx-auto">
-        <button class="bg-beige beige-btn btn" type="button" @click="goToSite()">메일함가기</button>
+        <button class="bg-blue btn-blue btn" type="button" @click="goToSite()">메일함가기</button>
       </div>
     </div>
   </div>
@@ -47,21 +47,20 @@ export default {
   margin-top: 15vh !important;
 }
 .button-container {
-  width: 70%;
+  width: 100%;
 }
 button {
   width: 100%;
   color: #F8F8F8;
 }
-.green-btn:hover {
-  background-color: #3c755a;
-  /* color: #D6CBBD; */
+/*.pink-btn:hover {
+  background-color: #A05E58;
   color: #F8F8F8;
 }
-.beige-btn:hover {
-  background-color: #907a62;
+.blue-btn:hover {
+  background-color: #5C83B4;
   color: #F8F8F8;
-}
+}*/
 .bold {
   font-weight: 600;
 }

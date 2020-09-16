@@ -74,7 +74,7 @@
 </template>
 
 <script>
-//import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 //import Swal from "sweetalert2";
 //import axios from "axios";
 //import SERVER from "@/api/api";
@@ -107,8 +107,8 @@ export default {
     },
   },
   methods: {
-    // ...mapMutations(["SET_TOKEN"]),
-    // ...mapActions("accountStore", ["login"]),
+     ...mapMutations(["SET_TOKEN"]),
+     ...mapActions("accountStore", ["login"]),
     async handleClickSignIn() {
       /*const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
@@ -340,7 +340,7 @@ input[type="password"] {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  padding-left: 30px;
+  /*padding-left: 30px;*/
 }
 .login-button:hover {
   /*background-color: #3c755a;*/
