@@ -1,85 +1,237 @@
 <template>
   <div>
-    <h3>캡쳐카메라</h3>
-    <input id="myFileInput camera1" @change="change1" type="file" accept="image/*;capture=camera" >
-
-    <h3>캡처카메라 2번째 버전</h3>
-    <input @change="change2"  type="file" accept="image/*" capture="camera" id="camera2">
-
-    <h3>이미지 업로드 버전</h3>
-    <input  @change="change3"  id="file camera3" type="file" accept="image/*">
-
-    <h3>Mozilla Multiple</h3>
-    <input  @change="change4" type="file" id="file camera4" name="file" multiple>
-
-    <img id="frame1">
-    <img id="frame2">
-    <img id="frame3">
-    <div id="frame4">
+    <div class="nav d-flex align-items-center">
+      <div class="left-align pointer" @click="clickBack">
+        <i class="fas fa-chevron-left"></i>
+      </div>
+      <div class="center-align d-flex align-items-center">
+        <img class="float-left mr-2" width="30px" src="https://user-images.githubusercontent.com/25967949/93281500-2f491680-f807-11ea-97bb-3fb3a98bbabc.png">
+        <h6>새 일기 작성</h6>
+      </div>
     </div>
+    <!-- 모달 창 -->
+    <Modal ref="ytmodal" @onConfirm="addCommand" />
+    <!-- 옵션 선택 -->
+    <editor-menu-bar
+      class="menu"
+      :editor="editor" 
+      v-slot="{ commands, isActive }"
+    >
+      <div class="menubar">
+        <button 
+          class="menubar__button"
+          :class="{ 'is-active': isActive.bold() }" 
+          @click="commands.bold"
+        >
+          <i class="fas fa-bold"></i>
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.italic() }"
+          @click="commands.italic"
+        >
+          <i class="fas fa-italic"></i>
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.strike() }"
+          @click="commands.strike"
+        >
+          <i class="fas fa-strikethrough"></i>
+        </button>
+
+        <button
+          class="menubar__button"
+          :class="{ 'is-active': isActive.underline() }"
+          @click="commands.underline"
+        >
+          <i class="fas fa-underline"></i>
+        </button>
+        <button
+          class="menubar__button"
+          @click="openModal(commands.image);"
+        >
+          <i class="fas fa-image"></i>
+        </button>
+
+        <button
+          class="menubar__button"
+          @click="commands.undo"
+        >
+          <i class="fas fa-undo"></i>
+        </button>
+
+        <button
+          class="menubar__button"
+          @click="commands.redo"
+        >
+          <i class="fas fa-redo"></i>
+        </button>
+
+      </div>
+
+    </editor-menu-bar>
+
+    <editor-content class="editor-content" :editor="editor" />
   </div>
+
 </template>
 
 <script>
-// var camera1 = document.getElementById('camera1');
-// var camera2 = document.getElementById('camera2');
-// var camera3 = document.getElementById('camera3');
-// var camera4 = document.getElementById('camera4');
-
-// var frame1 = document.getElementById('frame1');
-// var frame2 = document.getElementById('frame2');
-// var frame3 = document.getElementById('frame3');
-// var frame4 = document.getElementById('frame4');
-
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import { Bold, Italic, Strike, Underline, HardBreak,  History, Image} from 'tiptap-extensions'
+import Modal from "./Modal";
 
 export default {
   name: 'DiaryCreate',
+  components: {
+    EditorContent,
+    EditorMenuBar,
+    Modal,
+  },
+  props: {
+    content: {
+      type: String,
+      default: ""
+    }
+  },
+  data() {
+    return {
+      editor: new Editor({
+        content: '<p>내용을 작성해주세요!</p>',
+        extensions: [
+          new Bold(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new HardBreak(),
+          new History(),
+          new Image(),
+        ],
+        onUpdate: ({ getHTML }) => {
+          let content = getHTML();
+          console.log(content);
+        }
+      }),
+    }
+  },
   methods: {
-    change1(e) {
-      var file = e.target.files[0];
-      var frame1 = document.getElementById('frame1');
-      frame1.src = URL.createObjectURL(file)
+    openModal(command) {
+      this.$refs.ytmodal.showModal(command);
     },
-    change2(e) {
-      var file = e.target.files[0];
-      var frame2 = document.getElementById('frame2');
-      frame2.src = URL.createObjectURL(file)
-    },
-    change3(e) {
-      var file = e.target.files[0];
-      var frame3 = document.getElementById('frame3');
-      frame3.src = URL.createObjectURL(file)
-    },
-    change4(e) {
-      var files = e.target.files
-      var frame4 = document.getElementById('frame4');
-      for (var file of files) {
-        console.log(file)
-        var i = document.createElement("img")
-        i.src = URL.createObjectURL(file)
-        frame4.appendChild(i)
+    addCommand(data) {
+      if (data.command !== null) {
+        data.command(data.data);
       }
     },
+    setContent() {
+      this.editor.setContent(this.content);
+    },
+    clickBack() {
+      this.$router.go(-1)
+    }
+  },
+  mounted() {
+    this.setContent();
+  },
+  beforeDestroy() {
+    // Always destroy your editor instance when it's no longer needed
+    this.editor.destroy()
+  },
+}
+
+</script>
+
+<style scoped lang="scss">
+// btn
+button:focus {
+  outline: none;
+}
+
+/* nav */
+.nav {
+  background: white;
+  -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  height: 6vh;
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+
+  .left-align {
+    float: left;
+    width: 33.3333%;
+    text-align: left;
+  }
+
+  .center-align {
+    float: left;
+    width: 33.3333%;
+    text-align: center;
+
+    h6 {
+      margin: 0;
+      font-weight: 900;
+    }
+  }
+}
+
+// editor-menu-bar
+.menu {
+  background-color: white;
+  color: #9BC7FF;
+  -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  width: 100%;
+  position: sticky;
+  z-index: 10000;
+  top:6vh;
+    
+  .menubar__button {
+    font-weight: 700;
+    display: -webkit-inline-box;
+    display: inline-flex;
+    background: transparent;
+    border: 0;
+    padding: .2rem .5rem;
+    margin-right: .2rem;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .is-active {
+    background-color: rgba(0,0,0,.1) !important;
+  }
+
+}
+
+// editor content
+.editor-content:focus {
+  outline: none !important;
+}
+
+.editor-content {
+  height: 80vh;
+  .ProseMirror {
+    // height: 80vh;
+
+    p:focus {
+      outline: none !important;
+    }
+  }
+  .ProseMirror-focused, .ProseMirror:focus, .ProseMirror{
+    outline: none !important;
   }
 }
 
 
-
-// camera2.addEventListener('change', function(e) {
-//   var file = e.target.files[0];
-//   frame2.src = URL.createObjectURL(file)
-// })
-// camera3.addEventListener('change', function(e) {
-//   var file = e.target.files[0];
-//   frame3.src = URL.createObjectURL(file)
-// })
-// camera4.addEventListener('change', function(e) {
-//   var file = e.target.files[0];
-//   frame4.src = URL.createObjectURL(file)
-// })
-
-</script>
-
-<style>
+.tiptap-vuetify-editor__content {
+  min-height: 200px;
+  max-height: 200px;
+}
 
 </style>

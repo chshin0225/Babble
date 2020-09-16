@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="app">
-      <nav class="nav">
+      <nav class="nav" v-if="this.$route.name!=='DiaryCreate'">
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
           <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
@@ -51,13 +51,16 @@
             <div class="text-right mt-3">
               <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
             </div>
+            <div class="mb-5">
+
+            </div>
           </div>
         </div>
         
       </Sidebar>
       
       <router-view></router-view>
-      <div style="height:100px"></div>
+      <!-- <div style="height:100px"></div> -->
       <!-- footer -->
       <div class="footer row no-gutters">
         <div 
@@ -143,7 +146,7 @@ export default {
       this.$router.push({ name: 'PhotoList'})
     },
     clickDiary() {
-      this.$router.push({ name: 'Diary'})
+      this.$router.push({ name: 'DiaryPhoto'})
     },
     clickProfile() {
       this.$router.push({ name: 'Profile'})
@@ -158,6 +161,7 @@ export default {
   -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  height: 6vh;
 }
 
 .logo-sect img {
@@ -248,6 +252,7 @@ a:hover {
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
+  z-index: 99999
 }
 
 p {
