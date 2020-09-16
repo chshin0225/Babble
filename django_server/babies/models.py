@@ -25,15 +25,15 @@ class Baby(models.Model):
    
 
 class BabyMeasurement(models.Model):
-    baby_id = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     weight = models.FloatField()
     height = models.FloatField()
     measure_date = models.DateField()
 
     # 최고권위자 class의 class_id가 1이라는 가정 하에
-    # owner_id = UserBabyRelationship.objects.get(baby_id=baby_id, class_id=1).values('user_id')
-    owner_id = 1
-    creator_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner_id, related_name='created_measurements')
+    # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
+    owner = 1
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_measurements')
     create_date = models.DateField(auto_now_add=True)
-    modifier_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner_id, related_name='modified_measurements')
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_measurements')
     modify_date = models.DateField(auto_now=True)
