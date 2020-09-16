@@ -24,10 +24,13 @@
 
       <div class="mt-4 guide-text">
         아기의 성별을 선택해 주세요.
-      </div>{{this.gender}}
-      <div class="buttons" style="margin-top:10px">
-        <button class="btn girl-button" style="float:left; margin-bottom:30px;" :class="{selected: gender=='girl'}" @click="clickEnroll">여자 아기</button>
-        <button class="btn boy-button" style="float:right; margin-bottom:30px;" :class="{selected: gender=='boy'}" @click="clickEnroll">남자 아기</button>
+      </div>
+      <div class="buttons" style="margin-top:10px; height:auto">
+        <button class="btn girl-button" style="float:left;" :class="{selected: enrollData.gender=='girl'}" @click="clickGirlBtn">여자 아기</button>
+        <button class="btn boy-button" style="float:right;" :class="{selected: enrollData.gender=='boy'}" @click="clickBoyBtn">남자 아기</button>
+        <label for="gender"></label>
+        <div class="error-text ml-2" v-if="error.gender">{{error.gender}}</div>
+        <div style="float:left; width:100%; margin-bottom:30px"/>
       </div>
 
       <div class="mt-4 guide-text">
@@ -54,7 +57,7 @@
       </div>
       <div class="input-with-label">
         <input 
-          v-model="enrollData.relationShip" 
+          v-model="enrollData.relationship" 
           
           v-bind:class="{error: error.relationship, complete:!error.relationship&&enrollData.relationship.length!==0}"
           class="inputs"
@@ -76,17 +79,15 @@
       </div>
       <div class="input-with-label">
         <input
-          v-model="enrollData.passwordConfirm"
+          v-model="enrollData.height"
           type="number"
-          id="password-confirm"
-          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&enrollData.passwordConfirm.length!==0}"
+          id="height"
           placeholder="키"
           class="inputs"
           required
           @keyup.enter="clickEnroll"
         />
-        <label for="password-confirm"></label>
-        <div class="error-text ml-2" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
+        <label for="height"></label>
       </div>
       
         <div class="mt-4 guide-text">
@@ -94,17 +95,15 @@
         </div>
       <div class="input-with-label">
         <input
-          v-model="enrollData.passwordConfirm"
+          v-model="enrollData.weight"
           type="number"
-          id="password-confirm"
-          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&enrollData.passwordConfirm.length!==0}"
+          id="weight"
           placeholder="몸무게"
           class="inputs"
           required
           @keyup.enter="clickEnroll"
         />
-        <label for="password-confirm"></label>
-        <div class="error-text ml-2" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
+        <label for="weight"></label>
       </div>
       
       <div class="buttons mt-5">
@@ -122,18 +121,19 @@ export default {
     return {
       enrollData: {
         babyName: "",
+        gender: "",
         birth: "",
         relationship: "",
-        passwordConfirm: "",
+        height: "",
+        weight: "",
       },
       error: {
-        birth: false,
         babyName: false,
+        gender: false,
+        birth: false,
         relationship: false,
-        passwordConfirm: false,
       },
       isSubmit: false,
-      gender:"",
     };
   },
   created() {
@@ -144,18 +144,30 @@ export default {
       deep: true,
       handler() {
         this.checkbabyNameForm();
+        this.checkGenderForm();
         this.checkBirthForm();
         this.checkRelationshipForm();
-        this.checkPasswordConfirmationForm();
       }
     }
   },
   methods: {
+    clickGirlBtn(){
+      this.enrollData.gender = 'girl';
+    },
+    clickBoyBtn(){
+      this.enrollData.gender = 'boy';
+    },
     checkbabyNameForm() {
       if ( this.enrollData.babyName.length > 0) {
         this.error.babyName = false;
       }
       else this.error.babyName = "아기의 이름을 입력해 주세요."
+    },
+    checkGenderForm() {
+      if ( this.enrollData.gender.length > 0) {
+        this.error.gender = false;
+      }
+      else this.error.gender = "아기의 성별을 선택해 주세요."
     },
     checkBirthForm() {
       if ( this.enrollData.birth.length > 0) {
@@ -170,38 +182,13 @@ export default {
       else this.error.relationship = "아기와의 관계를 입력해 주세요."
 
       // 버튼 활성화
-      if (this.enrollData.babyName.length > 0 && this.enrollData.birth.length > 0 && this.enrollData.relationship.length > 0 && this.enrollData.passwordConfirm.length > 0){
+      if (this.enrollData.babyName.length > 0 && this.enrollData.gender.length > 0 && this.enrollData.birth.length > 0 && this.enrollData.relationship.length > 0){
         let isSubmit = true;
         Object.values(this.error).map(v => {
           if (v) isSubmit = false;
         });
         this.isSubmit = isSubmit;
       }
-    },
-    validEmail(email) {
-      // eslint-disable-next-line
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    },
-    checkPasswordForm() {
-      if (this.enrollData.password.length > 0 && this.enrollData.password.length < 8) {
-          this.error.password = "비밀번호가 너무 짧아요"
-        } else if ( this.enrollData.password.length >= 8 && !this.validPassword(this.enrollData.password) ) {
-          this.error.password = "영문, 숫자 포함 8 자리 이상이어야 해요.";
-        } else this.error.password = false;
-    },
-    validPassword(password) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
-      return va.test(password);
-    },
-    checkPasswordConfirmationForm() {
-      if (this.enrollData.password.length >= 8 && this.validPassword(this.enrollData.password)) {
-         if (this.enrollData.password !== this.enrollData.passwordConfirm )
-        this.error.passwordConfirm = "비밀번호가 일치하지 않아요."
-      else this.error.passwordConfirm = false;
-      }
-      
-     
     },
     clickEnroll() {
       if ( this.isSubmit ){
@@ -240,51 +227,33 @@ h3 {
   color: #F8F8F8;
   width: 100%;
 }
-.girl-button{
-  background-color: #F8F8F8;
+
+.girl-button {
+  /*background-color: #F8F8F8;*/
   border-color: #FEA59C;
   color: #FEA59C;
   width: 49.5%;
 }
-.boy-button .selected{
-  background-color: #FEA59C;
-  color: #F8F8F8;
+.girl-button.selected{
+  background-color: #FEA59C !important;
+  color: #F8F8F8 !important;
   width: 49.5%;
 }
 .boy-button{
-  background-color: #F8F8F8;
+  /*background-color: #F8F8F8;*/
   border-color: #9BC7FF;
   color: #9BC7FF;
   width: 49.5%;
 }
-.boy-button .selected{
-  background-color: #9BC7FF;
-  color: #F8F8F8;
+.boy-button.selected{
+  background-color: #9BC7FF !important;
+  color: #F8F8F8 !important;
   width: 49.5%;
-}
-.divide {
-  width: 10%;
-  border-top: 1px solid #FEA59C;
-  margin-left: auto;
-  margin-right: auto;
-}
-.kakao {
-  background-color: #ffe812;
-  border-radius: 5px;
-  width: 70%;
-}
-.google {
-  background-color:  #FFFFFF;
-  border-radius: 5px;
-  width: 70%;
 }
 .inputs:focus {
   border-style: none;
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
-}
-input[type="password"] {
-  font-family:sans-serif;
 }
 .error, .error:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
@@ -317,10 +286,6 @@ input[type="password"] {
 .enroll-form {
   margin-top: 10vh !important;
   opacity: 0.9;
-}
-.items:hover {
-  cursor: pointer;
-  color: #d6cbbd;
 }
 
 .guide-text{
