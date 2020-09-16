@@ -117,9 +117,10 @@
 
 ### [AI] Photo - Epic
 
-- 이미지 태그 - Story
-- 표정 인식 - Story 
-- 얼굴 인식 - Story
+- 신경망 가능성 체크 - Story
+  - Object detection 모델 - task
+  - 얼굴표정 감정인식 모델 - task
+- 딥러닝 연산 서버 구축
 
 
 

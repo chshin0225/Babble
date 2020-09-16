@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,14 +56,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Django REST framework
-    'rest_framework',
-
     # our apps
     'accounts',
     'photos',
     'diaries',
-    
+    'babies',
 ]
 
 MIDDLEWARE = [
@@ -106,8 +104,8 @@ DATABASES = {
         'NAME': 'babble',
         'USER': 'root',
         # local mysql database 비밀번호를 여기에 쓸 것
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '6Dragons!',
+        'HOST': '',
         'PORT': '3306',
     }
 }
@@ -150,6 +148,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# static
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.User'
 

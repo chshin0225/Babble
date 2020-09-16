@@ -1,44 +1,83 @@
 <template>
   <div>
     <div id="app">
-      <Burger></Burger>
-      <Sidebar>
-        <div class="sidebar-panel-nav">
-          <!-- 현재 babble box info -->
-          <div class="upper bg-pink">
-            <div class="profile float-left mr-3">
-              <img src="http://bit.do/babbleprofile">
-            </div>
-            <div class="babble-box">
-              <p>아롱이 (아기 이름)</p>
-              <p>D + 73</p>
-            </div>
-          </div>
-
-          <div class="menu-container">
-            <li class="list invite"><a href="#home"><i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</a></li>
-            <hr>
-            <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
-            <li class="list menu"><a href="#contact"><i class="fas fa-cog mr-3"></i> 설정</a></li>
-          </div>
-          
+      <nav class="nav">
+        <Burger class="left-align d-flex align-items-center"></Burger>
+        <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
+          <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
+          <span class="logo-title color-pink">Babble</span>
         </div>
+      </nav>
+      <Sidebar class=" d-flex justify-content-between" style="clear:both;">
+        <div class="side d-flex flex-column justify-content-between h-100">
+          <div class="sidebar-panel-nav">
+            <!-- 현재 babble box info -->
+            <div class="upper bg-pink">
+              <div class="profile float-left mr-3">
+                <img src="http://bit.do/babbleprofile">
+              </div>
+              <div class="babble-box">
+                <p>아롱이 (아기 이름)</p>
+                <p>D + 73</p>
+              </div>
+            </div>
+
+            <div class="menu-container">
+              <li class="list invite"><a href="#home"><i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</a></li>
+              <hr>
+              <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
+              <li class="list menu"><a href="#contact"><i class="fas fa-cog mr-3"></i> 설정</a></li>
+            </div>
+            
+          </div>
+          <div class="sidebar-bottom">
+            <hr>
+            <div class="d-flex justify-content-between">
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">사랑이</p>
+              </div>
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">럭키</p>
+              </div>
+              <div class="other-profile pointer">
+                <img src="http://bit.do/babbleprofile">
+                <p class="text-center">다롱이</p>
+              </div>
+            </div>
+            <div class="text-right mt-3">
+              <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
+            </div>
+          </div>
+        </div>
+        
       </Sidebar>
       
       <router-view></router-view>
+      <div style="height:100px"></div>
       <!-- footer -->
       <div class="footer row no-gutters">
-        <div class="col-4 color-gray" :class="{'color-pink' : isAlbum()}">
+        <div 
+        class="col-4 color-gray" 
+        :class="{'color-pink' : isAlbum()}"
+        @click="clickPhoto">
           <p><i class="fas fa-images"></i></p>
-          <p>Album</p>
+          <p>Photo</p>
         </div>
-        <div class="col-4 color-gray" :class="{'color-pink' : isDiary()}">
+        <div 
+          class="col-4 color-gray" 
+          :class="{'color-pink' : isDiary()}"
+          @click="clickDiary">
           <p><i class="fas fa-book"></i></p>
           <p>Diary</p>
         </div>
-        <div class="col-4 color-gray" :class="{'color-pink' : isProfile()}">
+        <div 
+          class="col-4 color-gray"
+          :class="{'color-pink' : isProfile()}"
+          @click="clickProfile">
           <p><i class="fas fa-user"></i></p>
           <p>Profile</p>
         </div>
@@ -48,6 +87,7 @@
 </template>
 
 <script>
+// import { mutations } from '@/store/index.js'
 import Sidebar from './views/common/Sidebar.vue';
 import Burger from './views/common/Burger.vue';
 export default {
@@ -62,14 +102,17 @@ export default {
     }
   },
   methods: {
+    // Logo
+    clickLogo() {
+      this.$router.push({name: 'PhotoMain'})
+    },
     // sidebar
     toggle() {
       this.isBurgerActive = !this.isBurgerActive
     },
     // navbar
     isAlbum() {
-      console.log(this.$route.name)
-      if (this.$route.name === 'Album') {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch'   ) {
         return true
       } else {
         return false
@@ -88,22 +131,88 @@ export default {
       } else {
         return false
       }
+    },
+    // 페이지 이동
+    clickBabblebox() {
+      // mutations.toggleNav
+      let backdrop = document.querySelector(".sidebar-backdrop")
+      backdrop.click()
+      this.$router.push({name: 'Babblebox'})
+    },
+    clickPhoto() {
+      this.$router.push({ name: 'PhotoList'})
+    },
+    clickDiary() {
+      this.$router.push({ name: 'Diary'})
+    },
+    clickProfile() {
+      this.$router.push({ name: 'Profile'})
     }
   }
-
-
 };
 </script>
 
 <style scoped>
+/* top-navbar */
+.nav {
+  -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+}
+
+.logo-sect img {
+  max-width: 10vw;
+  height: auto;
+}
+/* @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap'); */
+ /* @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap'); */
+ /* @import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap'); */
+ @import url('https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap');
+.logo-sect .logo-title {
+  font-size: 6vw;
+  font-family: 'Rammetto One', cursive;
+}
+
+.left-align {
+  float: left;
+  width: 33.3333%;
+  text-align: left;
+}
+
+.center-align {
+  float: left;
+  width: 33.3333%;
+  text-align: center;
+}
+
 /* sidebar */
+.side {
+  overflow:hidden;
+}
+
 .upper {
   padding: 20px;
 }
 
 .menu-container {
-  padding: 40px;
+ padding: 20px 0 40px 40px;
   list-style: none;
+}
+
+.sidebar-bottom {
+  padding: 0 20px 40px 40px;
+}
+
+.list:hover {
+  left: 20px;
+  transform-origin: left;
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 .menu {
@@ -118,19 +227,22 @@ export default {
   color: #FEA59C !important;
 }
 
-.profile img{
+.profile img, .other-profile img{
   max-width: 50px;
   height: auto;
   border-radius: 50%;
 }
 
-/*  fotter */
+
+
+
+/*  footer */
 .footer {
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: ;
+  background-color: white;
   color: black;
   text-align: center;
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
