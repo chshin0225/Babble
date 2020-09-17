@@ -55,10 +55,13 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     ## CORS
     'corsheaders',
     ## yasg
     'drf_yasg',
+    ## django_storages
+    # 'storages',
 
     # original
     'django.contrib.admin',
@@ -73,6 +76,9 @@ INSTALLED_APPS = [
     'photos',
     'diaries',
     'babies',
+
+    # # provider
+    # 'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -110,18 +116,28 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+
+#         'NAME': 'babble',
+#         'USER': 'dragon',
+#         'PASSWORD': get_secret('DB_PASSWORD'),
+#         'HOST': 'j3a310.p.ssafy.io',
+
+#         # 'NAME': 'babble',
+#         # 'USER': 'root',
+#         # 'PASSWORD': '',
+#         # 'HOST': '',
+
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'babble',
-        # 'USER': 'dragon',
-        # 'PASSWORD': get_secret('DB_PASSWORD'),
-        # 'HOST': 'j3a310.p.ssafy.io',
-        'NAME': 'babble',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -165,17 +181,95 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # static
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.User'
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+}
+ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
 
 SITE_ID = 1
 
 REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
 }
+# REST_USE_JWT = True
+
+# import datetime
+# JWT_AUTH = {
+#   'JWT_SECRET_KEY': SECRET_KEY,
+#   'JWT_ALGORITHM': 'HS256',
+#   'JWT_ALLOW_REFRESH': True,
+#       # 1주일간 유효한 토큰
+#   'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+#       # 28일 마다 갱신됨(유효 기간 연장시)
+#   'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+# }
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST = []
+
+
+# Django all-auth configuration
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_AUTHENTICATED_LOGOUT_REDIRECTS = True
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+OLD_PASSWORD_FIELD_ENABLED = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_USER_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'ssafybabble@gmail.com'
+# EMAIL_HOST_PASSWORD = get_secret('DB_PASSWORD')
+# SERVER_EMAIL = 'ssafybabble@gmail.com'
+# DEFAULT_FROM_MAIL = EMAIL_HOST_USER
+
+# # Social Login
+# SOCIALACCOUNT_PROVIDERS = {
+#     'kakao': {
+#         'APP': {
+#             'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
+#             'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
+#             'key': ''
+#         }
+#     }
+# }
+
+
+# AWS s3
+DEFAULT_FILE_STORAGE = 'django_server.storages.MediaStorage'
+STATICFILES_STORAGE = 'django_server.storages.StaticStorage'
+
+MEDIAFILES_LOCATION = 'media'
+STATICFILES_LOCATION = 'static'
+
+# Make sure delete from here before commit
+AWS_REGION = get_secret('AWS')['REGION']
+AWS_STORAGE_BUCKET_NAME = get_secret('AWS')['BUCKET_NAME']
+AWS_ACCESS_KEY_ID = get_secret('AWS')['ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = get_secret('AWS')['SECRET_KEY']
+AWS_STORAGE_BUCKET_NAME = 'babble-bucket'
+
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
