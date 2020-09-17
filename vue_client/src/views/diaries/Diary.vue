@@ -56,7 +56,7 @@ export default {
 
 
 .nav-container .router-link-exact-active {
-  color: #ff6454;
+  color: #aae9f0;
 }
 
 
