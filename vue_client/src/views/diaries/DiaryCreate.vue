@@ -9,139 +9,85 @@
         <h6>새 일기 작성</h6>
       </div>
     </div>
-    <!-- 모달 창 -->
-    <Modal ref="ytmodal" @onConfirm="addCommand" />
-    <!-- 옵션 선택 -->
-    <editor-menu-bar
-      class="menu"
-      :editor="editor" 
-      v-slot="{ commands, isActive }"
-    >
-      <div class="menubar">
-        <button 
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bold() }" 
-          @click="commands.bold"
-        >
-          <i class="fas fa-bold"></i>
-        </button>
+    
+    <!-- 제목 -->
+    <v-text-field class="m-3" label="제목"></v-text-field>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.italic() }"
-          @click="commands.italic"
-        >
-          <i class="fas fa-italic"></i>
-        </button>
+    <!-- 에디터 -->
+     <editor 
+      :options="editorOptions"
+      height="80vh"
+      initialEditType="wysiwyg"
+      previewStyle="vertical"
+      class="m-3"
+     />
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.strike() }"
-          @click="commands.strike"
-        >
-          <i class="fas fa-strikethrough"></i>
-        </button>
-
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.underline() }"
-          @click="commands.underline"
-        >
-          <i class="fas fa-underline"></i>
-        </button>
-        <button
-          class="menubar__button"
-          @click="openModal(commands.image);"
-        >
-          <i class="fas fa-image"></i>
-        </button>
-
-        <button
-          class="menubar__button"
-          @click="commands.undo"
-        >
-          <i class="fas fa-undo"></i>
-        </button>
-
-        <button
-          class="menubar__button"
-          @click="commands.redo"
-        >
-          <i class="fas fa-redo"></i>
-        </button>
-
-      </div>
-
-    </editor-menu-bar>
-
-    <editor-content class="editor-content" :editor="editor" />
+    <!-- 성장 기록 -->
+    <div class="mx-3 mt-5 mb-2">
+      <h6>우리 아이 성장 기록</h6>
+      <v-text-field
+        label=" 키"
+        suffix="cm"
+        v-model="babyHeight"
+      ></v-text-field>
+      <v-text-field
+        label="몸무게"
+        suffix="kg"
+        v-model="babyWeight"
+      ></v-text-field>
+      <v-text-field
+        label="머리 둘레"
+        suffix="cm"
+        v-model="babyHead"
+      ></v-text-field>
+    </div>
+    <div class="p-2 d-flex justify-content-end">
+      <button class="btn btn-pink ">작성</button>
+    </div>
+    <div style="height:10vh"></div>
+        
   </div>
+
+  
 
 </template>
 
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-import { Bold, Italic, Strike, Underline, HardBreak,  History, Image} from 'tiptap-extensions'
-import Modal from "./Modal";
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+
+import { Editor } from '@toast-ui/vue-editor';
 
 export default {
   name: 'DiaryCreate',
   components: {
-    EditorContent,
-    EditorMenuBar,
-    Modal,
-  },
-  props: {
-    content: {
-      type: String,
-      default: ""
-    }
+    editor: Editor,
   },
   data() {
     return {
-      editor: new Editor({
-        content: '<p>내용을 작성해주세요!</p>',
-        extensions: [
-          new Bold(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new HardBreak(),
-          new History(),
-          new Image(),
-        ],
-        onUpdate: ({ getHTML }) => {
-          let content = getHTML();
-          console.log(content);
-        }
-      }),
-    }
+      // editorText: 'This is initialValue.',
+      editorOptions: {
+        hideModeSwitch: true,
+        toolbarItems: [
+          'heading', 'bold', 'italic', 'strike', 'divider','image', 'link', 'hr', 'ul', 'ol', 'task',
+           'divider'
+        ]
+      },
+      babyHead: 0,
+      babyHeight: 0,
+      babyWeight: 0,
+    };
   },
   methods: {
-    openModal(command) {
-      this.$refs.ytmodal.showModal(command);
-    },
-    addCommand(data) {
-      if (data.command !== null) {
-        data.command(data.data);
-      }
-    },
-    setContent() {
-      this.editor.setContent(this.content);
+    getHTML() {
+      let html = this.$refs.toastuiEditor.invoke('getHtml');
+      console.log(html)
     },
     clickBack() {
       this.$router.go(-1)
     }
   },
-  mounted() {
-    this.setContent();
-  },
-  beforeDestroy() {
-    // Always destroy your editor instance when it's no longer needed
-    this.editor.destroy()
-  },
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -179,59 +125,13 @@ button:focus {
   }
 }
 
-// editor-menu-bar
-.menu {
-  background-color: white;
-  color: #9BC7FF;
-  -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
-  width: 100%;
+.tui-editor-defaultUI-toolbar {
   position: sticky;
-  z-index: 10000;
-  top:6vh;
-    
-  .menubar__button {
-    font-weight: 700;
-    display: -webkit-inline-box;
-    display: inline-flex;
-    background: transparent;
-    border: 0;
-    padding: .2rem .5rem;
-    margin-right: .2rem;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-
-  .is-active {
-    background-color: rgba(0,0,0,.1) !important;
-  }
-
+  top: 6vh;
 }
 
-// editor content
-.editor-content:focus {
-  outline: none !important;
-}
-
-.editor-content {
-  height: 80vh;
-  .ProseMirror {
-    // height: 80vh;
-
-    p:focus {
-      outline: none !important;
-    }
-  }
-  .ProseMirror-focused, .ProseMirror:focus, .ProseMirror{
-    outline: none !important;
-  }
-}
-
-
-.tiptap-vuetify-editor__content {
-  min-height: 200px;
-  max-height: 200px;
+.tui-editor-defaultUI {
+  margin: 40px !important;
 }
 
 </style>
