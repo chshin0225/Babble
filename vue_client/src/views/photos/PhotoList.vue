@@ -1,6 +1,16 @@
 <template>
   <div class="grid" data-app>
     <div>
+      <div class="photos row no-gutters">
+        <div v-for="photo in photos" :key="`club_${photo.id}`" class="photo-container pointer" @click="clickPhoto">
+          <div class="photo">             
+            <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-20baf.appspot.com/o/' + photo.image_url + '?alt=media&token=89612eed-0bc3-47d5-8531-dae94e9b376a'" class="card-img-top " alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 여기부터 가짜 -->
+    <!-- <div>
       <h5 class="date">2020-09-15 화</h5>
       <div class="photos d-flex">
         <div class="photo-container pointer" @click="clickPhoto">
@@ -64,7 +74,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- 날짜 선택 -->
     <!-- <h4>날짜 선택</h4>
@@ -95,6 +105,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'PhotoList',
   data() {
@@ -103,14 +114,21 @@ export default {
       // dialog: false,
     }
   },
+  computed: {
+    ...mapState('photoStore', ['photos'])
+  },
   methods: {
+    ...mapActions('photoStore', ['fetchPhotos']),
     clickAdd() {
       this.$router.push({ name: 'PhotoCreate' })
     },
     clickPhoto() {
       this.$router.push({ name: 'PhotoDetail' })
     }
-  } 
+  },
+  created() {
+    this.fetchPhotos()
+  }
 }
 </script>
 
@@ -120,7 +138,7 @@ export default {
 }
 
 img {
-  /* width: 90%; */
+  /* width: 30vw; */
   height: 30vw;
   width: auto;
 }
@@ -132,6 +150,7 @@ img {
   height: 30vw;
   overflow:hidden;
   margin-right: 2.5vw;
+  margin-bottom: 2.5vw;
 }
 
 .date {

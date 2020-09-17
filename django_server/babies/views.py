@@ -35,6 +35,9 @@ class BabyListView(APIView):
             relationship_serializer = UserBabyRelationshipSerializer(data=user_baby_relationship)
             if relationship_serializer.is_valid(raise_exception=True):
                 relationship_serializer.save(baby=baby, rank=owner)
+                user = request.user
+                user.current_baby = baby
+                user.save()
                 return Response(relationship_serializer.data)
             return Response(relationship_serializer.errors)
         return Response(serializer.errors)
