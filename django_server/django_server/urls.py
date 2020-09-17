@@ -46,10 +46,10 @@ urlpatterns = [
     # url(r'^account/', include('allauth.urls')),
     # url(r'^accounts-rest/registration/account-confio/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
 
-    path('account/', include('rest_auth.urls')),
-    path('account/registration/', include('rest_auth.registration.urls')),
-    path('account/', include('allauth.urls')),
-    url(r'account/registration/confirm-email/(?P<key>.+)/$', confirm_email, name='confirm_email'),
+    path('accounts/', include('rest_auth.urls')),
+    path('accounts/registration/', include('rest_auth.registration.urls')),
+    path('accounts/', include('allauth.urls')),
+    url(r'accounts/registration/confirm-email/(?P<key>.+)/$', confirm_email, name='confirm_email'),
     
     path('diaries/', include('diaries.urls')),
     path('photos/', include('photos.urls')),

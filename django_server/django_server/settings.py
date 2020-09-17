@@ -120,15 +120,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        # 'NAME': 'babble',
-        # 'USER': 'dragon',
-        # 'PASSWORD': get_secret('DB_PASSWORD'),
-        # 'HOST': 'j3a310.p.ssafy.io',
-
         'NAME': 'babble',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '',
+        'USER': 'dragon',
+        'PASSWORD': get_secret('DB_PASSWORD'),
+        'HOST': 'j3a310.p.ssafy.io',
+
+        # 'NAME': 'babble',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': '',
 
         'PORT': '3306',
     }
@@ -262,12 +262,12 @@ MEDIAFILES_LOCATION = 'media'
 STATICFILES_LOCATION = 'static'
 
 # Make sure delete from here before commit
-# AWS_REGION = get_secret('AWS')['REGION']
-# AWS_STORAGE_BUCKET_NAME = get_secret('AWS')['BUCKET_NAME']
-# AWS_ACCESS_KEY_ID = get_secret('AWS')['ACCESS_KEY_ID']
-# AWS_SECRET_ACCESS_KEY = get_secret('AWS')['SECRET_KEY']
-# AWS_STORAGE_BUCKET_NAME = 'babble-bucket'
+AWS_REGION = get_secret('AWS')['REGION']
+AWS_STORAGE_BUCKET_NAME = get_secret('AWS')['BUCKET_NAME']
+AWS_ACCESS_KEY_ID = get_secret('AWS')['ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = get_secret('AWS')['SECRET_KEY']
+AWS_STORAGE_BUCKET_NAME = 'babble-bucket'
 
-# AWS_QUERYSTRING_AUTH = False
-# AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
-# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
