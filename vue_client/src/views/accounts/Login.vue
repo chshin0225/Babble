@@ -1,9 +1,9 @@
 <template>
   <div class="background1">
     <div class="container p-3 mt-5 bg-light-ivory login-form">
-      <h3 class="login-title color-pink">
+      <!-- <h3 class="login-title color-pink">
         로그인
-      </h3>
+      </h3> -->
 
       <div class="input-with-label">
         <input
@@ -283,16 +283,14 @@ export default {
 
 <style scoped>
 .login-form {
-  margin-top: 15vh !important;
+  margin-top: 2.5vh !important;
+  text-align: center;
   opacity: 0.9;
+  /* border: 1px solid #FEA59C; */
 }
 .container {
   width: 80%;
   border-radius: 25px;
-}
-h3 {
-  color: #FEA59C;
-  font-weight: 900;
 }
 .inputs {
   border-style: none;
