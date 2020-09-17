@@ -8,26 +8,26 @@
       </div>
       <div class="input-with-label">
         <input 
-          v-model="enrollData.babyName"
-          v-bind:class="{error: error.babyName, complete:!error.babyName&&enrollData.babyName.length!==0}"
+          v-model="enrollData.baby.baby_name"
+          v-bind:class="{error: error.baby_name, complete:!error.baby_name&&enrollData.baby.baby_name.length!==0}"
           class="inputs"
           style="margin-top:0px"
-          id="babyName"
+          id="baby_name"
           placeholder="이름, 별명, 태명 등" 
           type="text" 
           autocapitalize="none"
           autocorrect="none"
         />
-        <label for="babyName"></label>
-        <div class="error-text ml-2" v-if="error.babyName">{{error.babyName}}</div>
+        <label for="baby_name"></label>
+        <div class="error-text ml-2" v-if="error.baby_name">{{error.baby_name}}</div>
       </div>
 
       <div class="mt-4 guide-text">
         아기의 성별을 선택해 주세요.
       </div>
-      <div class="buttons" style="margin-top:10px; height:auto">
-        <button class="btn girl-button" style="float:left;" :class="{selected: enrollData.gender=='girl'}" @click="clickGirlBtn">여자 아기</button>
-        <button class="btn boy-button" style="float:right;" :class="{selected: enrollData.gender=='boy'}" @click="clickBoyBtn">남자 아기</button>
+      <div class="buttons" style="margin-top:10px; birth_height:auto">
+        <button class="btn girl-button" style="float:left;" :class="{selected: enrollData.baby.gender=='F'}" @click="clickGirlBtn">여자 아기</button>
+        <button class="btn boy-button" style="float:right;" :class="{selected: enrollData.baby.gender=='M'}" @click="clickBoyBtn">남자 아기</button>
         <label for="gender"></label>
         <div class="error-text ml-2" v-if="error.gender">{{error.gender}}</div>
         <div style="float:left; width:100%; margin-bottom:30px"/>
@@ -38,8 +38,8 @@
       </div>
       <div class="input-with-label">
         <input 
-          v-model="enrollData.birth" 
-          v-bind:class="{error : error.birth, complete:!error.birth&&enrollData.birth.length!==0}"
+          v-model="enrollData.baby.birth" 
+          v-bind:class="{error : error.birth, complete:!error.birth&&enrollData.baby.birth.length!==0}"
           class="inputs"
           id="birth" 
           placeholder="년 월 일" 
@@ -57,17 +57,17 @@
       </div>
       <div class="input-with-label">
         <input 
-          v-model="enrollData.relationship" 
+          v-model="enrollData.relationship_name" 
           
-          v-bind:class="{error: error.relationship, complete:!error.relationship&&enrollData.relationship.length!==0}"
+          v-bind:class="{error: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
           class="inputs"
-          id="relationship" 
+          id="relationship_name" 
           type="text"
           placeholder="관계" 
           required
         />
-        <label for="relationship"></label>
-        <div class="error-text ml-2" v-if="error.relationship">{{error.relationship}}</div>
+        <label for="relationship_name"></label>
+        <div class="error-text ml-2" v-if="error.relationship_name">{{error.relationship_name}}</div>
       </div>
 
         <div class="mt-4" style="font-size:20px; color:#bbbbbb;">
@@ -79,15 +79,15 @@
       </div>
       <div class="input-with-label">
         <input
-          v-model="enrollData.height"
+          v-model="enrollData.baby.birth_height"
           type="number"
-          id="height"
+          id="birth_height"
           placeholder="키"
           class="inputs"
           required
           @keyup.enter="clickEnroll"
         />
-        <label for="height"></label>
+        <label for="birth_height"></label>
       </div>
       
         <div class="mt-4 guide-text">
@@ -95,15 +95,15 @@
         </div>
       <div class="input-with-label">
         <input
-          v-model="enrollData.weight"
+          v-model="enrollData.baby.birth_weight"
           type="number"
-          id="weight"
+          id="birth_weight"
           placeholder="몸무게"
           class="inputs"
           required
           @keyup.enter="clickEnroll"
         />
-        <label for="weight"></label>
+        <label for="birth_weight"></label>
       </div>
       
       <div class="buttons mt-5">
@@ -117,22 +117,25 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'Signup',
+  name: 'RegisterBaby',
   data() {
     return {
       enrollData: {
-        babyName: "",
-        gender: "",
-        birth: "",
-        relationship: "",
-        height: "",
-        weight: "",
+        baby: {
+          baby_name: "",
+          gender: "",
+          birth: "",
+          birth_height: "",
+          birth_weight: "",
+          profile_image: "profileimage",
+        },
+        relationship_name: ""
       },
       error: {
-        babyName: false,
+        baby_name: false,
         gender: false,
         birth: false,
-        relationship: false,
+        relationship_name: false,
       },
       isSubmit: false,
     };
@@ -144,46 +147,46 @@ export default {
     enrollData: {
       deep: true,
       handler() {
-        this.checkbabyNameForm();
+        this.checkbaby_nameForm();
         this.checkGenderForm();
         this.checkBirthForm();
-        this.checkRelationshipForm();
+        this.checkrelationship_nameForm();
       }
     }
   },
   methods: {
     clickGirlBtn(){
-      this.enrollData.gender = 'girl';
+      this.enrollData.baby.gender = 'F';
     },
     clickBoyBtn(){
-      this.enrollData.gender = 'boy';
+      this.enrollData.baby.gender = 'M';
     },
-    checkbabyNameForm() {
-      if ( this.enrollData.babyName.length > 0) {
-        this.error.babyName = false;
+    checkbaby_nameForm() {
+      if ( this.enrollData.baby.baby_name.length > 0) {
+        this.error.baby_name = false;
       }
-      else this.error.babyName = "아기의 이름을 입력해 주세요."
+      else this.error.baby_name = "아기의 이름을 입력해 주세요."
     },
     checkGenderForm() {
-      if ( this.enrollData.gender.length > 0) {
+      if ( this.enrollData.baby.gender.length > 0) {
         this.error.gender = false;
       }
       else this.error.gender = "아기의 성별을 선택해 주세요."
     },
     checkBirthForm() {
-      if ( this.enrollData.birth.length > 0) {
+      if ( this.enrollData.baby.birth.length > 0) {
         this.error.birth = false;
       }
       else this.error.birth = "아기의 출생일자를 선택해 주세요."
     },
-    checkRelationshipForm() {
-      if ( this.enrollData.relationship.length > 0) {
-        this.error.relationship = false;
+    checkrelationship_nameForm() {
+      if ( this.enrollData.relationship_name.length > 0) {
+        this.error.relationship_name = false;
       }
-      else this.error.relationship = "아기와의 관계를 입력해 주세요."
+      else this.error.relationship_name = "아기와의 관계를 입력해 주세요."
 
       // 버튼 활성화
-      if (this.enrollData.babyName.length > 0 && this.enrollData.gender.length > 0 && this.enrollData.birth.length > 0 && this.enrollData.relationship.length > 0){
+      if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
         let isSubmit = true;
         Object.values(this.error).map(v => {
           if (v) isSubmit = false;
@@ -193,6 +196,9 @@ export default {
     },
     clickEnroll() {
       if ( this.isSubmit ){
+        this.enrollData.baby.birth_height = Number(this.enrollData.baby.birth_height)
+        this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)
+        console.log("HELLO")
         this.enrollBaby(this.enrollData)
       }
     },
