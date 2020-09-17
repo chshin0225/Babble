@@ -158,9 +158,9 @@ export default {
         });*/
     },
     clickLogin() {
-      /*if (this.isSubmit) {
+      if (this.isSubmit) {
         this.login(this.loginData);
-      }*/
+      }
     },
     kakaoLogin() {
       /*window.Kakao.Auth.login({
@@ -306,6 +306,7 @@ h3 {
 }
 .login-button {
   background-color: #FEA59C;
+  box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   color: #f8f8f8;
   width: 100%;
 }
@@ -317,11 +318,13 @@ h3 {
 }
 .kakao {
   background-color: #ffe812;
+  box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   border-radius: 5px;
   width: 100%;
 }
 .google {
   background-color: #ffffff;
+  box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   border-radius: 5px;
   width: 100% !important;
 }

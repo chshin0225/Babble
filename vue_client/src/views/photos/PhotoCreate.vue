@@ -134,14 +134,14 @@ export default {
     // },
     change4(e) {
       var files = e.target.files
+      console.log(files)
       var frame = document.getElementById('frame');
       for (var file of files) {
         var div = document.createElement("div")
         div.classList.add("col-4");
         var i = document.createElement("img")
         i.src = URL.createObjectURL(file)
-        i.classList.add('imgStyle')
-        i.className = "imgStyle"
+
         i.style.objectFit='cover'
         i.style.objectPosition='50% 50%'
         i.style.width='30vw'

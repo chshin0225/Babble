@@ -5,12 +5,22 @@ import accountStore from '@/store/modules/accountStore'
 import diaryStore from '@/store/modules/diaryStore'
 import photoStore from '@/store/modules/photoStore'
 
+import cookies from 'vue-cookies'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    authToken: cookies.get('auth-token'),
+  },
+  getters: {
+    config: state => ({ headers: { jwt : state.authToken}}),
   },
   mutations: {
+    SET_TOKEN(state, token) {
+      state.authToken = token
+      cookies.set('auth-token', token)
+    },
   },
   actions: {
   },

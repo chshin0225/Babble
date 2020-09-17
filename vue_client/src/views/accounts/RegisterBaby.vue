@@ -110,6 +110,7 @@
         <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
       </div>
     </div>
+    <div style="height:15vh"></div>
   </div>
 </template>
 
