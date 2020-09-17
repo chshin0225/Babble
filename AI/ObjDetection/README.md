@@ -22,7 +22,6 @@ objDetection.py 에서 입력으로 하고자하는 이미지 path를 설정한�
 ```bash
 $ python objDetection.py
 ```
----
 
 ## 의존성 라이브러리
 
