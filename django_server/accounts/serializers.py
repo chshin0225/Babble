@@ -27,7 +27,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies']
+        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby']
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:
