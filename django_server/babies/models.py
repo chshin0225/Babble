@@ -19,7 +19,7 @@ class Baby(models.Model):
         default='F',
     )
 
-    profile_image = models.CharField(max_length=200)
+    profile_image = models.CharField(max_length=200, blank=True, null=True)
     birth_height = models.FloatField()
     birth_weight = models.FloatField()
    
