@@ -8,7 +8,7 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </nav>
-      <Sidebar class=" d-flex justify-content-between" style="clear:both;">
+      <Sidebar class=" d-flex justify-content-between" style="clear:both; z-index:100;">
         <div class="side d-flex flex-column justify-content-between h-100">
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
@@ -64,21 +64,21 @@
       <!-- footer -->
       <div class="footer row no-gutters">
         <div 
-        class="col-4 color-gray" 
+        class="col-4 color-gray pointer" 
         :class="{'color-pink' : isAlbum()}"
         @click="clickPhoto">
           <p><i class="fas fa-images"></i></p>
           <p>Photo</p>
         </div>
         <div 
-          class="col-4 color-gray" 
+          class="col-4 color-gray pointer" 
           :class="{'color-pink' : isDiary()}"
           @click="clickDiary">
           <p><i class="fas fa-book"></i></p>
           <p>Diary</p>
         </div>
         <div 
-          class="col-4 color-gray"
+          class="col-4 color-gray pointer"
           :class="{'color-pink' : isProfile()}"
           @click="clickProfile">
           <p><i class="fas fa-user"></i></p>
@@ -122,7 +122,7 @@ export default {
       }
     },
     isDiary() {
-      if (this.$route.name === 'Diary') {
+      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar'  ) {
         return true
       } else {
         return false
@@ -193,6 +193,7 @@ export default {
 .side {
   overflow:hidden;
 }
+
 
 .upper {
   padding: 20px;

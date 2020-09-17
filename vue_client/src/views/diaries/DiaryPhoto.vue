@@ -36,10 +36,10 @@
     <!-- Swiper -->
     <swiper class="swiper" :options="swiperOption">
       <swiper-slide v-for="n in 10" :key=n> 
-        <div class="card" style="background-image:url('https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764')">
+        <div class="card" @click="clickCard" style="background-image:url('https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764')">
           <div class="p-3 title col-3 text-center">
-            <span class="date">7</span><br>
-            <span class="month">July</span>
+            <span class="date">{{n}}</span><br>
+            <span class="month">Sept</span>
           </div>
           <div class="p-3 mt-auto">
             <h4 class="diary-text">세상에서 가장 귀여운 우리 아롱이... 오늘은 밥 많이 먹었다!</h4>
@@ -51,7 +51,7 @@
     </swiper>
   </div>
   <!-- 다이어리 추가 버튼 구현 -->
-  <div @click="clickAdd" class="add-button color-pink">
+  <div @click="clickAdd" class="add-button color-pink pointer">
     <i class="fas fa-plus-circle fa-2x"></i>
   </div>
 </div>
@@ -91,6 +91,9 @@ export default {
   methods: {
     clickAdd() {
       this.$router.push({name: 'DiaryCreate'})
+    },
+    clickCard( ){
+      this.$router.push({name: 'DiaryDetail', params: { 'diaryId': 1 } })
     }
   }
 }
@@ -164,7 +167,7 @@ p {
 
 /* 추가 버튼 */
 .add-button {
-  position: absolute;
+  position: fixed;
   bottom: 10vh;
   right: 5vw;
   text-shadow: 5px 5px 20px rgba(0,0,0,0.6);

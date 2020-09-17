@@ -50,7 +50,7 @@
         </div>
         <div class="photo-container">
           <div class="photo">
-            <img src="https://lh3.googleusercontent.com/proxy/ZTHeMEFXstf0x3R3xsDnwl6cjsbIXSzFOxP8bbJRxQhPXXzysOggzJPLf8rDIW6C9KPAeTNdHHbZQhxafFFS43WdFjrWfbLOJ2fi5HVB5t3Ar0pLc1xbysATdNvrWmuxmAuTaQ" class="card-img-top" alt="...">
+            <img src="https://image.chosun.com/sitedata/image/201503/19/2015031902832_0.jpg" class="card-img-top" alt="...">
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
       <div class="photos d-flex">
         <div class="photo-container">
           <div class="photo">
-            <img src="https://lh3.googleusercontent.com/proxy/I8VHuGeCKm3Mr0766qrIhVU1CRQCtWKWNhdI-qjWprYYF5Ov20qyr8NmuJR-k6avovYBkit3UERqwGpOLyDJtrYX5GKN3EcFZMkVurpYgz81rzR_tXULTeU72fAoP6Z_tW24KCOrxgWIbb14HITOhg" class="card-img-top " alt="...">
+            <img src="https://pds.joins.com/news/component/htmlphoto_mmdata/201501/08/htm_2015010810155c010c011.jpeg" class="card-img-top " alt="...">
           </div>
         </div>
       </div>
@@ -86,6 +86,11 @@
         </v-row>
       </v-dialog>
     </div> -->
+    <!-- 사진 추가 버튼 구현 -->
+    <div @click="clickAdd" class="add-button color-pink pointer">
+      <i class="fas fa-plus-circle fa-2x"></i>
+    </div>
+    <div style="height:15vh"></div>
   </div>
 </template>
 
@@ -99,6 +104,9 @@ export default {
     }
   },
   methods: {
+    clickAdd() {
+      this.$router.push({name: 'PhotoCreate'})
+    }
   } 
 }
 </script>
@@ -126,5 +134,14 @@ img {
 .date {
   font-weight: 900;
   margin: 5vw 0 0 3vw;
+}
+
+/* 추가 버튼 */
+.add-button {
+  position: fixed;
+  bottom: 10vh;
+  right: 5vw;
+  text-shadow: 5px 5px 20px rgba(0,0,0,0.6);
+  z-index: 1000;
 }
 </style>
