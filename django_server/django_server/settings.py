@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     ## yasg
     'drf_yasg',
     ## django_storages
-    # 'storages',
+    'storages',
 
     # original
     'django.contrib.admin',
@@ -116,30 +116,30 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-
-#         'NAME': 'babble',
-#         'USER': 'dragon',
-#         'PASSWORD': get_secret('DB_PASSWORD'),
-#         'HOST': 'j3a310.p.ssafy.io',
-
-#         # 'NAME': 'babble',
-#         # 'USER': 'root',
-#         # 'PASSWORD': '',
-#         # 'HOST': '',
-
-#         'PORT': '3306',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+
+        'NAME': 'babble',
+        'USER': 'dragon',
+        'PASSWORD': get_secret('DB_PASSWORD'),
+        'HOST': 'j3a310.p.ssafy.io',
+
+        # 'NAME': 'babble',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': '',
+
+        'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 
 # Password validation

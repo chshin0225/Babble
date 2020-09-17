@@ -12,7 +12,7 @@ class Tag(models.Model):
 class Photo(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     image_url = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
+    location = models.CharField(blank=True, null=True, max_length=200)
 
     # 최고권위자 class의 class_id가 1이라는 가정 하에
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
