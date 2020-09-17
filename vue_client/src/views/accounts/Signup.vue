@@ -1,8 +1,7 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory signup-form">
-      <h3 class="color-pink">회원가입</h3>
-
+    <div class="container p-3 bg-light-ivory signup-form">
+      <!-- <h3 class="color-pink">회원가입</h3> -->
       <div class="input-with-label">
         <input 
           v-model="signupData.name"
@@ -246,8 +245,9 @@ input[type="password"] {
   background-repeat: repeat;
 }
 .signup-form {
-  margin-top: 15vh !important;
+  margin-top: 2.5vh !important;
   opacity: 0.9;
+  text-align: center;
 }
 .items:hover {
   cursor: pointer;
