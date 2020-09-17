@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    # 'allauth.socialaccount',
     ## CORS
     'corsheaders',
     ## yasg
@@ -77,8 +77,8 @@ INSTALLED_APPS = [
     'diaries',
     'babies',
 
-    # provider
-    'allauth.socialaccount.providers.kakao',
+    # # provider
+    # 'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -184,45 +184,46 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.User'
-REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
-}
+# REST_AUTH_SERIALIZERS = {
+#     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
+# }
 
 SITE_ID = 1
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ],
 }
-REST_USE_JWT = True
+# REST_USE_JWT = True
 
-import datetime
-JWT_AUTH = {
-  'JWT_SECRET_KEY': SECRET_KEY,
-  'JWT_ALGORITHM': 'HS256',
-  'JWT_ALLOW_REFRESH': True,
-      # 1주일간 유효한 토큰
-  'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-      # 28일 마다 갱신됨(유효 기간 연장시)
-  'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
-}
+# import datetime
+# JWT_AUTH = {
+#   'JWT_SECRET_KEY': SECRET_KEY,
+#   'JWT_ALGORITHM': 'HS256',
+#   'JWT_ALLOW_REFRESH': True,
+#       # 1주일간 유효한 토큰
+#   'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+#       # 28일 마다 갱신됨(유효 기간 연장시)
+#   'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+# }
 
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST = []
 
 
 # Django all-auth configuration
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'
 
@@ -233,25 +234,25 @@ ACCOUNT_AUTHENTICATED_LOGOUT_REDIRECTS = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 OLD_PASSWORD_FIELD_ENABLED = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_USER_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ssafybabble@gmail.com'
-EMAIL_HOST_PASSWORD = get_secret('DB_PASSWORD')
-SERVER_EMAIL = 'ssafybabble@gmail.com'
-DEFAULT_FROM_MAIL = EMAIL_HOST_USER
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_USER_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'ssafybabble@gmail.com'
+# EMAIL_HOST_PASSWORD = get_secret('DB_PASSWORD')
+# SERVER_EMAIL = 'ssafybabble@gmail.com'
+# DEFAULT_FROM_MAIL = EMAIL_HOST_USER
 
-# Social Login
-SOCIALACCOUNT_PROVIDERS = {
-    'kakao': {
-        'APP': {
-            'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
-            'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
-            'key': ''
-        }
-    }
-}
+# # Social Login
+# SOCIALACCOUNT_PROVIDERS = {
+#     'kakao': {
+#         'APP': {
+#             'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
+#             'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
+#             'key': ''
+#         }
+#     }
+# }
 
 
 # AWS s3

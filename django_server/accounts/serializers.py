@@ -6,7 +6,7 @@ from babies.serializers import BabySerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = []
+        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies']
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:
