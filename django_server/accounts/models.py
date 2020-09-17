@@ -38,6 +38,10 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        self.cleaned_data = self.get_cleaned_data()
+        user.name = self.cleaned_data.get('name')
+        user.profile_image = self.cleaned_data.get('profile_image')
+
         user.save()
         return user
 
@@ -59,8 +63,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     
-    name = models.CharField(blank=True, max_length=50)
-    profile_image = models.CharField(max_length=200) 
+    name = models.CharField(blank=True, null=True, max_length=50)
+    profile_image = models.CharField(blank=True, null=True, max_length=200) 
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
