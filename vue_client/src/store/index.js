@@ -14,7 +14,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
   },
   getters: {
-    config: state => ({ headers: { jwt : state.authToken}}),
+    config: state => ({ headers: { Authorization: `Token ${state.authToken}`}}),
   },
   mutations: {
     SET_TOKEN(state, token) {

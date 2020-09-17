@@ -4,7 +4,10 @@ export default {
       // accounts
       signup: '/rest-auth/signup/',
       login: '/rest-auth/login/',
-      logout: '/rest-auth/logout/'
+      logout: '/rest-auth/logout/',
+
+      // photos
+      photos: '/photos/',
     }
   }
   
