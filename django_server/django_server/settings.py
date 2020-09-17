@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
-    # 'allauth.socialaccount',
+    'allauth.socialaccount',
     ## CORS
     'corsheaders',
     ## yasg
@@ -116,30 +116,30 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-
-        'NAME': 'babble',
-        'USER': 'dragon',
-        'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': 'j3a310.p.ssafy.io',
-
-        # 'NAME': 'babble',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': '',
-
-        'PORT': '3306',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'ENGINE': 'django.db.backends.mysql',
+
+#         'NAME': 'babble',
+#         'USER': 'dragon',
+#         'PASSWORD': get_secret('DB_PASSWORD'),
+#         'HOST': 'j3a310.p.ssafy.io',
+
+#         # 'NAME': 'babble',
+#         # 'USER': 'root',
+#         # 'PASSWORD': '',
+#         # 'HOST': '',
+
+#         'PORT': '3306',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 
 # Password validation
@@ -184,9 +184,10 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.User'
-# REST_AUTH_SERIALIZERS = {
-#     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer',
-# }
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+}
+ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
 
 SITE_ID = 1
 
@@ -234,7 +235,7 @@ ACCOUNT_AUTHENTICATED_LOGOUT_REDIRECTS = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 OLD_PASSWORD_FIELD_ENABLED = True
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USER_TLS = True
 # EMAIL_PORT = 587
 # EMAIL_HOST = 'smtp.gmail.com'
