@@ -24,10 +24,7 @@ class DiaryListView(APIView):
         serializer = DiarySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # 유저 정보 필요!!
-            User = get_user_model()
-            admin = User.objects.get(id=1)
-            serializer.save(creator=admin, baby=baby)
-            # serializer.save(creator=request.user, baby=baby)
+            serializer.save(creator=request.user, baby=baby)
             return Response(serializer.data)
         return Response(serializer.errors)
 
@@ -51,10 +48,12 @@ class DiaryDetailView(APIView):
 
     def delete(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        if diary.creator == request.user:
-            diary.delete()
-            return Response()
+        print(request.user)
+        print(diary.creator)
+        # if diary.creator == request.user:
+        diary.delete()
         return Response()
+        # return Response({'detail': '권한이 없습니다.'})
 
     
 class DiaryCommentListView(APIView):

@@ -8,7 +8,7 @@ from photos.models import Photo
 
 # Create your models here.
 class Diary(models.Model):
-    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(Baby, blank=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
     content_html = models.TextField()
@@ -17,7 +17,7 @@ class Diary(models.Model):
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_diaries')
     create_date = models.DateField(auto_now_add=True)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_diaries')
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name='modified_diaries')
     modify_date = models.DateField(auto_now=True)
 
     permitted_groups = models.ManyToManyField(Group, blank=True, related_name='allowed_diaries')
