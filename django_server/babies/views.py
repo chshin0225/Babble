@@ -21,10 +21,10 @@ class BabyListView(APIView):
     
     # 새로운 babble box 생성
     def post(self, request):
-        serializer = BabySerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
+        baby_serializer = BabySerializer(data=request.data)
+        if baby_serializer.is_valid(raise_exception=True):
+            baby_serializer.save()
+            return Response(baby_serializer.data)
         return Response(serializer.errors)
 
 
@@ -36,4 +36,14 @@ class BabyDetailView(APIView):
         pass
 
     def delete(self, request, baby_id):
+        pass
+
+
+class UserBabyRelationshipListView(APIView):
+    def get(self, request):
+        user_baby_relationships = UserBabyRelationship.objects.filter(user=request.user).all()
+        serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
+        return Response(serializer.data)
+
+    def put(self, request):
         pass

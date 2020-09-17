@@ -123,7 +123,7 @@ DATABASES = {
 
         'NAME': 'babble',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'cw24352435',
         'HOST': '',
 
         'PORT': '3306',
