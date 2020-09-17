@@ -5,32 +5,56 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from babies.models import Baby
 
 class UserManager(BaseUserManager):
-    use_in_migrations = True
+    # use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
+    # def _create_user(self, email, password, **extra_fields):
+    #     if not email:
+    #         raise ValueError('The given email must be set')
+    #     email = self.normalize_email(email)
+    #     user = self.model(email=email, **extra_fields)
+    #     user.set_password(password)
+    #     user.save(using=self._db)
+    #     return user
+
+    # def create_user(self, email, password=None, **extra_fields):
+    #     extra_fields.setdefault('is_staff', False)
+    #     extra_fields.setdefault('is_superuser', False)
+    #     return self._create_user(email, password, **extra_fields)
+    
+    # def create_superuser(self, email, password, **extra_fields):
+    #     extra_fields.setdefault('is_staff', True)
+    #     extra_fields.setdefault('is_superuser', True)
+        
+    #     if extra_fields.get('is_staff') is not True:
+    #         raise ValueError('Superuser mush have is_staff=True.')
+    #     if extra_fields.get('is_superuser') is not True:
+    #         raise ValueError('Superuser mush have is_superuser=True.')
+
+    #     return self._create_user(email, password, **extra_fields)
+
+    def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        self.cleaned_data = self.get_cleaned_data()
+        user.name = self.cleaned_data.get('name')
+        user.profile_image = self.cleaned_data.get('profile_image')
+
+        user.save()
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
-    
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser mush have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser mush have is_superuser=True.')
+        extra_fields.setdefault('is_active', True)
 
-        return self._create_user(email, password, **extra_fields)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True.'))
+        return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
     first_name = None
@@ -38,9 +62,9 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
-
-    name = models.CharField(blank=True, max_length=50)
-    profile_image = models.CharField(max_length=200) 
+    
+    name = models.CharField(blank=True, null=True, max_length=50)
+    profile_image = models.CharField(blank=True, null=True, max_length=200) 
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
