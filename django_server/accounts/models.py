@@ -54,7 +54,15 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
             raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self.create_user(email, password, **extra_fields)
+
+        if not email:
+            raise ValueError(_('The Email must be set'))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+
+        user.save()
+        return user
 
 class User(AbstractUser):
     first_name = None
@@ -64,7 +72,8 @@ class User(AbstractUser):
     password = models.CharField(max_length=128)
     
     name = models.CharField(blank=True, null=True, max_length=50)
-    profile_image = models.CharField(blank=True, null=True, max_length=200) 
+    profile_image = models.CharField(blank=True, null=True, max_length=200)
+    current_baby = models.ForeignKey(Baby, null=True, on_delete=models.SET_NULL)
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
