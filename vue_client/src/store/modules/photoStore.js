@@ -22,18 +22,18 @@ const photoStore = {
     }
   },
   actions: {
-    fetchPhotos({ commit }) {
+    fetchPhotos({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos, rootGetters.config)
         .then(res => {
           commit('SET_PHOTOS', res.data)
         })
         .catch(err => console.log(err.response.data))
     },
-    findPhoto({ commit }, photoId) {
+    findPhoto({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
         .then(res => {
           commit('SET_SELECTED_PHOTO', res.data)
-          router.push({name: 'PhotoDetail', params: { photoId: PhotoId}})
+          router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
         .catch(err => console.log(err.response.data))
     },

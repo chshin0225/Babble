@@ -117,7 +117,7 @@ p {
 
 .card {
   height: 60vh;
-  width: 86vw;
+  width: 82vw;
   background-size: cover;
   background-position: 50% 50%;
   border-radius: 10%;
@@ -125,6 +125,7 @@ p {
   -moz-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -webkit-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -o-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
+   margin-bottom: 2vh;
 }
 
 

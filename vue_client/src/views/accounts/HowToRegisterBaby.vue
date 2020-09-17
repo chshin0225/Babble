@@ -1,12 +1,12 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 enroll-form">
-      <h3 class="color-pink">아기 등록</h3>
-      <div class="image-sect" style="text-align:center;">
+    <div class="container p-3 mt-5 enroll-form text-center">
+      <h2 class="color-pink">아기 등록</h2>
+      <div class="image-sect">
         <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png">
       </div>
-      <div class="mt-4" style="font-size:14px; font-weight:bold; text-align:center">
-        아기의 정보를 등록해볼까요?</div>
+      <div class="mt-4 desc-title">
+        <h5>아기의 정보를 등록해볼까요?</h5></div>
         <div class="mt-3" style="font-size:12px; text-align:center">
           아기를 새로 등록하시거나<br>
           다른 계정에서 발급된 초대 코드를 등록해<br>
@@ -49,13 +49,21 @@ export default {
   width: 80%;
   border-radius: 25px;
 }
-h3 {
+
+h2 {
   color: #FEA59C;
-  font-weight: 800;
+  font-weight: 900;
 }
+
+.desc-title h5 {
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
 .btn {
   width:100%;
 }
+
 .background {
   background-image: url("https://user-images.githubusercontent.com/25967949/90751489-27ce4480-e311-11ea-93aa-2ab9d1f41b4e.png");
   position: absolute;
@@ -65,10 +73,12 @@ h3 {
   right: 0;
   background-repeat: repeat;
 }
+
 .enroll-form {
   margin-top: 10vh !important;
   opacity: 0.9;
 }
+
 .image-sect img {
   max-width: 40vw;
   height: auto;

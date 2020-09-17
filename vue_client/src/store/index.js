@@ -41,7 +41,7 @@ export default new Vuex.Store({
         })
     },
     findMyAccount({ commit, getters}) {
-      axios.get(SERVER.URL + SERVER.ROUTES.myaccount, null, getters.config)
+      axios.get(SERVER.URL + SERVER.ROUTES.myaccount, getters.config)
         .then(res => {
           console.log(res)
           commit('SET_MYACCOUNT', res.data)

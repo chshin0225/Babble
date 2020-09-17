@@ -23,29 +23,32 @@
       </p>
       <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764">
     </div>
-    <div class="mt-3 growth-title">
-      <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
-      <span class="growth">성장 기록</span>
-    </div>
-    <div class="growth-record">
-      <p><img width="30px" src="https://static.thenounproject.com/png/379739-200.png"> 키 94cm</p>
-      <p><img width="30px" src="https://image.flaticon.com/icons/png/512/941/941517.png">몸무게 9.2kg</p>
-      <p><img width="30px" src="https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/001/758/original/head.png">머리둘레 20cm</p>
-    </div>
     <div class="scallop-down"></div>
-    <div class="comment mb-5">
+    <div class="mt-3 growth-title row no-gutters">
+      <div class="col-3 text-center">
+        <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+      </div>
+      <div class="col-9">
+        <p class="growth">성장 기록</p>
+        <p>무게 9.2Kg 🞄 키 67cm 🞄 머리둘레 20cm</p>
+      </div>
+      
+    </div>
+    <div class="scallop-up"></div>
+    <div class="comment mb-5 mt-3">
+      <h5 class="comment-title mb-3">댓글</h5>
       <div>
         <div class="d-flex justify-content-between">
-          <p>아빠</p>
-          <p>3시간 전</p>
+          <p class="comment-username">아빠</p>
+          <p class="comment-time">3시간 전</p>
         </div>
         <div>너무 귀엽다 우리 아롱이</div>
       </div>
       <hr>
       <div>
         <div class="d-flex justify-content-between">
-          <p>할머니</p>
-          <p>어제</p>
+          <p class="comment-username">할머니</p>
+          <p class="comment-time">어제</p>
         </div>
         <div>예쁘게 크렴</div>
       </div>
@@ -96,6 +99,14 @@ export default {
 }
 
 
+.scallop-up{
+  height:40px;
+  width:100%;
+  background: -webkit-gradient(radial, 50% 100%, 10, 50% 100%, 40, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+-webkit-background-size: 49px 100%;
+}
+
+
 .scallop-down{
   height:40px;
   /* margin-left: auto;
@@ -103,6 +114,19 @@ export default {
   width:100%;
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;
+}
+
+.comment-title {
+  font-weight: 900;
+  color: #FEA59C;
+}
+
+.comment-username {
+  font-weight: 600;
+}
+
+.comment-time {
+  color: #979797;
 }
 
 </style>

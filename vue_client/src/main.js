@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
+import VueCookies from 'vue-cookies'
 
 // firebase
 import firebase from 'firebase'
@@ -21,6 +22,9 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+
+
+Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 
