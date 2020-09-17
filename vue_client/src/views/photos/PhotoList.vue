@@ -3,7 +3,7 @@
     <div>
       <h5 class="date">2020-09-15 화</h5>
       <div class="photos d-flex">
-        <div class="photo-container">
+        <div class="photo-container pointer" @click="clickPhoto">
           <div class="photo">
             <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764" class="card-img-top " alt="...">
           </div>
@@ -105,7 +105,10 @@ export default {
   },
   methods: {
     clickAdd() {
-      this.$router.push({name: 'PhotoCreate'})
+      this.$router.push({ name: 'PhotoCreate' })
+    },
+    clickPhoto() {
+      this.$router.push({ name: 'PhotoDetail' })
     }
   } 
 }
