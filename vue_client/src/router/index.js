@@ -6,6 +6,7 @@ import PhotoMain from '@/views/photos/PhotoMain'
 import PhotoList from '@/views/photos/PhotoList'
 import PhotoLibrary from '@/views/photos/PhotoLibrary'
 import PhotoSearch from '@/views/photos/PhotoSearch'
+import PhotoDetail from '@/views/photos/PhotoDetail'
 
 // Diary
 import Diary from '@/views/diaries/Diary'
@@ -55,6 +56,11 @@ Vue.use(VueRouter)
         name: 'PhotoSearch'
       },
     ]
+  },
+  {
+    path: '/photo/:photoId',
+    component: PhotoDetail,
+    name: 'PhotoDetail'
   },
   // Authentication
   {
