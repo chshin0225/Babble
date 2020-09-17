@@ -43,7 +43,7 @@
           v-bind:class="{error : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
           class="inputs"
           id="password1" 
-          type="password1"
+          type="password"
           placeholder="비밀번호를 입력하세요." 
           required
         />
@@ -54,7 +54,7 @@
       <div class="input-with-label">
         <input
           v-model="signupData.password2"
-          type="password1"
+          type="password"
           id="password1-confirm"
           v-bind:class="{error : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
           placeholder="비밀번호를 다시 입력해주세요."
@@ -214,7 +214,7 @@ h3 {
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
 }
-input[type="password1"] {
+input[type="password"] {
   font-family:sans-serif;
 }
 .error, .error:focus {

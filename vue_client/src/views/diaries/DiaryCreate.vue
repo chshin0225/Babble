@@ -11,7 +11,11 @@
     </div>
     
     <!-- 제목 -->
-    <v-text-field class="m-3" label="제목"></v-text-field>
+    <v-text-field 
+      class="m-3" 
+      label="제목"
+      v-model="diaryData.title"
+    ></v-text-field>
 
     <!-- 에디터 -->
      <editor 
@@ -20,6 +24,7 @@
       initialEditType="wysiwyg"
       previewStyle="vertical"
       class="m-3"
+      ref="toastuiEditor"
      />
 
     <!-- 성장 기록 -->
@@ -42,7 +47,7 @@
       ></v-text-field>
     </div>
     <div class="p-2 d-flex justify-content-end">
-      <button class="btn btn-pink ">작성</button>
+      <button @click="clickCreate()" class="btn btn-pink ">작성</button>
     </div>
     <div style="height:10vh"></div>
         
@@ -55,6 +60,7 @@
 <script>
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
+import { mapActions } from 'vuex';
 
 import { Editor } from '@toast-ui/vue-editor';
 
@@ -76,15 +82,28 @@ export default {
       babyHead: 0,
       babyHeight: 0,
       babyWeight: 0,
+      diaryData: {
+        title: '',
+        content: '',
+        content_html: ''
+      }
     };
   },
   methods: {
+    ...mapActions('diaryStore', ['createDiary']),
     getHTML() {
       let html = this.$refs.toastuiEditor.invoke('getHtml');
       console.log(html)
     },
     clickBack() {
       this.$router.go(-1)
+    },
+    clickCreate() {
+      this.diaryData.content_html = this.$refs.toastuiEditor.invoke('getHtml');
+      this.diaryData.content = this.$refs.toastuiEditor.invoke('getMarkdown')
+      // this.diaryData.content = this.diaryData.content_html;
+      console.log(this.diaryData)
+      this.createDiary(this.diaryData)
     }
   },
 }

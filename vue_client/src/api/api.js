@@ -5,7 +5,11 @@ export default {
       signup: '/rest-auth/signup/',
       login: '/rest-auth/login/',
       logout: '/rest-auth/logout/',
+      babies: '/babies/',
+      myaccount: '/accounts/myinfo/',
 
+      // diary
+      diaries: '/diaries/',
       // photos
       photos: '/photos/',
     }
