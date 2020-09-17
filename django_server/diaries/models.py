@@ -8,12 +8,11 @@ from photos.models import Photo
 
 # Create your models here.
 class Diary(models.Model):
-    baby = models.ForeignKey(Baby, blank=True, on_delete=models.CASCADE)
+    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
     content_html = models.TextField()
-    
-    # 최고권위자 class의 class_id가 1이라는 가정 하에
+
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_diaries')
