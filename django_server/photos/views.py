@@ -20,21 +20,17 @@ class PhotoListView(APIView):
 
     # 아기 사진 업로드
     def post(self, request):
-        cb = request.user.current_baby
+        cb = request.user.current_baby.id
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
 
         new_photos = request.data['photos']
         for photo in new_photos:
-            serializer = PhotoDetailSerializer(
-                                                image_url=photo['image_url'],
-                                                creator=request.user,
-                                                modifier=request.user,
-                                                baby=cb
-                                                )
+            photo["baby"] = cb
+            serializer = PhotoDetailSerializer(data=photo)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-        return Response()
+        return Response({"message":"사진이 등록되었습니다."})
 
 class PhotoDetailView(APIView):
     def get(self, request, photo_id):

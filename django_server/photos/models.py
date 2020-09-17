@@ -23,8 +23,8 @@ class Photo(models.Model):
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
     modify_date = models.DateField(auto_now=True)
 
-    permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
-    photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos')
+    permitted_groups = models.ManyToManyField(Group, null=True, related_name='allowed_photos')
+    photo_tags = models.ManyToManyField(Tag, null=True, related_name='tagged_photos')
 
 
 class PhotoComment(models.Model):
