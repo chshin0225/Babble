@@ -120,15 +120,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'babble',
-        'USER': 'dragon',
-        'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': 'j3a310.p.ssafy.io',
-
         # 'NAME': 'babble',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': '',
+        # 'USER': 'dragon',
+        # 'PASSWORD': get_secret('DB_PASSWORD'),
+        # 'HOST': 'j3a310.p.ssafy.io',
+
+        'NAME': 'babble',
+        'USER': 'root',
+        'PASSWORD': get_secret('LOCAL_PASSWORD'),
+        'HOST': '',
 
         'PORT': '3306',
     }
@@ -192,7 +192,8 @@ SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',

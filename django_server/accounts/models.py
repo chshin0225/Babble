@@ -70,5 +70,5 @@ class UserBabyRelationship(models.Model):
     # 클래스가 지워진다면?
     rank = models.ForeignKey(Rank, on_delete=models.CASCADE)
     # default값은 무소속?
-    group = models.ForeignKey(Group, on_delete=models.SET_DEFAULT, default=1)
+    group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.SET_NULL)
     relationship_name = models.CharField(max_length=50)
