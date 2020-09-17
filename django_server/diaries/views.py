@@ -54,7 +54,7 @@ class DiaryDetailView(APIView):
         if diary.creator == request.user:
             diary.delete()
             return Response()
-        return Response(serializer.errors)
+        return Response()
 
     
 class DiaryCommentListView(APIView):
