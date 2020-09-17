@@ -127,7 +127,7 @@ DATABASES = {
 
         # 'NAME': 'babble',
         # 'USER': 'root',
-        # 'PASSWORD': '',
+        # 'PASSWORD': get_secret('LOCAL_PASSWORD'),
         # 'HOST': '',
 
         'PORT': '3306',

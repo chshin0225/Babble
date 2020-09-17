@@ -10,6 +10,8 @@ export default {
 
       // diary
       diaries: '/diaries/',
+      // photos
+      photos: '/photos/',
     }
   }
   

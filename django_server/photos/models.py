@@ -12,7 +12,7 @@ class Tag(models.Model):
 class Photo(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     image_url = models.CharField(max_length=200)
-    location = models.CharField(blank=True, null=True, max_length=200)
+    location = models.CharField(max_length=200, blank=True, null=True)
 
     # 최고권위자 class의 class_id가 1이라는 가정 하에
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
@@ -20,11 +20,11 @@ class Photo(models.Model):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_photos')
     # 사진의 metadata?
     create_date = models.DateField(auto_now_add=True)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
     modify_date = models.DateField(auto_now=True)
 
-    permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
-    photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos')
+    permitted_groups = models.ManyToManyField(Group, null=True, related_name='allowed_photos')
+    photo_tags = models.ManyToManyField(Tag, null=True, related_name='tagged_photos')
 
 
 class PhotoComment(models.Model):
@@ -44,10 +44,10 @@ class Album(models.Model):
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_albums')
     create_date = models.DateField(auto_now_add=True)
-    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_albums')
+    modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_albums')
     modify_date = models.DateField(auto_now=True)
 
-    photos = models.ManyToManyField(Photo, related_name='albums')
-    album_tags = models.ManyToManyField(Tag, related_name='tagged_albums')
+    photos = models.ManyToManyField(Photo, blank=True, related_name='albums')
+    album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums')
 
 
