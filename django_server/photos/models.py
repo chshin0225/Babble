@@ -12,7 +12,10 @@ class Tag(models.Model):
 class Photo(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     image_url = models.CharField(max_length=200)
-    location = models.CharField(max_length=200, blank=True, null=True)
+    file_type = models.CharField(max_length=50)
+    last_modified = models.DateTimeField()
+    size = models.IntegerField()
+    # location = models.CharField(max_length=200, blank=True, null=True)
 
     # 최고권위자 class의 class_id가 1이라는 가정 하에
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
@@ -23,8 +26,8 @@ class Photo(models.Model):
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
     modify_date = models.DateField(auto_now=True)
 
-    permitted_groups = models.ManyToManyField(Group, null=True, related_name='allowed_photos')
-    photo_tags = models.ManyToManyField(Tag, null=True, related_name='tagged_photos')
+    permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
+    photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos')
 
 
 class PhotoComment(models.Model):

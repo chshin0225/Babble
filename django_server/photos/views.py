@@ -24,7 +24,7 @@ class PhotoListView(APIView):
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
 
-        new_photos = request.data['photos']
+        new_photos = request.data
         for photo in new_photos:
             photo["baby"] = cb
             serializer = PhotoDetailSerializer(data=photo)
