@@ -5,18 +5,18 @@
 
       <div class="input-with-label">
         <input 
-          v-model="signupData.nickName"
-          v-bind:class="{error: error.nickName, complete:!error.nickName&&signupData.nickName.length!==0}"
+          v-model="signupData.name"
+          v-bind:class="{error: error.name, complete:!error.name&&signupData.name.length!==0}"
           class="inputs"
-          id="nickName"
+          id="name"
           placeholder="닉네임" 
           type="text" 
           autocapitalize="none"
           autocorrect="none"
           style="text-transform:lowercase"
         />
-        <label for="nickName"></label>
-        <div class="error-text ml-3" v-if="error.nickName">{{error.nickName}}</div>
+        <label for="name"></label>
+        <div class="error-text ml-3" v-if="error.name">{{error.name}}</div>
       </div>
 
       <div class="input-with-label">
@@ -38,32 +38,32 @@
 
       <div class="input-with-label">
         <input 
-          v-model="signupData.password" 
+          v-model="signupData.password1" 
           
-          v-bind:class="{error : error.password, complete:!error.password&&signupData.password.length!==0}"
+          v-bind:class="{error : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
           class="inputs"
-          id="password" 
-          type="password"
+          id="password1" 
+          type="password1"
           placeholder="비밀번호를 입력하세요." 
           required
         />
-        <label for="password"></label>
-        <div class="error-text ml-3" v-if="error.password">{{error.password}}</div>
+        <label for="password1"></label>
+        <div class="error-text ml-3" v-if="error.password1">{{error.password1}}</div>
       </div>
 
       <div class="input-with-label">
         <input
-          v-model="signupData.passwordConfirm"
-          type="password"
-          id="password-confirm"
-          v-bind:class="{error : error.passwordConfirm, complete:!error.passwordConfirm&&signupData.passwordConfirm.length!==0}"
+          v-model="signupData.password2"
+          type="password1"
+          id="password1-confirm"
+          v-bind:class="{error : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
           placeholder="비밀번호를 다시 입력해주세요."
           class="inputs"
           required
           @keyup.enter="clickSignup"
         />
-        <label for="password-confirm"></label>
-        <div class="error-text ml-3" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
+        <label for="password1-confirm"></label>
+        <div class="error-text ml-3" v-if="error.password2">{{error.password2}}</div>
       </div>
       <div class="buttons mt-3">
         <button class="btn signup-button" :class="{disabled: !isSubmit}" @click="clickSignup">가입하기</button>
@@ -83,15 +83,15 @@ export default {
     return {
       signupData: {
         email: "",
-        password: "",
-        passwordConfirm: "",
-        nickName: "",
+        password1: "",
+        password2: "",
+        name: "",
       },
       error: {
         email: false,
-        nickName: false,
-        password: false,
-        passwordConfirm: false,
+        name: false,
+        password1: false,
+        password2: false,
       },
       isSubmit: false,
     };
@@ -103,19 +103,19 @@ export default {
     signupData: {
       deep: true,
       handler() {
-        this.checknickNameForm();
+        this.checknameForm();
         this.checkEmailForm();
-        this.checkPasswordForm();
-        this.checkPasswordConfirmationForm();
+        this.checkpassword1Form();
+        this.checkpassword2ationForm();
       }
     }
   },
   methods: {
-    checknickNameForm() {
-      if ( this.signupData.nickName.length > 0) {
-        this.error.nickName = false;
+    checknameForm() {
+      if ( this.signupData.name.length > 0) {
+        this.error.name = false;
       }
-      else this.error.nickName="닉네임을 입력해주세요."
+      else this.error.name="닉네임을 입력해주세요."
     },
     checkEmailForm() {
       if ( this.signupData.email.length > 0 && !this.validEmail(this.signupData.email) ) {
@@ -128,26 +128,26 @@ export default {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
     },
-    checkPasswordForm() {
-      if (this.signupData.password.length > 0 && this.signupData.password.length < 8) {
-          this.error.password = "비밀번호가 너무 짧아요"
-        } else if ( this.signupData.password.length >= 8 && !this.validPassword(this.signupData.password) ) {
-          this.error.password = "영문, 숫자 포함 8 자리 이상이어야 해요.";
-        } else this.error.password = false;
+    checkpassword1Form() {
+      if (this.signupData.password1.length > 0 && this.signupData.password1.length < 8) {
+          this.error.password1 = "비밀번호가 너무 짧아요"
+        } else if ( this.signupData.password1.length >= 8 && !this.validpassword1(this.signupData.password1) ) {
+          this.error.password1 = "영문, 숫자 포함 8 자리 이상이어야 해요.";
+        } else this.error.password1 = false;
     },
-    validPassword(password) {
+    validpassword1(password1) {
       var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
-      return va.test(password);
+      return va.test(password1);
     },
-    checkPasswordConfirmationForm() {
-      if (this.signupData.password.length >= 8 && this.validPassword(this.signupData.password)) {
-         if (this.signupData.password !== this.signupData.passwordConfirm )
-        this.error.passwordConfirm = "비밀번호가 일치하지 않아요."
-      else this.error.passwordConfirm = false;
+    checkpassword2ationForm() {
+      if (this.signupData.password1.length >= 8 && this.validpassword1(this.signupData.password1)) {
+         if (this.signupData.password1 !== this.signupData.password2 )
+        this.error.password2 = "비밀번호가 일치하지 않아요."
+      else this.error.password2 = false;
       }
       
       // 버튼 활성화
-      if (this.signupData.nickName.length > 0 && this.signupData.email.length > 0 && this.signupData.password.length > 0 && this.signupData.passwordConfirm.length > 0){
+      if (this.signupData.name.length > 0 && this.signupData.email.length > 0 && this.signupData.password1.length > 0 && this.signupData.password2.length > 0){
         let isSubmit = true;
         Object.values(this.error).map(v => {
           if (v) isSubmit = false;
@@ -214,7 +214,7 @@ h3 {
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
 }
-input[type="password"] {
+input[type="password1"] {
   font-family:sans-serif;
 }
 .error, .error:focus {
