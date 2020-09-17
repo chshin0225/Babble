@@ -1,7 +1,11 @@
 <template>
   <div class="">
     <v-app-bar color="#FFFFFF" flat dense>
-      <v-icon class="top-left-icons" color="#FEA59C">mdi-arrow-left</v-icon>
+      <v-icon 
+        class="top-left-icons pointer" 
+        color="#FEA59C"
+        @click="clickBack"
+      >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
       <v-icon class="top-right-icons" color="#FEA59C">mdi-folder-outline</v-icon>
       <v-icon class="top-right-icons" color="#FEA59C">mdi-heart-outline</v-icon>
@@ -53,12 +57,18 @@
         </div>
       </div>
     </div>
+    <div style="height:15vh"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'DiaryDetail',
+  methods: {
+    clickBack() {
+      this.$router.go(-1)
+    }
+  }
 }
 </script>
 <style scoped>
