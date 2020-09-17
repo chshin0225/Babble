@@ -21,6 +21,9 @@ from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from allauth.account.views import confirm_email
+from django.conf.urls import url
+
 schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
@@ -35,15 +38,22 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('babies/', include('babies.urls')),
+    # url(r'^rest-auth/', include('rest_auth.urls')),
+    # url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    # url(r'^account/', include('allauth.urls')),
+    # url(r'^accounts-rest/registration/account-confio/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
+
+    path('account/', include('rest_auth.urls')),
+    path('account/registration/', include('rest_auth.registration.urls')),
+    path('account/', include('allauth.urls')),
+    url(r'account/registration/confirm-email/(?P<key>.+)/$', confirm_email, name='confirm_email'),
+    
     path('diaries/', include('diaries.urls')),
     path('photos/', include('photos.urls')),
-
-    # rest-auth
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/signup/', include('rest_auth.registration.urls')),
+    path('babies/', include('babies.urls')),
 ]
 
 if settings.DEBUG:
