@@ -6,6 +6,7 @@ import PhotoMain from '@/views/photos/PhotoMain'
 import PhotoList from '@/views/photos/PhotoList'
 import PhotoLibrary from '@/views/photos/PhotoLibrary'
 import PhotoSearch from '@/views/photos/PhotoSearch'
+import PhotoCreate from '@/views/photos/PhotoCreate'
 
 // Diary
 import Diary from '@/views/diaries/Diary'
@@ -20,15 +21,17 @@ import DiaryDetail from '@/views/diaries/DiaryDetail'
 import Babblebox from '@/views/common/Babblebox'
 
 // Authentication
-import Login from '@/views/accounts/Login.vue'
-import Signup from '@/views/accounts/Signup.vue'
-import PasswordFind from '@/views/accounts/PasswordFind.vue'
-import PasswordFindEmail from '@/views/accounts/PasswordFindEmail.vue'
-import HowToRegisterBaby from '@/views/accounts/HowToRegisterBaby.vue'
-import RegisterBaby from '@/views/accounts/RegisterBaby.vue'
-import RegisterBabyRelate from '@/views/accounts/RegisterBabyRelate.vue'
-import RegisterInviteLink from '@/views/accounts/RegisterInviteLink.vue'
+import Login from '@/views/accounts/Login'
+import Signup from '@/views/accounts/Signup'
+import PasswordFind from '@/views/accounts/PasswordFind'
+import PasswordFindEmail from '@/views/accounts/PasswordFindEmail'
+import HowToRegisterBaby from '@/views/accounts/HowToRegisterBaby'
+import RegisterBaby from '@/views/accounts/RegisterBaby'
+import RegisterBabyRelate from '@/views/accounts/RegisterBabyRelate'
+import RegisterInviteLink from '@/views/accounts/RegisterInviteLink'
 
+// Profile
+import Profile from '@/views/profile/Profile'
 
 Vue.use(VueRouter)
 
@@ -55,6 +58,11 @@ Vue.use(VueRouter)
         name: 'PhotoSearch'
       },
     ]
+  },
+  {
+    path: '/photo/create',
+    component: PhotoCreate,
+    name: 'PhotoCreate'
   },
   // Authentication
   {
@@ -136,6 +144,12 @@ Vue.use(VueRouter)
     path: '/diary/:diaryId',
     name: 'DiaryDetail',
     component: DiaryDetail
+  },
+  // Profile
+  {
+    path: '/profile/:profileId',
+    name: 'Profile',
+    component: Profile
   }
 ]
 
