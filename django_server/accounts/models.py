@@ -64,6 +64,7 @@ class User(AbstractUser):
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
