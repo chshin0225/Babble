@@ -1,12 +1,16 @@
 <template>
   <div>
     <div id="app">
-      <nav class="nav" v-if="this.$route.name!=='DiaryCreate'">
+      <nav class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
           <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
           <span class="logo-title color-pink">Babble</span>
         </div>
+      </nav>
+      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="this.$route.name!=='DiaryCreate' && this.$route.name!=='HowToRegisterBaby'">
+        <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
+        <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
       </nav>
       <Sidebar class=" d-flex justify-content-between" style="clear:both; z-index:100;">
         <div class="side d-flex flex-column justify-content-between h-100">
@@ -91,6 +95,7 @@
 
 <script>
 // import { mutations } from '@/store/index.js'
+import { mapState, mapActions } from 'vuex'
 import Sidebar from './views/common/Sidebar.vue';
 import Burger from './views/common/Burger.vue';
 export default {
@@ -102,12 +107,17 @@ export default {
   data(){
     return {
       isBurgerActive: false,
+      routes: ['DiaryCreate', 'HowToRegisterBaby', 'Signup', 'Login']
     }
   },
+  computed: {
+    ...mapState([ 'myaccount', 'users', 'authToken']),
+  },
   methods: {
+    ...mapActions(['findBaby', 'findMyAccount']),
     // Logo
     clickLogo() {
-      this.$router.push({name: 'PhotoMain'})
+      this.$router.push({name: 'PhotoList'})
     },
     // sidebar
     toggle() {
@@ -115,14 +125,14 @@ export default {
     },
     // navbar
     isAlbum() {
-      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch'   ) {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate'   ) {
         return true
       } else {
         return false
       }
     },
     isDiary() {
-      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar'  ) {
+      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar' || this.$route.name === 'DiaryCreate' ) {
         return true
       } else {
         return false
@@ -151,6 +161,9 @@ export default {
     clickProfile() {
       this.$router.push({ name: 'Profile'})
     }
+  },
+  created() {
+    this.findMyAccount()
   }
 };
 </script>
@@ -187,6 +200,18 @@ export default {
   float: left;
   width: 33.3333%;
   text-align: center;
+}
+
+/* top navbar 2 */
+.nav2 img {
+  max-width: 15vw;
+  height: auto;
+}
+
+.nav2 .nav2-title {
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: 'Rammetto One', cursive;
 }
 
 /* sidebar */
