@@ -9,7 +9,7 @@
         <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
         <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
         <v-app v-else> 
-          <v-bottom-sheet v-model="sheet" persistent>
+          <v-bottom-sheet v-model="sheet">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="#FEA59C"
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 // var camera1 = document.getElementById('camera1');
 // var camera2 = document.getElementById('camera2');
 // var camera3 = document.getElementById('camera3');
@@ -99,9 +100,11 @@ export default {
       toggle_exclusive: [],
       height: '45vh',
       no_image: true,
+      photos: []
     }
   },
   methods: {
+    ...mapActions('photoStore', ['createPhotos']),
     clickBack() {
       this.$router.go(-1)
     },
@@ -112,7 +115,7 @@ export default {
     },
     clickFinal() {
       this.sheet = !this.sheet
-      this.$router.push({name: 'PhotoList'})
+      this.createPhotos(this.photos)
     },
     changeHeight() {
       this.height = '57vh'
@@ -134,6 +137,7 @@ export default {
     // },
     change4(e) {
       var files = e.target.files
+      this.photos = files
       console.log(files)
       var frame = document.getElementById('frame');
       for (var file of files) {
@@ -246,6 +250,10 @@ export default {
 .crying-baby {
   height: 50vh;
   width: auto;
+}
+
+#frame {
+  padding-left: 2.5vw;
 }
 
 </style>
