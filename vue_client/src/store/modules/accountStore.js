@@ -36,7 +36,7 @@ const accountStore = {
                   title: "회원가입에 성공하였습니다."
                 })
       
-                router.push({name: 'PhotoList'})
+                router.push({name: 'HowToRegisterBaby'})
               })
 
               .catch(err => {
