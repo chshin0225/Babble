@@ -16,6 +16,7 @@ export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
     myaccount: null,
+    currentBaby: null,
   },
   getters: {
     config: state => ({ headers: { Authorization: `Token ${state.authToken}`}}),
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     SET_MYACCOUNT(state, user) {
       state.myaccount = user
+    },
+    SET_BABY(state, baby) {
+      state.currentBaby = baby
     }
   },
   actions: {
@@ -43,7 +47,6 @@ export default new Vuex.Store({
     findMyAccount({ commit, getters}) {
       axios.get(SERVER.URL + SERVER.ROUTES.myaccount, getters.config)
         .then(res => {
-          console.log(res)
           commit('SET_MYACCOUNT', res.data)
         })
         .catch(err => {
