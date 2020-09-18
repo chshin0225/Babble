@@ -1,12 +1,17 @@
 <template>
   <div class="grid" data-app>
-    <div>
-      <div class="photos row no-gutters">
+    <div v-if="photos">
+      <div class="photos row no-gutters" v-if="photos.length">
         <div v-for="photo in photos" :key="`club_${photo.id}`" class="photo-container pointer" @click="clickPhoto">
           <div class="photo">             
             <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-20baf.appspot.com/o/' + photo.image_url + '?alt=media&token=89612eed-0bc3-47d5-8531-dae94e9b376a'" class="card-img-top " alt="">
           </div>
         </div>
+      </div>
+      <div v-else class="text-center no-photos mt-5">
+         <!-- 만약 업로드 된이미지가 없을 경우 -->
+        <img class="crying-baby" src="@/assets/baby.png">
+        <h5>업로드 된 이미지가 없습니다.<br>아기 사진을 올려주세요!</h5>
       </div>
     </div>
     <!-- 여기부터 가짜 -->
@@ -126,7 +131,7 @@ export default {
       this.$router.push({ name: 'PhotoDetail' })
     }
   },
-  created() {
+  mounted() {
     this.fetchPhotos()
   }
 }
@@ -137,7 +142,7 @@ export default {
   padding: 0 0 0 2.5vw;
 }
 
-img {
+.photos img {
   /* width: 30vw; */
   height: 30vw;
   width: auto;
@@ -166,4 +171,10 @@ img {
   text-shadow: 5px 5px 20px rgba(0,0,0,0.6);
   z-index: 1000;
 }
+
+.crying-baby {
+  height: 50vh;
+  width: auto;
+}
+
 </style>
