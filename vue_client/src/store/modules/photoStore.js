@@ -37,9 +37,10 @@ const photoStore = {
         })
         .catch(err => console.log(err.response.data))
     },
-    createPhotos({ rootState, rootGetters }, photos) {
+    createPhotos({ rootState, rootGetters, dispatch }, photos) {
       const createData = []
       var storageRef = firebase.storage().ref();
+      
       for (var photo of photos) {
         storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
         
@@ -51,12 +52,15 @@ const photoStore = {
         }
         createData.push(imageInfo)
       }
+
       axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, rootGetters.config)
         .then(() => {
+          dispatch('fetchPhotos')
           router.push({name: 'PhotoList'})
         })
         .catch(err => console.log(err.response.data))
-      },
+    },
+      
   }
 }
 
