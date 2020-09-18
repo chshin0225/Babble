@@ -11,15 +11,15 @@ from babies.models import Baby
 # Create your views here.
 class DiaryListView(APIView):
     def get(self, request):
-        # baby_id = request.user.current_baby
-        baby_id = 1
+        baby_id = request.user.current_baby
+        # baby_id = 1
         diaries = Diary.objects.filter(baby=baby_id)
         serializer = DiaryListSerializer(diaries, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        # baby_id = request.user.current_baby
-        baby_id = 1
+        baby_id = request.user.current_baby.id
+        # baby_id = 1
         baby = get_object_or_404(Baby, id=baby_id)
         serializer = DiarySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
