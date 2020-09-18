@@ -3,7 +3,7 @@
     <div class="scallop-down"></div>
     <div class="text-center">
       <h3 class="color-pink font-weight-bold">Babble Box</h3>
-      <p>현재 <span class="color-blue font-weight-bold">아롱이맘</span>님께서 예뻐해주시는 아기입니다.</p>
+      <p>현재 <span class="color-blue font-weight-bold" v-if="myaccount">{{ myaccount.name }}</span>님께서 예뻐해주시는 아기입니다.</p>
     </div>
     <!-- <div class="scallop-down"></div> -->
     <div class="babbleboxes w-75 mt-3">
@@ -88,8 +88,18 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Babblebox',
+  computed: {
+    ...mapState([ 'myaccount']),
+  },
+  methods: {
+    ...mapActions(['findBaby', 'findMyAccount']),
+  },
+  mounted() {
+    this.findMyAccount()
+  }
 }
 </script>
 

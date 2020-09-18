@@ -77,6 +77,7 @@ const accountStore = {
                   title: "로그인에 성공하였습니다."
                 })
                 dispatch('findMyAccount', null, { root: true })
+                // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
                 router.push({name: 'PhotoList'})
               })
               .catch(err => {
@@ -118,8 +119,8 @@ const accountStore = {
           axios.post(SERVER.URL + SERVER.ROUTES.babies, enrollData, rootGetters.config)
             .then(res => {
               console.log(res)
-              
               dispatch('findMyAccount', null, { root: true })
+              // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
               router.push({ name: 'PhotoList'})
             })
             .catch(err => {

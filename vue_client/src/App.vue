@@ -16,13 +16,13 @@
         <div class="side d-flex flex-column justify-content-between h-100">
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
-            <div class="upper bg-pink">
+            <div class="upper bg-pink" >
               <div class="profile float-left mr-3">
                 <img src="http://bit.do/babbleprofile">
               </div>
-              <div class="babble-box">
-                <p>아롱이 (아기 이름)</p>
-                <p>D + 73</p>
+              <div class="babble-box" v-if="currentBaby">
+                <p>{{ currentBaby.baby_name}}</p>
+                <p>D + {{ countDays }}</p>
               </div>
             </div>
 
@@ -56,7 +56,6 @@
               <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
             </div>
             <div class="mb-5">
-
             </div>
           </div>
         </div>
@@ -95,6 +94,7 @@
 
 <script>
 // import { mutations } from '@/store/index.js'
+// import moment from "moment" 
 import { mapState, mapActions } from 'vuex'
 import Sidebar from './views/common/Sidebar.vue';
 import Burger from './views/common/Burger.vue';
@@ -107,12 +107,32 @@ export default {
   data(){
     return {
       isBurgerActive: false,
-      routes: ['DiaryCreate', 'HowToRegisterBaby', 'Signup', 'Login']
+      routes: ['DiaryCreate', 'HowToRegisterBaby', 'Signup', 'Login'],
+      days: null,
     }
   },
   computed: {
-    ...mapState([ 'myaccount',  'authToken']),
+    ...mapState([ 'myaccount', 'currentBaby',  'authToken']),
+    countDays() {
+      if (this.currentBaby) {
+        var d1 = new Date() 
+        var d2 = new Date(this.currentBaby.birth)
+        var days2 = Math.floor(Math.abs(d1-d2)/(8.64e+7))
+        return days2
+      }
+      else {
+        return null
+      }
+    },
   },
+  watch: {
+    myaccount() {
+      if (this.myaccount) {
+        this.findBaby(this.myaccount.current_baby)
+      }
+    },
+  },
+
   methods: {
     ...mapActions(['findBaby', 'findMyAccount']),
     // Logo
@@ -160,11 +180,12 @@ export default {
     },
     clickProfile() {
       this.$router.push({ name: 'Profile'})
-    }
+    },
+    
   },
-  // created() {
-  //   this.findMyAccount()
-  // }
+  mounted() {
+    this.findMyAccount()
+  }
 };
 </script>
 
