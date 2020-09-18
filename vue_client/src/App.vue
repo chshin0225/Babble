@@ -111,7 +111,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([ 'myaccount', 'users', 'authToken']),
+    ...mapState([ 'myaccount',  'authToken']),
   },
   methods: {
     ...mapActions(['findBaby', 'findMyAccount']),
@@ -162,9 +162,9 @@ export default {
       this.$router.push({ name: 'Profile'})
     }
   },
-  created() {
-    this.findMyAccount()
-  }
+  // created() {
+  //   this.findMyAccount()
+  // }
 };
 </script>
 

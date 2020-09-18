@@ -16,7 +16,7 @@ const accountStore = {
 
     },
     actions: {
-        postAuthData1({ commit } , info) {
+        postAuthData1({ commit} , info) {
             axios.post(SERVER.URL + SERVER.ROUTES.signup, info.data)
               .then(res => {
                 commit('SET_TOKEN', res.data.key, { root: true })
@@ -35,7 +35,6 @@ const accountStore = {
                   icon: 'success',
                   title: "회원가입에 성공하였습니다."
                 })
-      
                 router.push({name: 'HowToRegisterBaby'})
               })
 
@@ -58,7 +57,7 @@ const accountStore = {
                 })
               })
           },
-        postAuthData2({ commit }, info) {
+        postAuthData2({ commit, dispatch }, info) {
             axios.post(SERVER.URL + SERVER.ROUTES.login, info.data)
               .then(res => {
                 commit('SET_TOKEN', res.data.key, { root: true })
@@ -77,7 +76,7 @@ const accountStore = {
                   icon: 'success',
                   title: "로그인에 성공하였습니다."
                 })
-      
+                dispatch('findMyAccount', null, { root: true })
                 router.push({name: 'PhotoList'})
               })
               .catch(err => {
@@ -114,11 +113,13 @@ const accountStore = {
           }
           dispatch('postAuthData1', info)
         },
-        enrollBaby({ rootGetters }, enrollData) {
+        enrollBaby({ rootGetters, dispatch }, enrollData) {
           console.log(enrollData)
           axios.post(SERVER.URL + SERVER.ROUTES.babies, enrollData, rootGetters.config)
             .then(res => {
               console.log(res)
+              
+              dispatch('findMyAccount', null, { root: true })
               router.push({ name: 'PhotoList'})
             })
             .catch(err => {
