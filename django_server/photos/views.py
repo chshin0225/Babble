@@ -29,7 +29,7 @@ class PhotoListView(APIView):
             photo["baby"] = cb
             serializer = PhotoDetailSerializer(data=photo)
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
+                serializer.save(creator=request.user, modifier=request.user)
         return Response({"message":"사진이 등록되었습니다."})
 
 class PhotoDetailView(APIView):
