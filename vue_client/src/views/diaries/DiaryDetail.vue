@@ -92,7 +92,8 @@ export default {
   }
 
   img {
-    width: 82vw;  
+    /*width: 82vw;*/ 
+    width:100%; 
   }
 }
 .growth {
