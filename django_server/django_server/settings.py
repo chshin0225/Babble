@@ -120,15 +120,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'babble',
-        'USER': 'dragon',
-        'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': 'j3a310.p.ssafy.io',
-
         # 'NAME': 'babble',
-        # 'USER': 'root',
-        # 'PASSWORD': get_secret('LOCAL_PASSWORD'),
-        # 'HOST': '',
+        # 'USER': 'dragon',
+        # 'PASSWORD': get_secret('DB_PASSWORD'),
+        # 'HOST': 'j3a310.p.ssafy.io',
+
+        'NAME': 'babble',
+        'USER': 'root',
+        'PASSWORD': get_secret('LOCAL_PASSWORD'),
+        'HOST': '',
 
         'PORT': '3306',
     }
