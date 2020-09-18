@@ -4,12 +4,18 @@
       <nav class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
-          <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
+          <span>
+            <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
+            <img src="@/assets/babble.png" />
+          </span>
           <span class="logo-title color-pink">Babble</span>
         </div>
       </nav>
       <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="this.$route.name!=='DiaryCreate' && this.$route.name!=='HowToRegisterBaby'">
-        <span><img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"></span>
+        <span>
+          <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
+          <img src="@/assets/babble.png" />
+          </span>
         <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
       </nav>
       <Sidebar class=" d-flex justify-content-between" style="clear:both; z-index:100;">
