@@ -59,7 +59,7 @@
       <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FFFFFF;"> #놀이터 </v-chip>
       <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; color: #FFFFFF;"> #할머니 집 </v-chip>
     </div>
-    
+    <div style="height:15vh"></div>
   </div>
 </template>
 
