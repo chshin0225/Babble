@@ -26,7 +26,9 @@
     <div class="scallop-down"></div>
     <div class="mt-3 growth-title row no-gutters">
       <div class="col-3 text-center">
-        <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+        <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+        <img width="50px" src="../../assets/giraffe.png" /> -->
+        <img width="50px" src="@/assets/giraffe.png" />
       </div>
       <div class="col-9">
         <p class="growth">성장 기록</p>
