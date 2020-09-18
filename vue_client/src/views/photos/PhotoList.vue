@@ -4,7 +4,7 @@
       <div class="photos row no-gutters">
         <div v-for="photo in photos" :key="`club_${photo.id}`" class="photo-container pointer" @click="clickPhoto">
           <div class="photo">             
-            <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-20baf.appspot.com/o/' + photo.image_url + '?alt=media&token=89612eed-0bc3-47d5-8531-dae94e9b376a'" class="card-img-top " alt="">
+            <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top " alt="">
           </div>
         </div>
       </div>
