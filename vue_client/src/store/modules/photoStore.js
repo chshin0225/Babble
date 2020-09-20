@@ -39,26 +39,53 @@ const photoStore = {
     },
     createPhotos({ rootState, rootGetters, dispatch }, photos) {
       const createData = []
-      var storageRef = firebase.storage().ref();
-      
-      for (var photo of photos) {
-        storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
-        
+      const promises = []
+      var storageRef = firebase.storage().ref()
+
+
+      photos.forEach( photo => {
+        const uploadTask = storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
+        promises.push(uploadTask)
+
         var imageInfo = {
-          "image_url": 'babble_' + rootState.myaccount.id + '%2F' + photo.name,
-          "last_modified": photo.lastModifiedDate,
-          "size": photo.size,
-          "file_type": photo.type
+              "image_url": 'babble_' + rootState.myaccount.id + '%2F' + photo.name,
+              "last_modified": photo.lastModifiedDate,
+              "size": photo.size,
+              "file_type": photo.type
         }
         createData.push(imageInfo)
-      }
+      })
 
-      axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, rootGetters.config)
-        .then(() => {
-          dispatch('fetchPhotos')
-          router.push({name: 'PhotoList'})
-        })
-        .catch(err => console.log(err.response.data))
+      // 모든 업로드가 끝난 후 사진들을 fetch 해온다 
+      Promise.all(promises).then(() => {
+        axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, rootGetters.config)
+          .then(() => {
+            dispatch('fetchPhotos')
+            router.push({name: 'PhotoList'})
+          })
+          .catch(err => console.log(err.response.data))
+      })
+      
+      // for (var photo of photos) {
+      //   storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
+        
+      //   var imageInfo = {
+      //     "image_url": 'babble_' + rootState.myaccount.id + '%2F' + photo.name,
+      //     "last_modified": photo.lastModifiedDate,
+      //     "size": photo.size,
+      //     "file_type": photo.type
+      //   }
+      //   createData.push(imageInfo)
+      //   console.log('upload')
+      // }
+
+      // axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, rootGetters.config)
+      //   .then(() => {
+      //     console.log('fetch')
+      //     dispatch('fetchPhotos')
+      //     router.push({name: 'PhotoList'})
+      //   })
+      //   .catch(err => console.log(err.response.data))
     },
       
   }
