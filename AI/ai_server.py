@@ -16,8 +16,8 @@ def tags(imgpath):
 
     # get_tags_emotion(img) 함수 만들기
     tags = []
-    tags.append(get_tags_emotion(img))
-    tags.append(get_tags_objDetection(img))
+    tags += get_tags_emotion(img)
+    tags += get_tags_objDetection(img)
 
     data = {
         'tags': tags
