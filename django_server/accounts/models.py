@@ -83,9 +83,9 @@ class User(AbstractUser):
     objects = UserManager()
 
 class BabyAccess(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
-    last_access_date = models.DateTimeField(auto_now=True)
+    last_access_date = models.DateTimeField(auto_now_add=True)
 
 
 class Rank(models.Model):

@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 # from rest_framework.permissions import IsAuthenticated
 
 from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
-from accounts.serializers import UserBabyRelationshipSerializer
+from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer
 
 from .models import Baby
 from accounts.models import User, UserBabyRelationship, Rank
@@ -35,11 +35,22 @@ class BabyListView(APIView):
             relationship_serializer = UserBabyRelationshipSerializer(data=user_baby_relationship)
             if relationship_serializer.is_valid(raise_exception=True):
                 relationship_serializer.save(baby=baby, rank=owner)
+
                 # 유저 데이터의 current_baby 업데이트
                 user = request.user
                 user.current_baby = baby
                 user.save()
-                return Response(relationship_serializer.data)
+
+                # BabyAccess에 방문 기록 추가 
+                baby_access_data = {
+                    "baby": baby_id,
+                    "user": user_id
+                }
+                baby_access_serializer = BabyAccessSerializer(data=baby_access_data)
+                if baby_access_serializer.is_valid(raise_exception=True):
+                    baby_access_serializer.save()
+                    return Response(relationship_serializer.data)
+                return Response(baby_access_data.errors)
             return Response(relationship_serializer.errors)
         return Response(serializer.errors)
 
