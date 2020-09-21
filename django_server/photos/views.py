@@ -3,9 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PhotoListSerializer, PhotoDetailSerializer
+from .serializers import PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer
 
-from .models import Photo
+from .models import Photo, PhotoComment
 # Create your views here.
 
 class PhotoListView(APIView):
@@ -62,3 +62,39 @@ class PhotoDetailView(APIView):
         # 여기서 권한 검증이 한 번 들어가줘야함 
         photo.delete()
         return Response({"message":"사진이 삭제되었습니다."})
+
+
+class PhotoCommentListView(APIView):
+    # 사진 댓글 리스트 조회
+    def get(self, request, photo_id):
+        photo = get_object_or_404(Photo, id=photo_id)
+        # comments = PhotoComment.objects.filter(photo=photo).order_by('-create_date')
+        serializer = PhotoCommentSerializer(photo.comments.order_by('-create_date'), many=True)
+        return Response(serializer.data)
+
+    # 사진 댓글 생성
+    def post(self, request, photo_id):
+        photo = get_object_or_404(Photo, id=photo_id)
+        serializer = PhotoCommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user, photo=photo)
+        return Response(serializer.data)
+
+
+class PhotoCommentDetailView(APIView):
+    # 사진 댓글 수정
+    def put(self, request, photo_id, comment_id):
+        comment = get_object_or_404(PhotoComment, id=comment_id)
+        # 여기서 권한 검증이 한 번 들어가줘야함
+        serializer = PhotoCommentSerializer(comment, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    
+    # 사진 댓글 삭제
+    def delete(self, request, photo_id, comment_id):
+        comment = get_object_or_404(PhotoComment, id=comment_id)
+        comment.delete()
+        return Response({"message":"댓글이 삭제되었습니다."})
+    
