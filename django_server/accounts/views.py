@@ -3,14 +3,26 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, GroupListSerializer
 
-from .models import User
+from .models import User, Group
 
 class UserDetailView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+class BabyAccessView(APIView):
+    def get(self, request, baby_id):
+        pass
+
+class GroupListView(APIView):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
+
 
 
 

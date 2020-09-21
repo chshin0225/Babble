@@ -8,5 +8,4 @@ urlpatterns = [
     path('<int:diary_id>/', views.DiaryDetailView.as_view()),
     path('<int:diary_id>/comments/', views.DiaryCommentListView.as_view()),
     path('<int:diary_id>/comments/<int:comment_id>/', views.DiaryCommentDetailView.as_view()),
-    
 ] 

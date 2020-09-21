@@ -73,7 +73,7 @@ class User(AbstractUser):
     
     name = models.CharField(blank=True, null=True, max_length=50)
     profile_image = models.CharField(blank=True, null=True, max_length=200)
-    current_baby = models.ForeignKey(Baby, null=True, on_delete=models.SET_NULL)
+    current_baby = models.ForeignKey(Baby, null=True, blank=True, on_delete=models.SET_NULL)
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
