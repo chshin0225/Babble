@@ -10,5 +10,7 @@ urlpatterns = [
 
     # path('login/kakao/', views.kakao_login, name='kakao_login'),
     # path('login/kakao/callback/', views.kakao_callback, name='kakao_callback')
-    path('myinfo/', views.UserDetailView.as_view())
+    path('myinfo/', views.UserDetailView.as_view()),
+    path('<int:baby_id>/', views.BabyAccessView.as_view()),
+    path('groups/', views.GroupListView.as_view()),
 ]

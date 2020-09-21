@@ -73,7 +73,7 @@ class User(AbstractUser):
     
     name = models.CharField(blank=True, null=True, max_length=50)
     profile_image = models.CharField(blank=True, null=True, max_length=200)
-    current_baby = models.ForeignKey(Baby, null=True, on_delete=models.SET_NULL)
+    current_baby = models.ForeignKey(Baby, null=True, blank=True, on_delete=models.SET_NULL)
     visited_babies = models.ManyToManyField(Baby, through='BabyAccess', related_name='visited_users')
     
     USERNAME_FIELD = 'email'
@@ -85,7 +85,7 @@ class User(AbstractUser):
 class BabyAccess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
-    last_access_date = models.DateField(auto_now=True)
+    last_access_date = models.DateTimeField(auto_now=True)
 
 
 class Rank(models.Model):

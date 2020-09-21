@@ -35,6 +35,7 @@ class BabyListView(APIView):
             relationship_serializer = UserBabyRelationshipSerializer(data=user_baby_relationship)
             if relationship_serializer.is_valid(raise_exception=True):
                 relationship_serializer.save(baby=baby, rank=owner)
+                # 유저 데이터의 current_baby 업데이트
                 user = request.user
                 user.current_baby = baby
                 user.save()
@@ -47,7 +48,6 @@ class BabyDetailView(APIView):
     # 해당 babble box 회원들만 조회 가능
     def get(self, request, baby_id):
         members = UserBabyRelationship.objects.filter(baby=baby_id).values_list('user', flat=True)
-        print(members)
         user_id = User.objects.get(email=request.user).id
         if user_id in members:
             baby = Baby.objects.get(id=baby_id)
