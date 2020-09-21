@@ -35,6 +35,6 @@ class BabyMeasurement(models.Model):
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='created_measurements')
-    create_date = models.DateField(auto_now_add=True)
+    create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name='modified_measurements')
-    modify_date = models.DateField(auto_now=True)
+    modify_date = models.DateTimeField(auto_now=True)
