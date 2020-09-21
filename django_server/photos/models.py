@@ -22,20 +22,20 @@ class Photo(models.Model):
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_photos')
     # 사진의 metadata?
-    create_date = models.DateField(auto_now_add=True)
+    create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
-    modify_date = models.DateField(auto_now=True)
+    modify_date = models.DateTimeField(auto_now=True)
 
     permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
     photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos')
 
 
 class PhotoComment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='photo_comments')
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
-    create_date = models.DateField(auto_now_add=True)
-    modify_date = models.DateField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    modify_date = models.DateTimeField(auto_now=True)
 
 
 class Album(models.Model):
@@ -46,9 +46,9 @@ class Album(models.Model):
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_albums')
-    create_date = models.DateField(auto_now_add=True)
+    create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_albums')
-    modify_date = models.DateField(auto_now=True)
+    modify_date = models.DateTimeField(auto_now=True)
 
     photos = models.ManyToManyField(Photo, blank=True, related_name='albums')
     album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums')

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Tag, Photo, PhotoComment, Album
-from accounts.serializers import GroupListSerializer
+from accounts.serializers import UserSerializer, GroupListSerializer
 class TagListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -16,4 +16,11 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
     photo_tags = TagListSerializer(required=False, many=True)
     class Meta:
         model = Photo
+        fields = '__all__'
+
+class PhotoCommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    photo = PhotoListSerializer(required=False)
+    class Meta:
+        model = PhotoComment
         fields = '__all__'
