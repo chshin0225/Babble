@@ -53,7 +53,7 @@ const accountStore = {
                  })
                  Toast.fire({
                   icon: 'error',
-                  title: err.response.data.message
+                  title: "아이디와 비밀번호를 확인해주세요"
                 })
               })
           },
