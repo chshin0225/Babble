@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>Babble</title>
+    <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
     
     <!-- Vuetify -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
@@ -15,8 +16,117 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 
+    <style>
+      @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+      * {
+        font-family: 'NanumSquare', sans-serif;
+      }
+
+      .color-pink {
+        color: #FEA59C !important;
+      }
+
+      .bg-pink {
+        background-color: #FEA59C !important;
+        color: white;
+      }
+
+      .btn-pink {
+        background-color: #FEA59C !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-pink:focus {
+        outline-style: none;
+      }
+
+      .btn-pink:hover {
+        background-color: #A05E58 !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-outline-pink {
+        border-color: #FEA59C !important;
+        color: #FEA59C !important;
+      }
+
+      .btn-outline-pink:focus {
+        outline-style: none;
+      }
+
+      .btn-outline-pink:hover {
+        background-color: #FEA59C !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-outline-pink:focus {
+        background-color: #FEA59C !important;
+        color: #F8F8F8 !important;
+        outline-style: none;
+      }
+
+      .color-blue {
+        color: #9BC7FF !important;
+      }
+
+      .bg-blue {
+        background-color: #9BC7FF !important;
+        color: white;
+      }
+
+      .btn-blue {
+        background-color: #9BC7FF !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-blue:focus {
+        outline-style: none;
+      }
+
+      .btn-blue:hover {
+        background-color: #5C83B4 !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-outline-blue {
+        border-color: #9BC7FF !important;
+        color: #9BC7FF !important;
+      }
+
+      .btn-outline-blue:focus {
+        outline-style: none;
+      }
+
+      .btn-outline-blue:hover {
+        background-color: #9BC7FF !important;
+        color: #F8F8F8 !important;
+      }
+
+      .btn-outline-blue:focus {
+        background-color: #9BC7FF !important;
+        color: #F8F8F8 !important;
+        outline-style: none;
+      }
+
+      .color-gray {
+        color: #E5E5E5;
+      }
+
+      .pointer {
+        cursor: pointer !important;
+      }
+
+      /* button outline 없애기 */
+      button:focus {
+        text-decoration: none;
+        outline: none;
+      }
+
+      
+    </style>
   </head>
   <body>
+    
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
