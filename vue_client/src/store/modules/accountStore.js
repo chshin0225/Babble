@@ -80,8 +80,7 @@ const accountStore = {
                 // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
                 router.push({name: 'PhotoList'})
               })
-              .catch(err => {
-                console.log(err.response)
+              .catch(() => {
                 const Toast = Swal.mixin({
                   toast: true,
                   position: 'top-end',
@@ -95,7 +94,7 @@ const accountStore = {
                  })
                  Toast.fire({
                   icon: 'error',
-                  title: err.response
+                  title: "아이디와 비밀번호를 확인해주세요"
                 })
               })
           },
