@@ -3,9 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer, GroupListSerializer
+from .serializers import UserSerializer, GroupListSerializer, BabyAccessSerializer
 
-from .models import User, Group
+from .models import User, Group, BabyAccess
+from babies.models import Baby
 
 class UserDetailView(APIView):
     def get(self, request):
@@ -13,8 +14,26 @@ class UserDetailView(APIView):
         return Response(serializer.data)
 
 class BabyAccessView(APIView):
-    def get(self, request, baby_id):
-        pass
+    # 현재 유저의 지난 babble box 접속 데이터 가져오기
+    def get(self, request):
+        access_log = BabyAccess.objects.filter(user=request.user).all()
+        serializer = BabyAccessSerializer(access_log, many=True)
+        return Response(serializer.data)
+
+    # 현재 유저가 새로운 babble box로 이동했을 때 BabyAccess에 log 추가
+    def post(self, request):
+        serializer = BabyAccessSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+
+            # 유저 정보에서 current_baby 업데이트
+            user = request.user
+            baby = Baby.objects.get(id=request.data['baby'])
+            user.current_baby = baby
+            user.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
 class GroupListView(APIView):
     def get(self, request):
