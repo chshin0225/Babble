@@ -22,15 +22,21 @@
         <div class="side d-flex flex-column justify-content-between h-100">
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
-            <div class="upper bg-pink" >
-              <div class="profile float-left mr-3">
-                <img src="http://bit.do/babbleprofile">
+            <div class="upper bg-pink d-flex justify-content-between">
+              <div>
+                <div class="profile float-left mr-3">
+                  <img src="http://bit.do/babbleprofile">
+                </div>
+                <span class="babble-box" v-if="currentBaby">
+                  <span>{{ currentBaby.baby_name}}</span><br>
+                  <span>D + {{ countDays }}</span>
+                </span>
               </div>
-              <div class="babble-box" v-if="currentBaby">
-                <p>{{ currentBaby.baby_name}}</p>
-                <p>D + {{ countDays }}</p>
+              <div class="logout-btn" @click="clickLogout">
+                <p class="text-muted pointer">로그아웃</p>
               </div>
             </div>
+            
 
             <div class="menu-container">
               <li class="list invite"><a href="#home"><i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</a></li>
@@ -71,24 +77,24 @@
       <router-view></router-view>
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
-      <div class="footer row no-gutters">
+      <div class="footer row no-gutters bg-pink">
         <div 
         class="col-4 color-gray pointer" 
-        :class="{'color-pink' : isAlbum()}"
+        :class="{'color-red' : isAlbum()}"
         @click="clickPhoto">
           <p><i class="fas fa-images"></i></p>
           <p>Photo</p>
         </div>
         <div 
           class="col-4 color-gray pointer" 
-          :class="{'color-pink' : isDiary()}"
+          :class="{'color-red' : isDiary()}"
           @click="clickDiary">
           <p><i class="fas fa-book"></i></p>
           <p>Diary</p>
         </div>
         <div 
           class="col-4 color-gray pointer"
-          :class="{'color-pink' : isProfile()}"
+          :class="{'color-red' : isProfile()}"
           @click="clickProfile">
           <p><i class="fas fa-user"></i></p>
           <p>Profile</p>
@@ -140,7 +146,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['findBaby', 'findMyAccount']),
+    ...mapActions(['findBaby', 'findMyAccount', 'logout']),
     // Logo
     clickLogo() {
       this.$router.push({name: 'PhotoList'})
@@ -187,6 +193,11 @@ export default {
     clickProfile() {
       this.$router.push({ name: 'Profile'})
     },
+    clickLogout() {
+      let backdrop = document.querySelector(".sidebar-backdrop")
+      backdrop.click()
+      this.logout()
+    }
     
   },
   mounted() {
@@ -229,7 +240,6 @@ export default {
   text-align: center;
 }
 
-/* top navbar 2 */
 .nav2 img {
   max-width: 15vw;
   height: auto;
@@ -246,9 +256,12 @@ export default {
   overflow:hidden;
 }
 
-
 .upper {
   padding: 20px;
+}
+
+.logout-btn:hover {
+  color: black !important;
 }
 
 .menu-container {
@@ -305,11 +318,14 @@ a:hover {
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
-  z-index: 99999
 }
 
 p {
   margin: 0;
+}
+
+.color-red {
+  color: #9bc7ff;
 }
 
 </style>
