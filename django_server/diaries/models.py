@@ -25,8 +25,8 @@ class Diary(models.Model):
 
 
 class DiaryComment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='diary_comments')
-    diary = models.ForeignKey(Diary, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE, related_name='diary_comments')
+    diary = models.ForeignKey(Diary, blank=True, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     create_date = models.DateField(auto_now_add=True)
     modify_date = models.DateField(auto_now=True)
