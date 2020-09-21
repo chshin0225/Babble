@@ -5,15 +5,13 @@ import matplotlib.pylab as plt
 import numpy as np
 import math
 from PIL import Image
-from deepface.extendedmodels import Age, Gender, Race, Emotion
-from deepface import DeepFace
 from pathlib import Path
+from deepface import DeepFace
+from deepface.extendedmodels import Emotion
 from deepface.commons import distance
-from keras.preprocessing.image import load_img, save_img, img_to_array
 from mtcnn import MTCNN
-from keras.preprocessing import image
 
-detector = cv2.dnn.readNetFromCaffe("deploy.prototxt", "res10_300x300_ssd_iter_140000.caffemodel")
+detector = cv2.dnn.readNetFromCaffe("files\\deploy.prototxt", "files\\res10_300x300_ssd_iter_140000.caffemodel")
 emotion_model = Emotion.loadModel()
 
 
@@ -24,54 +22,43 @@ def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate ima
 
     # -----------------------
     # find rotation direction
-
     if left_eye_y > right_eye_y:
         point_3rd = (right_eye_x, left_eye_y)
         direction = -1  # rotate same direction to clock
     else:
         point_3rd = (left_eye_x, right_eye_y)
         direction = 1  # rotate inverse direction of clock
-
     # -----------------------
     # find length of triangle edges
-
     a = distance.findEuclideanDistance(np.array(left_eye), np.array(point_3rd))
-    b = distance.findEuclideanDistance(np.array(right_eye), np.array(point_3rd))
+    b = distance.findEuclideanDistance(
+        np.array(right_eye), np.array(point_3rd))
     c = distance.findEuclideanDistance(np.array(right_eye), np.array(left_eye))
-
     # -----------------------
-
     # apply cosine rule
 
     if b != 0 and c != 0:  # this multiplication causes division by zero in cos_a calculation
-
-        cos_a = (b * b + c * c - a * a) / (2 * b * c)
+        cos_a = (b*b + c*c - a*a)/(2*b*c)
         angle = np.arccos(cos_a)  # angle in radian
         angle = (angle * 180) / math.pi  # radian to degree
-
         # -----------------------
         # rotate base image
-
         if direction == -1:
             angle = 90 - angle
 
         img = Image.fromarray(img)
         img = np.array(img.rotate(direction * angle))
-
     # -----------------------
-
     return img  # return img anyway
 
 
 def align_face(img):  # rotate face to horizontal
-
-    home = str(Path.home())
+    home = str(Path.home())    
     mtcnn_detector = MTCNN()
     detections = mtcnn_detector.detect_faces(img)
 
     if len(detections) > 0:
         detection = detections[0]
-
         keypoints = detection["keypoints"]
         left_eye = keypoints["left_eye"]
         right_eye = keypoints["right_eye"]
@@ -88,7 +75,8 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
     base_img = image_file.copy()  # back up original image
     original_size = base_img.shape
 
-    target_size = (ty, tx)  # The higher the number, the easier it is to find a small face.
+    # The higher the number, the easier it is to find a small face.
+    target_size = (ty, tx)
     image_file = cv2.resize(image_file, target_size)
     aspect_ratio_x = (original_size[1] / target_size[1])
     aspect_ratio_y = (original_size[0] / target_size[0])
@@ -99,14 +87,16 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
     detector.setInput(imageBlob)
     detections = detector.forward()
 
-    column_labels = ["img_id", "is_face", "confidence", "left", "top", "right", "bottom"]
+    column_labels = ["img_id", "is_face",
+                     "confidence", "left", "top", "right", "bottom"]
     detections_df = pd.DataFrame(detections[0][0], columns=column_labels)
 
     # 0: background, 1: face, confidence 가 높은게 얼굴일 확률이 높다
     detections_df = detections_df[detections_df['is_face'] == 1]
     detections_df = detections_df[detections_df['confidence'] > 0.90]
 
-    detections_df['left'] = (detections_df['left'] * tx).astype(int)  # 좌표값을 정수형 데이터로 변환
+    detections_df['left'] = (detections_df['left'] *
+                             tx).astype(int)  # 좌표값을 정수형 데이터로 변환
     detections_df['bottom'] = (detections_df['bottom'] * ty).astype(int)
     detections_df['right'] = (detections_df['right'] * tx).astype(int)
     detections_df['top'] = (detections_df['top'] * ty).astype(int)
@@ -114,59 +104,60 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
     detections_df = detections_df[detections_df['right'] < original_size[1]]
     detections_df = detections_df[detections_df['bottom'] < original_size[0]]
 
-    face_list_df = pd.DataFrame(columns=['left', 'top', 'right', 'bottom'])  # pos of faces
+    face_list_df = pd.DataFrame(
+        columns=['left', 'top', 'right', 'bottom'])  # pos of faces
 
-    for i, instance in detections_df.iterrows():  #
-        confidence_score = str(round(100 * instance["confidence"], 2)) + " %"
+    for i, instance in detections_df.iterrows():  # set face pos
+        confidence_score = str(round(100*instance["confidence"], 2))+" %"
         left = instance["left"]
         right = instance["right"]
         bottom = instance["bottom"]
         top = instance["top"]
 
-        face_list_df = face_list_df.append({'left': left, 'top': top, 'right': right, 'bottom': bottom},
-                                           ignore_index=True)
-        # cv2.putText(base_img, confidence_score, (int(left*aspect_ratio_x), int(top*aspect_ratio_y-10)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        face_list_df = face_list_df.append(
+            {'left': left, 'top': top, 'right': right, 'bottom': bottom}, ignore_index=True)
+        
 
     face_list_df = face_list_df.astype(int)
 
-    emotion_res_list = list()
+    emotion_res_list = list()  # return emotion each face
 
     for i, instance in face_list_df.iterrows():  # each face
         detected_face = base_img[int(instance['top'] * aspect_ratio_y):int(instance['bottom'] * aspect_ratio_y),
-                        int(instance['left'] * aspect_ratio_x):int(instance['right'] * aspect_ratio_x)]  # get face
-        # detected_face = detected_face[:, :, ::-1]
-        # plt.imshow(detected_face)
-        # plt.show()
+                                 int(instance['left'] * aspect_ratio_x):int(instance['right'] * aspect_ratio_x)]  # get face
+        
         detected_face = align_face(detected_face)  # face rotate to horizontal
-        detected_face = cv2.cvtColor(detected_face, cv2.COLOR_BGR2GRAY)  # to grey
+        detected_face = cv2.cvtColor(
+            detected_face, cv2.COLOR_BGR2GRAY)  # to grey
         face48 = cv2.resize(detected_face, (48, 48))
-        img_pixels = image.img_to_array(face48)
+        
+        # normalization
+        img_pixels = np.asarray(face48, 'float32')
+        img_pixels = img_pixels.reshape(
+            (img_pixels.shape[0], img_pixels.shape[1], 1))
         img_pixels = np.expand_dims(img_pixels, axis=0)
         img_pixels /= 255  # normalize input in [0, 1]
 
+        # get strongest emotions
         emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
         emotion_predictions = emotion_model.predict(img_pixels)[0, :]  # get emotion info use emotion model
         sum_of_predictions = emotion_predictions.sum()
-
-        # emotion_res = list()
-        # emotion_res.append([emotion_labels[0], 100 * emotion_predictions[0] / sum_of_predictions])
         emotion_res = [emotion_labels[0], 100 * emotion_predictions[0] / sum_of_predictions]
 
-        for i in range(1, len(emotion_labels)):
+        for i in range(1, len(emotion_labels)):  # get max emotion
             emotion_label = emotion_labels[i]
             emotion_prediction = 100 * emotion_predictions[i] / sum_of_predictions
-            if (emotion_res[1] < emotion_prediction):
+
+            if(emotion_res[1] < emotion_prediction):
                 emotion_res = [emotion_labels[i], emotion_prediction]
-        # print(emotion_res)
+        
         emotion_res_list.append(emotion_res[0])
 
-    for i, instance in face_list_df.iterrows():  # draw rectangle
-        cv2.putText(base_img, emotion_res_list[i],
-                    (int(instance['left'] * aspect_ratio_x), int(instance['top'] * aspect_ratio_y - 10)),
+    for i, instance in face_list_df.iterrows():  # draw rectangle and text
+        cv2.putText(base_img, emotion_res_list[i], (int(instance['left']*aspect_ratio_x), int(instance['top']*aspect_ratio_y-10)),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
         cv2.rectangle(base_img, (int(instance['left'] * aspect_ratio_x), int(instance['top'] * aspect_ratio_y)),
-                      (int(instance['right'] * aspect_ratio_x), int(instance['bottom'] * aspect_ratio_y)),
-                      (255, 255, 255), 3)
+                      (int(instance['right'] * aspect_ratio_x), int(instance['bottom'] * aspect_ratio_y)), (255, 255, 255), 3)
 
     imS = cv2.resize(base_img, (800, 800))
     cv2.imshow("test", imS)
@@ -176,15 +167,10 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
 
 
 start = time.time()
-imgpath = "image3.jpg"
+imgpath = "images\\image13.jpg"
 print(get_tag_emotion(imgpath, 400, 400))
-# get_tag_emotion(imgpath, 500, 500)
-# get_tag_emotion(imgpath, 850, 850)
-# get_tag_emotion(imgpath, 1000, 700)
-# get_tag_emotion(imgpath, 700, 1000)
+#get_tag_emotion(imgpath, 500, 500)
+#get_tag_emotion(imgpath, 850, 850)
+#get_tag_emotion(imgpath, 1000, 700)
+#get_tag_emotion(imgpath, 700, 1000)
 print("time :", time.time() - start)
-
-# result  = DeepFace.verify(imgpath, "images\\image8.jpg")
-# print(result)
-# demography = DeepFace.analyze(imgpath, actions=['emotion'])
-# print("Emotion: ", demography["dominant_emotion"])
