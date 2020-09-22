@@ -8,12 +8,16 @@ const diaryStore = {
     namespaced: true,
     state: {
         diary: null,
+        comments: null,
     },
     getters: {
     },
     mutations: {
         SET_DIARY(state, diary) {
             state.diary = diary
+        },
+        SET_COMMENTS(state, comments) {
+            state.comments = comments
         }
     },
     actions: {
@@ -27,7 +31,7 @@ const diaryStore = {
                 })
        },
        findDiary({ rootGetters, commit }, diaryId) {
-           axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId, null, rootGetters.config)
+           axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId +'/' , rootGetters.config)
             .then(res => {
                 commit('SET_DIARY', res.data)
                 console.log("RES DATA",res.data)
@@ -35,6 +39,26 @@ const diaryStore = {
             .catch(err => {
                 console.log(err)
             })
+       },
+       fetchComments({ rootGetters, commit }, diaryId) {
+           axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId + '/comments/', rootGetters.config)
+            .then(res => {
+                commit('SET_COMMENTS', res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+       },
+       createComment({ dispatch, rootGetters }, commentData) {
+           console.log(commentData)
+           axios.post(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + '/comments/', commentData, rootGetters.config)
+           .then(res => {
+               console.log(res)
+               dispatch('fetchComments', commentData.diaryId)
+           })
+           .catch(err => {
+               console.log(err.response)
+           })
        }
     }
 }
