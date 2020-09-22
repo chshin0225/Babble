@@ -5,7 +5,20 @@
         <p>{{diary.create_date | moment('YYYY-MM-DD HH:mm:ss')}}</p>
       </div>
       <div class="diary-writer">
-        <p>{{diary.creator}}엄마 작성</p>
+        <span class="mr-3">{{diary.creator}}엄마 작성</span>
+        <button class="btn btn-pink" @click="sheet = !sheet">:</button>
+        <v-app>
+            <v-bottom-sheet v-model="sheet">
+              <v-sheet class="text-center" height="15vh">
+                <div class="py-3">
+                  <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
+                  <p class="pointer diary-option mb-1"> 일기 수정</p>
+                  <p class="pointer diary-option"> 일기 삭제</p>
+                </div>
+              </v-sheet>
+            </v-bottom-sheet>
+        </v-app>
+        
       </div>
     </div>
     
@@ -56,11 +69,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
+
 export default {
   name: 'DiaryDetail',
   data() {
     return {
       diaryContent: null,
+      sheet: false,
     }
   },
   watch: {
@@ -75,6 +91,19 @@ export default {
   },
   methods: {
     ...mapActions('diaryStore', ['findDiary']),
+    clickShare() {
+      const copyText = document.createElement("input");
+      copyText.value = `http://j3a310.p.ssafy.io/diary/${this.$route.params.diaryId}`
+      document.body.appendChild(copyText)
+      
+      copyText.select();
+      document.execCommand("copy");
+      document.body.removeChild(copyText)
+      Swal.fire({
+          icon: 'success',
+          text: '주소가 복사되었습니다'
+        })
+    },
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)
@@ -85,6 +114,7 @@ export default {
 
 <style scoped lang="scss">
 .diary-top {
+  height: 5vh;
   .diary-date {
     p {
       margin: 0;
@@ -93,6 +123,9 @@ export default {
   .diary-writer {
     p {
       margin: 0;
+    }
+    .diary-option:hover {
+      color: #FEA59C;
     }
   }
 }
