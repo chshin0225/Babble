@@ -23,6 +23,7 @@ class BabyAccessView(APIView):
     # 현재 유저가 새로운 babble box로 이동했을 때 BabyAccess에 log 추가
     def post(self, request):
         serializer = BabyAccessSerializer(data=request.data)
+
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
 
@@ -36,11 +37,34 @@ class BabyAccessView(APIView):
         return Response(serializer.errors)
 
 class GroupListView(APIView):
+    # 한 babble box 내의 존재하는 그룹들 조회
     def get(self, request):
+        baby = request.user.current_baby
+        print(baby)
+        groups = Group.objects.filter(baby=baby).all()
+        serializer = GroupListSerializer(groups, many=True)
+        return Response(serializer.data)
+
+    # 새로운 그룹 생성
+    def post(self, request):
+        baby = request.user.current_baby
+        serializer = GroupListSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=baby)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+class GroupDetailView(APIView):
+    def get(self, request, group_id):
+        pass
+    
+    def put(self, request, group_id):
         pass
 
-    def post(self, request):
+    def delete(self, request, group_id):
         pass
+
+
 
 
 

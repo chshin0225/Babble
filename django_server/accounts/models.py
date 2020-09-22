@@ -93,7 +93,7 @@ class Rank(models.Model):
 
 
 class Group(models.Model):
-    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(Baby, blank=True, on_delete=models.CASCADE)
     group_name = models.CharField(max_length=50)
     
 
@@ -102,6 +102,5 @@ class UserBabyRelationship(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     # 클래스가 지워진다면?
     rank = models.ForeignKey(Rank, on_delete=models.CASCADE)
-    # default값은 무소속?
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.SET_NULL)
     relationship_name = models.CharField(max_length=50)
