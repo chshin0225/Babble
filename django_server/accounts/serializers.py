@@ -51,3 +51,10 @@ class UserBabyRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBabyRelationship
         fields = '__all__'
+
+class SimpleUserBabyRelationshipSerializer(serializers.ModelSerializer):
+    # baby = BabySerializer(required=False)
+    # rank = RankSerializer(required=False)
+    class Meta:
+        model = UserBabyRelationship
+        fields = '__all__'
