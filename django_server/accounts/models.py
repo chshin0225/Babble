@@ -101,6 +101,6 @@ class UserBabyRelationship(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     baby = models.ForeignKey(Baby, blank=True, on_delete=models.CASCADE)
     # 클래스가 지워진다면?
-    rank = models.ForeignKey(Rank, on_delete=models.CASCADE)
+    rank = models.ForeignKey(Rank, blank=True, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.SET_NULL)
     relationship_name = models.CharField(max_length=50)

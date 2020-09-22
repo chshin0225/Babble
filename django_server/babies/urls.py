@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.BabyListView.as_view()),
     path('<int:baby_id>/', views.BabyDetailView.as_view()),
     path('relationships/', views.UserBabyRelationshipListView.as_view()),
+    path('mybabblebox/', views.MyBabbleBoxView.as_view()),
 ]

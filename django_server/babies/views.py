@@ -88,10 +88,10 @@ class BabyDetailView(APIView):
 
 
 class UserBabyRelationshipListView(APIView):
-    # 현 유저의 user baby relationship들 조회 
+    # 현재 babble box에 초대된 유저들의 애기와의 관계 정보 조회
     def get(self, request):
-        user_id = User.objects.get(email=request.user).id
-        user_baby_relationships = UserBabyRelationship.objects.filter(user=user_id).all()
+        baby = request.user.current_baby
+        user_baby_relationships = UserBabyRelationship.objects.filter(baby=baby).all()
         serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
 
@@ -102,3 +102,11 @@ class UserBabyRelationshipListView(APIView):
             serializer.save(baby=request.user.current_baby)
             return Response(serializer.data)
         return Response(serializer.errors)
+
+class MyBabbleBoxView(APIView):
+    # 현 유저의 user baby relationship들 조회 
+    def get(self, request):
+        user_id = User.objects.get(email=request.user).id
+        user_baby_relationships = UserBabyRelationship.objects.filter(user=user_id).all()
+        serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
+        return Response(serializer.data)

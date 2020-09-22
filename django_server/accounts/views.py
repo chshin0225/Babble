@@ -60,14 +60,27 @@ class GroupDetailView(APIView):
         serializer = UserBabyRelationshipSerializer(group_members, many=True)
         return Response(serializer.data)
     
-    # 그룹에 유저 추가
+    # 그룹에 유저 추가(초대하려는 유저는 babble box 멤버여야함)
     def put(self, request, group_id):
         baby = request.user.current_baby
-        user = UserBabyRelationship.objects.get(baby=baby, user=request.data['user'])
-        serializer = UserBabyRelationshipSerializer(data=request.data)
+        user = User.objects.get(id=request.data['user']).id
+        group = Group.objects.get(id=group_id)
+        data = UserBabyRelationship.objects.get(baby=baby, user=user)
+        data.group = group
+        data.save()
+        serializer = UserBabyRelationshipSerializer(data)
+        return Response(serializer.data)
 
+    # 그룹에서 멤버 제거
     def delete(self, request, group_id):
-        pass
+        baby = request.user.current_baby
+        user = User.objects.get(id=request.data['user']).id
+        group = Group.objects.get(id=group_id)
+        data = UserBabyRelationship.objects.get(baby=baby, user=user)
+        data.group = None
+        data.save()
+        serializer = UserBabyRelationshipSerializer(data)
+        return Response(serializer.data)
 
 
 
