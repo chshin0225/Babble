@@ -8,6 +8,9 @@ import secrets from './api/secrets.json'
 // firebase
 import firebase from 'firebase'
 
+import vueMoment from 'vue-moment' 
+Vue.use(vueMoment)
+
 var firebaseConfig = {
   apiKey: secrets['SECRET_KEY'],
   authDomain: "babble-98541.firebaseapp.com",
