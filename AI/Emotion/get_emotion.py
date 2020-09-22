@@ -166,11 +166,12 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
     return emotion_res_list
 
 
-start = time.time()
-imgpath = "images\\image13.jpg"
+#start = time.time()
+imgpath = "images\\image3.jpg"
 print(get_tag_emotion(imgpath, 400, 400))
 #get_tag_emotion(imgpath, 500, 500)
 #get_tag_emotion(imgpath, 850, 850)
 #get_tag_emotion(imgpath, 1000, 700)
 #get_tag_emotion(imgpath, 700, 1000)
-print("time :", time.time() - start)
+#print("time :", time.time() - start)
+
