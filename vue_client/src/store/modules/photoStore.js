@@ -9,6 +9,8 @@ const photoStore = {
   state: {
     photos: null,
     selectedPhoto: null,
+    comments: null,
+    photo: null,
   },
   getters: {
     
@@ -19,7 +21,10 @@ const photoStore = {
     },
     SET_SELECTED_PHOTO(state, photo) {
       state.photo = photo
-    }
+    },
+    SET_SELECTED_PHOTO_COMMENTS(state, comments) {
+      state.comments = comments
+    },
   },
   actions: {
     fetchPhotos({ rootGetters, commit }) {
@@ -33,7 +38,15 @@ const photoStore = {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
         .then(res => {
           commit('SET_SELECTED_PHOTO', res.data)
-          router.push({name: 'PhotoDetail', params: { photoId: photoId}})
+          //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
+        })
+        .catch(err => console.log(err.response.data))
+    },
+    fetchPhotoComments({ rootGetters, commit }, photoId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
+        .then(res => {
+          commit('SET_SELECTED_PHOTO_COMMENTS', res.data)
+          //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
         .catch(err => console.log(err.response.data))
     },

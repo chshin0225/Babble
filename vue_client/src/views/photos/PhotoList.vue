@@ -2,7 +2,7 @@
   <div class="grid" data-app>
     <div v-if="photos">
       <div class="photos row no-gutters" v-if="photos.length">
-        <div v-for="photo in photos" :key="`club_${photo.id}`" class="photo-container pointer" @click="clickPhoto">
+        <div v-for="photo in photos" :key="`club_${photo.id}`" class="photo-container pointer" @click="clickPhoto(photo.id)">
           <div class="photo">             
             <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top " alt="">
           </div>
@@ -123,12 +123,14 @@ export default {
     ...mapState('photoStore', ['photos'])
   },
   methods: {
-    ...mapActions('photoStore', ['fetchPhotos']),
+    ...mapActions('photoStore', ['fetchPhotos', 'findPhoto']),
     clickAdd() {
       this.$router.push({ name: 'PhotoCreate' })
     },
-    clickPhoto() {
-      this.$router.push({ name: 'PhotoDetail' })
+    clickPhoto(photo_id) {
+      this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
+      //this.$router.push({ path: '/photo/'+photo_id }) 
+      //this.findPhoto(photo_id);
     }
   },
   mounted() {
