@@ -19,8 +19,7 @@ const diaryStore = {
         createDiary({ rootGetters }, diaryData) {
             axios.post(SERVER.URL + SERVER.ROUTES.diaries, diaryData, rootGetters.config)
                 .then(res => {
-                    console.log(res)
-                    router.push({ name: 'DiaryPhoto '})
+                    router.push({ name: 'DiaryDetail', params: {diaryId: res.data.id}})
                 })
                 .catch(err => {
                     console.log(err)
