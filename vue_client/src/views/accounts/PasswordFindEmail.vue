@@ -74,7 +74,7 @@ button {
   background-repeat: repeat;
 }
 .formatting {
-  margin-top: 20vh !important;
+  margin-top: 10vh !important;
   opacity: 0.9;
 }
 </style>
