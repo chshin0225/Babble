@@ -1,5 +1,6 @@
 export default {
     URL: 'http://j3a310.p.ssafy.io:8000',
+    // URL: 'http://127.0.0.1:8000',
     ROUTES: {
       // accounts
       signup: '/rest-auth/signup/',
@@ -7,6 +8,7 @@ export default {
       logout: '/rest-auth/logout/',
       babies: '/babies/',
       myaccount: '/accounts/myinfo/',
+      kakao: '/accounts/login/kakao/',
 
       // diary
       diaries: '/diaries/',
