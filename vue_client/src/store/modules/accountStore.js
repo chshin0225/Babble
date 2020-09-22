@@ -125,6 +125,15 @@ const accountStore = {
             .catch(err => {
               console.error(err)
             })
+        },
+        kakaoLogin() {
+          axios.get(SERVER.URL + SERVER.ROUTES.kakao)
+            .then(res => {
+              console.log(res)
+            })
+            .catch(err => {
+              console.error(err)
+            })
         }
     }
 }

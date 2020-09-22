@@ -54,6 +54,9 @@ urlpatterns = [
     # path('accounts/', include('allauth.urls')),
     # url(r'accounts/registration/confirm-email/(?P<key>.+)/$', confirm_email, name='confirm_email'),
     
+    path('accounts/', include('allauth.urls')),
+    path('', include('django.contrib.auth.urls')),
+
     path('accounts/', include('accounts.urls')),
     path('diaries/', include('diaries.urls')),
     path('photos/', include('photos.urls')),

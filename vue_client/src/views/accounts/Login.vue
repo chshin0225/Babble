@@ -108,7 +108,7 @@ export default {
   },
   methods: {
      ...mapMutations(["SET_TOKEN"]),
-     ...mapActions("accountStore", ["login"]),
+     ...mapActions("accountStore", ["login", "kakaoLogin"]),
     async handleClickSignIn() {
       /*const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
@@ -161,12 +161,6 @@ export default {
       if (this.isSubmit) {
         this.login(this.loginData);
       }
-    },
-    kakaoLogin() {
-      /*window.Kakao.Auth.login({
-        scope: "profile, account_email",
-        success: this.GetMe,
-      });*/
     },
     GetMe() {
       /*window.Kakao.API.request({
