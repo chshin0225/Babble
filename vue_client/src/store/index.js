@@ -8,7 +8,8 @@ import photoStore from '@/store/modules/photoStore'
 import cookies from 'vue-cookies'
 import axios from 'axios'
 import SERVER from '@/api/api'
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
+import router from '@/router'
 
 Vue.use(Vuex)
 
@@ -52,7 +53,29 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-    }
+    },
+    logout({ commit, getters }) {
+      commit('SET_TOKEN', null)
+      cookies.remove('auth-token')
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+       })
+       Toast.fire({
+        icon: 'success',
+        title: '로그아웃되었습니다.'
+      })
+      axios.post(SERVER.URL + SERVER.ROUTES.logout, getters.config)
+
+      router.push({ name: 'Login' })
+    },
   },
   modules: {
     accountStore: accountStore,
