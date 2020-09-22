@@ -78,7 +78,7 @@ INSTALLED_APPS = [
     'babies',
 
     # # provider
-    # 'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -245,15 +245,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # DEFAULT_FROM_MAIL = EMAIL_HOST_USER
 
 # # Social Login
-# SOCIALACCOUNT_PROVIDERS = {
-#     'kakao': {
-#         'APP': {
-#             'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
-#             'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
-#             'key': ''
-#         }
-#     }
-# }
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
+            'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
+            'key': ''
+        }
+    }
+}
 
 
 # AWS s3

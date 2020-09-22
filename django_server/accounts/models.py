@@ -71,6 +71,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     
+    user_type = models.CharField(default='basic', max_length=50)
     name = models.CharField(blank=True, null=True, max_length=50)
     profile_image = models.CharField(blank=True, null=True, max_length=200)
     current_baby = models.ForeignKey(Baby, null=True, blank=True, on_delete=models.SET_NULL)
