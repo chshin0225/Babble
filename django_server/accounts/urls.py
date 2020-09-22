@@ -12,6 +12,7 @@ urlpatterns = [
     path('login/kakao/callback/', views.kakao_callback, name='kakao_callback'),
     path('login/kakao/todjango/', views.KakaoToDjangoLogin.as_view(), name='kako_todjango_login'),
     path('myinfo/', views.UserDetailView.as_view()),
-    path('<int:baby_id>/', views.BabyAccessView.as_view()),
+    path('access/', views.BabyAccessView.as_view()),
     path('groups/', views.GroupListView.as_view()),
+    path('groups/<int:group_id>/', views.GroupDetailView.as_view()),
 ]

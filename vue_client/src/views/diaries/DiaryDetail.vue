@@ -1,27 +1,22 @@
 <template>
-  <div class="p-3">
+  <div class="p-3" v-if="diary">
     <div class="diary-top d-flex justify-content-between my-3">
       <div class="diary-date text-muted">
-        <p>2020년 7월 8일 14:28</p>
+        <p>{{diary.create_date | moment('YYYY-MM-DD HH:mm:ss')}}</p>
       </div>
       <div class="diary-writer">
-        <p>엄마 작성</p>
+        <p>{{diary.creator}}엄마 작성</p>
       </div>
     </div>
     
     <div class="diary-title">
-      <h5>하..너무 귀엽다!!</h5>
+      <h5>{{diary.title}}</h5>
     </div>
     <div class="diary-content p-2">
-      <p class="text">
-        세상에서 가장 귀여운 우리 아롱이... 오늘은 밥 많이 먹었다!
-        무럭무럭 잘 크고 있는 것 같아서 엄마는 행복해.
-        우리 애기가 밥 많이 먹는 모습도 귀엽고,
-        오물오물하는 볼도 귀엽고,
-        전부 다 귀여워! 
-        딱 이대로만 예쁘게 커주길 바래.
+      <p class="text" v-html="this.diaryContent">
+        <!-- {{diary.content}} -->
       </p>
-      <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764">
+      <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
     </div>
     <div class="scallop-down"></div>
     <div class="mt-3 growth-title row no-gutters">
@@ -60,8 +55,31 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'DiaryDetail',
+  data() {
+    return {
+      diaryContent: null,
+    }
+  },
+  watch: {
+    diary() {
+      if (this.diary) {
+        this.diaryContent = this.diary.content
+      }
+    }
+  },
+  computed: {
+    ...mapState('diaryStore', ['diary'])
+  },
+  methods: {
+    ...mapActions('diaryStore', ['findDiary']),
+  },
+  mounted() {
+    this.findDiary(this.$route.params.diaryId)
+  }
+
 }
 </script>
 

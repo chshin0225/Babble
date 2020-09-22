@@ -3,10 +3,14 @@ from django.contrib.auth import get_user_model
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
+from rest_framework import status
 
 from .serializers import DiaryListSerializer, DiarySerializer, DiaryCommentSerializer
+from accounts.serializers import SimpleUserBabyRelationshipSerializer
+
 from .models import Diary, DiaryComment
 from babies.models import Baby
+from accounts.models import UserBabyRelationship
 
 # Create your views here.
 class DiaryListView(APIView):
@@ -32,8 +36,17 @@ class DiaryListView(APIView):
 class DiaryDetailView(APIView):
     def get(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        serializer = DiarySerializer(diary)
-        return Response(serializer.data)
+        diary_serializer = DiarySerializer(diary)        
+
+        # creator와 baby의 관계 정보 
+        creator = diary.creator
+        user_baby_relationship = UserBabyRelationship.objects.get(user=creator, baby=request.user.current_baby)
+        user_baby_relationship_serializer = SimpleUserBabyRelationshipSerializer(user_baby_relationship)
+
+        return Response({
+            'diary': diary_serializer.data,
+            'relationship': user_baby_relationship_serializer.data
+        }, status=status.HTTP_200_OK)
 
     def put(self, request, diary_id):
         baby_id = request.user.current_baby

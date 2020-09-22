@@ -18,14 +18,14 @@
     ></v-text-field>
 
     <!-- 에디터 -->
-     <editor 
-      :options="editorOptions"
-      height="80vh"
-      initialEditType="wysiwyg"
-      previewStyle="vertical"
-      class="m-3"
-      ref="toastuiEditor"
-     />
+    <vue-editor
+      id="editor"
+      class="p-3"
+      v-model="diaryData.content"
+      useCustomImageHandler
+      @image-added="handleImageAdded"
+      :editorToolbar="customToolbar"
+    ></vue-editor>
 
     <!-- 성장 기록 -->
     <div class="mx-3 mt-5 mb-2">
@@ -58,26 +58,34 @@
 </template>
 
 <script>
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { mapActions } from 'vuex';
+// Advanced Use - Hook into Quill's API for Custom Functionality
+import { VueEditor } from "vue2-editor";
+import firebase from 'firebase'
 
-import { Editor } from '@toast-ui/vue-editor';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import axios from "axios";
+
+import SERVER from '@/api/api'
+// import router from '@/router'
 
 export default {
   name: 'DiaryCreate',
   components: {
-    editor: Editor,
+    VueEditor
+  },
+  computed: {
+    ...mapState([ 'myaccount']),
+    ...mapGetters(['config'])
   },
   data() {
     return {
       // editorText: 'This is initialValue.',
-      editorOptions: {
-        hideModeSwitch: true,
-        toolbarItems: [
-          'heading', 'bold', 'italic', 'strike', 'divider','image', 'link', 'hr', 'ul', 'ol', 'task',
-           'divider'
-        ]
+      customToolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["image", "code-block"]],
+      editorSettings: {
+        modules: {
+          imageDrop: true,
+          imageResize: {}
+        }
       },
       babyHead: 0,
       babyHeight: 0,
@@ -86,24 +94,46 @@ export default {
         title: '',
         content: '',
         content_html: ''
-      }
+      },
+      htmlForEditor:""
     };
   },
   methods: {
     ...mapActions('diaryStore', ['createDiary']),
-    getHTML() {
-      let html = this.$refs.toastuiEditor.invoke('getHtml');
-      console.log(html)
-    },
     clickBack() {
       this.$router.go(-1)
     },
     clickCreate() {
-      this.diaryData.content_html = this.$refs.toastuiEditor.invoke('getHtml');
-      this.diaryData.content = this.$refs.toastuiEditor.invoke('getMarkdown')
-      // this.diaryData.content = this.diaryData.content_html;
-      console.log(this.diaryData)
+      this.diaryData.content_html = this.diaryData.content;
       this.createDiary(this.diaryData)
+    },
+    handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      const createData = []
+      const promises = []
+      var storageRef = firebase.storage().ref()
+      
+      const uploadTask = storageRef.child('babble_'+ this.myaccount.id).child(file.name).put(file)
+      promises.push(uploadTask)
+
+      var imageInfo = {
+        "image_url": 'babble_' + this.myaccount.id + '%2F' + file.name,
+        "last_modified": file.lastModifiedDate,
+        "size": file.size,
+        "file_type": file.type
+      }
+      createData.push(imageInfo)
+
+      Promise.all(promises).then(() => {
+        axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, this.config)
+          .then(() => {
+            let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+            Editor.insertEmbed(cursorLocation, "image", url);
+            resetUploader();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
     }
   },
 }

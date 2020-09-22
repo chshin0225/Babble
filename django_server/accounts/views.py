@@ -3,9 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from .serializers import UserSerializer, GroupListSerializer
-
-from .models import User, Group
+from .serializers import UserSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer
+from .models import User, Group, BabyAccess, UserBabyRelationship
+from babies.models import Baby
 
 class UserDetailView(APIView):
     def get(self, request):
@@ -13,15 +13,62 @@ class UserDetailView(APIView):
         return Response(serializer.data)
 
 class BabyAccessView(APIView):
-    def get(self, request, baby_id):
-        pass
+    # 현재 유저의 지난 babble box 접속 데이터 가져오기
+    def get(self, request):
+        access_log = BabyAccess.objects.filter(user=request.user).all()
+        serializer = BabyAccessSerializer(access_log, many=True)
+        return Response(serializer.data)
+
+    # 현재 유저가 새로운 babble box로 이동했을 때 BabyAccess에 log 추가
+    def post(self, request):
+        serializer = BabyAccessSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+
+            # 유저 정보에서 current_baby 업데이트
+            user = request.user
+            baby = Baby.objects.get(id=request.data['baby'])
+            user.current_baby = baby
+            user.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
 class GroupListView(APIView):
+    # 한 babble box 내의 존재하는 그룹들 조회
     def get(self, request):
+        baby = request.user.current_baby
+        groups = Group.objects.filter(baby=baby).all()
+        serializer = GroupListSerializer(groups, many=True)
+        return Response(serializer.data)
+
+    # 새로운 그룹 생성
+    def post(self, request):
+        baby = request.user.current_baby
+        serializer = GroupListSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=baby)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+class GroupDetailView(APIView):
+    # 한 그룹 내의 유저 목록 조회
+    def get(self, request, group_id):
+        group_members = UserBabyRelationship.objects.filter(group=group_id).all()
+        serializer = UserBabyRelationshipSerializer(group_members, many=True)
+        return Response(serializer.data)
+    
+    # 그룹에 유저 추가
+    def put(self, request, group_id):
+        baby = request.user.current_baby
+        user = UserBabyRelationship.objects.get(baby=baby, user=request.data['user'])
+        serializer = UserBabyRelationshipSerializer(data=request.data)
+
+    def delete(self, request, group_id):
         pass
 
-    def post(self, request):
-        pass
+
 
 
 

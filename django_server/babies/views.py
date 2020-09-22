@@ -5,17 +5,17 @@ from rest_framework.views import APIView
 # from rest_framework.permissions import IsAuthenticated
 
 from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
-from accounts.serializers import UserBabyRelationshipSerializer
+from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer
 
 from .models import Baby
 from accounts.models import User, UserBabyRelationship, Rank
 
 # Create your views here.
 class BabyListView(APIView):
-    # permission_classes = ['IsAuthenticated']
+    # 현 유저의 babble box들 조회
     def get(self, request):
-        my_babies = UserBabyRelationship.objects.filter(user=request.user).all()
-        serializer = UserBabyRelationshipSerializer(my_babies, many=True)
+        babies = Baby.objects.all()
+        serializer = BabySerializer(babies, many=True)
         return Response(serializer.data)
 
     # 새로운 babble box 생성
@@ -35,11 +35,22 @@ class BabyListView(APIView):
             relationship_serializer = UserBabyRelationshipSerializer(data=user_baby_relationship)
             if relationship_serializer.is_valid(raise_exception=True):
                 relationship_serializer.save(baby=baby, rank=owner)
+
                 # 유저 데이터의 current_baby 업데이트
                 user = request.user
                 user.current_baby = baby
                 user.save()
-                return Response(relationship_serializer.data)
+
+                # BabyAccess에 방문 기록 추가 
+                baby_access_data = {
+                    "baby": baby_id,
+                    "user": user_id
+                }
+                baby_access_serializer = BabyAccessSerializer(data=baby_access_data)
+                if baby_access_serializer.is_valid(raise_exception=True):
+                    baby_access_serializer.save()
+                    return Response(relationship_serializer.data)
+                return Response(baby_access_data.errors)
             return Response(relationship_serializer.errors)
         return Response(serializer.errors)
 
@@ -77,15 +88,17 @@ class BabyDetailView(APIView):
 
 
 class UserBabyRelationshipListView(APIView):
+    # 현 유저의 user baby relationship들 조회 
     def get(self, request):
         user_id = User.objects.get(email=request.user).id
         user_baby_relationships = UserBabyRelationship.objects.filter(user=user_id).all()
         serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
 
+    # 새로운 유저를 babble box에 초대 
     def post(self, request):
         serializer = UserBabyRelationshipSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(baby=request.user.current_baby)
             return Response(serializer.data)
         return Response(serializer.errors)

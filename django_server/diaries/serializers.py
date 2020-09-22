@@ -13,7 +13,7 @@ class DiaryListSerializer(serializers.ModelSerializer):
 
 class DiarySerializer(serializers.ModelSerializer):
     # baby = BabySerializer(required=False)
-    # creator = UserSerializer(required=False)
+    creator = UserSerializer(required=False)
     # modifier = UserSerializer(required=False)
     class Meta:
         model = Diary
