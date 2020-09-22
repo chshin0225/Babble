@@ -100,6 +100,41 @@ const photoStore = {
       //   })
       //   .catch(err => console.log(err.response.data))
     },
+    createPhotoComment({ rootGetters }, commentData) {
+      
+      axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/', commentData, rootGetters.config)
+      .then(res => {
+          console.log(res)
+          //router.push({ name: 'PhotoDetail' , params : {photoId : commentData.photoId}})
+          router.go(0)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    },
+    modifyPhotoComment({ rootGetters }, commentData) {
+      
+      axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/', commentData, rootGetters.config)
+      .then(res => {
+          console.log(res)
+          //router.push({ name: 'PhotoDetail' , params : {photoId : commentData.photoId}})
+          router.go(0)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    },
+    deletePhotoComment({ rootGetters }, commentData) {
+      console.log("deletePhotoComment", SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/'+ commentData.commentId + '/');
+      axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/' + commentData.commentId + '/', rootGetters.config)
+      .then(res => {
+          console.log(res)
+          router.go(0)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    },
       
   }
 }

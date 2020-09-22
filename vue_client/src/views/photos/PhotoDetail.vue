@@ -21,11 +21,11 @@
         <div class="mt-3 tag-container">
           <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FEA59C;"> #놀이터 </v-chip>
           <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip>
+          {{this.sheet}}{{this.height}}
         </div>
 
         <div class="mt-2 photo-date text-muted">
-          <p>2020년 7월 8일 14:28</p>
-          <!-- <p>{{photo.create_date}}</p> -->
+          <p>{{photo.create_date | convertDate}}</p>
         </div>
         <div class="mt-2 photo-location text-muted">
           <p><v-icon>mdi-map-marker</v-icon>서울특별시 강남구 역삼동</p>
@@ -34,83 +34,190 @@
       <div class="mt-4 comment-content">
         
         <div class="scallop-down"></div>
+        <div style="width:100%;display:inline-block;padding-bottom:5px;">
+          <textarea
+            style="width:100%; padding:5px; border:1px solid #a8a8a8; border-radius:5px;"
+            v-model="comment_content"
+            no-resize="no-resize"
+            outlined="outlined"
+            rows="2"
+            placeholder="댓글을 입력하세요">
+          </textarea>
+          <button class="btn btn-outline-pink" style="float:right; padding:.15rem .75rem" @click="clickCreateComment()">등록</button>
+        </div>
+        <v-app id="comment_app">
         <div v-for="comment in comments" :key="`comment_${comment.id}`">
           <div>
             <div class="d-flex justify-content-between">
               <p class="nickname">{{comment.user.name}}</p>
               <p>{{comment.modify_date | diffDate}}</p>
             </div>
-            <div>{{comment.content}}</div>
+            <div class="d-flex justify-content-between">
+              <div style="width:95%;">{{comment.content}}{{comment.id}}</div>
+              
+              <hr>
+              <!--<v-icon v-if="comment.user.id" color="#FEA59C" @click="clickFinal()">mdi-dots-vertical</v-icon>-->
+
+            
+              <v-bottom-sheet v-model="sheet">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-if="comment.user.id" color="#FEA59C"
+                  v-bind="attrs"
+                  v-on="on" @click="clickCommentMenu(comment.id)">mdi-dots-vertical</v-icon>
+              </template>
+              <v-list>
+                <!-- <v-subheader>Open in</v-subheader>
+                <v-list-item
+                  v-for="tile in tiles"
+                  :key="tile.title"
+                  @click="sheet = false"
+                >
+                  <v-list-item-avatar>
+                    <v-avatar size="32px" tile>
+                    <v-icon color="#FEA59C">{{tile.img}}</v-icon>
+                    </v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-title>{{ tile.title }}</v-list-item-title>
+                </v-list-item> -->
+                <v-list-item @click="commentModify()">
+                  <v-list-item-avatar>
+                    <v-avatar size="32px" tile>
+                    <v-icon color="#FEA59C">mdi-pencil-outline</v-icon>
+                    </v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-title>댓글 수정하기</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="commentDelete()">
+                  <v-list-item-avatar>
+                    <v-avatar size="32px" tile>
+                    <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+                    </v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-title>댓글 삭제하기</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-avatar size="32px" tile>
+                    </v-avatar>
+                  </v-list-item-avatar>
+                  <v-list-item-title></v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-bottom-sheet>
+          
+
+
+
+
+
+
+
+
+            </div>
           </div>
           <hr>
         </div>
-        <!-- <div>
-          <div class="d-flex justify-content-between">
-            <p class="nickname">아빠</p>
-            <p>3시간 전</p>
-          </div>
-          <div>우리 애기 이쁘당</div>
-        </div>
-        <hr>
-        <div>
-          <div class="d-flex justify-content-between">
-            <p class="nickname">엄마</p>
-            <p>어제</p>
-          </div>
-          <div>이쁜 울애기</div>
-        </div>
-        <hr>
-        <div>
-          <div class="d-flex justify-content-between">
-            <p class="nickname">할머니</p>
-            <p>2020.09.10</p>
-          </div>
-          <div>할미가 맛난 거 해줄게</div>
-        </div> -->
+        </v-app>
       </div>
     </div>
     <div style="height:15vh"></div>
   </div>
 </template>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+
 <script>
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'PhotoDetail',
-  /*mounted() {
-    console.log("mounted", this.$route.params.photoId );
-  },*/
+  data() {
+    return {
+      comment_content : '',
+      height: '45vh',
+      sheet: false,
+      tiles: [
+        { img: 'mdi-pencil-outline', title: '댓글 수정하기' },
+        { img: 'mdi-trash-can-outline', title: '댓글 삭제하기' },
+        { img: '', title: '' },
+      ],
+      selectedCommentId: ""
+    }
+  },
   computed: {
     ...mapState('photoStore', ['photo', 'comments'])
   },
   methods: {
-    ...mapActions('photoStore', ['findPhoto', 'fetchPhotoComments']),
+    ...mapActions('photoStore', ['findPhoto', 'fetchPhotoComments', 'createPhotoComment', 'modifyPhotoComment', 'deletePhotoComment']),
     clickBack() {
       this.$router.go(-1)
+    },
+    clickCreateComment(){
+      let commentData = {photoId : this.$route.params.photoId, content : this.comment_content};
+      this.createPhotoComment(commentData);
+    },
+    changeHeight() {
+      this.height = '57vh'
+    },
+    clickFinal() {
+      //this.sheet = !this.sheet
+      this.sheet = false;
+      //this.createPhotos(this.photos)
+    },
+    commentModify(){
+      this.clickFinal();
+      console.log("commentModify", this.selectedCommentId);
+    },
+    commentDelete(){
+      this.clickFinal();
+      console.log("commentDelete", this.selectedCommentId);
+      if(confirm("댓글을 삭제하시겠습니까?")){
+        
+        let commentData = {photoId : this.$route.params.photoId, commentId : this.selectedCommentId};
+        console.log("commentDelete", commentData);
+        this.deletePhotoComment(commentData);
+      }
+      
+    },
+    clickCommentMenu(commentId){
+      //this.clickFinal();
+      console.log("clickCOmmentMenu", commentId);
+      this.selectedCommentId = commentId;
     }
   },
   filters: {
-      diffDate(val) {
-        let diff = ((new Date() - (new Date(val))) / 1000) - new Date(val).getTimezoneOffset() * 60;
-        
-        if(diff < 60)
-          return '방금 전'
-        diff /= 60;
-        if(diff < 60)
-          return parseInt(diff) + '분 전'
-        diff /= 60;
-        if(diff < 24)
-          return parseInt(diff) + '시간 전'
-        diff /= 24;
-        if(diff < 7)
-          return parseInt(diff) + '일 전'
-        if (diff < 30)
-          return parseInt(diff/7) + '주 전'
-        if (diff < 365)
-          return parseInt(diff/30) + '달 전'
-        return parseInt(diff/365) + '년 전'
-        return val
-      }
+    convertDate(val){
+      //let date = new Date((new Date(val)/1000 + new Date(val).getTimezoneOffset() * 60)*1000);
+      let date = new Date(val);
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = date.getDate();
+      day = day < 10 ? '0'+day : day;
+      let hour = date.getHours();
+      hour = hour < 10 ? '0'+hour : hour;
+      let min = date.getMinutes();
+      min = min < 10 ? '0'+min : min;
+      let strDate = year+"년 "+month+"월 "+day+"일 "+hour+":"+min;
+      return strDate
+    },
+    diffDate(val) {
+      //let diff = ((new Date() - (new Date(val))) / 1000) - new Date(val).getTimezoneOffset() * 60;
+      let diff = (new Date() - (new Date(val))) / 1000;
+      
+      if(diff < 60)
+        return '방금 전'
+      diff /= 60;
+      if(diff < 60)
+        return parseInt(diff) + '분 전'
+      diff /= 60;
+      if(diff < 24)
+        return parseInt(diff) + '시간 전'
+      diff /= 24;
+      if(diff < 7)
+        return parseInt(diff) + '일 전'
+      if (diff < 30)
+        return parseInt(diff/7) + '주 전'
+      if (diff < 365)
+        return parseInt(diff/30) + '달 전'
+      return parseInt(diff/365) + '년 전'
+    }
   },
   mounted() {
     this.findPhoto(this.$route.params.photoId);
@@ -154,6 +261,15 @@ export default {
   width:100%;
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;
+}
+/* 
+#comment_app{
+  height:15vh;
+} */
+
+
+#app {
+  min-height: 0 !important;
 }
 
 </style>
