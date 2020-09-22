@@ -3,9 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer, GroupListSerializer, BabyAccessSerializer
+from .serializers import UserSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer
 
-from .models import User, Group, BabyAccess
+from .models import User, Group, BabyAccess, UserBabyRelationship
 from babies.models import Baby
 
 class UserDetailView(APIView):
@@ -40,7 +40,6 @@ class GroupListView(APIView):
     # 한 babble box 내의 존재하는 그룹들 조회
     def get(self, request):
         baby = request.user.current_baby
-        print(baby)
         groups = Group.objects.filter(baby=baby).all()
         serializer = GroupListSerializer(groups, many=True)
         return Response(serializer.data)
@@ -55,11 +54,17 @@ class GroupListView(APIView):
         return Response(serializer.errors)
 
 class GroupDetailView(APIView):
+    # 한 그룹 내의 유저 목록 조회
     def get(self, request, group_id):
-        pass
+        group_members = UserBabyRelationship.objects.filter(group=group_id).all()
+        serializer = UserBabyRelationshipSerializer(group_members, many=True)
+        return Response(serializer.data)
     
+    # 그룹에 유저 추가
     def put(self, request, group_id):
-        pass
+        baby = request.user.current_baby
+        user = UserBabyRelationship.objects.get(baby=baby, user=request.data['user'])
+        serializer = UserBabyRelationshipSerializer(data=request.data)
 
     def delete(self, request, group_id):
         pass

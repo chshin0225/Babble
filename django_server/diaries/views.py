@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import DiaryListSerializer, DiarySerializer, DiaryCommentSerializer
+
 from .models import Diary, DiaryComment
 from babies.models import Baby
+from accounts.models import UserBabyRelationship
 
 # Create your views here.
 class DiaryListView(APIView):
@@ -32,7 +34,7 @@ class DiaryListView(APIView):
 class DiaryDetailView(APIView):
     def get(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        serializer = DiarySerializer(diary)
+        serializer = DiarySerializer(diary)        
         return Response(serializer.data)
 
     def put(self, request, diary_id):
