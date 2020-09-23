@@ -105,13 +105,23 @@ class UserBabyRelationshipListView(APIView):
 
 
 class UserBabyRelationshipDetailView(APIView):
-    # 특정 유저의 babble box 내에서의 권한 수정
+    # 특정 유저의 babble box 내에서의 rank/relationship_name 수정
     def put(self, request, user_id):
-        pass
+        baby = request.user.current_baby
+        user_baby_relationship = get_object_or_404(UserBabyRelationship, user=user_id, baby=baby)
+        new_rank = get_object_or_404(Rank, id=request.data['rank'])
+        user_baby_relationship.rank = new_rank
+        user_baby_relationship.relationship_name = request.data['relationship_name']
+        user_baby_relationship.save()
+        serializer = UserBabyRelationshipSerializer(user_baby_relationship)
+        return Response(serializer.data)
 
     # 특정 유저를 babble box에서 삭제
     def delete(self, request, user_id):
-        user_baby_relationship = get_object_or_404(UserBabyRelationship)
+        baby = request.user.current_baby
+        user_baby_relationship = get_object_or_404(UserBabyRelationship, user=user_id, baby=baby)
+        user_baby_relationship.delete()
+        return Response()
 
 
 class MyBabbleBoxView(APIView):
