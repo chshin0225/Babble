@@ -40,6 +40,15 @@ const diaryStore = {
                 console.log(err)
             })
        },
+       deleteDiary({ rootGetters }, diaryId) {
+            axios.delete(SERVER.URL + SERVER.ROUTES.diaries + diaryId, rootGetters.config)
+            .then(() => {
+            router.push({ name: 'DiaryPhoto' })
+            })
+            .catch(err => {
+            console.log(err.response.data)
+            })
+       },
        fetchComments({ rootGetters, commit }, diaryId) {
            axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId + '/comments/', rootGetters.config)
             .then(res => {
@@ -59,6 +68,15 @@ const diaryStore = {
            .catch(err => {
                console.log(err.response)
            })
+       },
+       deleteComment({ dispatch, rootGetters}, commentData) {
+        axios.delete(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + SERVER.ROUTES.comments + commentData.commentId, rootGetters.config)
+            .then(() => {
+            dispatch('fetchComments', commentData.diaryId)
+            })
+            .catch(err => {
+            console.log(err.response.data)
+            })
        }
     }
 }

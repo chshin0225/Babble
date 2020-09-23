@@ -12,6 +12,7 @@ class Diary(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     content_html = models.TextField()
+    diary_date = models.DateField()
 
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
@@ -19,6 +20,7 @@ class Diary(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name='modified_diaries')
     modify_date = models.DateTimeField(auto_now=True)
+    cover_photo = models.CharField(max_length=200, blank=True, null=True)
 
     permitted_groups = models.ManyToManyField(Group, blank=True, related_name='allowed_diaries')
     featured_photos = models.ManyToManyField(Photo, blank=True, related_name='related_diaries')

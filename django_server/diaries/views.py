@@ -49,7 +49,7 @@ class DiaryDetailView(APIView):
         }, status=status.HTTP_200_OK)
 
     def put(self, request, diary_id):
-        baby_id = request.user.current_baby
+        baby_id = request.user.current_baby.id
         baby = get_object_or_404(Baby, id=baby_id)
         diary = get_object_or_404(Diary, id=diary_id)
         serializer = DiarySerializer(diary, data=request.data)

@@ -7,11 +7,14 @@ export default {
       login: '/rest-auth/login/',
       logout: '/rest-auth/logout/',
       babies: '/babies/',
+      babblebox: 'mybabblebox',
       myaccount: '/accounts/myinfo/',
       social: '/accounts/login/social/',
 
       // diary
       diaries: '/diaries/',
+      comments: '/comments/',
+      
       // photos
       photos: '/photos/',
     }

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
 from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer
 
-from .models import Baby
+from .models import Baby, BabyMeasurement
 from accounts.models import User, UserBabyRelationship, Rank
 
 # Create your views here.
@@ -25,9 +25,9 @@ class BabyListView(APIView):
             baby_serializer.save()
             # user_baby_relationship 만들기 
             baby_id = baby_serializer.data['id']
-            baby = Baby.objects.get(id=baby_id)
-            owner = Rank.objects.get(id=1)
-            user_id = User.objects.get(email=request.user).id
+            baby = get_object_or_404(Baby, id=baby_id)
+            owner = get_object_or_404(Rank, id=1)
+            user_id = get_object_or_404(User, email=request.user).id
             user_baby_relationship = {
                 'user': user_id,
                 'relationship_name': request.data['relationship_name']
@@ -56,31 +56,31 @@ class BabyListView(APIView):
 
 
 class BabyDetailView(APIView):
-    # 해당 babble box 회원들만 조회 가능
+    # 개별 애기 정보 조회 (해당 babble box 회원들만 조회 가능)
     def get(self, request, baby_id):
         members = UserBabyRelationship.objects.filter(baby=baby_id).values_list('user', flat=True)
-        user_id = User.objects.get(email=request.user).id
+        user_id = get_object_or_404(User, email=request.user).id
         if user_id in members:
-            baby = Baby.objects.get(id=baby_id)
+            baby = get_object_or_404(Baby, id=baby_id)
             serializer = BabySerializer(baby)
             return Response(serializer.data)
         return Response({'detail': '권한이 없습니다.'})
 
-    # 해당 babble box 생성자만 수정 가능
+    # 개별 애기 정보 수정(해당 babble box 생성자만 수정 가능)
     def put(self, request, baby_id):
-        owner = UserBabyRelationship.objects.get(baby=baby_id, rank=1).user
+        owner = get_object_or_404(UserBabyRelationship, baby=baby_id, rank=1).user
         if owner == request.user:
-            baby = Baby.objects.get(id=baby_id)
+            baby = get_object_or_404(Baby, id=baby_id)
             serializer = BabySerializer(baby, data=request.data)
             if serializer.is_valid():
                 serializer.save()
             return Response(serializer.errors)
         return Response({'detail': '권한이 없습니다.'})
 
-    # 해당 babble box 생성자만 삭제 가능
+    # babble box 삭제 (해당 babble box 생성자만 삭제 가능)
     def delete(self, request, baby_id):
-        owner = UserBabyRelationship.objects.get(baby=baby_id, rank=1).user
-        baby = Baby.objects.get(id=baby_id)
+        owner = get_object_or_404(UserBabyRelationship, baby=baby_id, rank=1).user
+        baby = get_object_or_404(Baby, id=baby_id)
         if owner == request.user:
             baby.delete()
             return Response()
@@ -95,7 +95,7 @@ class UserBabyRelationshipListView(APIView):
         serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
 
-    # 새로운 유저를 babble box에 초대 
+    # 새로운 유저를 babble box에 초대
     def post(self, request):
         serializer = UserBabyRelationshipSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -103,10 +103,72 @@ class UserBabyRelationshipListView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
 
+
+class UserBabyRelationshipDetailView(APIView):
+    # 특정 유저의 babble box 내에서의 rank/relationship_name 수정
+    def put(self, request, user_id):
+        baby = request.user.current_baby
+        user_baby_relationship = get_object_or_404(UserBabyRelationship, user=user_id, baby=baby)
+        new_rank = get_object_or_404(Rank, id=request.data['rank'])
+        user_baby_relationship.rank = new_rank
+        user_baby_relationship.relationship_name = request.data['relationship_name']
+        user_baby_relationship.save()
+        serializer = UserBabyRelationshipSerializer(user_baby_relationship)
+        return Response(serializer.data)
+
+    # 특정 유저를 babble box에서 삭제
+    def delete(self, request, user_id):
+        baby = request.user.current_baby
+        user_baby_relationship = get_object_or_404(UserBabyRelationship, user=user_id, baby=baby)
+        user_baby_relationship.delete()
+        return Response()
+
+
 class MyBabbleBoxView(APIView):
     # 현 유저의 user baby relationship들 조회 
     def get(self, request):
-        user_id = User.objects.get(email=request.user).id
+        user_id = get_object_or_404(User, email=request.user).id
         user_baby_relationships = UserBabyRelationship.objects.filter(user=user_id).all()
         serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
+
+
+class MeasurementListView(APIView):
+    # 성장 기록 전체 목록 조회
+    def get(self, request):
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby).all()
+        serializer = BabyMeasurementSerializer(measurements, many=True)
+        return Response(serializer.data)
+
+    # 새로운 성장 기록 작성
+    def post(self, request):
+        print(request.data)
+        serializer = BabyMeasurementSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby, creator=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+class MeasurementDetailView(APIView):
+    # 성장 기록 detail 조회
+    def get(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        serializer = BabyMeasurementSerializer(measurement)
+        return Response(serializer.data)
+
+    # 성장 기록 수정
+    def put(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        serializer = BabyMeasurementSerializer(measurement, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby, modifier=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+        
+
+    # 성장 기록 삭제
+    def delete(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        measurement.delete()
+        return Response({"message": "성장 기록이 삭제되었습니다."})

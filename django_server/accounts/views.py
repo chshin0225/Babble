@@ -56,7 +56,7 @@ class BabyAccessView(APIView):
 
             # 유저 정보에서 current_baby 업데이트
             user = request.user
-            baby = Baby.objects.get(id=request.data['baby'])
+            baby = get_object_or_404(Baby, id=request.data['baby'])
             user.current_baby = baby
             user.save()
 
@@ -90,9 +90,9 @@ class GroupDetailView(APIView):
     # 그룹에 유저 추가(초대하려는 유저는 babble box 멤버여야함)
     def put(self, request, group_id):
         baby = request.user.current_baby
-        user = User.objects.get(id=request.data['user']).id
-        group = Group.objects.get(id=group_id)
-        data = UserBabyRelationship.objects.get(baby=baby, user=user)
+        user = get_object_or_404(User, id=request.data['user']).id
+        group = get_object_or_404(Group, id=group_id)
+        data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
         data.group = group
         data.save()
         serializer = UserBabyRelationshipSerializer(data)
@@ -101,9 +101,9 @@ class GroupDetailView(APIView):
     # 그룹에서 멤버 제거
     def delete(self, request, group_id):
         baby = request.user.current_baby
-        user = User.objects.get(id=request.data['user']).id
-        group = Group.objects.get(id=group_id)
-        data = UserBabyRelationship.objects.get(baby=baby, user=user)
+        user = get_object_or_404(User, id=request.data['user']).id
+        group = get_object_or_404(Group, id=group_id)
+        data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
         data.group = None
         data.save()
         serializer = UserBabyRelationshipSerializer(data)
