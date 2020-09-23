@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       accessData: {
-        baby: 
+        baby: null,
       }
     }
   },
