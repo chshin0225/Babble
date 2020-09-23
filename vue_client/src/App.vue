@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <div id="app">
       <nav class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
         <Burger class="left-align d-flex align-items-center"></Burger>
@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
