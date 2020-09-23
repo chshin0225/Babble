@@ -89,7 +89,16 @@ export default new Vuex.Store({
           console.log(err)
         })
     },
-    
+    accessBabbleBox({ dispatch, getters }, accessData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.access, accessData, getters.config)
+        .then(() => {
+          dispatch('findBaby',accessData.baby)
+          router.push({ name: 'PhotoList' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   },
   modules: {
     accountStore: accountStore,

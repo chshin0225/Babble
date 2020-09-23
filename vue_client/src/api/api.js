@@ -9,7 +9,9 @@ export default {
       babies: '/babies/',
       babblebox: 'mybabblebox',
       myaccount: '/accounts/myinfo/',
+      access: '/accounts/access/',
       kakao: '/accounts/login/kakao/',
+      
 
       // diary
       diaries: '/diaries/',
