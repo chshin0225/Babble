@@ -8,7 +8,7 @@ export default {
       logout: '/rest-auth/logout/',
       babies: '/babies/',
       myaccount: '/accounts/myinfo/',
-      kakao: '/accounts/login/kakao/',
+      social: '/accounts/login/social/',
 
       // diary
       diaries: '/diaries/',

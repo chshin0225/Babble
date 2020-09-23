@@ -126,14 +126,50 @@ const accountStore = {
               console.error(err)
             })
         },
-        kakaoLogin() {
-          axios.get(SERVER.URL + SERVER.ROUTES.kakao)
+        socialLogin({ commit, dispatch }, userInfo) {
+          axios.post(SERVER.URL + SERVER.ROUTES.social, userInfo)
             .then(res => {
-              console.log(res)
+              commit('SET_TOKEN', res.data.key, { root: true });
+              dispatch('findMyAccount', null, { root: true })
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+              Toast.fire({
+                icon: "success",
+                title: "로그인에 성공하였습니다.",
+              });
+              if (res.data.state === 'login') {
+                router.push({name: 'PhotoList'});
+              } else if (res.data.state === 'signup') {
+                router.push({name: 'HowToRegisterBaby'})
+              }
             })
-            .catch(err => {
-              console.error(err)
-            })
+            .catch((err) => {
+              console.log(err)
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                  toast.addEventListener("mouseenter", Swal.stopTimer);
+                  toast.addEventListener("mouseleave", Swal.resumeTimer);
+                },
+              });
+              Toast.fire({
+                icon: "error",
+                title: err.response.data.message,
+              });
+            });
         }
     }
 }
