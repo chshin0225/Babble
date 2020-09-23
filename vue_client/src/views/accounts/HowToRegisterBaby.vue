@@ -20,6 +20,7 @@
         <button class="btn btn-blue" @click="clickInviteLink">링크로 초대받았습니다.</button>
       </div>
     </div>
+    <div style="height:15vh;"></div>
   </div>
 </template>
 

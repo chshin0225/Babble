@@ -13,7 +13,7 @@
                 <div class="py-3">
                   <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
                   <p class="pointer diary-option mb-1"> 일기 수정</p>
-                  <p class="pointer diary-option"> 일기 삭제</p>
+                  <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
                 </div>
               </v-sheet>
             </v-bottom-sheet>
@@ -48,7 +48,7 @@
     <div class="comment mb-5 mt-3">
       <h5 class="comment-title mb-3">댓글</h5>
       <!-- 댓글 작성 -->
-      <div class="input-group row no-gutters commentSection" style="height:65px;">
+      <div class="input-group row no-gutters comment-create" style="height:65px;">
         <textarea
           class="col-10 textareaSection p-1" 
           @keyup.enter="enterComment" 
@@ -68,35 +68,30 @@
         작성</button>
       </div>
       <!-- 댓글 리스트 -->
-      <div class="commentList">
+      <div class="comment-list">
         <div v-for="comment in comments" :key="`comment_${comment.id}`">
           <div>
             <div class="d-flex justify-content-between">
-              <p class="nickname">{{comment.user}}</p>
-              <p>{{comment.modify_date | moment('YYYY-MM-DD HH:MM:SS')}}</p>
+              <p class="comment-username">{{comment.user}}</p>
+              <div class="d-flex">
+                <p class="comment-time">{{comment.modify_date |  moment("from", "now")}}</p>
+                <div class="dropdown">
+                  <div class="btn-group dropleft">
+                    <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <p class="dropdown-item pointer">댓글 수정</p>
+                      <p class="dropdown-item pointer" @click="clickDeleteComment(commentData, comment.id)">댓글 삭제</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
             <div>{{comment.content}}</div>
           </div>
           <hr>
         </div>
       </div>
-
-      <!-- <div>
-        <div class="d-flex justify-content-between">
-          <p class="comment-username">아빠</p>
-          <p class="comment-time">3시간 전</p>
-        </div>
-        <div>너무 귀엽다 우리 아롱이</div>
-      </div>
-      <hr>
-      <div>
-        <div class="d-flex justify-content-between">
-          <p class="comment-username">할머니</p>
-          <p class="comment-time">어제</p>
-        </div>
-        <div>예쁘게 크렴</div>
-      </div> -->
-
     </div>
   </div>
 </template>
@@ -104,6 +99,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Swal from 'sweetalert2'
+
+const swal = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success mr-2',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
 
 export default {
   name: 'DiaryDetail',
@@ -130,7 +133,7 @@ export default {
     ...mapState('diaryStore', ['diary', 'comments'])
   },
   methods: {
-    ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment']),
+    ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment', 'deleteComment', 'deleteDiary']),
     clickShare() {
       const copyText = document.createElement("input");
       copyText.value = `http://j3a310.p.ssafy.io/diary/${this.$route.params.diaryId}`
@@ -143,6 +146,21 @@ export default {
           icon: 'success',
           text: '주소가 복사되었습니다'
         })
+    },
+    clickDelete( ){
+      swal.fire({
+        text: "정말 다이어리를 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: '네',
+        cancelButtonText: '아니요',
+        icon: "warning",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deleteDiary(this.$route.params.diaryId)
+        } 
+      });
+      
     },
     activeBtn() {
       if (this.commentData.content) {
@@ -160,29 +178,35 @@ export default {
         })  
     },
     enterComment() {
-      if (this.commentCreateData.content.length === 1){
-        this.commentCreateData.content = null
+      if (this.commentData.content.length === 1){
+        this.commentData.content = null
         this.btnActive = false
         Swal.fire({
           icon: 'error',
           text: '댓글을 작성해주세요.'
         })
       } else {
-        let notiData = new Object()
-        notiData = {
-          to: this.selectedPost.user.id,
-          dataId: this.selectedPost.id,
-          isRead: false,
-          type: "comment"
-        }
-        this.createNoti(notiData)
-        this.createComment(this.commentCreateData)
+        this.createComment(this.commentData)
         .then(() => {
-          this.commentCreateData.content = null
+          this.commentData.content = null
           this.btnActive = false
         })  
       }
     },
+    clickDeleteComment(commentData, commentId){
+       swal.fire({
+        text: "정말 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: '네',
+        cancelButtonText: '아니요',
+        icon: "warning",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deleteComment({ diaryId: commentData.diaryId, commentId: commentId })
+        } 
+      });
+    }
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)
@@ -251,32 +275,53 @@ export default {
 
 // comment
 .comment {
-  // textarea
-  textarea {
-    border: 1px solid #FEA59C;
-    &:focus {
-      outline-style: none; 
-    }
-  }
-  button {
-    border: 1px solid #FEA59C;
-    background-color: #979797;
-    color: white;
-  }
-
-
   .comment-title {
     font-weight: 900;
     color: #FEA59C;
   }
 
-  .comment-username {
-    font-weight: 600;
+  .comment-create {
+    textarea {
+      border: 1px solid #FEA59C;
+      &:focus {
+        outline-style: none; 
+      }
+    }
+
+    button {
+      border: 1px solid #FEA59C;
+      background-color: #979797;
+      color: white;
+    }
+  }
+  
+  .comment-list {
+    .comment-username {
+      font-weight: 600;
+    }
+
+    .comment-time {
+      color: #979797;
+    }
+
+    .dropdown {
+      .btn {
+        margin-left: 5px;
+        padding: 1px 3px 1px 3px!important;
+      }
+      .dropdown-menu {
+        padding: 0;
+        text-align: center;
+        p {
+          padding: 3px 0 3px 0;
+          margin: 0;
+        }
+      }
+    }
+
   }
 
-  .comment-time {
-    color: #979797;
-  }
+
 }
 
 

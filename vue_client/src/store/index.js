@@ -18,6 +18,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     myaccount: null,
     currentBaby: null,
+    babbleboxes: null,
   },
   getters: {
     config: state => ({ headers: { Authorization: `Token ${state.authToken}`}}),
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     },
     SET_BABY(state, baby) {
       state.currentBaby = baby
+    },
+    SET_BABBLEBOX(state, babbleboxes) {
+      state.babbleboxes = babbleboxes
     }
   },
   actions: {
@@ -76,6 +80,16 @@ export default new Vuex.Store({
 
       router.push({ name: 'Login' })
     },
+    fetchBabbleBox({ commit, getters }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.babblebox, getters.config)
+        .then(res => {
+          commit('SET_BABBLEBOX', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    
   },
   modules: {
     accountStore: accountStore,
