@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3" v-if="diary">
+  <div class="p-3" v-if="diary" data-app>
     <div class="diary-top d-flex justify-content-between my-3">
       <div class="diary-date text-muted">
         <p>{{diary.diary.create_date | moment('YYYY-MM-DD HH:mm:ss')}}</p>
@@ -8,7 +8,7 @@
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
         <button class="btn btn-pink" @click="sheet = !sheet">:</button>
         <v-bottom-sheet v-model="sheet">
-          <v-sheet class="text-center" height="15vh">
+          <v-sheet class="text-center" height="20vh">
             <div class="py-3">
               <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
               <p class="pointer diary-option mb-1"> 일기 수정</p>
@@ -47,23 +47,26 @@
       <h5 class="comment-title mb-3">댓글</h5>
       <!-- 댓글 작성 -->
       <div class="input-group row no-gutters comment-create" style="height:65px;">
-        <textarea
-          class="col-10 textareaSection p-1" 
-          @keyup.enter="enterComment" 
-          @input="activeBtn"
-          v-model="commentData.content" 
-          type="content" 
-          placeholder="댓글을 작성하세요 :)" 
-          rows="1" 
-          autofocus
-        ></textarea>
-        <button 
-          :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
-          class="btn col-2"
-          :disabled="!btnActive"
-          @click="clickComment"
-        >
-        작성</button>
+        <div class="input-group row no-gutters comment-create" style="height:65px;">
+          <textarea
+            class="col-10 textareaSection p-1" 
+            @keyup.enter="enterComment" 
+            @input="activeBtn"
+            v-model="commentData.content" 
+            type="content" 
+            placeholder="댓글을 작성하세요 :)" 
+            rows="1" 
+            autofocus
+          ></textarea>
+          <button 
+            :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
+            class="btn col-2"
+            :disabled="!btnActive"
+            @click="clickComment"
+          >
+          작성</button>
+        </div>
+        
       </div>
       <!-- 댓글 리스트 -->
       <div class="comment-list">
@@ -73,19 +76,43 @@
               <p class="comment-username">{{comment.user}}</p>
               <div class="d-flex">
                 <p class="comment-time">{{comment.modify_date |  moment("from", "now")}}</p>
-                <div class="dropdown">
+                <div class="dropdown" v-if="comment.user === myaccount.id">
                   <div class="btn-group dropleft">
                     <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <p class="dropdown-item pointer">댓글 수정</p>
+                      <p class="dropdown-item pointer" @click="clickInitUpdateComment(comment)">댓글 수정</p>
                       <p class="dropdown-item pointer" @click="clickDeleteComment(commentData, comment.id)">댓글 삭제</p>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
-            <div>{{comment.content}}</div>
+            <!-- 댓글 수정 X - 댓글 내용 노출 -->
+            <div v-if="comment.id != commentUpdateData.commentId">
+              {{ comment.content }}
+            </div>
+            <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
+            <div v-else>
+              <div class="input-group row no-gutters comment-create" style="height:65px;">
+              <textarea
+                class="col-10 textareaSection p-1" 
+                @keyup.enter="enterUpdateComment" 
+                @input="updateActiveBtn(comment.content)"
+                v-model="commentUpdateData.content" 
+                type="content" 
+                rows="1" 
+                autofocus
+              ></textarea>
+              <button 
+                :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
+                class="btn col-2"
+                :disabled="!updateBtnActive"
+                @click="clickUpdateComment(commentUpdateData)"
+              >
+                수정
+              </button>
+              </div>
+            </div>
           </div>
           <hr>
         </div>
@@ -116,7 +143,13 @@ export default {
         content: null,
         diaryId: this.$route.params.diaryId
       },
-      btnActive: false
+      btnActive: false,
+      commentUpdateData: {
+        diaryId: this.$route.params.diaryId,
+        commentId: null,
+        content: null,
+      },
+      updateBtnActive: false,
     }
   },
   watch: {
@@ -128,10 +161,11 @@ export default {
     }
   },
   computed: {
+    ...mapState(['myaccount']),
     ...mapState('diaryStore', ['diary', 'comments'])
   },
   methods: {
-    ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment', 'deleteComment', 'deleteDiary']),
+    ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment', 'deleteComment', 'updateComment', 'deleteDiary']),
     clickShare() {
       const copyText = document.createElement("input");
       copyText.value = `http://j3a310.p.ssafy.io/diary/${this.$route.params.diaryId}`
@@ -140,12 +174,15 @@ export default {
       copyText.select();
       document.execCommand("copy");
       document.body.removeChild(copyText)
+      this.sheet = false;
       Swal.fire({
           icon: 'success',
           text: '주소가 복사되었습니다'
         })
+      
     },
     clickDelete( ){
+      this.sheet = false;
       swal.fire({
         text: "정말 다이어리를 삭제하시겠습니까?",
         showCancelButton: true,
@@ -165,6 +202,13 @@ export default {
         this.btnActive = true
       } else {
         this.btnActive = false
+      }
+    },
+    updateActiveBtn(priorContent) {
+      if (this.commentUpdateData.content !== priorContent) {
+        this.updateBtnActive = true
+      } else {
+        this.updateBtnActive = true
       }
     },
     clickComment() {
@@ -204,7 +248,34 @@ export default {
           this.deleteComment({ diaryId: commentData.diaryId, commentId: commentId })
         } 
       });
-    }
+    },
+    clickInitUpdateComment(comment) {
+      this.commentUpdateData.commentId = comment.id 
+      this.commentUpdateData.content = comment.content
+    },
+    clickUpdateComment(comment) {
+      this.updateComment(comment)
+      this.commentUpdateData.commentId = null
+      this.commentUpdateData.content = null
+      this.updateBtnActive = false
+    },
+    enterUpdateComment() {
+      if (this.commentUpdateData.content.length === 1){
+        this.commentUpdateData.content = null
+        this.updateBtnActive = false
+        Swal.fire({
+          icon: 'error',
+          text: '댓글을 작성해주세요.'
+        })
+      } else {
+        this.updateComment(this.commentUpdateData)
+        .then(() => {
+          this.commentUpdateData.commentId = null
+          this.commentUpdateData.content = null
+          this.updateBtnActive = false
+        })  
+      }
+    },
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)

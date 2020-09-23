@@ -69,13 +69,23 @@ const diaryStore = {
                console.log(err.response)
            })
        },
-       deleteComment({ dispatch, rootGetters}, commentData) {
+       deleteComment({ dispatch, rootGetters }, commentData) {
         axios.delete(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + SERVER.ROUTES.comments + commentData.commentId, rootGetters.config)
             .then(() => {
-            dispatch('fetchComments', commentData.diaryId)
+                dispatch('fetchComments', commentData.diaryId)
             })
             .catch(err => {
-            console.log(err.response.data)
+                console.log(err.response.data)
+            })
+       },
+       updateComment({ dispatch, rootGetters }, commentUpdateData) {
+           axios.put(SERVER.URL + SERVER.ROUTES.diaries + commentUpdateData.diaryId + SERVER.ROUTES.comments + commentUpdateData.commentId + '/', commentUpdateData, rootGetters.config)
+            .then((res) => {
+                console.log(res)
+                dispatch('fetchComments', commentUpdateData.diaryId)
+            })
+            .catch(err => {
+                console.log(err.response.data)
             })
        }
     }
