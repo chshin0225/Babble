@@ -7,9 +7,10 @@ from rest_framework import status
 
 from .serializers import DiaryListSerializer, DiarySerializer, DiaryCommentSerializer
 from accounts.serializers import SimpleUserBabyRelationshipSerializer
+from babies.serializers import BabyMeasurementSerializer
 
 from .models import Diary, DiaryComment
-from babies.models import Baby
+from babies.models import Baby, BabyMeasurement
 from accounts.models import UserBabyRelationship
 
 # Create your views here.
@@ -43,10 +44,19 @@ class DiaryDetailView(APIView):
         user_baby_relationship = UserBabyRelationship.objects.get(user=creator, baby=request.user.current_baby)
         user_baby_relationship_serializer = SimpleUserBabyRelationshipSerializer(user_baby_relationship)
 
-        return Response({
-            'diary': diary_serializer.data,
-            'relationship': user_baby_relationship_serializer.data
-        }, status=status.HTTP_200_OK)
+        if BabyMeasurement.objects.filter(measure_date=diary.diary_date).exists():
+            measurement = BabyMeasurement.objects.get(measure_date=diary.diary_date)
+            measurement_serializer = BabyMeasurementSerializer(measurement)
+            return Response({
+                'diary': diary_serializer.data,
+                'relationship': user_baby_relationship_serializer.data,
+                'measurement': measurement_serializer.data
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'diary': diary_serializer.data,
+                'relationship': user_baby_relationship_serializer.data
+            }, status=status.HTTP_200_OK)
 
     def put(self, request, diary_id):
         baby_id = request.user.current_baby.id
