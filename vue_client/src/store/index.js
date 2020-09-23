@@ -59,26 +59,30 @@ export default new Vuex.Store({
         })
     },
     logout({ commit, getters }) {
-      commit('SET_TOKEN', null)
-      cookies.remove('auth-token')
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        onOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-          }
-       })
-       Toast.fire({
-        icon: 'success',
-        title: '로그아웃되었습니다.'
-      })
-      axios.post(SERVER.URL + SERVER.ROUTES.logout, getters.config)
-
-      router.push({ name: 'Login' })
+      axios.post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
+        .then(() => {
+          commit('SET_TOKEN', null)
+          cookies.remove('auth-token')
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+          })
+          Toast.fire({
+            icon: 'success',
+            title: '로그아웃되었습니다.'
+          })
+          router.push({ name: 'Login' })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     fetchBabbleBox({ commit, getters }) {
       axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.babblebox, getters.config)

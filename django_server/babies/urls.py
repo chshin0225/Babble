@@ -4,6 +4,7 @@ from . import views
 app_name = 'babies'
 
 urlpatterns = [
+    # 애기 정보 관련
     path('', views.BabyListView.as_view()),
     path('<int:baby_id>/', views.BabyDetailView.as_view()),
     
@@ -13,4 +14,8 @@ urlpatterns = [
     
     # 내가 초대된 babble box들 정보 관련
     path('mybabblebox/', views.MyBabbleBoxView.as_view()),
+
+    # 성장 기록 관련
+    path('measurements/', views.MeasurementListView.as_view()),
+    path('measurements/<int:measurement_id>/', views.MeasurementDetailView.as_view()),
 ]

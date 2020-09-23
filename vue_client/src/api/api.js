@@ -11,7 +11,7 @@ export default {
       myaccount: '/accounts/myinfo/',
       access: '/accounts/access/',
       kakao: '/accounts/login/kakao/',
-      
+      social: '/accounts/login/social/',
 
       // diary
       diaries: '/diaries/',
