@@ -4,51 +4,56 @@
   <div>
     <p class="main-title text-center color-pink">아롱이의 9월</p>
     <!-- Date Picker -->
-    <v-app>
-      <v-row class="d-flex justify-content-center">
-        <v-col cols="3" sm="3" class="erase-padding">
-          <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="date"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="date"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-                class="centered-date"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" type="month" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-col>
-      </v-row>
-    </v-app>
+    <v-row class="d-flex justify-content-center">
+      <v-col cols="3" sm="3" class="erase-padding">
+        <v-dialog
+          ref="dialog"
+          v-model="modal"
+          :return-value.sync="date"
+          persistent
+          width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="date"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+              class="centered-date"
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="date" type="month" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+            <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-dialog>
+      </v-col>
+    </v-row>
 
     <!-- Swiper -->
-    <swiper class="swiper" :options="swiperOption">
-      <swiper-slide v-for="n in 10" :key=n> 
-        <div class="card" @click="clickCard" style="background-image:url('https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764')">
-          <div class="p-3 title col-3 text-center">
-            <span class="date">{{n}}</span><br>
-            <span class="month">Sept</span>
+    <div v-if="photoDiaries">
+      <swiper class="swiper" :options="swiperOption" v-if="photoDiaries.length">
+        <swiper-slide v-for="diary in photoDiaries" :key="diary.id">
+          <div class="card" v-if="diary.cover_photo" @click="clickCard" :style="`background-image:url(${diary.cover_photo})`">
+            <div class="p-3 title col-3 text-center">
+              <span class="date">{{diary.create_date | moment("DD")}}</span><br>
+              <span class="month">{{ diary.create_date | moment("MMM") }}</span>
+            </div>
+            <div class="p-3 mt-auto">
+              <h4 class="diary-text">{{diary.title}}</h4>
+            </div>
+            <!-- <img src="https://lh3.googleusercontent.com/proxy/I8VHuGeCKm3Mr0766qrIhVU1CRQCtWKWNhdI-qjWprYYF5Ov20qyr8NmuJR-k6avovYBkit3UERqwGpOLyDJtrYX5GKN3EcFZMkVurpYgz81rzR_tXULTeU72fAoP6Z_tW24KCOrxgWIbb14HITOhg" class="card-img-top " alt="..."> -->
           </div>
-          <div class="p-3 mt-auto">
-            <h4 class="diary-text">세상에서 가장 귀여운 우리 아롱이... 오늘은 밥 많이 먹었다!</h4>
-          </div>
-          <!-- <img src="https://lh3.googleusercontent.com/proxy/I8VHuGeCKm3Mr0766qrIhVU1CRQCtWKWNhdI-qjWprYYF5Ov20qyr8NmuJR-k6avovYBkit3UERqwGpOLyDJtrYX5GKN3EcFZMkVurpYgz81rzR_tXULTeU72fAoP6Z_tW24KCOrxgWIbb14HITOhg" class="card-img-top " alt="..."> -->
-        </div>
-      </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
-    </swiper>
+        </swiper-slide>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
+      <div v-else class="text-center no-photos mt-5">
+         <!-- 만약 업로드 된이미지가 없을 경우 -->
+        <img class="crying-baby" src="@/assets/baby.png">
+        <h5>아직 작성된 포토 다이어리가 없습니다.<br>아기 사진과 함께 다이어리를 작성해주세요!</h5>
+     </div>
+    </div>
   </div>
   <!-- 다이어리 추가 버튼 구현 -->
   <div @click="clickAdd" class="add-button color-pink pointer">
@@ -64,12 +69,18 @@
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 
+import { mapState, mapActions } from 'vuex'
+ 
+
 export default {
   name: 'DiaryPhoto',
-  title: 'Centered slides',
   components: {
     Swiper,
     SwiperSlide,
+  },
+  computed: {
+    ...mapState(['myaccount']),
+    ...mapState('diaryStore', ['photoDiaries'])
   },
   data() {
     return {
@@ -89,12 +100,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions('diaryStore', ['fetchDiaries']),
     clickAdd() {
       this.$router.push({name: 'DiaryCreate'})
     },
-    clickCard( ){
+    clickCard(){
       this.$router.push({name: 'DiaryDetail', params: { 'diaryId': 1 } })
     }
+  },
+  created() {
+    this.fetchDiaries()
   }
 }
 </script>

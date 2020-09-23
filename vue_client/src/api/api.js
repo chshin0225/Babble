@@ -17,6 +17,7 @@ export default {
       diaries: '/diaries/',
       comments: '/comments/',
       measurements: 'measurements/',
+      photo: 'photo/',
       
       // photos
       photos: '/photos/',
