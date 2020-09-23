@@ -7,17 +7,15 @@
       <div class="diary-writer">
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
         <button class="btn btn-pink" @click="sheet = !sheet">:</button>
-        <v-app>
-            <v-bottom-sheet v-model="sheet">
-              <v-sheet class="text-center" height="15vh">
-                <div class="py-3">
-                  <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
-                  <p class="pointer diary-option mb-1"> 일기 수정</p>
-                  <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
-                </div>
-              </v-sheet>
-            </v-bottom-sheet>
-        </v-app>
+        <v-bottom-sheet v-model="sheet">
+          <v-sheet class="text-center" height="15vh">
+            <div class="py-3">
+              <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
+              <p class="pointer diary-option mb-1"> 일기 수정</p>
+              <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
+            </div>
+          </v-sheet>
+        </v-bottom-sheet>
         
       </div>
     </div>
@@ -217,7 +215,6 @@ export default {
 
 <style scoped lang="scss">
 .diary-top {
-  height: 5vh;
   .diary-date {
     p {
       margin: 0;
@@ -243,11 +240,6 @@ export default {
   p {
   white-space: pre-wrap;
   word-wrap: break-word;
-  }
-
-  img {
-    /*width: 82vw;*/ 
-    width:100%; 
   }
 }
 
@@ -318,11 +310,13 @@ export default {
         }
       }
     }
-
   }
-
-
 }
 
+</style>
 
+<style scoped>
+.diary-content >>> img {
+  max-width: 100%;
+}
 </style>
