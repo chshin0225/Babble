@@ -29,20 +29,25 @@
       </p>
       <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
     </div>
-    <div class="scallop-down"></div>
-    <div class="mt-3 growth-title row no-gutters">
-      <div class="col-3 text-center">
-        <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
-        <img width="50px" src="../../assets/giraffe.png" /> -->
-        <img width="50px" src="@/assets/giraffe.png" />
+    <div class="measurement" v-if="diary.measurement">
+      <div class="scallop-down"></div>
+      <div class="mt-3 growth-title row no-gutters">
+        <div class="col-3 text-center">
+          <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+          <img width="50px" src="../../assets/giraffe.png" /> -->
+          <img width="50px" src="@/assets/giraffe.png" />
+        </div>
+        <div class="col-9">
+          <p class="growth">성장 기록</p>
+          <p>
+            <span v-if="diary.measurement.weight">무게 {{ diary.measurement.weight }} kg</span>
+            <span v-if="diary.measurement.height"> 🞄 키 {{ diary.measurement.height }} cm</span>
+            <span v-if="diary.measurement.head_size"> 🞄 머리둘레 {{ diary.measurement.head_size }} cm</span>          </p>
+        </div>
       </div>
-      <div class="col-9">
-        <p class="growth">성장 기록</p>
-        <p>무게 9.2Kg 🞄 키 67cm 🞄 머리둘레 20cm</p>
-      </div>
-      
+      <div class="scallop-up"></div>
     </div>
-    <div class="scallop-up"></div>
+    
     <div class="comment mb-5 mt-3">
       <h5 class="comment-title mb-3">댓글</h5>
       <!-- 댓글 작성 -->
