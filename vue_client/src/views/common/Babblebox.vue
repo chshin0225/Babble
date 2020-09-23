@@ -17,7 +17,7 @@
             <p>D + {{ babblebox.baby.birth | countDays(babblebox.baby.birth) }}</p>
           </div>
         </div>
-        <div class="babblebox-enter d-flex align-items-center pointer">
+        <div class="babblebox-enter d-flex align-items-center pointer" @click="clickBabbleBox(babblebox.baby.id)">
           <i class="fas fa-sign-in-alt"></i>
         </div>
       </div>
@@ -48,7 +48,9 @@ export default {
   name: 'Babblebox',
   data() {
     return {
-
+      accessData: {
+        baby: 
+      }
     }
   },
   computed: {
@@ -69,6 +71,10 @@ export default {
       console.log("HELLO")
       this.$router.push({ name: 'HowToRegisterBaby' })
     },
+    clickBabbleBox(babbleboxId) {
+      console.log(babbleboxId)
+      this.findBaby(babbleboxId)
+    }
   },
   mounted() {
     this.findMyAccount()
