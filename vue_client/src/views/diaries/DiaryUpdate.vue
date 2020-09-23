@@ -65,23 +65,23 @@
       <v-text-field
         label=" 키"
         suffix="cm"
-        v-model="babyHeight"
+        v-model="recordData.babyRecord.height"
       ></v-text-field>
       <v-text-field
         label="몸무게"
         suffix="kg"
-        v-model="babyWeight"
+        v-model="recordData.babyRecord.weight"
       ></v-text-field>
       <v-text-field
         label="머리 둘레"
         suffix="cm"
-        v-model="babyHead"
+        v-model="recordData.babyRecord.head_size"
       ></v-text-field>
     </div>
     <div class="p-2 d-flex justify-content-end">
       <button @click="clickUpdate()" class="btn btn-pink ">수정</button>
     </div>
-    <div style="height:10vh"></div>
+    <div style="height:15vh"></div>
         
   </div>
 
@@ -120,9 +120,16 @@ export default {
           imageResize: {}
         }
       },
-      babyHead: 0,
-      babyHeight: 0,
-      babyWeight: 0,
+      tempRecord: {
+        babyHead: 0,
+        babyHeight: 0,
+        babyWeight: 0,
+      },
+      recordData: {
+        babyRecord: {
+
+        },
+      },
       diaryData: {
         diaryUpdateData: {
           diary_date: '',
@@ -142,13 +149,20 @@ export default {
     };
   },
   methods: {
-    ...mapActions('diaryStore', ['updateDiary']),
+    ...mapActions('diaryStore', ['updateDiary', 'updateMeasurement']),
     clickBack() {
       this.$router.go(-1)
     },
     clickUpdate() {
       this.diaryData.diaryUpdateData.content_html = this.diaryData.diaryUpdateData.content;
       this.updateDiary(this.diaryData)
+
+      if (this.diary.measurement) {
+        this.updateMeasurement(this.recordData)
+        .then(() => {
+          this.$router.push({ name: 'DiaryDetail', params: { diaryId: this.diary.diary.id } })
+        })
+      }
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
       const createData = []
@@ -191,6 +205,14 @@ export default {
     this.diaryData.diaryUpdateData.content_html = this.diary.diary.content_html
     if (this.diary.diary.cover_photo) {
       this.diaryData.diaryUpdateData.cover_photo = this.diary.diary.cover_photo
+    }
+
+    if (this.diary.measurement) {
+      this.recordData.babyRecord.weight = this.diary.measurement.weight
+      this.recordData.babyRecord.height = this.diary.measurement.height
+      this.recordData.babyRecord.head_size = this.diary.measurement.head_size
+      this.recordData.babyRecord.measure_date = this.diary.measurement.measure_date
+      this.recordData.measurement_id = this.diary.measurement.id
     }
     console.log("다이어리 업데이트", this.diary)
   }
