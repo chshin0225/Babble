@@ -193,3 +193,6 @@ node_modules
 
 # firebase config file
 config.pickle
+
+# private photos
+AI/Sameface/*.jpg
