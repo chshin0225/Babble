@@ -24,10 +24,14 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['profile_image'] = self.validated_data.get('profile_image', '')
         return data_dict
 
+class SocialRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'name', 'user_type']
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby']
+        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby', 'user_type']
 
 class BabyAccessSerializer(serializers.ModelSerializer):
     class Meta:

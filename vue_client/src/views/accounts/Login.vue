@@ -1,10 +1,6 @@
 <template>
   <div class="background1">
     <div class="container p-3 mt-5 bg-light-ivory login-form">
-      <!-- <h3 class="login-title color-pink">
-        로그인
-      </h3> -->
-
       <div class="input-with-label">
         <input
           v-model="loginData.email"
@@ -59,7 +55,6 @@
           class="btn google d-flex align-items-center justify-content-center"
           @click="handleClickSignIn"
         >
-          <!-- <i class="fab fa-google-plus-g"></i> -->
           <img
             class="google-logo"
             src="https://user-images.githubusercontent.com/57381062/88908677-291dcb80-d295-11ea-8a24-2a96837dd714.png"
@@ -74,10 +69,8 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
-//import Swal from "sweetalert2";
-//import axios from "axios";
-//import SERVER from "@/api/api";
+import { mapActions } from "vuex";
+import router from '@/router';
 
 export default {
   name: "Login",
@@ -94,9 +87,6 @@ export default {
       isSubmit: false,
     };
   },
-  created() {
-    this.component = this;
-  },
   watch: {
     loginData: {
       deep: true,
@@ -107,122 +97,51 @@ export default {
     },
   },
   methods: {
-     ...mapMutations(["SET_TOKEN"]),
-     ...mapActions("accountStore", ["login", "kakaoLogin"]),
+    ...mapActions("accountStore", ["login", "socialLogin"]),
     async handleClickSignIn() {
-      /*const googleUser = await this.$gAuth.signIn();
+      const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
       const userInfo = {
-        nickName: profile.getName(),
+        name: profile.getName(),
         email: profile.getEmail(),
-        platformType: "GOOGLE",
+        user_type: "google",
       };
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.social, userInfo)
-        .then((res) => {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          this.SET_TOKEN(res.data);
-          Toast.fire({
-            icon: "success",
-            title: "로그인에 성공하였습니다.",
-          });
-          this.$router.push("/");
-        })
-        .catch((err) => {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          Toast.fire({
-            icon: "error",
-            title: err.response.data.message,
-          });
-          this.$router.push("/");
-        });*/
+      this.socialLogin(userInfo)
+    },
+    kakaoLogin() {
+      window.Kakao.Auth.login({
+        scope: "profile, account_email",
+        success: this.GetMe
+      });
+    },
+    GetMe() {
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: res => {
+          const kakao_account = res.kakao_account;
+          const userInfo = {
+            name: kakao_account.profile.nickname,
+            email: kakao_account.email,
+            user_type: "kakao",
+          };
+          if (userInfo.email === undefined) {
+            router.push({
+              name: "SignupKakao",
+              params: {
+                name: userInfo.name,
+                user_type: userInfo.user_type,
+              },
+            });
+          } else {
+            this.socialLogin(userInfo)
+          }
+        },
+      });
     },
     clickLogin() {
       if (this.isSubmit) {
         this.login(this.loginData);
       }
-    },
-    GetMe() {
-      /*window.Kakao.API.request({
-        url: "/v2/user/me",
-        success: (res) => {
-          const kakao_account = res.kakao_account;
-          const userInfo = {
-            nickName: kakao_account.profile.nickname,
-            email: kakao_account.email,
-            platformType: "KAKAO",
-          };
-          if (userInfo.email === undefined) {
-            this.$router.push({
-              name: "SignupKakao",
-              params: {
-                nickName: userInfo.nickName,
-                platformType: userInfo.platformType,
-              },
-            });
-          } else {
-            axios
-              .post(SERVER.URL + SERVER.ROUTES.social, userInfo)
-              .then((res) => {
-                this.SET_TOKEN(res.data);
-                const Toast = Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  onOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                  },
-                });
-                Toast.fire({
-                  icon: "success",
-                  title: "로그인에 성공하였습니다.",
-                });
-                this.$router.push("/");
-              })
-              .catch((err) => {
-                const Toast = Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  onOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                  },
-                });
-                Toast.fire({
-                  icon: "error",
-                  title: err.response.data.message,
-                });
-                this.$router.push("/");
-              });
-          }
-        },
-      });*/
     },
     checkEmailForm() {
       if (
@@ -266,10 +185,10 @@ export default {
       return va.test(password);
     },
     clickSignup() {
-      this.$router.push({ name: "Signup" });
+      router.push({ name: "Signup" });
     },
     clickPasswordFind() {
-      this.$router.push({ name: "PasswordFind" });
+      router.push({ name: "PasswordFind" });
     },
   },
 };

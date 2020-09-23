@@ -24,6 +24,7 @@ import Babblebox from '@/views/common/Babblebox'
 // Authentication
 import Login from '@/views/accounts/Login'
 import Signup from '@/views/accounts/Signup'
+import SignupKakao from '@/views/accounts/SignupKakao'
 import PasswordFind from '@/views/accounts/PasswordFind'
 import PasswordFindEmail from '@/views/accounts/PasswordFindEmail'
 import HowToRegisterBaby from '@/views/accounts/HowToRegisterBaby'
@@ -80,6 +81,11 @@ Vue.use(VueRouter)
     path: '/signup',
     name: 'Signup',
     component: Signup
+  },
+  {
+    path: '/signup/kakao',
+    name: 'SignupKakao',
+    component: SignupKakao
   },
   {
     path: '/pwfind',
@@ -173,8 +179,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'PasswordFind', 'PasswordFindEmail'] // Login 안해도 됨
-  const authPages = ['Login', 'Signup', 'PasswordFind', 'PasswordFindEmail'] // Login 되어있으면 안됨
+  const publicPages = ['Login', 'Signup', 'SignupKakao', 'PasswordFind', 'PasswordFindEmail'] // Login 안해도 됨
+  const authPages = ['Login', 'Signup', 'SignupKakao', 'PasswordFind', 'PasswordFindEmail'] // Login 되어있으면 안됨
   // const pubicPages = ['Login', 'Signup'] // Login 안해도 됨
   // const authPages = ['Login', 'Signup'] // Login 되어있으면 안됨
   const authRequired = !publicPages.includes(to.name) // 로그인 해야하는 페이지면 true 반환
