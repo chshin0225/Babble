@@ -11,7 +11,7 @@
           <v-sheet class="text-center" height="20vh">
             <div class="py-3">
               <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
-              <p class="pointer diary-option mb-1"> 일기 수정</p>
+              <p class="pointer diary-option mb-1" @click="clickEdit"> 일기 수정</p>
               <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
             </div>
           </v-sheet>
@@ -276,6 +276,9 @@ export default {
         })  
       }
     },
+    clickEdit() {
+      this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
+    }
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)

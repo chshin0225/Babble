@@ -15,6 +15,7 @@ import DiaryPhoto from '@/views/diaries/DiaryPhoto'
 import DiaryCalendar from '@/views/diaries/DiaryCalendar'
 import DiaryTimeline from '@/views/diaries/DiaryTimeline'
 import DiaryCreate from '@/views/diaries/DiaryCreate'
+import DiaryUpdate from '@/views/diaries/DiaryUpdate'
 import DiaryDetail from '@/views/diaries/DiaryDetail'
 
 
@@ -145,6 +146,11 @@ Vue.use(VueRouter)
     path: '/diary/create', 
     name: 'DiaryCreate',
     component: DiaryCreate
+  },
+  {
+    path: '/diary/:diaryId/update',
+    name: 'DiaryUpdate',
+    component: DiaryUpdate
   },
   {
     path: '/diary/:diaryId',

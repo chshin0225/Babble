@@ -42,12 +42,23 @@ const diaryStore = {
        },
        deleteDiary({ rootGetters }, diaryId) {
             axios.delete(SERVER.URL + SERVER.ROUTES.diaries + diaryId, rootGetters.config)
+                .then(() => {
+                    router.push({ name: 'DiaryPhoto' })
+                })
+                .catch(err => {
+                    console.log(err.response.data)
+                })
+       },
+       updateDiary({ rootGetters }, diaryData) {
+           console.log(diaryData.diaryUpdateData)
+            axios.put(SERVER.URL + SERVER.ROUTES.diaries + diaryData.diaryId + '/', diaryData.diaryUpdateData, rootGetters.config)
             .then(() => {
-            router.push({ name: 'DiaryPhoto' })
+                router.push({ name: 'DiaryDetail', params: { diaryId: diaryData.diaryId } })
             })
             .catch(err => {
-            console.log(err.response.data)
+                console.log(err.response)
             })
+            
        },
        fetchComments({ rootGetters, commit }, diaryId) {
            axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId + '/comments/', rootGetters.config)
