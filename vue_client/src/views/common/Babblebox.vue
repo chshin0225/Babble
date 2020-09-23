@@ -1,80 +1,20 @@
 <template>
-  <div class="">
+  <div v-if="babbleboxes">
     <div class="scallop-down"></div>
     <div class="text-center">
       <h3 class="color-pink font-weight-bold">Babble Box</h3>
       <p>현재 <span class="color-blue font-weight-bold" v-if="myaccount">{{ myaccount.name }}</span>님께서 예뻐해주시는 아기입니다.</p>
     </div>
     <!-- <div class="scallop-down"></div> -->
-    <div class="babbleboxes w-75 mt-3">
+    <div class="babbleboxes w-75 mt-3" v-for="babblebox in babbleboxes" :key="`babblebox-${babblebox.id}`">
       <div class="babblebox d-flex justify-content-between my-3">
         <div class="babblebox-info d-flex">
           <div class="profile mr-3">
             <img src="http://bit.do/babbleprofile">
           </div>
           <div class="babble-box">
-            <p>아롱이</p>
-            <p>D + 73</p>
-          </div>
-        </div>
-        <div class="babblebox-enter d-flex align-items-center pointer">
-          <i class="fas fa-sign-in-alt"></i>
-        </div>
-      </div>
-
-      <div class="babblebox d-flex justify-content-between my-3">
-        <div class="babblebox-info d-flex">
-          <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
-          </div>
-          <div class="babble-box">
-            <p>샛별이</p>
-            <p>D + 120</p>
-          </div>
-        </div>
-        <div class="babblebox-enter d-flex align-items-center pointer">
-          <i class="fas fa-sign-in-alt"></i>
-        </div>
-      </div>
-
-      <div class="babblebox d-flex justify-content-between my-3">
-        <div class="babblebox-info d-flex">
-          <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
-          </div>
-          <div class="babble-box">
-            <p>초롱이</p>
-            <p>D + 32</p>
-          </div>
-        </div>
-        <div class="babblebox-enter d-flex align-items-center pointer">
-          <i class="fas fa-sign-in-alt"></i>
-        </div>
-      </div>
-
-      <div class="babblebox d-flex justify-content-between my-3">
-        <div class="babblebox-info d-flex">
-          <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
-          </div>
-          <div class="babble-box">
-            <p>재롱이</p>
-            <p>D + 244</p>
-          </div>
-        </div>
-        <div class="babblebox-enter d-flex align-items-center pointer">
-          <i class="fas fa-sign-in-alt"></i>
-        </div>
-      </div>
-
-      <div class="babblebox d-flex justify-content-between my-3">
-        <div class="babblebox-info d-flex">
-          <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
-          </div>
-          <div class="babble-box">
-            <p>다롱이</p>
-            <p>D + 160</p>
+            <p>{{ babblebox.baby.baby_name }}</p>
+            <p>D + {{ babblebox.baby.birth | countDays(babblebox.baby.birth) }}</p>
           </div>
         </div>
         <div class="babblebox-enter d-flex align-items-center pointer">
@@ -91,14 +31,29 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Babblebox',
+  data() {
+    return {
+
+    }
+  },
   computed: {
-    ...mapState([ 'myaccount']),
+    ...mapState([ 'myaccount', 'babbleboxes']),
+  },
+  filters: {
+    countDays(date) {
+      var d1 = new Date() 
+      var d2 = new Date(date)
+      var days2 = Math.floor(Math.abs(d1-d2)/(8.64e+7))
+      return days2
+
+    }
   },
   methods: {
-    ...mapActions(['findBaby', 'findMyAccount']),
+    ...mapActions(['findBaby', 'findMyAccount', 'fetchBabbleBox']),
   },
   mounted() {
     this.findMyAccount()
+    this.fetchBabbleBox()
   }
 }
 </script>

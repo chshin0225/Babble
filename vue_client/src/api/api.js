@@ -7,6 +7,7 @@ export default {
       login: '/rest-auth/login/',
       logout: '/rest-auth/logout/',
       babies: '/babies/',
+      babblebox: 'mybabblebox',
       myaccount: '/accounts/myinfo/',
       kakao: '/accounts/login/kakao/',
 
