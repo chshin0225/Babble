@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
 from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer
 
-from .models import Baby
+from .models import Baby, BabyMeasurement
 from accounts.models import User, UserBabyRelationship, Rank
 
 # Create your views here.
@@ -131,3 +131,44 @@ class MyBabbleBoxView(APIView):
         user_baby_relationships = UserBabyRelationship.objects.filter(user=user_id).all()
         serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
+
+
+class MeasurementListView(APIView):
+    # 성장 기록 전체 목록 조회
+    def get(self, request):
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby).all()
+        serializer = BabyMeasurementSerializer(measurements, many=True)
+        return Response(serializer.data)
+
+    # 새로운 성장 기록 작성
+    def post(self, request):
+        print(request.data)
+        serializer = BabyMeasurementSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby, creator=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+class MeasurementDetailView(APIView):
+    # 성장 기록 detail 조회
+    def get(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        serializer = BabyMeasurementSerializer(measurement)
+        return Response(serializer.data)
+
+    # 성장 기록 수정
+    def put(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        serializer = BabyMeasurementSerializer(measurement, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby, modifier=request.user)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+        
+
+    # 성장 기록 삭제
+    def delete(self, request, measurement_id):
+        measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
+        measurement.delete()
+        return Response({"message": "성장 기록이 삭제되었습니다."})

@@ -13,9 +13,9 @@ class BabySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BabyMeasurementSerializer(serializers.ModelSerializer):
-    baby = BabySerializer(required=False)
+    # baby = BabySerializer(required=False)
     # creator = UserSerializer(required=False)
     # modifer = UserSerializer(required=False)
     class Meta:
-        model = Baby
+        model = BabyMeasurement
         fields = '__all__'
