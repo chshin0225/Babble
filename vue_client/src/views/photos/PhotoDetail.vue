@@ -9,7 +9,31 @@
       <v-spacer></v-spacer>
       <v-icon class="top-right-icons" color="#FEA59C">mdi-folder-outline</v-icon>
       <v-icon class="top-right-icons" color="#FEA59C">mdi-heart-outline</v-icon>
-      <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon>
+      <!-- <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon> -->
+      
+      <v-bottom-sheet v-model="photo_sheet">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            class="top-right-icons"
+            color="#FEA59C"
+            v-bind="attrs"
+            v-on="on" 
+            @click="clickPhotoMenu()">mdi-dots-vertical</v-icon>
+        </template>
+        <v-list>
+          <v-list-item @click="photoDelete()">
+            <v-list-item-avatar>
+              <v-avatar size="32px" tile>
+              <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-title>사진 삭제하기</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-bottom-sheet>
+
+
+
     </v-app-bar>
 
       <div class="p-3">
@@ -21,7 +45,7 @@
         <div class="mt-3 tag-container">
           <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FEA59C;"> #놀이터 </v-chip>
           <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip>
-          {{this.sheet}}{{this.height}}
+          
         </div>
 
         <div class="mt-2 photo-date text-muted">
@@ -53,8 +77,17 @@
               <p>{{comment.modify_date | diffDate}}</p>
             </div>
             <div class="d-flex justify-content-between">
-              <div style="width:95%;">{{comment.content}}{{comment.id}}</div>
-              
+              <div style="width:95%;">{{comment.content}}</div>
+              <!-- <div style="width:95%;">
+                <textarea
+                  style="width:100%; padding:5px; border:1px solid #a8a8a8; border-radius:5px;"
+                  v-model="comment.content"
+                  no-resize="no-resize"
+                  outlined="outlined"
+                  rows="2"
+                  placeholder="댓글을 입력하세요">
+                </textarea>
+              </div> -->
               <hr>
               <!--<v-icon v-if="comment.user.id" color="#FEA59C" @click="clickFinal()">mdi-dots-vertical</v-icon>-->
 
@@ -95,13 +128,6 @@
                   </v-list-item-avatar>
                   <v-list-item-title>댓글 삭제하기</v-list-item-title>
                 </v-list-item>
-                <v-list-item>
-                  <v-list-item-avatar>
-                    <v-avatar size="32px" tile>
-                    </v-avatar>
-                  </v-list-item-avatar>
-                  <v-list-item-title></v-list-item-title>
-                </v-list-item>
               </v-list>
             </v-bottom-sheet>
           
@@ -132,12 +158,12 @@ export default {
     return {
       comment_content : '',
       height: '45vh',
+      photo_sheet: false,
       sheet: false,
-      tiles: [
+      /*comment_tiles: [
         { img: 'mdi-pencil-outline', title: '댓글 수정하기' },
         { img: 'mdi-trash-can-outline', title: '댓글 삭제하기' },
-        { img: '', title: '' },
-      ],
+      ],*/
       selectedCommentId: ""
     }
   },
@@ -145,7 +171,7 @@ export default {
     ...mapState('photoStore', ['photo', 'comments'])
   },
   methods: {
-    ...mapActions('photoStore', ['findPhoto', 'fetchPhotoComments', 'createPhotoComment', 'modifyPhotoComment', 'deletePhotoComment']),
+    ...mapActions('photoStore', ['findPhoto', 'fetchPhotoComments', 'createPhotoComment', 'modifyPhotoComment', 'deletePhotoComment', 'deletePhoto']),
     clickBack() {
       this.$router.go(-1)
     },
@@ -156,17 +182,19 @@ export default {
     changeHeight() {
       this.height = '57vh'
     },
-    clickFinal() {
+    /*clickFinal() {
       //this.sheet = !this.sheet
       this.sheet = false;
       //this.createPhotos(this.photos)
-    },
+    },*/
     commentModify(){
-      this.clickFinal();
-      console.log("commentModify", this.selectedCommentId);
+      //this.clickFinal();
+      this.sheet = false;
+      //console.log("commentModify", this.selectedCommentId);
     },
     commentDelete(){
-      this.clickFinal();
+      //this.clickFinal();
+      this.sheet = false;
       console.log("commentDelete", this.selectedCommentId);
       if(confirm("댓글을 삭제하시겠습니까?")){
         
@@ -180,7 +208,23 @@ export default {
       //this.clickFinal();
       console.log("clickCOmmentMenu", commentId);
       this.selectedCommentId = commentId;
-    }
+    },
+    clickPhotoMenu(){
+      //console.log("clickCOmmentMenu", commentId);
+      //this.selectedCommentId = commentId;
+    },
+    photoDelete(){
+      //this.clickFinal();
+      this.photo_sheet = false;
+      console.log("photoDelete");
+      if(confirm("사진을 삭제하시겠습니까?")){
+        
+        let commentData = {photoId : this.$route.params.photoId};
+        console.log("commentDelete", commentData);
+        this.deletePhoto(commentData);
+      }
+      
+    },
   },
   filters: {
     convertDate(val){

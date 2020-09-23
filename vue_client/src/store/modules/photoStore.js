@@ -100,6 +100,17 @@ const photoStore = {
       //   })
       //   .catch(err => console.log(err.response.data))
     },
+    deletePhoto({ rootGetters }, commentData) {
+      
+      axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/', rootGetters.config)
+      .then(res => {
+          console.log(res)
+          router.go(-1)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    },
     createPhotoComment({ rootGetters }, commentData) {
       
       axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/', commentData, rootGetters.config)
@@ -125,7 +136,6 @@ const photoStore = {
       })
     },
     deletePhotoComment({ rootGetters }, commentData) {
-      console.log("deletePhotoComment", SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/'+ commentData.commentId + '/');
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/' + commentData.commentId + '/', rootGetters.config)
       .then(res => {
           console.log(res)
