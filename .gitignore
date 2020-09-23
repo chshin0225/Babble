@@ -190,3 +190,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 node_modules
+
+# firebase config file
+config.pickle
