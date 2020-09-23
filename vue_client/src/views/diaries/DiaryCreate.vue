@@ -173,14 +173,4 @@ button:focus {
     }
   }
 }
-
-.tui-editor-defaultUI-toolbar {
-  position: sticky;
-  top: 6vh;
-}
-
-.tui-editor-defaultUI {
-  margin: 40px !important;
-}
-
 </style>
