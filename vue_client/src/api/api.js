@@ -9,11 +9,14 @@ export default {
       babies: '/babies/',
       babblebox: 'mybabblebox',
       myaccount: '/accounts/myinfo/',
+      access: '/accounts/access/',
+      kakao: '/accounts/login/kakao/',
       social: '/accounts/login/social/',
 
       // diary
       diaries: '/diaries/',
       comments: '/comments/',
+      measurements: 'measurements/',
       
       // photos
       photos: '/photos/',

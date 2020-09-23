@@ -1,26 +1,26 @@
 <template>
-  <div data-app>
+  <div>
     <div class="nav d-flex align-items-center">
       <div class="left-align pointer" @click="clickBack">
         <i class="fas fa-chevron-left"></i>
       </div>
       <div class="center-align d-flex align-items-center">
         <img class="float-left mr-2" width="30px" src="https://user-images.githubusercontent.com/25967949/93281500-2f491680-f807-11ea-97bb-3fb3a98bbabc.png">
-        <h6>새 일기 작성</h6>
+        <h6>일기 수정</h6>
       </div>
     </div>
-
+    
     <!-- 날짜 입력 -->
     <v-col cols="12" sm="6" md="4">
       <v-dialog
         ref="dialog"
         v-model="modal"
-        :return-value.sync="diaryData.diary_date"
+        :return-value.sync="diaryData.diaryUpdateData.diary_date"
         width="290px"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-            v-model="diaryData.diary_date"
+            v-model="diaryData.diaryUpdateData.diary_date"
             label="날짜"
             readonly
             v-bind="attrs"
@@ -30,30 +30,30 @@
         <v-date-picker 
           color="#FEA59C" 
           :close-on-content-click="false" 
-          v-model="diaryData.diary_date" 
+          v-model="diaryData.diaryUpdateData.diary_date" 
           :max="today"
           scrollable>
           <v-col class="d-flex justify-end">
             <v-btn text color="#9BC7FF" @click="modal = false">취소</v-btn>
-            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diary_date)">선택</v-btn>
+            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diaryUpdateData.diary_date)">선택</v-btn>
           </v-col>
           
         </v-date-picker>
       </v-dialog>
     </v-col>
-    
+
     <!-- 제목 -->
     <v-text-field 
       class="m-3" 
       label="제목"
-      v-model="diaryData.title"
+      v-model="diaryData.diaryUpdateData.title"
     ></v-text-field>
 
     <!-- 에디터 -->
     <vue-editor
       id="editor"
       class="p-3"
-      v-model="diaryData.content"
+      v-model="diaryData.diaryUpdateData.content"
       useCustomImageHandler
       @image-added="handleImageAdded"
       :editorToolbar="customToolbar"
@@ -65,23 +65,23 @@
       <v-text-field
         label=" 키"
         suffix="cm"
-        v-model="tempRecord.babyHeight"
+        v-model="babyHeight"
       ></v-text-field>
       <v-text-field
         label="몸무게"
         suffix="kg"
-        v-model="tempRecord.babyWeight"
+        v-model="babyWeight"
       ></v-text-field>
       <v-text-field
         label="머리 둘레"
         suffix="cm"
-        v-model="tempRecord.babyHead"
+        v-model="babyHead"
       ></v-text-field>
     </div>
     <div class="p-2 d-flex justify-content-end">
-      <button @click="clickCreate()" class="btn btn-pink ">작성</button>
+      <button @click="clickUpdate()" class="btn btn-pink ">수정</button>
     </div>
-    <div style="height:15vh"></div>
+    <div style="height:10vh"></div>
         
   </div>
 
@@ -101,13 +101,14 @@ import SERVER from '@/api/api'
 // import router from '@/router'
 
 export default {
-  name: 'DiaryCreate',
+  name: 'DiaryUpdate',
   components: {
     VueEditor
   },
   computed: {
     ...mapState([ 'myaccount']),
-    ...mapGetters(['config'])
+    ...mapGetters(['config']),
+    ...mapState('diaryStore', ['diary'])
   },
   data() {
     return {
@@ -119,80 +120,37 @@ export default {
           imageResize: {}
         }
       },
-      // babyRecord: {
-      // },
-      tempRecord: {
-        babyHead: 0,
-        babyHeight: 0,
-        babyWeight: 0,
-      },
+      babyHead: 0,
+      babyHeight: 0,
+      babyWeight: 0,
       diaryData: {
-        diary_date: new Date().toISOString().substr(0, 10),
-        title: '',
-        content: '',
-        content_html: '',
+        diaryUpdateData: {
+          diary_date: '',
+          title: '',
+          content: '',
+          content_html: ''
+        },
+        diaryId: this.$route.params.diaryId,
       },
       htmlForEditor:"",
       // Date
       menu2: false,
       modal: false,
       today: new Date().toISOString().substr(0, 10),
-      // files
+      // Files
       files: null,
     };
   },
   methods: {
-    ...mapActions('diaryStore', ['createDiary', 'createRecord']),
+    ...mapActions('diaryStore', ['updateDiary']),
     clickBack() {
       this.$router.go(-1)
     },
-    clickCreate() {
-      var flag = 0
-
-      if (this.tempRecord.babyHead !== 0 || this.tempRecord.babyWeight !== 0 || this.tempRecord.babyHeight !== 0) {
-        var babyRecord = new Object()
-        if (this.tempRecord.babyHead !== 0) {
-          babyRecord.head_size = parseFloat(this.tempRecord.babyHead)
-        } 
-        if (this.tempRecord.babyWeight !== 0) {
-          babyRecord.weight = parseFloat(this.tempRecord.babyWeight)
-        }
-        if (this.tempRecord.babyHeight !== 0) {
-          babyRecord.height = parseFloat(this.tempRecord.babyHeight)
-        }
-        babyRecord.measure_date = this.diaryData.diary_date
-        console.log(babyRecord)
-        this.createRecord(babyRecord)
-          .then(() => {
-            flag = 1
-            this.$router.push({ name: 'DiaryPhoto'})
-          })
-      }
-
-      if (this.diaryData.content.length >= 1 && this.diaryData.title.length >= 1) {
-        this.diaryData.content_html = this.diaryData.content;
-        if (flag === 1) {
-          flag = 2
-        }
-        else {
-          flag = 3
-        }
-
-        if (flag === 1) {
-          this.$router.push({ name: 'DiaryPhoto' })
-        } else if (flag === 2 || flag === 3) {
-          this.createDiary(this.diaryData)
-        }
-      }
-      
-
-      
-
-
-
+    clickUpdate() {
+      this.diaryData.diaryUpdateData.content_html = this.diaryData.diaryUpdateData.content;
+      this.updateDiary(this.diaryData)
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-      console.log("HANDLE IMAGE ADDED")
       const createData = []
       const promises = []
       var storageRef = firebase.storage().ref()
@@ -218,14 +176,24 @@ export default {
           .catch(err => {
             console.log(err);
           });
-        if ( this.files === null ) {
-          let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-          this.diaryData.cover_photo = url
-          console.log(this.diaryData)
-        }
       })
+      if ( this.files === null ) {
+        let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+        this.diaryData.cover_photo = url
+        console.log(this.diaryData)
+      }
     }
   },
+  mounted() {
+    this.diaryData.diaryUpdateData.diary_date = this.diary.diary.diary_date
+    this.diaryData.diaryUpdateData.title = this.diary.diary.title
+    this.diaryData.diaryUpdateData.content = this.diary.diary.content
+    this.diaryData.diaryUpdateData.content_html = this.diary.diary.content_html
+    if (this.diary.diary.cover_photo) {
+      this.diaryData.diaryUpdateData.cover_photo = this.diary.diary.cover_photo
+    }
+    console.log("다이어리 업데이트", this.diary)
+  }
 }
 </script>
 
@@ -244,7 +212,7 @@ button:focus {
   height: 6vh;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 2;
 
   .left-align {
     float: left;
@@ -263,19 +231,4 @@ button:focus {
     }
   }
 }
-</style>
-
-<style scoped>
-.v-picker__title__btn >>> div {
-  color: black !important;
-}
-
-.v-date-picker-title >>> p {
-  color: black !important;
-}
-
-.v-picker__actions >>> button {
-  text-align: right !important;
-}
-
 </style>

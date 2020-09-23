@@ -66,14 +66,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['findBaby', 'findMyAccount', 'fetchBabbleBox']),
+    ...mapActions(['findBaby', 'findMyAccount', 'fetchBabbleBox', 'accessBabbleBox']),
     clickCreate() {
-      console.log("HELLO")
       this.$router.push({ name: 'HowToRegisterBaby' })
     },
     clickBabbleBox(babbleboxId) {
-      console.log(babbleboxId)
-      this.findBaby(babbleboxId)
+      var babblebox = new Object()
+      babblebox.baby = babbleboxId
+      this.accessBabbleBox(babblebox)
     }
   },
   mounted() {
