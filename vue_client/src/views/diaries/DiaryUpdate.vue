@@ -10,6 +10,38 @@
       </div>
     </div>
     
+    <!-- 날짜 입력 -->
+    <v-col cols="12" sm="6" md="4">
+      <v-dialog
+        ref="dialog"
+        v-model="modal"
+        :return-value.sync="diaryData.diaryUpdateData.diary_date"
+        width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="diaryData.diaryUpdateData.diary_date"
+            label="날짜"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker 
+          color="#FEA59C" 
+          :close-on-content-click="false" 
+          v-model="diaryData.diaryUpdateData.diary_date" 
+          :max="today"
+          scrollable>
+          <v-col class="d-flex justify-end">
+            <v-btn text color="#9BC7FF" @click="modal = false">취소</v-btn>
+            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diaryUpdateData.diary_date)">선택</v-btn>
+          </v-col>
+          
+        </v-date-picker>
+      </v-dialog>
+    </v-col>
+
     <!-- 제목 -->
     <v-text-field 
       class="m-3" 
@@ -93,13 +125,20 @@ export default {
       babyWeight: 0,
       diaryData: {
         diaryUpdateData: {
+          diary_date: '',
           title: '',
           content: '',
           content_html: ''
         },
         diaryId: this.$route.params.diaryId,
       },
-      htmlForEditor:""
+      htmlForEditor:"",
+      // Date
+      menu2: false,
+      modal: false,
+      today: new Date().toISOString().substr(0, 10),
+      // Files
+      files: null,
     };
   },
   methods: {
@@ -138,12 +177,21 @@ export default {
             console.log(err);
           });
       })
+      if ( this.files === null ) {
+        let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+        this.diaryData.cover_photo = url
+        console.log(this.diaryData)
+      }
     }
   },
   mounted() {
+    this.diaryData.diaryUpdateData.diary_date = this.diary.diary.diary_date
     this.diaryData.diaryUpdateData.title = this.diary.diary.title
     this.diaryData.diaryUpdateData.content = this.diary.diary.content
     this.diaryData.diaryUpdateData.content_html = this.diary.diary.content_html
+    if (this.diary.diary.cover_photo) {
+      this.diaryData.diaryUpdateData.cover_photo = this.diary.diary.cover_photo
+    }
     console.log("다이어리 업데이트", this.diary)
   }
 }
