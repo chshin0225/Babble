@@ -12,6 +12,8 @@ export default {
 
       // diary
       diaries: '/diaries/',
+      comments: '/comments/',
+      
       // photos
       photos: '/photos/',
     }

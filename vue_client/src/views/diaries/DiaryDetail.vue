@@ -80,7 +80,7 @@
                     <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <p class="dropdown-item pointer">댓글 수정</p>
-                      <p class="dropdown-item pointer" @click="clickDeleteComment(comment.id)">댓글 삭제</p>
+                      <p class="dropdown-item pointer" @click="clickDeleteComment(commentData, comment.id)">댓글 삭제</p>
                     </div>
                   </div>
                 </div>
@@ -193,7 +193,7 @@ export default {
         })  
       }
     },
-    clickDeleteComment(commentId){
+    clickDeleteComment(commentData, commentId){
        swal.fire({
         text: "정말 삭제하시겠습니까?",
         showCancelButton: true,
@@ -203,7 +203,7 @@ export default {
       })
       .then((result) => {
         if (result.value) {
-          this.deleteComment({ diaryId: this.$route.params.diaryid, commentId: commentId })
+          this.deleteComment({ diaryId: commentData.diaryId, commentId: commentId })
         } 
       });
     }
