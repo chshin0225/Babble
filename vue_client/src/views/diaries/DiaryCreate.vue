@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div data-app>
     <div class="nav d-flex align-items-center">
       <div class="left-align pointer" @click="clickBack">
         <i class="fas fa-chevron-left"></i>
@@ -9,6 +9,38 @@
         <h6>새 일기 작성</h6>
       </div>
     </div>
+
+    <!-- 날짜 입력 -->
+    <v-col cols="12" sm="6" md="4">
+      <v-dialog
+        ref="dialog"
+        v-model="modal"
+        :return-value.sync="diaryData.diary_date"
+        width="290px"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-text-field
+            v-model="diaryData.diary_date"
+            label="날짜"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-date-picker 
+          color="#FEA59C" 
+          :close-on-content-click="false" 
+          v-model="diaryData.diary_date" 
+          :max="today"
+          scrollable>
+          <v-col class="d-flex justify-end">
+            <v-btn text color="#9BC7FF" @click="modal = false">취소</v-btn>
+            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diary_date)">선택</v-btn>
+          </v-col>
+          
+        </v-date-picker>
+      </v-dialog>
+    </v-col>
     
     <!-- 제목 -->
     <v-text-field 
@@ -33,23 +65,23 @@
       <v-text-field
         label=" 키"
         suffix="cm"
-        v-model="babyHeight"
+        v-model="tempRecord.babyHeight"
       ></v-text-field>
       <v-text-field
         label="몸무게"
         suffix="kg"
-        v-model="babyWeight"
+        v-model="tempRecord.babyWeight"
       ></v-text-field>
       <v-text-field
         label="머리 둘레"
         suffix="cm"
-        v-model="babyHead"
+        v-model="tempRecord.babyHead"
       ></v-text-field>
     </div>
     <div class="p-2 d-flex justify-content-end">
       <button @click="clickCreate()" class="btn btn-pink ">작성</button>
     </div>
-    <div style="height:10vh"></div>
+    <div style="height:15vh"></div>
         
   </div>
 
@@ -87,27 +119,80 @@ export default {
           imageResize: {}
         }
       },
-      babyHead: 0,
-      babyHeight: 0,
-      babyWeight: 0,
+      // babyRecord: {
+      // },
+      tempRecord: {
+        babyHead: 0,
+        babyHeight: 0,
+        babyWeight: 0,
+      },
       diaryData: {
+        diary_date: new Date().toISOString().substr(0, 10),
         title: '',
         content: '',
-        content_html: ''
+        content_html: '',
       },
-      htmlForEditor:""
+      htmlForEditor:"",
+      // Date
+      menu2: false,
+      modal: false,
+      today: new Date().toISOString().substr(0, 10),
+      // files
+      files: null,
     };
   },
   methods: {
-    ...mapActions('diaryStore', ['createDiary']),
+    ...mapActions('diaryStore', ['createDiary', 'createRecord']),
     clickBack() {
       this.$router.go(-1)
     },
     clickCreate() {
-      this.diaryData.content_html = this.diaryData.content;
-      this.createDiary(this.diaryData)
+      var flag = 0
+
+      if (this.tempRecord.babyHead !== 0 || this.tempRecord.babyWeight !== 0 || this.tempRecord.babyHeight !== 0) {
+        var babyRecord = new Object()
+        if (this.tempRecord.babyHead !== 0) {
+          babyRecord.head_size = parseFloat(this.tempRecord.babyHead)
+        } 
+        if (this.tempRecord.babyWeight !== 0) {
+          babyRecord.weight = parseFloat(this.tempRecord.babyWeight)
+        }
+        if (this.tempRecord.babyHeight !== 0) {
+          babyRecord.height = parseFloat(this.tempRecord.babyHeight)
+        }
+        babyRecord.measure_date = this.diaryData.diary_date
+        console.log(babyRecord)
+        this.createRecord(babyRecord)
+          .then(() => {
+            flag = 1
+            this.$router.push({ name: 'DiaryPhoto'})
+          })
+      }
+
+      if (this.diaryData.content.length >= 1 && this.diaryData.title.length >= 1) {
+        this.diaryData.content_html = this.diaryData.content;
+        if (flag === 1) {
+          flag = 2
+        }
+        else {
+          flag = 3
+        }
+
+        if (flag === 1) {
+          this.$router.push({ name: 'DiaryPhoto' })
+        } else if (flag === 2 || flag === 3) {
+          this.createDiary(this.diaryData)
+        }
+      }
+      
+
+      
+
+
+
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      console.log("HANDLE IMAGE ADDED")
       const createData = []
       const promises = []
       var storageRef = firebase.storage().ref()
@@ -133,6 +218,11 @@ export default {
           .catch(err => {
             console.log(err);
           });
+        if ( this.files === null ) {
+          let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+          this.diaryData.cover_photo = url
+          console.log(this.diaryData)
+        }
       })
     }
   },
@@ -154,7 +244,7 @@ button:focus {
   height: 6vh;
   position: sticky;
   top: 0;
-  z-index: 10000;
+  z-index: 1;
 
   .left-align {
     float: left;
@@ -173,4 +263,19 @@ button:focus {
     }
   }
 }
+</style>
+
+<style scoped>
+.v-picker__title__btn >>> div {
+  color: black !important;
+}
+
+.v-date-picker-title >>> p {
+  color: black !important;
+}
+
+.v-picker__actions >>> button {
+  text-align: right !important;
+}
+
 </style>

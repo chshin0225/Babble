@@ -8,6 +8,7 @@ const diaryStore = {
     namespaced: true,
     state: {
         diary: null,
+        diaryId: null,
         comments: null,
     },
     getters: {
@@ -24,6 +25,7 @@ const diaryStore = {
         createDiary({ rootGetters }, diaryData) {
             axios.post(SERVER.URL + SERVER.ROUTES.diaries, diaryData, rootGetters.config)
                 .then(res => {
+                    console.log(res.data.id)
                     router.push({ name: 'DiaryDetail', params: {diaryId: res.data.id}})
                 })
                 .catch(err => {
@@ -70,7 +72,6 @@ const diaryStore = {
             })
        },
        createComment({ dispatch, rootGetters }, commentData) {
-           console.log(commentData)
            axios.post(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + '/comments/', commentData, rootGetters.config)
            .then(res => {
                console.log(res)
@@ -96,7 +97,17 @@ const diaryStore = {
                 dispatch('fetchComments', commentUpdateData.diaryId)
             })
             .catch(err => {
-                console.log(err.response.data)
+                console.log(err.response)
+            })
+       },
+       createRecord({ rootGetters }, babyRecord) {
+           console.log(babyRecord)
+           axios.post(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements, babyRecord, rootGetters.config)
+            .then((res) => {
+                console.log(res.data)
+             })
+            .catch(err => {
+                console.log(err.response)
             })
        }
     }
