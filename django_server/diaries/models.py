@@ -12,6 +12,7 @@ class Diary(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     content_html = models.TextField()
+    diary_date = models.DateField()
 
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
