@@ -192,4 +192,7 @@ pnpm-debug.log*
 node_modules
 
 # firebase config file
-config.pickle
+config.picklei
+
+# private photos
+AI/Sameface/*.jpg
