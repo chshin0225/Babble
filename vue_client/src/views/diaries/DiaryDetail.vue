@@ -2,7 +2,7 @@
   <div class="p-3" v-if="diary" data-app>
     <div class="diary-top d-flex justify-content-between my-3">
       <div class="diary-date text-muted">
-        <p>{{diary.diary.create_date | moment('YYYY-MM-DD HH:mm:ss')}}</p>
+        <p>{{diary.diary.diary_date}}</p>
       </div>
       <div class="diary-writer">
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
@@ -118,6 +118,7 @@
         </div>
       </div>
     </div>
+    <div style="height: 10vh;"></div>
   </div>
 </template>
 
