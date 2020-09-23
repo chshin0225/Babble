@@ -123,6 +123,16 @@ const diaryStore = {
                 .catch(err => {
                     console.log(err.response)
                 })
+        },
+        updateMeasurement({ rootGetters }, recordData) {
+            console.log(recordData)
+            axios.put(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements + recordData.measurement_id + '/', recordData.babyRecord, rootGetters.config)
+                .then((res) => {
+                    console.log(res.data)
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
         }
     }
 }
