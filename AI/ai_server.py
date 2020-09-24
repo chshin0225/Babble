@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 from ObjDetection.yolo import YOLO
 from Emotion import get_emotion as GE
 from PIL import Image
@@ -13,6 +14,8 @@ import cv2
 app = Flask(__name__)
 app.yolo = YOLO()
 app.config['JSON_AS_ASCII'] = False
+CORS(app)
+
 
 graph = tf.get_default_graph()
 
