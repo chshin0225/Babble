@@ -30,6 +30,14 @@
               </v-list-item-avatar>
               <v-list-item-title>사진 삭제하기</v-list-item-title>
             </v-list-item>
+            <v-list-item @click="photoTagUpdate()">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>태그 수정하기</v-list-item-title>
+            </v-list-item>
           </v-list>
         </v-bottom-sheet>
       </div>
@@ -299,6 +307,20 @@ export default {
       }
       
     },
+    photoTagUpdate() {
+      var photoData = {
+        id: this.photo.id,
+        image_url: this.photo.image_url,
+        last_modified: this.photo.last_modified,
+        size: this.photo.size,
+        file_type: this.photo.file_type,
+        tags: []
+      }
+      this.photo.photo_tags.forEach(tag => {
+        photoData.tags.push(tag.tag_name)
+      });
+      this.$router.push({ name: "TagSelect", params: { photoData: photoData, photoType: "update" }})
+    }
   },
   filters: {
     convertDate(val){
