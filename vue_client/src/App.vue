@@ -213,6 +213,9 @@ export default {
   -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   height: 6vh;
+  background-color: white;
+  position: sticky;
+  top: 0;
 }
 
 .logo-sect img {
