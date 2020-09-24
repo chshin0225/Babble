@@ -1,50 +1,57 @@
 <template>
   <div class="">
-    <v-app-bar color="#FFFFFF" flat dense>
+    <nav color="#FFFFFF" class="d-flex justify-content-between w-100">
       <v-icon 
         class="top-left-icons pointer" 
         color="#FEA59C"
         @click="clickBack"
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
-      <v-icon class="top-right-icons" color="#FEA59C">mdi-folder-outline</v-icon>
-      <v-icon class="top-right-icons" color="#FEA59C">mdi-heart-outline</v-icon>
-      <!-- <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon> -->
-      
-      <v-bottom-sheet v-model="photo_sheet">
-        <template v-slot:activator="{ on, attrs }">
-          <v-icon
-            class="top-right-icons"
-            color="#FEA59C"
-            v-bind="attrs"
-            v-on="on" 
-            @click="clickPhotoMenu()">mdi-dots-vertical</v-icon>
-        </template>
-        <v-list>
-          <v-list-item @click="photoDelete()">
-            <v-list-item-avatar>
-              <v-avatar size="32px" tile>
-              <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
-              </v-avatar>
-            </v-list-item-avatar>
-            <v-list-item-title>사진 삭제하기</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-bottom-sheet>
+      <div>
+        <v-icon class="top-right-icons" color="#FEA59C">mdi-folder-outline</v-icon>
+        <v-icon class="top-right-icons" color="#FEA59C">mdi-heart-outline</v-icon>
+        <!-- <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon> -->
+        
+        <v-bottom-sheet v-model="photo_sheet">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              class="top-right-icons"
+              color="#FEA59C"
+              v-bind="attrs"
+              v-on="on" 
+              @click="clickPhotoMenu()">mdi-dots-vertical</v-icon>
+          </template>
+          <v-list>
+            <v-list-item @click="photoDelete()">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>사진 삭제하기</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="photoTagUpdate()">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>태그 수정하기</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-bottom-sheet>
+      </div>
+    </nav>
 
-
-
-    </v-app-bar>
-
-      <div class="p-3">
+    <div class="p-3" v-if="photo">
       <div class="photo-content">
         <div class="photo-container">
           <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
           <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
         </div>
         <div class="mt-3 tag-container">
-          <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FEA59C;"> #놀이터 </v-chip>
-          <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip>
+          <v-chip v-for="tag in photo.photo_tags" :key="tag.id" class="ma-2" outlined color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FEA59C;">#{{ tag.tag_name }}</v-chip>
+          <!-- <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip> -->
           
         </div>
 
@@ -56,94 +63,87 @@
         </div>
       </div>
       <div class="mt-4 comment-content">
-        
         <div class="scallop-down"></div>
-        <div style="width:100%;display:inline-block;padding-bottom:5px;">
-          <textarea
-            style="width:100%; padding:5px; border:1px solid #a8a8a8; border-radius:5px;"
-            v-model="comment_content"
-            no-resize="no-resize"
-            outlined="outlined"
-            rows="2"
-            placeholder="댓글을 입력하세요">
-          </textarea>
-          <button class="btn btn-outline-pink" style="float:right; padding:.15rem .75rem" @click="clickCreateComment()">등록</button>
-        </div>
-        <v-app id="comment_app">
-        <div v-for="comment in comments" :key="`comment_${comment.id}`">
-          <div>
-            <div class="d-flex justify-content-between">
-              <p class="nickname">{{comment.user.name}}</p>
-              <p>{{comment.modify_date | diffDate}}</p>
-            </div>
-            <div class="d-flex justify-content-between">
-              <div style="width:95%;">{{comment.content}}</div>
-              <!-- <div style="width:95%;">
-                <textarea
-                  style="width:100%; padding:5px; border:1px solid #a8a8a8; border-radius:5px;"
-                  v-model="comment.content"
-                  no-resize="no-resize"
-                  outlined="outlined"
-                  rows="2"
-                  placeholder="댓글을 입력하세요">
-                </textarea>
-              </div> -->
-              <hr>
-              <!--<v-icon v-if="comment.user.id" color="#FEA59C" @click="clickFinal()">mdi-dots-vertical</v-icon>-->
 
+        <!-- 댓글 -->
+        <div class="comment mb-5 mt-3">
+          <h5 class="comment-title mb-3">댓글</h5>
+          <!-- 댓글 작성 -->
+          <div class="input-group row no-gutters comment-create" style="height:65px;">
+            <div class="input-group row no-gutters comment-create" style="height:65px;">
+              <textarea
+                class="col-10 textareaSection p-1" 
+                @keyup.enter="enterComment" 
+                @input="activeBtn"
+                v-model="commentData.content" 
+                type="content" 
+                placeholder="댓글을 작성하세요 :)" 
+                rows="1" 
+                autofocus
+              ></textarea>
+              <button 
+                :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
+                class="btn col-2"
+                :disabled="!btnActive"
+                @click="clickComment"
+              >
+              작성</button>
+            </div>
             
-              <v-bottom-sheet v-model="sheet">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon v-if="comment.user.id" color="#FEA59C"
-                  v-bind="attrs"
-                  v-on="on" @click="clickCommentMenu(comment.id)">mdi-dots-vertical</v-icon>
-              </template>
-              <v-list>
-                <!-- <v-subheader>Open in</v-subheader>
-                <v-list-item
-                  v-for="tile in tiles"
-                  :key="tile.title"
-                  @click="sheet = false"
-                >
-                  <v-list-item-avatar>
-                    <v-avatar size="32px" tile>
-                    <v-icon color="#FEA59C">{{tile.img}}</v-icon>
-                    </v-avatar>
-                  </v-list-item-avatar>
-                  <v-list-item-title>{{ tile.title }}</v-list-item-title>
-                </v-list-item> -->
-                <v-list-item @click="commentModify()">
-                  <v-list-item-avatar>
-                    <v-avatar size="32px" tile>
-                    <v-icon color="#FEA59C">mdi-pencil-outline</v-icon>
-                    </v-avatar>
-                  </v-list-item-avatar>
-                  <v-list-item-title>댓글 수정하기</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="commentDelete()">
-                  <v-list-item-avatar>
-                    <v-avatar size="32px" tile>
-                    <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
-                    </v-avatar>
-                  </v-list-item-avatar>
-                  <v-list-item-title>댓글 삭제하기</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-bottom-sheet>
-          
-
-
-
-
-
-
-
-
-            </div>
           </div>
-          <hr>
+          <!-- 댓글 리스트 -->
+          <div class="comment-list" v-if="comments">
+            <div v-if="comments.length">
+              <div v-for="comment in comments" :key="`comment_${comment.id}`">
+                <div>
+                  <div class="d-flex justify-content-between">
+                    <p class="comment-username">{{comment.user.name}}</p>
+                    <div class="d-flex">
+                      <p class="comment-time">{{comment.modify_date |  moment("from", "now")}}</p>
+                      <div class="dropdown" v-if="comment.user.id === myaccount.id">
+                        <div class="btn-group dropleft">
+                          <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <p class="dropdown-item pointer" @click="clickInitUpdateComment(comment)">댓글 수정</p>
+                            <p class="dropdown-item pointer" @click="clickDeleteComment(commentData, comment.id)">댓글 삭제</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 댓글 수정 X - 댓글 내용 노출 -->
+                  <div v-if="comment.id != commentUpdateData.comment_id">
+                    {{ comment.content }}
+                  </div>
+                  <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
+                  <div v-else>
+                    <div class="input-group row no-gutters comment-create" style="height:65px;">
+                    <textarea
+                      class="col-10 textareaSection p-1" 
+                      @keyup.enter="enterUpdateComment" 
+                      @input="updateActiveBtn(comment.content)"
+                      v-model="commentUpdateData.comment.content" 
+                      type="content" 
+                      rows="1" 
+                      autofocus
+                    ></textarea>
+                    <button 
+                      :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
+                      class="btn col-2"
+                      :disabled="!updateBtnActive"
+                      @click="clickUpdateComment(commentUpdateData)"
+                    >
+                      수정
+                    </button>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+            </div>
+
+          </div>
         </div>
-        </v-app>
       </div>
     </div>
     <div style="height:15vh"></div>
@@ -152,6 +152,16 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Swal from 'sweetalert2'
+
+const swal = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success mr-2',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
 export default {
   name: 'PhotoDetail',
   data() {
@@ -160,58 +170,130 @@ export default {
       height: '45vh',
       photo_sheet: false,
       sheet: false,
-      /*comment_tiles: [
-        { img: 'mdi-pencil-outline', title: '댓글 수정하기' },
-        { img: 'mdi-trash-can-outline', title: '댓글 삭제하기' },
-      ],*/
-      selectedCommentId: ""
+      selectedCommentId: "",
+      commentData: {
+        content: null,
+        photo_id: this.$route.params.photoId
+      },
+      btnActive: false,
+      commentUpdateData: {
+        photo_id: this.$route.params.photoId,
+        comment_id: null,
+        comment: {
+          content: null,
+        }
+      },
+      updateBtnActive: false,
     }
   },
   computed: {
+    ...mapState(['myaccount']),
     ...mapState('photoStore', ['photo', 'comments'])
   },
+  watch: {
+    photo() {
+      if (this.photo) {
+        this.photoContent = this.photo.content
+        this.fetchComments(this.$route.params.photoId)
+      }
+    }
+  },
   methods: {
-    ...mapActions('photoStore', ['findPhoto', 'fetchPhotoComments', 'createPhotoComment', 'modifyPhotoComment', 'deletePhotoComment', 'deletePhoto']),
+    ...mapActions('photoStore', ['findPhoto', 'fetchComments', 'createComment', 'updateComment', 'deleteComment', 'deletePhoto']),
     clickBack() {
       this.$router.go(-1)
     },
     clickCreateComment(){
       let commentData = {photoId : this.$route.params.photoId, content : this.comment_content};
-      this.createPhotoComment(commentData);
+      this.createComment(commentData);
     },
     changeHeight() {
       this.height = '57vh'
     },
-    /*clickFinal() {
-      //this.sheet = !this.sheet
-      this.sheet = false;
-      //this.createPhotos(this.photos)
-    },*/
-    commentModify(){
-      //this.clickFinal();
-      this.sheet = false;
-      //console.log("commentModify", this.selectedCommentId);
-    },
-    commentDelete(){
-      //this.clickFinal();
-      this.sheet = false;
-      console.log("commentDelete", this.selectedCommentId);
-      if(confirm("댓글을 삭제하시겠습니까?")){
-        
-        let commentData = {photoId : this.$route.params.photoId, commentId : this.selectedCommentId};
-        console.log("commentDelete", commentData);
-        this.deletePhotoComment(commentData);
+    activeBtn() {
+      if (this.commentData.content) {
+        this.btnActive = true
+      } else {
+        this.btnActive = false
       }
-      
     },
-    clickCommentMenu(commentId){
-      //this.clickFinal();
-      console.log("clickCOmmentMenu", commentId);
-      this.selectedCommentId = commentId;
+    updateActiveBtn(priorContent) {
+      if (this.commentUpdateData.comment.content !== priorContent) {
+        this.updateBtnActive = true
+      } else {
+        this.updateBtnActive = false
+      }
     },
-    clickPhotoMenu(){
-      //console.log("clickCOmmentMenu", commentId);
-      //this.selectedCommentId = commentId;
+    clickComment() {
+      console.log(this.commentData)
+      this.createComment(this.commentData)
+        .then(() => {
+          this.commentData.content = null
+          this.btnActive = false
+        })  
+    },
+    enterComment() {
+      if (this.commentData.content.length === 1){
+        this.commentData.content = null
+        this.btnActive = false
+        Swal.fire({
+          icon: 'error',
+          text: '댓글을 작성해주세요.'
+        })
+      } else {
+        this.createComment(this.commentData)
+        .then(() => {
+          this.commentData.content = null
+          this.btnActive = false
+        })  
+      }
+    },
+    clickDeleteComment(commentData, commentId){
+       swal.fire({
+        text: "정말 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: '네',
+        cancelButtonText: '아니요',
+        icon: "warning",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deleteComment({ photoId: this.$route.params.photoId, commentId: commentId })
+        } 
+      });
+    },
+    clickInitUpdateComment(comment) {
+      this.commentUpdateData.comment_id = comment.id 
+      this.commentUpdateData.comment.content = comment.content
+    },
+    clickUpdateComment(commentUpdateData) {
+      console.log(this.commentUpdateData)
+      this.updateComment(commentUpdateData)
+      .then(() => {
+        this.commentUpdateData.comment_id = null
+        this.commentUpdateData.comment.content = null
+        this.updateBtnActive = false
+      })
+    },
+    enterUpdateComment() {
+      if (this.commentUpdateData.comment.content.length === 1){
+        this.commentUpdateData.comment.content = null
+        this.updateBtnActive = false
+        Swal.fire({
+          icon: 'error',
+          text: '댓글을 작성해주세요.'
+        })
+      } else {
+        this.updateComment(this.commentUpdateData)
+        .then(() => {
+          this.commentUpdateData.comment_id = null
+          this.commentUpdateData.comment.content = null
+          this.updateBtnActive = false
+        })  
+      }
+    },
+    clickEdit() {
+      this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
     },
     photoDelete(){
       //this.clickFinal();
@@ -225,6 +307,20 @@ export default {
       }
       
     },
+    photoTagUpdate() {
+      var photoData = {
+        id: this.photo.id,
+        image_url: this.photo.image_url,
+        last_modified: this.photo.last_modified,
+        size: this.photo.size,
+        file_type: this.photo.file_type,
+        tags: []
+      }
+      this.photo.photo_tags.forEach(tag => {
+        photoData.tags.push(tag.tag_name)
+      });
+      this.$router.push({ name: "TagSelect", params: { photoData: photoData, photoType: "update" }})
+    }
   },
   filters: {
     convertDate(val){
@@ -265,12 +361,17 @@ export default {
   },
   mounted() {
     this.findPhoto(this.$route.params.photoId);
-    this.fetchPhotoComments(this.$route.params.photoId);
+    // this.fetchComments(this.$route.params.photoId);
     //alert(this.$route.params.photoId);
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+nav {
+  background: white;
+  position: fixed;  
+}
+
 .top-left-icons{
   font-size:28px;
 }
@@ -306,14 +407,53 @@ export default {
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;
 }
-/* 
-#comment_app{
-  height:15vh;
-} */
 
+// comment
+.comment {
+  .comment-title {
+    font-weight: 900;
+    color: #FEA59C;
+  }
 
-#app {
-  min-height: 0 !important;
+  .comment-create {
+    textarea {
+      border: 1px solid #FEA59C;
+      &:focus {
+        outline-style: none; 
+      }
+    }
+
+    button {
+      border: 1px solid #FEA59C;
+      background-color: #979797;
+      color: white;
+    }
+  }
+  
+  .comment-list {
+    .comment-username {
+      font-weight: 600;
+    }
+
+    .comment-time {
+      color: #979797;
+    }
+
+    .dropdown {
+      .btn {
+        margin-left: 5px;
+        padding: 1px 3px 1px 3px!important;
+      }
+      .dropdown-menu {
+        padding: 0;
+        text-align: center;
+        p {
+          padding: 3px 0 3px 0;
+          margin: 0;
+        }
+      }
+    }
+  }
 }
 
 </style>

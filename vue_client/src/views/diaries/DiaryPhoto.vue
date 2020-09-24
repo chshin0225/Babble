@@ -2,7 +2,7 @@
 <template>
 <div>
   <div>
-    <p class="main-title text-center color-pink">아롱이의 9월</p>
+    <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 {{date | moment('M')}}월</h5>
     <!-- Date Picker -->
     <v-row class="d-flex justify-content-center">
       <v-col cols="3" sm="3" class="erase-padding">
@@ -24,8 +24,8 @@
           </template>
           <v-date-picker v-model="date" type="month" scrollable>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+            <v-btn text color="#9BC7FF" @click="modal = false">Cancel</v-btn>
+            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(date)">OK</v-btn>
           </v-date-picker>
         </v-dialog>
       </v-col>
@@ -35,10 +35,10 @@
     <div v-if="photoDiaries">
       <swiper class="swiper" :options="swiperOption" v-if="photoDiaries.length">
         <swiper-slide v-for="diary in photoDiaries" :key="diary.id">
-          <div class="card" v-if="diary.cover_photo" @click="clickCard" :style="`background-image:url(${diary.cover_photo})`">
+          <div class="card" v-if="diary.cover_photo" @click="clickCard(diary.id)" :style="`background-image:url(${diary.cover_photo})`">
             <div class="p-3 title col-3 text-center">
-              <span class="date">{{diary.create_date | moment("DD")}}</span><br>
-              <span class="month">{{ diary.create_date | moment("MMM") }}</span>
+              <span class="date">{{diary.diary_date | moment("DD")}}</span><br>
+              <span class="month">{{ diary.diary_date | moment("MMM") }}</span>
             </div>
             <div class="p-3 mt-auto">
               <h4 class="diary-text">{{diary.title}}</h4>
@@ -79,7 +79,7 @@ export default {
     SwiperSlide,
   },
   computed: {
-    ...mapState(['myaccount']),
+    ...mapState(['myaccount', 'currentBaby']),
     ...mapState('diaryStore', ['photoDiaries'])
   },
   data() {
@@ -100,25 +100,24 @@ export default {
     }
   },
   methods: {
-    ...mapActions('diaryStore', ['fetchDiaries']),
+    ...mapActions('diaryStore', ['fetchPhotoDiaries']),
     clickAdd() {
       this.$router.push({name: 'DiaryCreate'})
     },
-    clickCard(){
-      this.$router.push({name: 'DiaryDetail', params: { 'diaryId': 1 } })
+    clickCard(diaryId){
+      this.$router.push({name: 'DiaryDetail', params: { 'diaryId': diaryId } })
     }
   },
   created() {
-    this.fetchDiaries()
+    this.fetchPhotoDiaries()
   }
 }
 </script>
 
 <style scoped>
-#app {
-  min-height: 0px !important;
-  height: 6vh !important;
-  overflow: hidden;
+.crying-baby {
+  height: 30vh;
+  width: auto;
 }
 
 p {
@@ -126,7 +125,7 @@ p {
 }
 
 .main-title {
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 900;
 }
 
@@ -140,7 +139,9 @@ p {
   -moz-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -webkit-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -o-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
-   margin-bottom: 2vh;
+  margin-bottom: 2vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 

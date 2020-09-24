@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div id="app">
+    <div>
       <nav class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
@@ -23,14 +23,14 @@
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
             <div class="upper bg-pink d-flex justify-content-between">
-              <div>
+              <div class="d-flex">
                 <div class="profile float-left mr-3">
                   <img src="http://bit.do/babbleprofile">
                 </div>
-                <span class="babble-box" v-if="currentBaby">
+                <div class="babble-box" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name}}</span><br>
                   <span>D + {{ countDays }}</span>
-                </span>
+                </div>
               </div>
               <div class="logout-btn" @click="clickLogout">
                 <p class="text-muted pointer">로그아웃</p>
@@ -216,6 +216,9 @@ export default {
   -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   height: 6vh;
+  background-color: white;
+  position: sticky;
+  top: 0;
 }
 
 .logo-sect img {
@@ -325,6 +328,7 @@ a:hover {
   -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.1);
+  z-index: 2;
 }
 
 p {

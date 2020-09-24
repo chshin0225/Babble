@@ -8,11 +8,13 @@
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
         <button class="btn btn-pink" @click="sheet = !sheet">:</button>
         <v-bottom-sheet v-model="sheet">
-          <v-sheet class="text-center" height="20vh">
+          <v-sheet class="text-center" height="27vh">
             <div class="py-3">
-              <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
-              <p class="pointer diary-option mb-1" @click="clickEdit"> 일기 수정</p>
-              <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
+              <div class="pointer diary-option mb-3" @click="clickShare">일기 공유</div>
+              <hr>
+              <div class="pointer diary-option mb-3" @click="clickEdit"> 일기 수정</div>
+              <hr>
+              <div class="pointer diary-option" @click="clickDelete"> 일기 삭제</div>
             </div>
           </v-sheet>
         </v-bottom-sheet>
@@ -35,14 +37,21 @@
         <div class="col-3 text-center">
           <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
           <img width="50px" src="../../assets/giraffe.png" /> -->
-          <img width="50px" src="@/assets/giraffe.png" />
+          <img class="img-fluid" src="@/assets/giraffe.png" />
         </div>
         <div class="col-9">
-          <p class="growth">성장 기록</p>
-          <p>
-            <span v-if="diary.measurement.weight">무게 {{ diary.measurement.weight }} kg</span>
-            <span v-if="diary.measurement.height"> 🞄 키 {{ diary.measurement.height }} cm</span>
-            <span v-if="diary.measurement.head_size"> 🞄 머리둘레 {{ diary.measurement.head_size }} cm</span>          </p>
+          <p class="growth d-flex justify-content-center">성장 기록</p>
+          <div class="d-flex justify-content-center text-center">
+            <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
+              <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
+            </p>
+            <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
+              <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
+            </p>
+            <p class="growth-record" v-if="diary.measurement.head_size">
+              <span class="growth-record-title">머리둘레</span><br>{{ diary.measurement.head_size }} cm
+            </p>          
+          </div>
         </div>
       </div>
       <div class="scallop-up"></div>
@@ -214,7 +223,7 @@ export default {
       if (this.commentUpdateData.content !== priorContent) {
         this.updateBtnActive = true
       } else {
-        this.updateBtnActive = true
+        this.updateBtnActive = false
       }
     },
     clickComment() {
@@ -284,7 +293,7 @@ export default {
     },
     clickEdit() {
       this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
-    }
+    },
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)
@@ -304,8 +313,11 @@ export default {
     p {
       margin: 0;
     }
-    .diary-option:hover {
-      color: #FEA59C;
+    .diary-option {
+      font-size: 1.5rem !important;
+      // &hover {
+      //   color: #FEA59C;
+      // }
     }
   }
 }
@@ -323,27 +335,42 @@ export default {
   }
 }
 
-.growth {
-  font-weight: 900;
-  font-size: 1.5rem;
+.measurement {
+  .growth {
+    font-weight: 900;
+    font-size: 1.5rem;
+  }
+
+  .scallop-up{
+    height:40px;
+    width:100%;
+    background: -webkit-gradient(radial, 50% 100%, 10, 50% 100%, 40, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+    -webkit-background-size: 49px 100%;
+  }
+
+
+  .scallop-down{
+    height:40px;
+    width:100%;
+    background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+    -webkit-background-size: 49px 100%;
+  }
+  
+  .growth-record {
+    border: 1px solid #FEA59C;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
+
+    .growth-record-title {
+      color: #FEA59C;
+      font-weight: 900;
+    }
+  }
+
 }
 
-.scallop-up{
-  height:40px;
-  width:100%;
-  background: -webkit-gradient(radial, 50% 100%, 10, 50% 100%, 40, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
-  -webkit-background-size: 49px 100%;
-}
 
 
-.scallop-down{
-  height:40px;
-  /* margin-left: auto;
-  margin-right: auto; */
-  width:100%;
-  background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
-  -webkit-background-size: 49px 100%;
-}
 
 // comment
 .comment {

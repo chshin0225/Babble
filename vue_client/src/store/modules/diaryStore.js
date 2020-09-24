@@ -8,6 +8,7 @@ const diaryStore = {
     namespaced: true,
     state: {
         diary: null,
+        diaries: null,
         photoDiaries: null,
         diaryId: null,
         comments: null,
@@ -17,6 +18,9 @@ const diaryStore = {
     mutations: {
         SET_DIARY(state, diary) {
             state.diary = diary
+        },
+        SET_DIARIES(state, diaries) {
+            state.diaries = diaries
         },
         SET_PHOTO_DIARIES(state, photoDiaries) {
             state.photoDiaries = photoDiaries
@@ -36,10 +40,20 @@ const diaryStore = {
                     console.log(err)
                 })
         },
-        fetchDiaries({ rootGetters, commit }) {
+        fetchPhotoDiaries({ rootGetters, commit }) {
             axios.get(SERVER.URL + SERVER.ROUTES.diaries + SERVER.ROUTES.photo , rootGetters.config)
                 .then(res => {
                     commit('SET_PHOTO_DIARIES', res.data)
+                    console.log(res.data)
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
+        },
+        fetchDiaries({ rootGetters, commit }) {
+            axios.get(SERVER.URL + SERVER.ROUTES.diaries, rootGetters.config)
+                .then(res => {
+                    commit('SET_DIARIES', res.data)
                     console.log(res.data)
                 })
                 .catch(err => {

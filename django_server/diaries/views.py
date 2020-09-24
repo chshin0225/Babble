@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -17,21 +18,26 @@ from accounts.models import UserBabyRelationship
 class DiaryListView(APIView):
     def get(self, request):
         baby_id = request.user.current_baby
-        # baby_id = 1
-        diaries = Diary.objects.filter(baby=baby_id)
+        diaries = Diary.objects.filter(baby=baby_id).order_by('-diary_date')
         serializer = DiaryListSerializer(diaries, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         baby_id = request.user.current_baby.id
-        # baby_id = 1
         baby = get_object_or_404(Baby, id=baby_id)
         serializer = DiarySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # 유저 정보 필요!!
             serializer.save(creator=request.user, baby=baby)
             return Response(serializer.data)
         return Response(serializer.errors)
+
+
+class DiaryPhotoListView(APIView):
+    def get(self, request):
+        baby_id = request.user.current_baby
+        photo_diaries = Diary.objects.filter( cover_photo__isnull=False, baby=baby_id).order_by('-diary_date')
+        serializer = DiaryListSerializer(photo_diaries, many=True)
+        return Response(serializer.data)
 
 
 class DiaryDetailView(APIView):
@@ -44,6 +50,7 @@ class DiaryDetailView(APIView):
         user_baby_relationship = UserBabyRelationship.objects.get(user=creator, baby=request.user.current_baby)
         user_baby_relationship_serializer = SimpleUserBabyRelationshipSerializer(user_baby_relationship)
 
+        # 해당 날짜에 기록한 성장 기록이 있는지 확인 후 있으면 성장 기록도 리턴 
         if BabyMeasurement.objects.filter(measure_date=diary.diary_date).exists():
             measurement = BabyMeasurement.objects.get(measure_date=diary.diary_date)
             measurement_serializer = BabyMeasurementSerializer(measurement)
@@ -82,7 +89,7 @@ class DiaryDetailView(APIView):
 class DiaryCommentListView(APIView):
     def get(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        serializer = DiaryCommentSerializer(diary.comments, many=True)
+        serializer = DiaryCommentSerializer(diary.comments.order_by('-create_date'), many=True)
         return Response(serializer.data)
 
     def post(self, request, diary_id):
