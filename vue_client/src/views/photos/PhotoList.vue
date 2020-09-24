@@ -151,13 +151,20 @@ export default {
 }
 
 .photo-container{
-  object-fit: cover;
+  /* object-fit: cover;
   object-position: 50% 50%;
   width: 30vw; 
-  height: 30vw;
+  height: 30vw; */
   overflow:hidden;
   margin-right: 2.5vw;
   margin-bottom: 2.5vw;
+}
+
+.photo-container img {
+  object-fit: cover;
+  object-position: 50% 50%;
+  width: 30vw;
+  overflow: hidden;
 }
 
 .date {
