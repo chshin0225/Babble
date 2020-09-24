@@ -67,6 +67,16 @@ class PhotoDetailView(APIView):
         serializer = PhotoDetailSerializer(photo, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(modifier=request.user)
+            
+            photo.photo_tags.clear()
+            for tag_name in request.data['tags']:
+                try:
+                    tag = Tag.objects.get(tag_name=tag_name)
+                except:
+                    tag = Tag(tag_name=tag_name)
+                    tag.save()
+                PhotoTag(tag=tag, photo=photo).save()
+
             return Response(serializer.data)
         return Response(serializer.errors)
 
