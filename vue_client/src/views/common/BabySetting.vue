@@ -14,26 +14,40 @@
     
     <div class="input-with-title mt-5">
       <div class="input-title-wrap"><span class="input-title">비밀번호</span></div>
-      <div class="inputs-wrap"><input class="inputs" placeholder="현재 비밀번호" /></div>
-      <div class="inputs-wrap"><input class="inputs" placeholder="새 비밀번호" /></div>
-      <div class="inputs-wrap"><input class="inputs" placeholder="새 비밀번호 확인" /></div>
+      <div class="inputs-wrap"><input class="inputs" placeholder="현재 비밀번호" v-model="old_password"/></div>
+      <div class="inputs-wrap"><input class="inputs" placeholder="새 비밀번호" v-model="new_password1"/></div>
+      <div class="inputs-wrap"><input class="inputs" placeholder="새 비밀번호 확인" v-model="new_password2"/></div>
     </div>
     <div class="buttons mt-2">
-      <button class="btn change-button">변경하기</button>
+      <button class="btn change-button" @click="changePW">변경하기</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'BabySetting',
   data() {
     return {
-      
-
-      
+      old_password:"",
+      new_password1:"",
+      new_password2:"",      
+     
     }
   },
+  methods:{
+    ...mapActions('accountStore', ['changePassword']),
+    changePW(){
+      let PWData = {
+            old_password : this.old_password, 
+            new_password1 : this.new_password1, 
+            new_password2 : this.new_password2
+          }
+      this.changePassword(PWData);
+    }
+  }
 }
 </script>
 

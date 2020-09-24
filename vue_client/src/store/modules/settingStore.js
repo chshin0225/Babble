@@ -77,6 +77,15 @@ const settingStore = {
           console.log(err.response)
         })
     },
+    modifyUserRank({ rootGetters }, userData) {
+      axios.put(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', userData, rootGetters.config)
+      .then(res => {
+          console.log(res)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+    },
   }
 }
 
