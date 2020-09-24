@@ -138,3 +138,20 @@ class GroupDetailView(APIView):
         data.save()
         serializer = UserBabyRelationshipSerializer(data)
         return Response(serializer.data)
+
+class GroupInfoView(APIView):
+    # 그룹명 수정
+    def put(self, request, group_id):
+        group = get_object_or_404(Group, id=group_id)
+        serializer = GroupListSerializer(group, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    # 그룹 삭제
+    def delete(self,request, group_id):
+        baby = request.user.current_baby
+        group = get_object_or_404(Group, id=group_id)
+        group.delete()
+        return Response({'message': '그룹 삭제가 완료되었습니다.'})

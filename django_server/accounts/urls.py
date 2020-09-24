@@ -11,4 +11,5 @@ urlpatterns = [
     # 현재 babble box에 속한 유저들 정보 관련
     path('groups/', views.GroupListView.as_view()),
     path('groups/<int:group_id>/', views.GroupDetailView.as_view()),
+    path('groups/<int:group_id>/info/', views.GroupInfoView.as_view()),
 ]
