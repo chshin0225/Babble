@@ -28,15 +28,10 @@ def index_page():
 
 @app.route('/tags', methods=['POST'])
 def tags():
-    print("asdfawqefasdfwef")
     # firebase image path
-
     path = json.loads(request.get_data(), encoding='utf-8')
-    #path = path['path']
-
-    print(path)
     path = path['path']
-    print(path)
+
     # load image
     url = storage.child(path).get_url(None)
     res = requests.get(url)
@@ -48,6 +43,7 @@ def tags():
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
 
+    # emotion을 통한 tag 추출
     
     data = {
         'tags': tags
