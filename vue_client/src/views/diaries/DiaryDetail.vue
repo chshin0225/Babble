@@ -8,11 +8,13 @@
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
         <button class="btn btn-pink" @click="sheet = !sheet">:</button>
         <v-bottom-sheet v-model="sheet">
-          <v-sheet class="text-center" height="20vh">
+          <v-sheet class="text-center" height="27vh">
             <div class="py-3">
-              <p class="pointer diary-option mb-1" @click="clickShare">일기 공유</p>
-              <p class="pointer diary-option mb-1" @click="clickEdit"> 일기 수정</p>
-              <p class="pointer diary-option" @click="clickDelete"> 일기 삭제</p>
+              <div class="pointer diary-option mb-3" @click="clickShare">일기 공유</div>
+              <hr>
+              <div class="pointer diary-option mb-3" @click="clickEdit"> 일기 수정</div>
+              <hr>
+              <div class="pointer diary-option" @click="clickDelete"> 일기 삭제</div>
             </div>
           </v-sheet>
         </v-bottom-sheet>
@@ -311,8 +313,11 @@ export default {
     p {
       margin: 0;
     }
-    .diary-option:hover {
-      color: #FEA59C;
+    .diary-option {
+      font-size: 1.5rem !important;
+      // &hover {
+      //   color: #FEA59C;
+      // }
     }
   }
 }
