@@ -170,7 +170,17 @@ const accountStore = {
                 title: err.response.data.message,
               });
             });
-        }
+        },
+        changePassword({ rootGetters }, passwordData) {
+          axios.put(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
+            .then(res => {
+              console.log(res)
+              router.go(0)
+            })
+            .catch(err => {
+              console.log(err)
+          })
+        },
     }
 }
 

@@ -7,6 +7,7 @@ export default {
       signup: '/rest-auth/signup/',
       login: '/rest-auth/login/',
       logout: '/rest-auth/logout/',
+      password: '/rest-auth/password/',
       groups: '/accounts/groups/',
       babies: '/babies/',
       babblebox: 'mybabblebox',
