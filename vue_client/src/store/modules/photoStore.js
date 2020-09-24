@@ -176,7 +176,7 @@ const photoStore = {
           console.log(err.response)
       })
     },
-    deleteComment({ rootGetters, dispatch }, commentData) {
+    deleteComment({ rootGetters }, commentData) {
       console.log(commentData)
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/' + commentData.commentId + '/', rootGetters.config)
         .then(res => {
