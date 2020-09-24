@@ -2,14 +2,14 @@
   <div>
     <div class="photo-content">
       <div class="photo-container">
-        <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + createData[0].image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+        <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photoData.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
       </div>
     </div>
     <h5 class="text-center mt-5">사진의 태그를 자유롭게 수정해주세요 :)</h5>
     <v-col cols="12">
       <v-combobox
         v-if="tags"
-        v-model="createData[0].tags"
+        v-model="photoData.tags"
         :items="tags"
         :search-input.sync="searchTag"
         hide-selected
@@ -30,7 +30,7 @@
           <v-chip
             v-bind="data.attrs"
             close
-            @click:close="remove(createData[0].tags, data.item)"
+            @click:close="remove(photoData.tags, data.item)"
           >
             {{ data.item }}
           </v-chip>
@@ -52,7 +52,7 @@
         raised
         absolute
         right
-        @click="completeCreatePhoto(createData)"
+        @click="clickConfirm"
       >확인</v-btn>
     </v-col>
   </div>
@@ -66,7 +66,9 @@ export default {
   name: 'TagSelect',
   data() {
     return {
-      createData: this.$route.params.createData,
+      photoData: this.$route.params.photoData,
+      photoType: this.$route.params.photoType,
+      // createData: this.$route.params.createData,
       searchTag: null
     }
   },
@@ -74,11 +76,20 @@ export default {
     ...mapState('photoStore', ['tags'])
   },
   methods: {
-    ...mapActions('photoStore', ['completeCreatePhoto', 'fetchTags']),
+    ...mapActions('photoStore', ['completeCreatePhoto', 'fetchTags', 'updatePhoto']),
     remove (data, item) {
       const index = data.indexOf(item)
       if (index >= 0) data.splice(index, 1)
     },
+    clickConfirm() {
+      if (this.photoType === "update") {
+        this.updatePhoto(this.photoData)
+      } else if (this.photoType === "create") {
+        var tempData = Array()
+        tempData.push(this.photoData)
+        this.completeCreatePhoto(tempData)
+      }
+    }
   },
   created() {
     this.fetchTags()

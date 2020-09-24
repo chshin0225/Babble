@@ -9,7 +9,6 @@ const photoStore = {
   state: {
     photos: null,
     tags: null,
-    selectedPhoto: null,
     comments: null,
     photo: null,
     searchedPhotos: null,
@@ -24,13 +23,13 @@ const photoStore = {
     SET_TAGS(state, tags) {
       state.tags = tags
     },
-    SET_SELECTED_PHOTO(state, photo) {
+    SET_PHOTO(state, photo) {
       state.photo = photo
     },
     SET_SEARCHED_PHOTOS(state, photo) {
       state.searchedPhotos = photo
     },
-    SET_SELECTED_PHOTO_COMMENTS(state, comments) {
+    SET_PHOTO_COMMENTS(state, comments) {
       state.comments = comments
     },
   },
@@ -52,7 +51,7 @@ const photoStore = {
     findPhoto({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
         .then(res => {
-          commit('SET_SELECTED_PHOTO', res.data)
+          commit('SET_PHOTO', res.data)
           //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
         .catch(err => console.log(err.response.data))
@@ -60,7 +59,7 @@ const photoStore = {
     fetchComments({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
         .then(res => {
-          commit('SET_SELECTED_PHOTO_COMMENTS', res.data)
+          commit('SET_PHOTO_COMMENTS', res.data)
           //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
         .catch(err => console.log(err.response.data))
@@ -73,12 +72,12 @@ const photoStore = {
 
       if (photos.length == 1) {
         photos.forEach( photo => {
-          const uploadTask = storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
+          const uploadTask = storageRef.child('babble_' + rootState.myaccount.current_baby).child(photo.name).put(photo)
           promises.push(uploadTask)
   
           var imageInfo = {
-                "image_url": 'babble_' + rootState.myaccount.id + '%2F' + photo.name,
-                "temp_url": 'babble_' + rootState.myaccount.id + '/' + photo.name,
+                "image_url": 'babble_' + rootState.myaccount.current_baby + '%2F' + photo.name,
+                "temp_url": 'babble_' + rootState.myaccount.current_baby + '/' + photo.name,
                 "last_modified": photo.lastModifiedDate,
                 "size": photo.size,
                 "file_type": photo.type,
@@ -93,18 +92,18 @@ const photoStore = {
           axios.post(SERVER.AIURL, imagePath)
               .then(res => {
                 createData[0].tags = res.data.tags
-                router.push({ name: "TagSelect", params: { createData: createData }})
+                router.push({ name: "TagSelect", params: { photoData: createData[0], photoType: 'create' }})
               })
               .catch(err => console.log(err.response.data))
         })
       } else {
         photos.forEach( photo => {
-          const uploadTask = storageRef.child('babble_' + rootState.myaccount.id).child(photo.name).put(photo)
+          const uploadTask = storageRef.child('babble_' + rootState.myaccount.current_baby).child(photo.name).put(photo)
           promises.push(uploadTask)
   
           var imageInfo = {
-                "image_url": 'babble_' + rootState.myaccount.id + '%2F' + photo.name,
-                "temp_url": 'babble_' + rootState.myaccount.id + '/' + photo.name,
+                "image_url": 'babble_' + rootState.myaccount.current_baby + '%2F' + photo.name,
+                "temp_url": 'babble_' + rootState.myaccount.current_baby + '/' + photo.name,
                 "last_modified": photo.lastModifiedDate,
                 "size": photo.size,
                 "file_type": photo.type,
@@ -145,6 +144,16 @@ const photoStore = {
           router.push({name: 'PhotoList'})
         })
         .catch(err => console.log(err.response.data))
+    },
+    updatePhoto({ rootGetters, commit }, photoData) {
+      axios.put(SERVER.URL + SERVER.ROUTES.photos + photoData.id + '/', photoData, rootGetters.config)
+        .then(res => {
+          commit('SET_PHOTO', res.data)
+          router.push({name: 'PhotoDetail', params: { photoId: photoData.id}})
+        })
+        .catch(err => {
+          console.log(err)
+      })
     },
     deletePhoto({ rootGetters }, commentData) {
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/', rootGetters.config)
