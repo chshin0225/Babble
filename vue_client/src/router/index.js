@@ -8,6 +8,7 @@ import PhotoLibrary from '@/views/photos/PhotoLibrary'
 import PhotoSearch from '@/views/photos/PhotoSearch'
 import PhotoCreate from '@/views/photos/PhotoCreate'
 import PhotoDetail from '@/views/photos/PhotoDetail'
+import TagSelect from '@/views/photos/TagSelect'
 
 // Diary
 import Diary from '@/views/diaries/Diary'
@@ -71,6 +72,11 @@ Vue.use(VueRouter)
     path: '/photo/:photoId',
     component: PhotoDetail,
     name: 'PhotoDetail'
+  },
+  {
+    path: '/photo/tagselect',
+    component: TagSelect,
+    name: 'TagSelect'
   },
   // Authentication
   {
