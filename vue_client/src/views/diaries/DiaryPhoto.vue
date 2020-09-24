@@ -24,8 +24,8 @@
           </template>
           <v-date-picker v-model="date" type="month" scrollable>
             <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+            <v-btn text color="#9BC7FF" @click="modal = false">Cancel</v-btn>
+            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(date)">OK</v-btn>
           </v-date-picker>
         </v-dialog>
       </v-col>
@@ -35,10 +35,10 @@
     <div v-if="photoDiaries">
       <swiper class="swiper" :options="swiperOption" v-if="photoDiaries.length">
         <swiper-slide v-for="diary in photoDiaries" :key="diary.id">
-          <div class="card" v-if="diary.cover_photo" @click="clickCard" :style="`background-image:url(${diary.cover_photo})`">
+          <div class="card" v-if="diary.cover_photo" @click="clickCard(diary.id)" :style="`background-image:url(${diary.cover_photo})`">
             <div class="p-3 title col-3 text-center">
-              <span class="date">{{diary.create_date | moment("DD")}}</span><br>
-              <span class="month">{{ diary.create_date | moment("MMM") }}</span>
+              <span class="date">{{diary.diary_date | moment("DD")}}</span><br>
+              <span class="month">{{ diary.diary_date | moment("MMM") }}</span>
             </div>
             <div class="p-3 mt-auto">
               <h4 class="diary-text">{{diary.title}}</h4>
@@ -104,8 +104,8 @@ export default {
     clickAdd() {
       this.$router.push({name: 'DiaryCreate'})
     },
-    clickCard(){
-      this.$router.push({name: 'DiaryDetail', params: { 'diaryId': 1 } })
+    clickCard(diaryId){
+      this.$router.push({name: 'DiaryDetail', params: { 'diaryId': diaryId } })
     }
   },
   created() {

@@ -57,7 +57,7 @@ const photoStore = {
         })
         .catch(err => console.log(err.response.data))
     },
-    fetchPhotoComments({ rootGetters, commit }, photoId) {
+    fetchComments({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
         .then(res => {
           commit('SET_SELECTED_PHOTO_COMMENTS', res.data)
@@ -147,41 +147,37 @@ const photoStore = {
         .catch(err => console.log(err.response.data))
     },
     deletePhoto({ rootGetters }, commentData) {
-      
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/', rootGetters.config)
       .then(res => {
           console.log(res)
-          router.go(-1)
+          router.push({ name: 'PhotoList' })
       })
       .catch(err => {
           console.log(err)
       })
     },
-    createPhotoComment({ rootGetters }, commentData) {
-      
-      axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/', commentData, rootGetters.config)
+    createComment({ rootGetters, dispatch }, commentData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photo_id + '/comments/', commentData, rootGetters.config)
       .then(res => {
           console.log(res)
-          //router.push({ name: 'PhotoDetail' , params : {photoId : commentData.photoId}})
-          router.go(0)
+          dispatch('fetchComments', commentData.photo_id)
       })
       .catch(err => {
           console.log(err)
       })
     },
-    modifyPhotoComment({ rootGetters }, commentData) {
-      
-      axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/', commentData, rootGetters.config)
+    updateComment({ rootGetters, dispatch }, commentData) {
+      axios.put(SERVER.URL + SERVER.ROUTES.photos + commentData.photo_id + '/comments/' + commentData.comment_id + '/', commentData.comment, rootGetters.config)
       .then(res => {
           console.log(res)
-          //router.push({ name: 'PhotoDetail' , params : {photoId : commentData.photoId}})
-          router.go(0)
+          dispatch('fetchComments', commentData.photo_id)
       })
       .catch(err => {
-          console.log(err)
+          console.log(err.response)
       })
     },
-    deletePhotoComment({ rootGetters }, commentData) {
+    deleteComment({ rootGetters, dispatch }, commentData) {
+      console.log(commentData)
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/' + commentData.commentId + '/', rootGetters.config)
         .then(res => {
             console.log(res)
