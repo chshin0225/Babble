@@ -131,7 +131,7 @@ class PhotoSearchView(APIView):
         searched_photos = Photo.objects.none()
         tags = Tag.objects.filter(tag_name__icontains=keyword)
         for tag in tags:
-            searched_photos = searched_photos.union(tag.tagged_photos.all())
-        searched_photos = searched_photos.intersection(Photo.objects.filter(baby=cb))
+            searched_photos = searched_photos | tag.tagged_photos.all()
+        searched_photos = searched_photos.filter(baby=cb)
         serializer = PhotoListSerializer(searched_photos, many=True)
         return Response(serializer.data)
