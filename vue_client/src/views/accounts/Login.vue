@@ -4,7 +4,7 @@
       <div class="input-with-label">
         <input
           v-model="loginData.email"
-          v-bind:class="{error : error.email, complete:!error.email&&loginData.email.length!==0}"
+          v-bind:class="{errorText : error.email, complete:!error.email&&loginData.email.length!==0}"
           class="inputs"
           id="email"
           placeholder="이메일"
@@ -20,7 +20,7 @@
       <div class="input-with-label">
         <input
           v-model="loginData.password"
-          v-bind:class="{error : error.password, complete:!error.password&&loginData.password.length!==0}"
+          v-bind:class="{errorText : error.password, complete:!error.password&&loginData.password.length!==0}"
           class="inputs"
           id="password"
           type="password"
@@ -247,8 +247,8 @@ export default {
 input[type="password"] {
   font-family: sans-serif;
 }
-.error,
-.error:focus {
+.errorText,
+.errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7);
 }
 .error-text {
@@ -283,5 +283,9 @@ input[type="password"] {
 }
 .formatting {
   opacity: 0.9;
+}
+
+.v-application >>> .error {
+  background-color: none !important;
 }
 </style>

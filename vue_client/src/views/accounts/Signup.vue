@@ -5,7 +5,7 @@
       <div class="input-with-label">
         <input 
           v-model="signupData.name"
-          v-bind:class="{error: error.name, complete:!error.name&&signupData.name.length!==0}"
+          v-bind:class="{errorText: error.name, complete:!error.name&&signupData.name.length!==0}"
           class="inputs"
           id="name"
           placeholder="닉네임" 
@@ -21,7 +21,7 @@
       <div class="input-with-label">
         <input 
           v-model="signupData.email" 
-          v-bind:class="{error : error.email, complete:!error.email&&signupData.email.length!==0}"
+          v-bind:class="{errorText : error.email, complete:!error.email&&signupData.email.length!==0}"
           class="inputs"
           id="email" 
           placeholder="이메일" 
@@ -39,7 +39,7 @@
         <input 
           v-model="signupData.password1" 
           
-          v-bind:class="{error : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
+          v-bind:class="{errorText : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
           class="inputs"
           id="password1" 
           type="password"
@@ -55,7 +55,7 @@
           v-model="signupData.password2"
           type="password"
           id="password1-confirm"
-          v-bind:class="{error : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
+          v-bind:class="{errorText : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
           placeholder="비밀번호를 다시 입력해주세요."
           class="inputs"
           required
@@ -216,7 +216,7 @@ h3 {
 input[type="password"] {
   font-family:sans-serif;
 }
-.error, .error:focus {
+.errorText, .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
 }
 .error-text {

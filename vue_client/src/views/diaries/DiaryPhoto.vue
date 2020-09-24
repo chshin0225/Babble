@@ -2,7 +2,7 @@
 <template>
 <div>
   <div>
-    <p class="main-title text-center color-pink">아롱이의 9월</p>
+    <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 {{date | moment('M')}}월</h5>
     <!-- Date Picker -->
     <v-row class="d-flex justify-content-center">
       <v-col cols="3" sm="3" class="erase-padding">
@@ -79,7 +79,7 @@ export default {
     SwiperSlide,
   },
   computed: {
-    ...mapState(['myaccount']),
+    ...mapState(['myaccount', 'currentBaby']),
     ...mapState('diaryStore', ['photoDiaries'])
   },
   data() {
@@ -100,7 +100,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('diaryStore', ['fetchDiaries']),
+    ...mapActions('diaryStore', ['fetchPhotoDiaries']),
     clickAdd() {
       this.$router.push({name: 'DiaryCreate'})
     },
@@ -109,16 +109,15 @@ export default {
     }
   },
   created() {
-    this.fetchDiaries()
+    this.fetchPhotoDiaries()
   }
 }
 </script>
 
 <style scoped>
-#app {
-  min-height: 0px !important;
-  height: 6vh !important;
-  overflow: hidden;
+.crying-baby {
+  height: 30vh;
+  width: auto;
 }
 
 p {
@@ -126,7 +125,7 @@ p {
 }
 
 .main-title {
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 900;
 }
 
@@ -140,7 +139,9 @@ p {
   -moz-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -webkit-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
   -o-box-shadow: 10px 10px  5px rgba(0,0,0,0.6);
-   margin-bottom: 2vh;
+  margin-bottom: 2vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
