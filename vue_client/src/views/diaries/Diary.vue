@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="nav d-flex justify-content-between p-3">
+    <div class="nav d-flex justify-content-between">
         <!-- 좌측 형태 정렬 -->
         <div class="nav-container bg-pink">
           <router-link :to="{ name: 'DiaryPhoto'}" class="view right-outline pointer">
@@ -18,7 +18,7 @@
         <div>
           <i class="fas fa-search pointer"></i>
         </div>
-    </nav>
+    </div>
     
     <!-- router-view -->
     <router-view></router-view>
