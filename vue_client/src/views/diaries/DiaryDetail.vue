@@ -60,7 +60,7 @@
     <div class="comment mb-5 mt-3">
       <h5 class="comment-title mb-3">댓글</h5>
       <!-- 댓글 작성 -->
-      <div class="input-group row no-gutters comment-create" style="height:65px;">
+      <div class="input-group row no-gutters comment-create mb-3" style="height:65px;">
         <div class="input-group row no-gutters comment-create" style="height:65px;">
           <textarea
             class="col-10 textareaSection p-1" 
@@ -87,16 +87,24 @@
         <div v-for="comment in comments" :key="`comment_${comment.id}`">
           <div>
             <div class="d-flex justify-content-between">
-              <p class="comment-username">{{comment.user}}</p>
+              <p class="comment-username">{{comment.user.name}}({{comment.relationship_name}})</p>
               <div class="d-flex">
-                <p class="comment-time">{{comment.modify_date |  moment("from", "now")}}</p>
-                <div class="dropdown" v-if="comment.user === myaccount.id">
-                  <div class="btn-group dropleft">
-                    <button type="button" class="btn btn-pink dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <p class="dropdown-item pointer" @click="clickInitUpdateComment(comment)">댓글 수정</p>
-                      <p class="dropdown-item pointer" @click="clickDeleteComment(commentData, comment.id)">댓글 삭제</p>
-                    </div>
+                <p class="comment-time mr-3">{{comment.modify_date |  moment("from", "now")}}</p>
+                <div v-if="comment.user.id === myaccount.id">
+                  <div>
+                    <button 
+                      @click="sheet2=!sheet2" 
+                      type="button" 
+                      class="btn btn-pink">:</button>
+                    <v-bottom-sheet v-model="sheet2">
+                      <v-sheet class="text-center" height="18vh">
+                        <div class="py-3">
+                          <div class="pointer diary-option mb-3" @click="clickInitUpdateComment(comment)">댓글 수정</div>
+                          <hr>
+                          <div class="pointer diary-option"  @click="clickDeleteComment(commentData, comment.id)"> 댓글 삭제</div>
+                        </div>
+                      </v-sheet>
+                    </v-bottom-sheet>
                   </div>
                 </div>
               </div>
@@ -154,6 +162,7 @@ export default {
     return {
       diaryContent: null,
       sheet: false,
+      sheet2: false,
       commentData: {
         content: null,
         diaryId: this.$route.params.diaryId
@@ -261,12 +270,14 @@ export default {
       .then((result) => {
         if (result.value) {
           this.deleteComment({ diaryId: commentData.diaryId, commentId: commentId })
+          this.sheet2 = !this.sheet2
         } 
       });
     },
     clickInitUpdateComment(comment) {
       this.commentUpdateData.commentId = comment.id 
       this.commentUpdateData.content = comment.content
+      this.sheet2 = !this.sheet2
     },
     clickUpdateComment(comment) {
       this.updateComment(comment)
