@@ -195,34 +195,47 @@ export default {
       console.log("HANDLE IMAGE ADDED")
       const createData = []
       const promises = []
+      const tagPromises = []
       var storageRef = firebase.storage().ref()
       
-      const uploadTask = storageRef.child('babble_'+ this.myaccount.id).child(file.name).put(file)
+      const uploadTask = storageRef.child('babble_'+ this.myaccount.current_baby).child(file.name).put(file)
       promises.push(uploadTask)
-
-      var imageInfo = {
-        "image_url": 'babble_' + this.myaccount.id + '%2F' + file.name,
-        "last_modified": file.lastModifiedDate,
-        "size": file.size,
-        "file_type": file.type
-      }
-      createData.push(imageInfo)
-
       Promise.all(promises).then(() => {
-        axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, this.config)
-          .then(() => {
-            let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-            Editor.insertEmbed(cursorLocation, "image", url);
-            resetUploader();
-          })
-          .catch(err => {
-            console.log(err);
-          });
-        if ( this.files === null ) {
-          let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-          this.diaryData.cover_photo = url
-          console.log(this.diaryData)
+        var imageInfo = {
+          "image_url": 'babble_' + this.myaccount.current_baby + '%2F' + file.name,
+          "temp_url": 'babble_' + this.myaccount.current_baby + '/' + file.name,
+          "last_modified": file.lastModifiedDate,
+          "size": file.size,
+          "file_type": file.type,
+          "tags": []
+        };
+        var imagePath = {
+          "path": imageInfo.temp_url
         }
+        const tagExtract = axios.post(SERVER.AIURL, imagePath)
+                            .then(res => {
+                              imageInfo.tags = res.data.tags
+                            })
+                            .catch(err => console.log(err.response.data))
+        tagPromises.push(tagExtract)
+        Promise.all(tagPromises).then(() => {
+          createData.push(imageInfo)
+          axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, this.config)
+            .then(() => {
+              let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+              Editor.insertEmbed(cursorLocation, "image", url);
+              resetUploader();
+            })
+            .catch(err => {
+              console.log(err);
+            });
+            if ( this.files === null ) {
+              let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+              this.diaryData.cover_photo = url
+              this.files = true
+              console.log(this.diaryData)
+            }
+        })
       })
     }
   },
