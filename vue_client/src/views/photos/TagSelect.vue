@@ -103,7 +103,8 @@ export default {
 }
 
 .photo-content .photo-container img{
-    width: 100%;  
+    width: 100%;
+    max-height: 50vh;
 }
 
 .final-button {
