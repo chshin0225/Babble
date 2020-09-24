@@ -12,7 +12,7 @@
               :color="pickColor(idx)"
               small
             >
-              <v-row class="pt-0">
+              <v-row class="pt-0 no-gutters">
                 <v-col cols="2" class="p-0">
                   <strong>{{diary.diary_date | moment("MM월 DD일")}}</strong>
                 </v-col>
