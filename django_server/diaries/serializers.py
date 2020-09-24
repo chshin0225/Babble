@@ -28,8 +28,13 @@ class DiarySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DiaryCommentSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(required=False)
+    user = UserSerializer(required=False)
     # diary = DiarySerializer(required=False)
+    relationship_name = serializers.SerializerMethodField('get_relationship_name')
     class Meta:
         model = DiaryComment
         fields = '__all__'
+
+    def get_relationship_name(self, diarycomment):
+        relationship_name = UserBabyRelationship.objects.get(baby=diarycomment.user.current_baby, user=diarycomment.user).relationship_name
+        return relationship_name
