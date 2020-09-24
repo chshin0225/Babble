@@ -18,4 +18,5 @@ urlpatterns = [
     # 성장 기록 관련
     path('measurements/', views.MeasurementListView.as_view()),
     path('measurements/<int:measurement_id>/', views.MeasurementDetailView.as_view()),
+    path('measurements/check/', views.MeasurementCheckView.as_view()),
 ]
