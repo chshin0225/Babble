@@ -1,12 +1,20 @@
+import datetime
+from operator import itemgetter
+from itertools import groupby
+
 from django.shortcuts import render, get_object_or_404
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from django.http import JsonResponse
+
 from .serializers import UserSerializer, SocialRegisterSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer
+
 from .models import User, Group, BabyAccess, UserBabyRelationship
 from babies.models import Baby
 from rest_framework.authtoken.models import Token
-import datetime
+
 
 class CustomLoginView(APIView):
     def post(self, request):
@@ -67,9 +75,31 @@ class GroupListView(APIView):
     # 한 babble box 내의 존재하는 그룹들 조회
     def get(self, request):
         baby = request.user.current_baby
-        groups = Group.objects.filter(baby=baby).all()
-        serializer = GroupListSerializer(groups, many=True)
-        return Response(serializer.data)
+        groups = list(Group.objects.filter(baby=baby).values_list('id', flat=True))
+        group_data = UserBabyRelationship.objects.filter(baby=baby, group__isnull=False).values('id', 'user', 'group', 'relationship_name')
+
+        key = itemgetter('group')
+        rows = groupby(group_data, key=key)
+
+        return_data = []
+        for group, items in rows:
+            items = list(items)
+            group_info = get_object_or_404(Group, id=group)
+            group_serializer = GroupListSerializer(group_info)
+            new_group_serializer = dict(group_serializer.data)
+            new_group_serializer['members'] = items
+            return_data.append(new_group_serializer)
+            groups.remove(group)
+        
+        if groups:
+            for g in groups:
+                group_info = get_object_or_404(Group, id=g)
+                group_serializer = GroupListSerializer(group_info)
+                new_group_serializer = dict(group_serializer.data)
+                new_group_serializer['members'] = []
+                return_data.append(new_group_serializer)
+
+        return Response(return_data)
 
     # 새로운 그룹 생성
     def post(self, request):
