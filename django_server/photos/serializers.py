@@ -21,6 +21,11 @@ class PhotoDetailSerializer(serializers.ModelSerializer):
 class PhotoCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     photo = PhotoListSerializer(required=False)
+    relationship_name = serializers.SerializerMethodField('get_relationship_name')
     class Meta:
         model = PhotoComment
         fields = '__all__'
+
+    def get_relationship_name(self, photocomment):
+        relationship_name = UserBabyRelationship.objects.get(baby=photocomment.user.current_baby, user=photocomment.user).relationship_name
+        return relationship_name
