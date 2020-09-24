@@ -1,78 +1,84 @@
 <template>
   <div>
-    <div class="nav2 d-flex justify-content-between align-items-center">
-      <div class="pointer" @click="clickBack">
-        <i class="fas fa-chevron-left"></i>
-      </div>
-      <div class="d-flex align-items-center">
-        <input @change="change4" type="file" id="file" name="file" multiple hidden>
-        <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
-        <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
-        <v-app v-else> 
-          <v-bottom-sheet v-model="sheet">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="#FEA59C"
-                outlined
-                v-bind="attrs"
-                v-on="on"
-              >
-                확인
-              </v-btn>
-            </template>
-            <v-sheet class="text-center" :height="height">
-              <div class="scallop-down"></div>
-              <h3>공개 범위</h3>
-              <v-container>
-                <v-radio-group v-model="radios" :mandatory="false">
-                  <v-radio label="전원 공개" value="All" color="#FEA59C"></v-radio>
-                  <v-radio label="부부 한정" value="Couple" color="#FEA59C"></v-radio>
-                  <v-radio @click="changeHeight" label="세부 설정" value="Others" color="#FEA59C"></v-radio>
-                </v-radio-group>
-                <!-- 토글 부분 -->
-                  <v-btn-toggle
-                  v-model="toggle_exclusive"
-                  multiple
-                  class="py-2"
-                  v-if="radios=='Others'"
+    <div class="my-5 py-5 text-center" v-show="loading">
+      <h5>사진을 업로드 중입니다!<br>잠시만 기다려주세요 :)</h5>
+      <img class="crying-baby my-5 py-5" src="@/assets/babble_logo.png">
+    </div>
+    <div v-show="!loading">
+      <div class="nav2 d-flex justify-content-between align-items-center">
+        <div class="pointer" @click="clickBack">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="d-flex align-items-center">
+          <input @change="change4" type="file" id="file" name="file" multiple hidden>
+          <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
+          <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
+          <v-app v-else> 
+            <v-bottom-sheet v-model="sheet">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="#FEA59C"
+                  outlined
+                  v-bind="attrs"
+                  v-on="on"
                 >
-                  <v-btn 
-                    value="부부" 
-                    outlined 
-                    color="#FEA59C">
-                    부부
-                  </v-btn>
-                  <v-btn value="친가" outlined color="#FEA59C">
-                    친가
-                  </v-btn>
-                  <v-btn value="외가" outlined color="#FEA59C">
-                    외가
-                  </v-btn>
-                  <v-btn value="친구/지인" outlined color="#FEA59C">
-                    친구/지인
-                  </v-btn>
-                </v-btn-toggle>
-              </v-container>
-              <!-- </div> -->
-              <v-btn
-                class="mt-6 final-button"
-                text
-                color="#FEA59C"
-                raised
-                @click="clickFinal"
-              >확인</v-btn>
-            </v-sheet>
-          </v-bottom-sheet>
-        </v-app>
+                  확인
+                </v-btn>
+              </template>
+              <v-sheet class="text-center" :height="height">
+                <div class="scallop-down"></div>
+                <h3>공개 범위</h3>
+                <v-container>
+                  <v-radio-group v-model="radios" :mandatory="false">
+                    <v-radio label="전원 공개" value="All" color="#FEA59C"></v-radio>
+                    <v-radio label="부부 한정" value="Couple" color="#FEA59C"></v-radio>
+                    <v-radio @click="changeHeight" label="세부 설정" value="Others" color="#FEA59C"></v-radio>
+                  </v-radio-group>
+                  <!-- 토글 부분 -->
+                    <v-btn-toggle
+                    v-model="toggle_exclusive"
+                    multiple
+                    class="py-2"
+                    v-if="radios=='Others'"
+                  >
+                    <v-btn 
+                      value="부부" 
+                      outlined 
+                      color="#FEA59C">
+                      부부
+                    </v-btn>
+                    <v-btn value="친가" outlined color="#FEA59C">
+                      친가
+                    </v-btn>
+                    <v-btn value="외가" outlined color="#FEA59C">
+                      외가
+                    </v-btn>
+                    <v-btn value="친구/지인" outlined color="#FEA59C">
+                      친구/지인
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-container>
+                <!-- </div> -->
+                <v-btn
+                  class="mt-6 final-button"
+                  text
+                  color="#FEA59C"
+                  raised
+                  @click="clickFinal"
+                >확인</v-btn>
+              </v-sheet>
+            </v-bottom-sheet>
+          </v-app>
 
+        </div>
       </div>
-    </div>
-    <!-- 만약 업로드 된이미지가 없을 경우 -->
-    <div v-if="no_image" class="text-center mt-5">
-      <img class="crying-baby" src="@/assets/baby.png">
-      <h5>업로드 된 이미지가 없습니다.</h5>
-    </div>
-    <div v-else id="frame" class="row no-gutters">
+      <!-- 만약 업로드 된이미지가 없을 경우 -->
+      <div v-if="no_image" class="text-center mt-5">
+        <img class="crying-baby" src="@/assets/baby.png">
+        <h5>업로드 된 이미지가 없습니다.</h5>
+      </div>
+      <div v-else id="frame" class="row no-gutters">
+      </div>
     </div>
   </div>
 </template>
@@ -100,7 +106,8 @@ export default {
       toggle_exclusive: [],
       height: '45vh',
       no_image: true,
-      photos: []
+      photos: [],
+      loading: false
     }
   },
   methods: {
@@ -116,6 +123,7 @@ export default {
     clickFinal() {
       this.sheet = !this.sheet
       this.createPhotos(this.photos)
+      this.loading = true
     },
     changeHeight() {
       this.height = '57vh'

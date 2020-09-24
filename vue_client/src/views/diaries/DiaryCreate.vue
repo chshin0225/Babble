@@ -1,92 +1,94 @@
 <template>
-  <div data-app>
-    <div class="nav d-flex align-items-center">
-      <div class="left-align pointer" @click="clickBack">
-        <i class="fas fa-chevron-left"></i>
+  <div>
+    <div class="my-5 py-5 text-center" v-show="loading">
+      <h5>사진을 업로드 중입니다!<br>잠시만 기다려주세요 :)</h5>
+      <img class="crying-baby my-5 py-5" src="@/assets/babble_logo.png">
+    </div>
+    <div data-app v-show="!loading">
+      <div class="nav d-flex align-items-center">
+        <div class="left-align pointer" @click="clickBack">
+          <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="center-align d-flex align-items-center">
+          <img class="float-left mr-2" width="30px" src="https://user-images.githubusercontent.com/25967949/93281500-2f491680-f807-11ea-97bb-3fb3a98bbabc.png">
+          <h6>새 일기 작성</h6>
+        </div>
       </div>
-      <div class="center-align d-flex align-items-center">
-        <img class="float-left mr-2" width="30px" src="https://user-images.githubusercontent.com/25967949/93281500-2f491680-f807-11ea-97bb-3fb3a98bbabc.png">
-        <h6>새 일기 작성</h6>
+
+      <!-- 날짜 입력 -->
+      <v-col cols="12" sm="6" md="4">
+        <v-dialog
+          ref="dialog"
+          v-model="modal"
+          :return-value.sync="diaryData.diary_date"
+          width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="diaryData.diary_date"
+              label="날짜"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker 
+            color="#FEA59C" 
+            :close-on-content-click="false" 
+            v-model="diaryData.diary_date" 
+            :max="today"
+            scrollable>
+            <v-col class="d-flex justify-end">
+              <v-btn text color="#9BC7FF" @click="modal = false">취소</v-btn>
+              <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diary_date)">선택</v-btn>
+            </v-col>
+            
+          </v-date-picker>
+        </v-dialog>
+      </v-col>
+      
+      <!-- 제목 -->
+      <v-text-field 
+        class="m-3" 
+        label="제목"
+        v-model="diaryData.title"
+      ></v-text-field>
+
+      <!-- 에디터 -->
+      <vue-editor
+        id="editor"
+        class="p-3"
+        v-model="diaryData.content"
+        useCustomImageHandler
+        @image-added="handleImageAdded"
+        :editorToolbar="customToolbar"
+      ></vue-editor>
+
+      <!-- 성장 기록 -->
+      <div class="mx-3 mt-5 mb-2">
+        <h6>우리 아이 성장 기록</h6>
+        <v-text-field
+          label=" 키"
+          suffix="cm"
+          v-model="tempRecord.babyHeight"
+        ></v-text-field>
+        <v-text-field
+          label="몸무게"
+          suffix="kg"
+          v-model="tempRecord.babyWeight"
+        ></v-text-field>
+        <v-text-field
+          label="머리 둘레"
+          suffix="cm"
+          v-model="tempRecord.babyHead"
+        ></v-text-field>
       </div>
+      <div class="p-2 d-flex justify-content-end">
+        <button @click="clickCreate()" class="btn btn-pink ">작성</button>
+      </div>
+      <div style="height:15vh"></div>
     </div>
-
-    <!-- 날짜 입력 -->
-    <v-col cols="12" sm="6" md="4">
-      <v-dialog
-        ref="dialog"
-        v-model="modal"
-        :return-value.sync="diaryData.diary_date"
-        width="290px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-text-field
-            v-model="diaryData.diary_date"
-            label="날짜"
-            readonly
-            v-bind="attrs"
-            v-on="on"
-          ></v-text-field>
-        </template>
-        <v-date-picker 
-          color="#FEA59C" 
-          :close-on-content-click="false" 
-          v-model="diaryData.diary_date" 
-          :max="today"
-          scrollable>
-          <v-col class="d-flex justify-end">
-            <v-btn text color="#9BC7FF" @click="modal = false">취소</v-btn>
-            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(diaryData.diary_date)">선택</v-btn>
-          </v-col>
-          
-        </v-date-picker>
-      </v-dialog>
-    </v-col>
-    
-    <!-- 제목 -->
-    <v-text-field 
-      class="m-3" 
-      label="제목"
-      v-model="diaryData.title"
-    ></v-text-field>
-
-    <!-- 에디터 -->
-    <vue-editor
-      id="editor"
-      class="p-3"
-      v-model="diaryData.content"
-      useCustomImageHandler
-      @image-added="handleImageAdded"
-      :editorToolbar="customToolbar"
-    ></vue-editor>
-
-    <!-- 성장 기록 -->
-    <div class="mx-3 mt-5 mb-2">
-      <h6>우리 아이 성장 기록</h6>
-      <v-text-field
-        label=" 키"
-        suffix="cm"
-        v-model="tempRecord.babyHeight"
-      ></v-text-field>
-      <v-text-field
-        label="몸무게"
-        suffix="kg"
-        v-model="tempRecord.babyWeight"
-      ></v-text-field>
-      <v-text-field
-        label="머리 둘레"
-        suffix="cm"
-        v-model="tempRecord.babyHead"
-      ></v-text-field>
-    </div>
-    <div class="p-2 d-flex justify-content-end">
-      <button @click="clickCreate()" class="btn btn-pink ">작성</button>
-    </div>
-    <div style="height:15vh"></div>
-        
   </div>
-
-  
-
 </template>
 
 <script>
@@ -139,6 +141,7 @@ export default {
       today: new Date().toISOString().substr(0, 10),
       // files
       files: null,
+      loading: false
     };
   },
   methods: {
@@ -192,6 +195,7 @@ export default {
 
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
+      this.loading = true
       console.log("HANDLE IMAGE ADDED")
       const createData = []
       const promises = []
@@ -225,9 +229,11 @@ export default {
               let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
               Editor.insertEmbed(cursorLocation, "image", url);
               resetUploader();
+              this.loading = false
             })
             .catch(err => {
               console.log(err);
+              this.loading = false
             });
             if ( this.files === null ) {
               let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
@@ -289,6 +295,11 @@ button:focus {
 
 .v-picker__actions >>> button {
   text-align: right !important;
+}
+
+.crying-baby {
+  height: 50vh;
+  width: auto;
 }
 
 </style>
