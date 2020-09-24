@@ -8,10 +8,15 @@
       </div>
     </div>
     <router-view></router-view> -->
-    <div class="buttons mt-2">
+    <div style="margin-top:15vh; width:100%; text-align:center">
+      <img src="http://bit.do/babbleprofile" style="width:50vw; height:50vw; border-radius:50%; border:1px solid #888888;">
+    </div>
+    <div class="mt-2" style="width:100%; text-align:center; font-size:6vw;">별이</div>
+
+    <div class="buttons mt-5">
       <button class="btn setting-button" @click="clickBabySetting">아기 설정</button>
     </div>
-    <div class="buttons mt-2">
+    <div class="buttons mt-5">
       <button class="btn setting-button" @click="clickGroupSetting">그룹 설정</button>
     </div>
   </div>
@@ -48,10 +53,14 @@ export default {
   border-bottom: 3px solid #FEA59C;
 }
 
+.buttons{
+  text-align:center;
+}
+
 .setting-button{
   background-color: #FEA59C;
   color: #F8F8F8;
-  width: 100%;
+  width: 80%;
 }
 
 
