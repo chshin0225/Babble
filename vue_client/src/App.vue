@@ -44,7 +44,7 @@
               <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
               <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
               <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
-              <li class="list menu"><a href="/settings"><i class="fas fa-cog mr-3"></i> 설정</a></li>
+              <li class="list menu" @click="clickSettings"><i class="fas fa-cog mr-3"></i> 설정</li>
             </div>
             
           </div>
@@ -197,6 +197,9 @@ export default {
       let backdrop = document.querySelector(".sidebar-backdrop")
       backdrop.click()
       this.logout()
+    },
+    clickSettings(){
+      this.$router.push({ name: 'Settings'})
     }
     
   },
@@ -294,6 +297,10 @@ a:hover {
 } 
 
 .menu > a:link, .menu > a:active, .menu > a:visited {
+  color: #FEA59C !important;
+}
+
+.list {
   color: #FEA59C !important;
 }
 
