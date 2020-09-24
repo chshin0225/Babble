@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <div id="app">
+    <div>
       <div class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
           <span>
             <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
-            <img src="@/assets/babble.png" />
+            <img src="@/assets/babble_logo.png" />
           </span>
           <span class="logo-title color-pink">Babble</span>
         </div>
@@ -14,7 +14,7 @@
       <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="this.$route.name!=='DiaryCreate' && this.$route.name!=='HowToRegisterBaby'">
         <span>
           <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
-          <img src="@/assets/babble.png" />
+          <img src="@/assets/babble_logo.png" />
           </span>
         <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
       </nav>
@@ -25,7 +25,7 @@
             <div class="upper bg-pink d-flex justify-content-between">
               <div class="d-flex">
                 <div class="profile float-left mr-3">
-                  <img src="http://bit.do/babbleprofile">
+                  <img src="@/assets/babble_logo.png">
                 </div>
                 <div class="babble-box" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name}}</span><br>
@@ -52,15 +52,15 @@
             <hr>
             <div class="d-flex justify-content-between">
               <div class="other-profile pointer">
-                <img src="http://bit.do/babbleprofile">
+                <img src="@/assets/babble_logo.png">
                 <p class="text-center">사랑이</p>
               </div>
               <div class="other-profile pointer">
-                <img src="http://bit.do/babbleprofile">
+                <img src="@/assets/babble_logo.png">
                 <p class="text-center">럭키</p>
               </div>
               <div class="other-profile pointer">
-                <img src="http://bit.do/babbleprofile">
+                <img src="@/assets/babble_logo.png">
                 <p class="text-center">다롱이</p>
               </div>
             </div>
@@ -310,7 +310,9 @@ a:hover {
 .profile img, .other-profile img{
   max-width: 50px;
   height: auto;
+  border: 1px solid #FEA59C;
   border-radius: 50%;
+  background-color: white;
 }
 
 

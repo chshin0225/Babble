@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="nav d-flex justify-content-between">
+    <nav class="nav d-flex justify-content-between p-2">
         <!-- 좌측 형태 정렬 -->
         <div class="nav-container bg-pink">
           <router-link :to="{ name: 'DiaryPhoto'}" class="view right-outline pointer">
@@ -18,16 +18,26 @@
         <div>
           <i class="fas fa-search pointer"></i>
         </div>
-    </div>
+    </nav>
     
     <!-- router-view -->
     <router-view></router-view>
+
+    <!-- 다이어리 추가 버튼 구현 -->
+    <div @click="clickAdd" class="add-button color-pink pointer">
+      <i class="fas fa-plus-circle fa-2x"></i>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Diary',
+  methods: {
+    clickAdd() {
+      this.$router.push({name: 'DiaryCreate'})
+    },
+  }
 }
 </script>
 
@@ -53,6 +63,15 @@ export default {
 
 .nav-container .router-link-exact-active {
   color: #aae9f0;
+}
+
+/* 추가 버튼 */
+.add-button {
+  position: fixed;
+  bottom: 10vh;
+  right: 5vw;
+  text-shadow: 5px 5px 20px rgba(0,0,0,0.6);
+  z-index: 1000;
 }
 
 
