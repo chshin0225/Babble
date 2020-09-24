@@ -32,7 +32,7 @@ def tags():
     # firebase image path
     path = json.loads(request.get_data(), encoding='utf-8')
     path = path['path']
-    
+
     # load image
     url = storage.child(path).get_url(None)    
     res = requests.get(url)

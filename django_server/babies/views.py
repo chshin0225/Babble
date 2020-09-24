@@ -142,12 +142,21 @@ class MeasurementListView(APIView):
 
     # 새로운 성장 기록 작성
     def post(self, request):
-        print(request.data)
-        serializer = BabyMeasurementSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(baby=request.user.current_baby, creator=request.user)
-            return Response(serializer.data)
-        return Response(serializer.errors)
+        if BabyMeasurement.objects.filter(measure_date=request.data['measure_date']).exists():
+            print('수정')
+            measurement = get_object_or_404(BabyMeasurement, measure_date=request.data['measure_date'])
+            serializer = BabyMeasurementSerializer(measurement, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(baby=request.user.current_baby, modifier=request.user)
+                return Response(serializer.data)
+            return Response(serializer.errors)
+        else:
+            print('생성')
+            serializer = BabyMeasurementSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(baby=request.user.current_baby, creator=request.user)
+                return Response(serializer.data)
+            return Response(serializer.errors)
 
 
 class MeasurementDetailView(APIView):
@@ -166,9 +175,16 @@ class MeasurementDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
         
-
     # 성장 기록 삭제
     def delete(self, request, measurement_id):
         measurement = get_object_or_404(BabyMeasurement, id=measurement_id)
         measurement.delete()
         return Response({"message": "성장 기록이 삭제되었습니다."})
+
+
+class MeasurementCheckView(APIView):
+    def post(self, request):
+        if BabyMeasurement.objects.filter(baby=request.user.current_baby, measure_date=request.data['measure_date']).exists():
+            return Response({"exists": True})
+        else:
+            return Response({"exists": False})

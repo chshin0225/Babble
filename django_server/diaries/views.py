@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from rest_framework.response import Response 
 from rest_framework.views import APIView
@@ -32,6 +33,14 @@ class DiaryListView(APIView):
             serializer.save(creator=request.user, baby=baby)
             return Response(serializer.data)
         return Response(serializer.errors)
+
+
+class DiaryPhotoListView(APIView):
+    def get(self, request):
+        baby_id = request.user.current_baby
+        photo_diaries = Diary.objects.filter( cover_photo__isnull=False, baby=baby_id).all()
+        serializer = DiaryListSerializer(photo_diaries, many=True)
+        return Response(serializer.data)
 
 
 class DiaryDetailView(APIView):
@@ -82,7 +91,7 @@ class DiaryDetailView(APIView):
 class DiaryCommentListView(APIView):
     def get(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        serializer = DiaryCommentSerializer(diary.comments, many=True)
+        serializer = DiaryCommentSerializer(diary.comments.order_by('-create_date'), many=True)
         return Response(serializer.data)
 
     def post(self, request, diary_id):

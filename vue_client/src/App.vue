@@ -27,7 +27,7 @@
                 <div class="profile float-left mr-3">
                   <img src="http://bit.do/babbleprofile">
                 </div>
-                <span class="babble-box" v-if="currentBaby">
+                <span class="babble-box float-left" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name}}</span><br>
                   <span>D + {{ countDays }}</span>
                 </span>
@@ -44,7 +44,7 @@
               <li class="list menu"><a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a></li>
               <li class="list menu"><a href="#contact"><i class="fas fa-video mr-3"></i> 성장 동영상</a></li>
               <li class="list menu"><a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a></li>
-              <li class="list menu"><a href="#contact"><i class="fas fa-cog mr-3"></i> 설정</a></li>
+              <li class="list menu" @click="clickSettings"><i class="fas fa-cog mr-3"></i> 설정</li>
             </div>
             
           </div>
@@ -197,6 +197,9 @@ export default {
       let backdrop = document.querySelector(".sidebar-backdrop")
       backdrop.click()
       this.logout()
+    },
+    clickSettings() {
+      this.$router.push({ name: 'Settings' })
     }
     
   },
@@ -212,7 +215,10 @@ export default {
   -webkit-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 4px 5px 0px rgba(0,0,0,0.1);
+  background-color: white;
   height: 6vh;
+  position: sticky;
+  top: 0;
 }
 
 .logo-sect img {
@@ -294,6 +300,10 @@ a:hover {
 } 
 
 .menu > a:link, .menu > a:active, .menu > a:visited {
+  color: #FEA59C !important;
+}
+
+.list {
   color: #FEA59C !important;
 }
 

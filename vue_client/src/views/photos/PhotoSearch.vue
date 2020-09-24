@@ -1,69 +1,85 @@
 <template>
   <div class="grid" data-app>
     <div style="text-align:center">
-  <div class="search-bar">
-      <input 
-        type="text" 
-        placeholder="Search" 
-        name="search" 
-        @keyup.enter="photoSearch"
-        v-model="searchKeyword"
-        class="input-search"
-      >
-      <button @click="photoSearch"><i class="fa fa-search" style="color:#9BC7FF;"></i></button>
-  </div>
-  </div>
-    <div>
-      <h5 class="tag-name">인물</h5>
-      <div class="photos d-flex">
-        <div class="photo-container">
-          <div class="photo">
-            <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764" class="card-img-top " alt="...">
-          </div>
-        </div>
-        <div class="photo-container">
-          <div class="photo">
-            <img src="https://pds.joins.com/news/component/htmlphoto_mmdata/201501/07/htm_20150107104932c010c011.jpg" class="card-img-top" alt="...">
-          </div>
-        </div>
-        <div class="photo-container">
-          <div class="photo">
-            <img src="https://image.ajunews.com/content/image/2015/02/25/20150225134705285589.jpg" class="card-img-top" alt="...">
+      <div class="search-bar">
+          <input 
+            type="text" 
+            placeholder="Search" 
+            name="search" 
+            @keyup.enter="searchPhotos(searchKeyword)"
+            v-model="searchKeyword"
+            class="input-search"
+          >
+          <button @click="searchPhotos(searchKeyword)"><i class="fa fa-search" style="color:#9BC7FF;"></i></button>
+      </div>
+    </div>
+    <div v-if="searchedPhotos">
+      <div class="photos row no-gutters mt-5" v-if="searchedPhotos.length">
+        <div v-for="photo in searchedPhotos" :key="`club_${photo.id}`" class="photo-container2 pointer" @click="clickPhoto(photo.id)">
+          <div class="photo">             
+            <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top " alt="">
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <h5 class="tag-name">감정</h5>
-      <div class="photos d-flex">
-        <div class="emotion-container">
-          <div class="photo-container">
-            <div class="photo">
-              <img src="https://mimg.segye.com/content/image/2015/01/30/20150130002870_0.jpg" class="card-img-top " alt="...">
-            </div>
-          </div>
-          <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">웃음</div>
-        </div>
-        <div class="emotion-container">
-          <div class="photo-container">
-            <div class="photo">
-              <img src="https://news.imaeil.com/inc/photos/2015/03/27/2015032710112575472_m.jpg" class="card-img-top" alt="...">
-            </div>
-          </div>
-        <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">울음</div>
-        </div>
+      <div class="d-flex flex-column justify-content-center align-items-center mt-5" v-else>
+        <h5>검색 결과가 없습니다.</h5>
+        <img class="crying-baby" src="@/assets/baby.png">
       </div>
     </div>
-    <div>
-      <h5 class="tag-name">태그</h5>
-      <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FFFFFF;"> #놀이터 </v-chip>
-      <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; color: #FFFFFF;"> #할머니 집 </v-chip>
+    <div v-else>
+      <div>
+        <h5 class="tag-name">인물</h5>
+        <div class="photos d-flex">
+          <div class="photo-container">
+            <div class="photo">
+              <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764" class="card-img-top " alt="...">
+            </div>
+          </div>
+          <div class="photo-container">
+            <div class="photo">
+              <img src="https://pds.joins.com/news/component/htmlphoto_mmdata/201501/07/htm_20150107104932c010c011.jpg" class="card-img-top" alt="...">
+            </div>
+          </div>
+          <div class="photo-container">
+            <div class="photo">
+              <img src="https://image.ajunews.com/content/image/2015/02/25/20150225134705285589.jpg" class="card-img-top" alt="...">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h5 class="tag-name">감정</h5>
+        <div class="photos d-flex">
+          <div class="emotion-container">
+            <div class="photo-container">
+              <div class="photo">
+                <img src="https://mimg.segye.com/content/image/2015/01/30/20150130002870_0.jpg" class="card-img-top " alt="...">
+              </div>
+            </div>
+            <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">웃음</div>
+          </div>
+          <div class="emotion-container">
+            <div class="photo-container">
+              <div class="photo">
+                <img src="https://news.imaeil.com/inc/photos/2015/03/27/2015032710112575472_m.jpg" class="card-img-top" alt="...">
+              </div>
+            </div>
+          <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">울음</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h5 class="tag-name">태그</h5>
+        <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FFFFFF;"> #놀이터 </v-chip>
+        <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; color: #FFFFFF;"> #할머니 집 </v-chip>
+      </div>
+      <div style="height:15vh"></div>
     </div>
-    <div style="height:15vh"></div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'PhotoSearch',
   data() {
@@ -73,8 +89,14 @@ export default {
       searchKeyword : "",
     }
   },
+  computed: {
+    ...mapState('photoStore', ['searchedPhotos'])
+  },
   methods: {
-    photoSearch(){}
+    ...mapActions('photoStore', ['searchPhotos']),
+    clickPhoto(photo_id) {
+      this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
+    }
   } 
 }
 </script>
@@ -143,4 +165,26 @@ img {
 .search-bar .input-search {
   width:60vw;
 }
+
+.photos img {
+  /* width: 30vw; */
+  height: 30vw;
+  width: auto;
+}
+
+.photo-container2{
+  object-fit: cover;
+  object-position: 50% 50%;
+  width: 30vw; 
+  height: 30vw;
+  overflow:hidden;
+  margin-right: 2.5vw;
+  margin-bottom: 2.5vw;
+}
+
+.crying-baby {
+  height: 50vh;
+  width: auto;
+}
+
 </style>

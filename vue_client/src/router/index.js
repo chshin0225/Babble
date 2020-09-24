@@ -8,6 +8,7 @@ import PhotoLibrary from '@/views/photos/PhotoLibrary'
 import PhotoSearch from '@/views/photos/PhotoSearch'
 import PhotoCreate from '@/views/photos/PhotoCreate'
 import PhotoDetail from '@/views/photos/PhotoDetail'
+import TagSelect from '@/views/photos/TagSelect'
 
 // Diary
 import Diary from '@/views/diaries/Diary'
@@ -21,6 +22,11 @@ import DiaryDetail from '@/views/diaries/DiaryDetail'
 
 // Babble Box
 import Babblebox from '@/views/common/Babblebox'
+import Settings from '@/views/common/Settings'
+import BabySetting from '@/views/common/BabySetting'
+import GroupSetting from '@/views/common/GroupSetting'
+import UserEdit from '@/views/common/UserEdit'
+import GroupEdit from '@/views/common/GroupEdit'
 
 // Authentication
 import Login from '@/views/accounts/Login'
@@ -71,6 +77,11 @@ Vue.use(VueRouter)
     path: '/photo/:photoId',
     component: PhotoDetail,
     name: 'PhotoDetail'
+  },
+  {
+    path: '/photo/tagselect',
+    component: TagSelect,
+    name: 'TagSelect'
   },
   // Authentication
   {
@@ -124,6 +135,40 @@ Vue.use(VueRouter)
     path: '/babblebox',
     name: 'Babblebox',
     component: Babblebox
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings,
+    children: [
+      {
+        path: '',
+        component: BabySetting,
+        name: 'BabySetting'
+      },
+      /*{
+        path: '/babysetting',
+        name: 'BabySetting',
+        component: BabySetting
+      },*/
+      {
+        path: '/groupsetting',
+        name: 'GroupSetting',
+        component: GroupSetting,
+        children: [
+          {
+            path: '',
+            component: UserEdit,
+            name: 'UserEdit'
+          },
+          {
+            path: '/groupedit',
+            name: 'GroupEdit',
+            component: GroupEdit
+          },
+        ]
+      },
+    ]
   },
   // Diary
   {
