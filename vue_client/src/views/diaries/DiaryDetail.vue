@@ -214,7 +214,7 @@ export default {
       if (this.commentUpdateData.content !== priorContent) {
         this.updateBtnActive = true
       } else {
-        this.updateBtnActive = true
+        this.updateBtnActive = false
       }
     },
     clickComment() {
