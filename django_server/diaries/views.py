@@ -91,7 +91,7 @@ class DiaryDetailView(APIView):
 class DiaryCommentListView(APIView):
     def get(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        serializer = DiaryCommentSerializer(diary.comments, many=True)
+        serializer = DiaryCommentSerializer(diary.comments.order_by('-create_date'), many=True)
         return Response(serializer.data)
 
     def post(self, request, diary_id):

@@ -68,7 +68,6 @@ class PhotoCommentListView(APIView):
     # 사진 댓글 리스트 조회
     def get(self, request, photo_id):
         photo = get_object_or_404(Photo, id=photo_id)
-        # comments = PhotoComment.objects.filter(photo=photo).order_by('-create_date')
         serializer = PhotoCommentSerializer(photo.comments.order_by('-create_date'), many=True)
         return Response(serializer.data)
 
