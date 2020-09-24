@@ -27,8 +27,11 @@ class Photo(models.Model):
     modify_date = models.DateTimeField(auto_now=True)
 
     permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
-    photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos')
+    photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos', through='PhotoTag')
 
+class PhotoTag(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
 
 class PhotoComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='photo_comments')

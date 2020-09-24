@@ -3,10 +3,16 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer
+from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer
 
-from .models import Photo, PhotoComment
+from .models import Tag, Photo, PhotoComment, PhotoTag
 # Create your views here.
+
+class TagListView(APIView):
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagListSerializer(tags, many=True)
+        return Response(serializer.data) 
 
 class PhotoListView(APIView):
     # 아기의 전체 사진 조회
@@ -23,13 +29,21 @@ class PhotoListView(APIView):
         cb = request.user.current_baby.id
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-
+        
         new_photos = request.data
         for photo in new_photos:
             photo["baby"] = cb
             serializer = PhotoDetailSerializer(data=photo)
             if serializer.is_valid(raise_exception=True):
-                serializer.save(creator=request.user, modifier=request.user)
+                created_photo = serializer.save(creator=request.user, modifier=request.user)
+            # tag
+            for tag_name in photo['tags']:
+                try:
+                    tag = Tag.objects.get(tag_name=tag_name)
+                except:
+                    tag = Tag(tag_name=tag_name)
+                    tag.save()
+                PhotoTag(tag=tag, photo=created_photo).save()
         return Response({"message":"사진이 등록되었습니다."})
 
 class PhotoDetailView(APIView):
@@ -97,4 +111,18 @@ class PhotoCommentDetailView(APIView):
         comment = get_object_or_404(PhotoComment, id=comment_id)
         comment.delete()
         return Response({"message":"댓글이 삭제되었습니다."})
-    
+
+
+class PhotoSearchView(APIView):
+    def post(self, request):
+        keyword = request.data["keyword"]
+        cb = request.user.current_baby.id
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        searched_photos = Photo.objects.none()
+        tags = Tag.objects.filter(tag_name__icontains=keyword)
+        for tag in tags:
+            searched_photos = searched_photos.union(tag.tagged_photos.all())
+        searched_photos = searched_photos.intersection(Photo.objects.filter(baby=cb))
+        serializer = PhotoListSerializer(searched_photos, many=True)
+        return Response(serializer.data)
