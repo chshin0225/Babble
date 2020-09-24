@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import accountStore from '@/store/modules/accountStore'
 import diaryStore from '@/store/modules/diaryStore'
 import photoStore from '@/store/modules/photoStore'
+import settingStore from '@/store/modules/settingStore'
 
 import cookies from 'vue-cookies'
 import axios from 'axios'
@@ -108,6 +109,7 @@ export default new Vuex.Store({
     accountStore: accountStore,
     diaryStore: diaryStore,
     photoStore: photoStore,
+    settingStore: settingStore,
   }
 })
 

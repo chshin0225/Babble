@@ -40,7 +40,7 @@ export default {
 <style scoped>
 
 .grid {
-  padding: 0 10vw;
+  padding: 15vw 10vw;
 }
 
 .input-title-wrap {
