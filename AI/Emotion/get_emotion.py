@@ -13,7 +13,7 @@ from deepface.commons import distance
 from mtcnn import MTCNN
 
 detector = cv2.dnn.readNetFromCaffe("Emotion\\files\\deploy.prototxt", "Emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
-emotion_model = Emotion.loadModel()
+
 
 
 def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate image
@@ -104,7 +104,7 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
 
     face_list_df = pd.DataFrame(
         columns=['left', 'top', 'right', 'bottom'])  # pos of faces
-
+    emotion_model = Emotion.loadModel()
     for i, instance in detections_df.iterrows():  # set face pos
         confidence_score = str(round(100*instance["confidence"], 2))+" %"
         left = instance["left"]

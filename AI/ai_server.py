@@ -10,6 +10,7 @@ import requests
 import pickle
 import tensorflow as tf
 import cv2
+from keras import backend as KB
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -30,6 +31,27 @@ storage = firebase.storage()
 def index_page():
     return "AI Server!"
 
+@app.route('/emotion', methods=['POST'])
+def emotion():
+    path = json.loads(request.get_data(), encoding='utf-8')          
+    path = path['path']
+    url = storage.child(path).get_url(None)
+
+    print(url)
+    # url to img
+    img_emtion = GE.url_to_image(url) 
+    
+    cv2.imshow("test", img_emtion)
+    cv2.waitKey(1000)
+    cv2.destroyAllWindows()
+    tag = []
+    
+    KB.clear_session()
+    tag = GE.get_tag_emotion(img_emtion)        
+    KB.clear_session()
+    print(tag)
+    return "asdf"
+
 @app.route('/tags', methods=['POST'])
 def tags():
     # firebase image path
@@ -49,6 +71,8 @@ def tags():
     # obj detection을 통한 tag 추출
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
+    
+    with graph.as_default():
         tags += GE.get_tag_emotion(img_emtion)  # add tags
         
     
