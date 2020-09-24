@@ -142,7 +142,20 @@ class MeasurementListView(APIView):
 
     # 새로운 성장 기록 작성
     def post(self, request):
-        print(request.data)
+        # if BabyMeasurement.objects.filter(measure_date=request.data['measure_date']).exists():
+        #     measurement = get_object_or_404(BabyMeasurement, measure_date=request.data['measure_date'])
+        #     serializer = BabyMeasurementSerializer(measurement, data=request.data)
+        #     if serializer.is_valid(raise_exception=True):
+        #         serializer.save(baby=request.user.current_baby, modifier=request.user)
+        #         return Response(serializer.data)
+        #     return Response(serializer.errors)
+        # else:
+        #     print(request.data)
+        #     serializer = BabyMeasurementSerializer(data=request.data)
+        #     if serializer.is_valid(raise_exception=True):
+        #         serializer.save(baby=request.user.current_baby, creator=request.user)
+        #         return Response(serializer.data)
+        #     return Response(serializer.errors)
         serializer = BabyMeasurementSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save(baby=request.user.current_baby, creator=request.user)
