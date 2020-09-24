@@ -9,7 +9,7 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.baby.baby_name"
-          v-bind:class="{error: error.baby_name, complete:!error.baby_name&&enrollData.baby.baby_name.length!==0}"
+          v-bind:class="{errorText: error.baby_name, complete:!error.baby_name&&enrollData.baby.baby_name.length!==0}"
           class="inputs"
           style="margin-top:0px"
           id="baby_name"
@@ -39,7 +39,7 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.baby.birth" 
-          v-bind:class="{error : error.birth, complete:!error.birth&&enrollData.baby.birth.length!==0}"
+          v-bind:class="{errorText : error.birth, complete:!error.birth&&enrollData.baby.birth.length!==0}"
           class="inputs"
           id="birth" 
           placeholder="년 월 일" 
@@ -59,7 +59,7 @@
         <input 
           v-model="enrollData.relationship_name" 
           
-          v-bind:class="{error: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
+          v-bind:class="{errorText: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
           class="inputs"
           id="relationship_name" 
           type="text"
@@ -184,7 +184,7 @@ export default {
         this.error.relationship_name = false;
       }
       else this.error.relationship_name = "아기와의 관계를 입력해 주세요."
-
+      
       // 버튼 활성화
       if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
         let isSubmit = true;
@@ -262,7 +262,7 @@ h3 {
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
 }
-.error, .error:focus {
+.errorText, .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
 }
 .error-text {
