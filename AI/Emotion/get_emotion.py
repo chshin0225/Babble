@@ -4,6 +4,7 @@ import time
 import matplotlib.pylab as plt
 import numpy as np
 import math
+import urllib.request
 from PIL import Image
 from pathlib import Path
 from deepface import DeepFace
@@ -11,7 +12,7 @@ from deepface.extendedmodels import Emotion
 from deepface.commons import distance
 from mtcnn import MTCNN
 
-detector = cv2.dnn.readNetFromCaffe("files\\deploy.prototxt", "files\\res10_300x300_ssd_iter_140000.caffemodel")
+detector = cv2.dnn.readNetFromCaffe("Emotion\\files\\deploy.prototxt", "Emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
 emotion_model = Emotion.loadModel()
 
 
@@ -68,10 +69,7 @@ def align_face(img):  # rotate face to horizontal
     return img  # return img anyway
 
 
-def get_tag_emotion(image_path, tx, ty):  # return tag list
-    image_file = cv2.imread(image_path)  # read image
-    if image_file is None:
-        return
+def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list    
     base_img = image_file.copy()  # back up original image
     original_size = base_img.shape
 
@@ -120,7 +118,7 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
 
     face_list_df = face_list_df.astype(int)
 
-    emotion_res_list = list()  # return emotion each face
+    emotion_res_list = []  # return emotion each face
 
     for i, instance in face_list_df.iterrows():  # each face
         detected_face = base_img[int(instance['top'] * aspect_ratio_y):int(instance['bottom'] * aspect_ratio_y),
@@ -159,19 +157,33 @@ def get_tag_emotion(image_path, tx, ty):  # return tag list
         cv2.rectangle(base_img, (int(instance['left'] * aspect_ratio_x), int(instance['top'] * aspect_ratio_y)),
                       (int(instance['right'] * aspect_ratio_x), int(instance['bottom'] * aspect_ratio_y)), (255, 255, 255), 3)
 
-    imS = cv2.resize(base_img, (800, 800))
-    cv2.imshow("test", imS)
-    cv2.waitKey(5000)
-    cv2.destroyAllWindows()
+    #imS = cv2.resize(base_img, (800, 800))
+    #cv2.imshow("test", imS)
+    #cv2.waitKey(5000)
+    #cv2.destroyAllWindows()
     return emotion_res_list
 
 
-#start = time.time()
-imgpath = "images\\image3.jpg"
-print(get_tag_emotion(imgpath, 1000, 700))
-#get_tag_emotion(imgpath, 500, 500)
-#get_tag_emotion(imgpath, 850, 850)
-#get_tag_emotion(imgpath, 1000, 700)
-#get_tag_emotion(imgpath, 700, 1000)
-#print("time :", time.time() - start)
+# METHOD #1: OpenCV, NumPy, and urllib
+def url_to_image(url):
+	# download the image, convert it to a NumPy array, and then read
+	# it into OpenCV format
+    # req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    resp = urllib.request.urlopen(url)    
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+	# return the image
+    return image
+
+
+#imgpath = "images\\image3.jpg"
+#url = "https://lh3.googleusercontent.com/proxy/BpcEYIdSKbhvftvfiDDMjkr1peSbnfVYRpjN3z1Lz2dQI4EAUzJ7-YBvc9v4T2c_gips_V_d1HsZHIZfub0bJuIpmAxtP-Z3FqF8l--jRL3d3sAmIf8o"
+#imS = url_to_image(url)
+#cv2.imshow("test", imS)
+#cv2.waitKey(5000)
+#cv2.destroyAllWindows()
+#print(get_tag_emotion(imS))
+
+# get_tag_emotion(imgpath)  # default target size is 300, 300 and don't need to code
+# get_tag_emotion(imgpath, 400, 400)  # you can resize target like this. big size is good for small face
 
