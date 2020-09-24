@@ -10,7 +10,6 @@
           ref="dialog"
           v-model="modal"
           :return-value.sync="date"
-          persistent
           width="290px"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -22,7 +21,7 @@
               class="centered-date"
             ></v-text-field>
           </template>
-          <v-date-picker v-model="date" type="month" scrollable>
+          <v-date-picker color="#FEA59C" v-model="date" type="month" scrollable>
             <v-spacer></v-spacer>
             <v-btn text color="#9BC7FF" @click="modal = false">Cancel</v-btn>
             <v-btn text color="#9BC7FF" @click="$refs.dialog.save(date)">OK</v-btn>
