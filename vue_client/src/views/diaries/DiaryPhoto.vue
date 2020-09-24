@@ -4,7 +4,7 @@
   <div>
     <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 {{date | moment('M')}}월</h5>
     <!-- Date Picker -->
-    <v-row class="d-flex justify-content-center">
+    <v-row class="d-flex justify-content-center no-gutters">
       <v-col cols="3" sm="3" class="erase-padding">
         <v-dialog
           ref="dialog"
@@ -54,13 +54,7 @@
      </div>
     </div>
   </div>
-  <!-- 다이어리 추가 버튼 구현 -->
-  <div @click="clickAdd" class="add-button color-pink pointer">
-    <i class="fas fa-plus-circle fa-2x"></i>
-  </div>
 </div>
-
-
 </template>
 
 <script>
