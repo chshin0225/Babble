@@ -11,10 +11,10 @@ from deepface import DeepFace
 from deepface.extendedmodels import Emotion
 from deepface.commons import distance
 from mtcnn import MTCNN
+import time
 
+# need 20 ms
 detector = cv2.dnn.readNetFromCaffe("Emotion\\files\\deploy.prototxt", "Emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
-
-
 
 def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate image
     # this function aligns given face in img based on left and right eye coordinates
@@ -69,7 +69,7 @@ def align_face(img):  # rotate face to horizontal
     return img  # return img anyway
 
 
-def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list    
+def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list      
     base_img = image_file.copy()  # back up original image
     original_size = base_img.shape
 
@@ -79,8 +79,9 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     aspect_ratio_x = (original_size[1] / target_size[1])
     aspect_ratio_y = (original_size[0] / target_size[0])
 
-    # detector expects (1, 3, 300, 300) shaped input
+    # detector expects (1, 3, 300, 300) shaped input    
     imageBlob = cv2.dnn.blobFromImage(image=image_file)
+    
     # imageBlob = np.expand_dims(np.rollaxis(image, 2, 0), axis = 0)
     detector.setInput(imageBlob)
     detections = detector.forward()
@@ -104,7 +105,7 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
 
     face_list_df = pd.DataFrame(
         columns=['left', 'top', 'right', 'bottom'])  # pos of faces
-    emotion_model = Emotion.loadModel()
+    
     for i, instance in detections_df.iterrows():  # set face pos
         confidence_score = str(round(100*instance["confidence"], 2))+" %"
         left = instance["left"]
@@ -114,19 +115,22 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
 
         face_list_df = face_list_df.append(
             {'left': left, 'top': top, 'right': right, 'bottom': bottom}, ignore_index=True)
-        
-
+    
     face_list_df = face_list_df.astype(int)
+    # time to get face : 20ms    
+    
+    emotion_model = Emotion.loadModel() # time to load model : 20ms     
 
     emotion_res_list = []  # return emotion each face
+    emotion_labels = ['화남', '역겹', '무섭', '행복', '슬픔', '놀람', '무']
+    # emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
 
     for i, instance in face_list_df.iterrows():  # each face
         detected_face = base_img[int(instance['top'] * aspect_ratio_y):int(instance['bottom'] * aspect_ratio_y),
                                  int(instance['left'] * aspect_ratio_x):int(instance['right'] * aspect_ratio_x)]  # get face
         
-        detected_face = align_face(detected_face)  # face rotate to horizontal
-        detected_face = cv2.cvtColor(
-            detected_face, cv2.COLOR_BGR2GRAY)  # to grey
+        detected_face = align_face(detected_face)  # face rotate to horizontal, time to align : 60ms
+        detected_face = cv2.cvtColor(detected_face, cv2.COLOR_BGR2GRAY)  # to grey
         face48 = cv2.resize(detected_face, (48, 48))
         
         # normalization
@@ -135,32 +139,36 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
             (img_pixels.shape[0], img_pixels.shape[1], 1))
         img_pixels = np.expand_dims(img_pixels, axis=0)
         img_pixels /= 255  # normalize input in [0, 1]
+        
 
-        # get strongest emotions
-        emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
+        # get strongest emotions                      
         emotion_predictions = emotion_model.predict(img_pixels)[0, :]  # get emotion info use emotion model
         sum_of_predictions = emotion_predictions.sum()
+        
+        # get max emotion
         emotion_res = [emotion_labels[0], 100 * emotion_predictions[0] / sum_of_predictions]
-
-        for i in range(1, len(emotion_labels)):  # get max emotion
-            emotion_label = emotion_labels[i]
+        
+        for i in range(1, len(emotion_labels)):
             emotion_prediction = 100 * emotion_predictions[i] / sum_of_predictions
 
             if(emotion_res[1] < emotion_prediction):
                 emotion_res = [emotion_labels[i], emotion_prediction]
-        
-        emotion_res_list.append(emotion_res[0])
 
+        if emotion_res[0] != "무":
+            emotion_res_list.append(emotion_res[0])
+        
+    '''
     for i, instance in face_list_df.iterrows():  # draw rectangle and text
         cv2.putText(base_img, emotion_res_list[i], (int(instance['left']*aspect_ratio_x), int(instance['top']*aspect_ratio_y-10)),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
         cv2.rectangle(base_img, (int(instance['left'] * aspect_ratio_x), int(instance['top'] * aspect_ratio_y)),
                       (int(instance['right'] * aspect_ratio_x), int(instance['bottom'] * aspect_ratio_y)), (255, 255, 255), 3)
-
-    #imS = cv2.resize(base_img, (800, 800))
-    #cv2.imshow("test", imS)
-    #cv2.waitKey(5000)
-    #cv2.destroyAllWindows()
+    
+    imS = cv2.resize(base_img, (800, 800))
+    cv2.imshow("test", imS)
+    cv2.waitKey(5000)
+    cv2.destroyAllWindows()
+    '''
     return emotion_res_list
 
 
@@ -176,13 +184,14 @@ def url_to_image(url):
     return image
 
 
-#imgpath = "images\\image3.jpg"
+#imgpath = "images\\image1.png"
 #url = "https://lh3.googleusercontent.com/proxy/BpcEYIdSKbhvftvfiDDMjkr1peSbnfVYRpjN3z1Lz2dQI4EAUzJ7-YBvc9v4T2c_gips_V_d1HsZHIZfub0bJuIpmAxtP-Z3FqF8l--jRL3d3sAmIf8o"
 #imS = url_to_image(url)
 #cv2.imshow("test", imS)
 #cv2.waitKey(5000)
 #cv2.destroyAllWindows()
-#print(get_tag_emotion(imS))
+#img = cv2.imread(imgpath)
+#print(get_tag_emotion(img))
 
 # get_tag_emotion(imgpath)  # default target size is 300, 300 and don't need to code
 # get_tag_emotion(imgpath, 400, 400)  # you can resize target like this. big size is good for small face
