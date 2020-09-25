@@ -53,7 +53,15 @@ class Album(models.Model):
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_albums')
     modify_date = models.DateTimeField(auto_now=True)
 
-    photos = models.ManyToManyField(Photo, blank=True, related_name='albums')
-    album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums')
+    photos = models.ManyToManyField(Photo, blank=True, related_name='albums', through='AlbumPhotoRelationship')
+    album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums', through='AlbumTag')
+
+class AlbumPhotoRelationship(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+
+class AlbumTag(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 
