@@ -42,10 +42,10 @@ export default {
     return {
       albums : [
         //{id : 0, image_url:"", title:"새 앨범"},
-        {id : 1, image_url:"babble_15%2F초코.jpg", title:"웃음"},
-        {id : 2, image_url:"babble_24%2F너부리.jpg", title:"눈물"},
-        {id : 3, image_url:"babble_24%2F보노보노.png", title:"음식"},
-        {id : 4, image_url:"babble_20%2F포로리.jpg", title:"야외"},
+        {id : 1, image_url:"babble_1%2FKakaoTalk_20200924_233638829_11.jpg", title:"웃음"},
+        {id : 2, image_url:"babble_1%2FKakaoTalk_20200924_233638829_01.jpg", title:"눈물"},
+        {id : 3, image_url:"babble_1%2FKakaoTalk_20200924_233638829_04.jpg", title:"음식"},
+        {id : 4, image_url:"babble_1%2FKakaoTalk_20200924_233638829_03.jpg", title:"야외"},
       ]
     }
   }
