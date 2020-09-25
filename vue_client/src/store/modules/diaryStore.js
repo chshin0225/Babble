@@ -110,7 +110,7 @@ const diaryStore = {
                 })
         },
         deleteComment({ dispatch, rootGetters }, commentData) {
-            axios.delete(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + SERVER.ROUTES.comments + commentData.commentId, rootGetters.config)
+            axios.delete(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + SERVER.ROUTES.comments + commentData.commentId + '/', rootGetters.config)
                 .then(() => {
                     dispatch('fetchComments', commentData.diaryId)
                 })
