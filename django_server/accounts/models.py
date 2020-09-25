@@ -105,3 +105,10 @@ class UserBabyRelationship(models.Model):
     rank = models.ForeignKey(Rank, blank=True, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, blank=True, null=True, on_delete=models.SET_NULL)
     relationship_name = models.CharField(max_length=50)
+
+class Invitation(models.Model):
+    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    rank = models.ForeignKey(Rank, on_delete=models.CASCADE)
+    token = models.TextField(blank=True)
+    closed = models.BooleanField(default=True)
+
