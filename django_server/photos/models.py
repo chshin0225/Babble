@@ -42,18 +42,27 @@ class PhotoComment(models.Model):
 
 
 class Album(models.Model):
-    baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
+    baby = models.ForeignKey(Baby, blank=True, on_delete=models.CASCADE)
     album_name = models.CharField(max_length=50)
     
     # 최고권위자 class의 class_id가 1이라는 가정 하에
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_albums')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.SET_DEFAULT, default=owner, related_name='created_albums')
     create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_albums')
     modify_date = models.DateTimeField(auto_now=True)
+    cover_photo = models.TextField(blank=True, null=True)
 
-    photos = models.ManyToManyField(Photo, blank=True, related_name='albums')
-    album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums')
+    photos = models.ManyToManyField(Photo, blank=True, related_name='albums', through='AlbumPhotoRelationship')
+    album_tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_albums', through='AlbumTag')
+
+class AlbumPhotoRelationship(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+
+class AlbumTag(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 
