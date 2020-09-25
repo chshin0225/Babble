@@ -106,24 +106,19 @@ class DiaryCommentDetailView(APIView):
     def put(self, request, diary_id, comment_id):
         diary = get_object_or_404(Diary, id=diary_id)
         comment = get_object_or_404(DiaryComment, id=comment_id)
-        serializer = DiaryCommentSerializer(comment, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user, diary=diary)
-            return Response(serializer.data)
-        return Response(serializer.errors)
+        if comment.user.id == request.user.id:
+            serializer = DiaryCommentSerializer(comment, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user=request.user, diary=diary)
+                return Response(serializer.data)
+            return Response(serializer.errors)
+        else:
+            return Response({"message": "작성자만 수정할 수 있습니다."}, status=400)
         
-
     def delete(self, request, diary_id, comment_id):
         comment = get_object_or_404(DiaryComment, id=comment_id)
-        print(comment)
-        print(comment.user)
-        print(request.user)
-        print(comment.user.id)
-        print(request.user.id)
         if comment.user.id == request.user.id:
-            print('삭제')
             comment.delete()
-            return Response()
+            return return Response({"message":"댓글이 삭제되었습니다."}, status=200)
         else:
-            print('삭제 안됨')
             return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
