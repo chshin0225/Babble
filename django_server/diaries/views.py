@@ -115,7 +115,8 @@ class DiaryCommentDetailView(APIView):
 
     def delete(self, request, diary_id, comment_id):
         comment = get_object_or_404(DiaryComment, id=comment_id)
-        if comment.user == request.user:
+        if comment.user.id == request.user.id:
             comment.delete()
             return Response()
-        return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
+        else:
+            return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
