@@ -56,7 +56,7 @@
                 <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_11.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top " alt="...">
               </div>
             </div>
-            <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">웃음</div>
+            <div style="text-align:center; width:30vw; float:left; height:auto;">웃음</div>
           </div>
           <div class="emotion-container">
             <div class="photo-container">
@@ -64,7 +64,7 @@
                 <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_01.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
               </div>
             </div>
-          <div style="text-align:center; width:30vw; z-index:9999; float:left; height:auto;">눈물</div>
+          <div style="text-align:center; width:30vw; float:left; height:auto;">울음</div>
           </div>
         </div>
       </div>
