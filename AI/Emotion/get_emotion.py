@@ -130,8 +130,6 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
                                  int(instance['left'] * aspect_ratio_x):int(instance['right'] * aspect_ratio_x)]  # get face
         
         detected_face = align_face(detected_face)  # face rotate to horizontal, time to align : 60ms
-        
-        
         detected_face = cv2.cvtColor(detected_face, cv2.COLOR_BGR2GRAY)  # to grey
         face48 = cv2.resize(detected_face, (48, 48))
         
