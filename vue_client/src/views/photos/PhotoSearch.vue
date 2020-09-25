@@ -32,17 +32,17 @@
         <div class="photos d-flex">
           <div class="photo-container">
             <div class="photo">
-              <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764" class="card-img-top " alt="...">
+              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top " alt="...">
             </div>
           </div>
           <div class="photo-container">
             <div class="photo">
-              <img src="https://pds.joins.com/news/component/htmlphoto_mmdata/201501/07/htm_20150107104932c010c011.jpg" class="card-img-top" alt="...">
+              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_03.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
             </div>
           </div>
           <div class="photo-container">
             <div class="photo">
-              <img src="https://image.ajunews.com/content/image/2015/02/25/20150225134705285589.jpg" class="card-img-top" alt="...">
+              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_06.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
           <div class="emotion-container">
             <div class="photo-container">
               <div class="photo">
-                <img src="https://mimg.segye.com/content/image/2015/01/30/20150130002870_0.jpg" class="card-img-top " alt="...">
+                <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_11.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top " alt="...">
               </div>
             </div>
             <div style="text-align:center; width:30vw; float:left; height:auto;">웃음</div>
@@ -61,7 +61,7 @@
           <div class="emotion-container">
             <div class="photo-container">
               <div class="photo">
-                <img src="https://news.imaeil.com/inc/photos/2015/03/27/2015032710112575472_m.jpg" class="card-img-top" alt="...">
+                <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_01.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
               </div>
             </div>
           <div style="text-align:center; width:30vw; float:left; height:auto;">울음</div>
@@ -129,10 +129,10 @@ img {
   width:30vw;
   margin-right: 2.5vw;
 }
+
+/*
 .photo-container {      
   position: relative;
-  /*width: 300px;
-  height: 300px;*/
   width: 30vw; 
   height: 30vw;
   margin-right: 2.5vw;
@@ -146,6 +146,48 @@ img {
   right: -9999px;
   bottom: -9999px;
   margin: auto;
+}
+
+.photos img {
+  height: 30vw;
+  width: auto;
+}*/
+.albums-container{
+  width:30vw; 
+  margin-right:2.5vw; 
+  margin-bottom:2.5vw;
+  border-radius : 50%;
+}
+.photo-container {      
+  position: relative;
+  width: 30vw; 
+  height: 30vw;
+  margin-right: 2.5vw;
+  overflow: hidden;
+  border-radius : 50%;
+}
+.photo-container .photo img { 
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  right: -9999px;
+  bottom: -9999px;
+  margin: auto;
+}
+
+.photos img {
+  /* width: 90%; */
+  min-width:30vw;
+  min-height:30vw;
+  height: 30vw;
+  width: auto;
+}
+
+.photos .photo{
+  border : 1px solid #888888;
+  border-radius: 50%;
+  min-width:30vw;
+  min-height:30vw;
 }
 
 .tag-name {
@@ -166,21 +208,6 @@ img {
   width:60vw;
 }
 
-.photos img {
-  /* width: 30vw; */
-  height: 30vw;
-  width: auto;
-}
-
-.photo-container2{
-  object-fit: cover;
-  object-position: 50% 50%;
-  width: 30vw; 
-  height: 30vw;
-  overflow:hidden;
-  margin-right: 2.5vw;
-  margin-bottom: 2.5vw;
-}
 
 .crying-baby {
   height: 50vh;
