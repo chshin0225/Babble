@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
-#from ObjDetection.yolo import YOLO
+from ObjDetection.yolo import YOLO
 from Emotion import get_emotion as GE
 from PIL import Image
 from io import BytesIO
@@ -16,7 +16,7 @@ sys.modules['Crypto'] = crypto
 import pyrebase
 
 app = Flask(__name__)
-#app.yolo = YOLO()
+app.yolo = YOLO()
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
 
@@ -33,27 +33,6 @@ storage = firebase.storage()
 @app.route('/')
 def index_page():
     return "AI Server!"
-
-@app.route('/emotion', methods=['POST'])
-def emotion():
-    path = json.loads(request.get_data(), encoding='utf-8')          
-    path = path['path']
-    url = storage.child(path).get_url(None)
-
-    print(url)
-    # url to img
-    img_emtion = GE.url_to_image(url) 
-    
-    cv2.imshow("test", img_emtion)
-    cv2.waitKey(1000)
-    cv2.destroyAllWindows()
-    tag = []
-    
-    KB.clear_session()
-    tag = GE.get_tag_emotion(img_emtion)        
-    KB.clear_session()
-    print(tag)
-    return "asdf"
 
 @app.route('/tags', methods=['POST'])
 def tags():
