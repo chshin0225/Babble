@@ -8,13 +8,15 @@ import urllib.request
 from PIL import Image
 from pathlib import Path
 from deepface import DeepFace
-from deepface.extendedmodels import Emotion
 from deepface.commons import distance
-from mtcnn import MTCNN
 import time
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from ai_server import mtcnn_detector, detector, emotion_model
 
 # need 20 ms
-detector = cv2.dnn.readNetFromCaffe("Emotion\\files\\deploy.prototxt", "Emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
+#detector = cv2.dnn.readNetFromCaffe("emotion\\files\\deploy.prototxt", "emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
 
 def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate image
     # this function aligns given face in img based on left and right eye coordinates
@@ -53,11 +55,10 @@ def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate ima
     return img  # return img anyway
 
 
-def align_face(img):  # rotate face to horizontal
-    home = str(Path.home())    
-    mtcnn_detector = MTCNN()
+def align_face(img):  # rotate face to horizontal        
+    #mtcnn_detector = MTCNN()    
     detections = mtcnn_detector.detect_faces(img)
-
+    
     if len(detections) > 0:
         detection = detections[0]
         keypoints = detection["keypoints"]
@@ -65,7 +66,7 @@ def align_face(img):  # rotate face to horizontal
         right_eye = keypoints["right_eye"]
 
         img = alignment_procedure(img, left_eye, right_eye)
-
+    
     return img  # return img anyway
 
 
@@ -119,7 +120,7 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     face_list_df = face_list_df.astype(int)
     # time to get face : 20ms    
     
-    emotion_model = Emotion.loadModel() # time to load model : 20ms     
+    #emotion_model = Emotion.loadModel() # time to load model : 20ms     
 
     emotion_res_list = []  # return emotion each face
     emotion_labels = ['화남', '역겹', '무섭', '행복', '슬픔', '놀람', '무']
