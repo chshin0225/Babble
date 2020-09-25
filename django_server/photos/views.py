@@ -117,13 +117,13 @@ class PhotoCommentDetailView(APIView):
             return Response(serializer.errors)
         else:
             return Response({"message": "작성자만 수정할 수 있습니다."}, status=400)
-            
+
     # 사진 댓글 삭제
     def delete(self, request, photo_id, comment_id):
         comment = get_object_or_404(PhotoComment, id=comment_id)
         if comment.user.id == request.user.id:
             comment.delete()
-            return return Response({"message":"댓글이 삭제되었습니다."}, status=200)
+            return Response({"message":"댓글이 삭제되었습니다."}, status=200)
         else:
             return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
 
