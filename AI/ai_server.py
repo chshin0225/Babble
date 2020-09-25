@@ -1,19 +1,22 @@
 from flask import Flask, request
 from flask_cors import CORS
-from ObjDetection.yolo import YOLO
+#from ObjDetection.yolo import YOLO
 from Emotion import get_emotion as GE
 from PIL import Image
 from io import BytesIO
 import json
-import pyrebase
 import requests
 import pickle
 import tensorflow as tf
 import cv2
 from keras import backend as KB
+import crypto
+import sys 
+sys.modules['Crypto'] = crypto
+import pyrebase
 
 app = Flask(__name__)
-app.yolo = YOLO()
+#app.yolo = YOLO()
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
 
