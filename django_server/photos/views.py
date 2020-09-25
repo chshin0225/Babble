@@ -109,17 +109,23 @@ class PhotoCommentDetailView(APIView):
     def put(self, request, photo_id, comment_id):
         comment = get_object_or_404(PhotoComment, id=comment_id)
         # 여기서 권한 검증이 한 번 들어가줘야함
-        serializer = PhotoCommentSerializer(comment, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
-    
+        if comment.user.id == request.user.id:
+            serializer = PhotoCommentSerializer(comment, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors)
+        else:
+            return Response({"message": "작성자만 수정할 수 있습니다."}, status=400)
+            
     # 사진 댓글 삭제
     def delete(self, request, photo_id, comment_id):
         comment = get_object_or_404(PhotoComment, id=comment_id)
-        comment.delete()
-        return Response({"message":"댓글이 삭제되었습니다."})
+        if comment.user.id == request.user.id:
+            comment.delete()
+            return return Response({"message":"댓글이 삭제되었습니다."}, status=200)
+        else:
+            return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
 
 
 class PhotoSearchView(APIView):
