@@ -219,6 +219,7 @@ export default {
   background-color: white;
   position: sticky;
   top: 0;
+  z-index: 99;
 }
 
 .logo-sect img {
