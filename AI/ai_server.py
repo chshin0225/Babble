@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from ObjDetection.yolo import YOLO
 from Emotion import get_emotion as GE
+from deepface.extendedmodels import Emotion
 from PIL import Image
 from io import BytesIO
 import json
@@ -14,6 +15,7 @@ import crypto
 import sys 
 sys.modules['Crypto'] = crypto
 import pyrebase
+from mtcnn import MTCNN
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -22,6 +24,10 @@ CORS(app)
 
 
 graph = tf.get_default_graph()
+
+mtcnn_detector = MTCNN()
+detector = cv2.dnn.readNetFromCaffe("emotion\\files\\deploy.prototxt", "emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
+emotion_model = Emotion.loadModel()
 
 # Initialize firebase app
 with open("config.pickle", "rb") as f:
@@ -50,14 +56,13 @@ def tags():
 
     tags=[] # 추출된 tag가 담길 list
 
-    # obj detection을 통한 tag 추출
+    # obj detection을 통한 tag 추출    
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
     
     with graph.as_default():
         tags += GE.get_tag_emotion(img_emtion)  # add tags
         
-    
     data = {
         'tags': tags
     }
