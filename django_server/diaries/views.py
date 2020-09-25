@@ -118,4 +118,4 @@ class DiaryCommentDetailView(APIView):
         if comment.user == request.user:
             comment.delete()
             return Response()
-        return Response(serializer.errors)
+        return Response({"message": "작성자만 삭제할 수 있습니다."}, status=400)
