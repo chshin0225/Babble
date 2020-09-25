@@ -1,7 +1,10 @@
 from rest_framework import serializers
+
 from .models import Tag, Photo, PhotoComment, Album
-from accounts.serializers import UserSerializer, GroupListSerializer
 from accounts.models import UserBabyRelationship
+
+from accounts.serializers import UserSerializer, GroupListSerializer
+
 class TagListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -30,3 +33,24 @@ class PhotoCommentSerializer(serializers.ModelSerializer):
     def get_relationship_name(self, photocomment):
         relationship_name = UserBabyRelationship.objects.get(baby=photocomment.user.current_baby, user=photocomment.user).relationship_name
         return relationship_name
+
+
+class AlbumListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ['id', 'baby', 'album_name', 'cover_photo', 'album_tags']
+
+
+class AlbumDetailSerializer(serializers.ModelSerializer):
+    photo_data = serializers.SerializerMethodField('get_photo_data')
+    class Meta:
+        model = Album
+        fields = '__all__'
+
+    def get_photo_data(self, album):
+        data = []
+        for photo_id in album.photos:
+            photo = Photo.objects.get(id=photo_id)
+            serializer = PhotoListSerializer(photo)
+            data.append(dict(serializer))
+        return data

@@ -50,9 +50,9 @@ class BabyListView(APIView):
                 if baby_access_serializer.is_valid(raise_exception=True):
                     baby_access_serializer.save()
                     return Response(relationship_serializer.data)
-                return Response(baby_access_data.errors)
+                return Response(baby_access_serializer.errors)
             return Response(relationship_serializer.errors)
-        return Response(serializer.errors)
+        return Response(baby_serializer.errors)
 
 
 class BabyDetailView(APIView):
