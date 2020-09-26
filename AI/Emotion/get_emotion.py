@@ -123,7 +123,7 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     #emotion_model = Emotion.loadModel() # time to load model : 20ms     
 
     emotion_res_list = []  # return emotion each face
-    emotion_labels = ['화남', '역겹', '무섭', '행복', '슬픔', '놀람', '무']
+    emotion_labels = ['화남', '역겹', '무섭', '행복', '슬픔', '놀람', '무']    
     # emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
 
     for i, instance in face_list_df.iterrows():  # each face
@@ -156,7 +156,13 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
                 emotion_res = [emotion_labels[i], emotion_prediction]
 
         if emotion_res[0] != "무":
-            emotion_res_list.append(emotion_res[0])
+            flag = 0
+            for em in emotion_res_list:
+                if em == emotion_res[0]:
+                    flag = 1
+            if flag == 0:
+                emotion_res_list.append(emotion_res[0])
+    
         
     '''
     for i, instance in face_list_df.iterrows():  # draw rectangle and text
