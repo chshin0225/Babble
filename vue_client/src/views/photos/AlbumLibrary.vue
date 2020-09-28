@@ -1,29 +1,24 @@
 <template>
   <div class="container" data-app>
+
     <div class="albums row">
       <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center">
-        <div class="album">
+        <div class="album d-flex justify-content-center align-items-center">
           <v-btn icon color="primary" :to="{ name: 'AlbumCreate' }" class="text-decoration-none">
             <v-icon x-large>mdi-plus-circle</v-icon>      
           </v-btn>
         </div>
         <p class="album-title">새 앨범</p>
       </div>
-      <div v-for="album in albums" :key="album.id" class="col-6 d-flex flex-column justify-content-center align-items-center">
+      <router-link v-for="album in albums" :key="album.id" :to="{ name: 'AlbumDetail', params: {albumId: album.id}}" class="col-6 d-flex flex-column justify-content-center align-items-center text-dark">
         <div class="album">
           <img :src="album.cover_photo" :alt="album.album_name">
         </div>
         <p class="album-title">{{ album.album_name }}</p>
-      </div>
+      </router-link>
     </div>
 
-    <!-- <div class="text-center mt-5">
-      <img class="crying-baby" src="@/assets/baby.png">
-      <h5>
-        페이지를 개발중입니다.<br>
-        빠른 시일 내에 찾아뵙도록 하겠습니다.
-      </h5>
-    </div>-->
+    <div class="footer"></div>
 
   </div>
 </template>
@@ -72,6 +67,10 @@ export default {
   border-radius: 10vw;
   min-width:45vw;
   min-height:45vw;
+}
+
+.footer {
+  height: 50px;
 }
 
 /*

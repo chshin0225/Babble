@@ -230,26 +230,25 @@ const photoStore = {
     // album CRUD
     fetchAlbums({ commit, rootGetters }) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums, rootGetters.config) 
-        .then(res => {
-          console.log(res.data)
-          commit('SET_ALBUMS', res.data)
-        })
+        .then(res => commit('SET_ALBUMS', res.data))
         .catch(err => console.error(err))
-      
     },
     createAlbum({ rootGetters }, albumData) {
       axios.post(SERVER.URL + SERVER.ROUTES.albums, albumData, rootGetters.config)
         .then(res => {
-          console.log(res.data)
+          let albumId = res.data.id
+          router.push({ name: 'AlbumDetail', params: {albumId: albumId}})
         })
         .catch(err => console.error(err))
     },
     getAlbum({ commit, rootGetters }, album_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
-        .then(res => {
-          console.log(res.data)
-          commit('SET_ALBUM', res.data)
-        })
+        .then(res => commit('SET_ALBUM', res.data))
+        .catch(err => console.error(err))
+    },
+    deleteAlbum({ rootGetters }, album_id) {
+      axios.delete(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
+        .then(() => router.push({ name: 'AlbumLibrary' }))
         .catch(err => console.error(err))
     },
 
