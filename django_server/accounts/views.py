@@ -7,15 +7,15 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.http import JsonResponse
-
 from .serializers import UserSerializer, SocialRegisterSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer
 
-from .models import User, Group, BabyAccess, UserBabyRelationship
+from .models import User, Rank, Group, BabyAccess, UserBabyRelationship, Invitation
 from babies.models import Baby
+from babies.serializers import BabySerializer
 from rest_framework.authtoken.models import Token
 
-
+import random
+import string
 class CustomLoginView(APIView):
     def post(self, request):
         data = request.data
@@ -32,7 +32,7 @@ class CustomLoginView(APIView):
                 token = Token.objects.create(user=user)
                 return Response({"key": token.key, "state": "login"})
             else:
-                return JsonResponse({"message":"이미 가입된 이메일입니다."}, status=400)
+                return Response({"message":"이미 가입된 이메일입니다."}, status=400)
         else:
             serializer = SocialRegisterSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
@@ -155,3 +155,48 @@ class GroupInfoView(APIView):
         group = get_object_or_404(Group, id=group_id)
         group.delete()
         return Response({'message': '그룹 삭제가 완료되었습니다.'})
+
+class InvitationCreateView(APIView):
+    def post(self, request):
+        data = request.data
+        baby = data['baby']
+        rank = data['rank']
+        master = get_object_or_404(Rank, id=1)
+        try:
+            relationship = get_object_or_404(UserBabyRelationship, baby_id=baby, user_id=request.user.id, rank=1)
+            token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
+            invite_url = "http://j3a310.p.ssafy.io/invite/" + token
+            invitation = Invitation(baby_id=baby, rank_id=rank, token=token)
+            invitation.save()
+            return Response({"url": invite_url}, status=200)
+        except:
+            return Response({"message":"초대링크를 생성할 권한이 없습니다."}, status=400)
+
+class InvitationVerifyView(APIView):
+    def post(self, request):
+        token = request.data['token']
+        relationship_name = request.data['relationship_name']
+        user = request.user
+        try:
+            invitation = get_object_or_404(Invitation, token=token, closed=False)
+            try:
+                relationship = get_object_or_404(UserBabyRelationship, baby_id=invitation.baby_id, user_id=user.id)
+                relationship.rank_id = invitation.rank_id
+                relationship.relationship_name = relationship_name
+                relationship.save()
+            except:
+                relationship = UserBabyRelationship(
+                                baby_id=invitation.baby_id,
+                                rank_id=invitation.rank_id,
+                                user_id=user.id,
+                                relationship_name=relationship_name)
+                relationship.save()
+            baby = get_object_or_404(Baby, id=invitation.baby_id)
+            user.current_baby = baby
+            user.save()
+            invitation.closed = True
+            invitation.save()
+            serializer = BabySerializer(baby)
+            return Response(serializer.data)
+        except:
+            return Response({"message":"초대 링크가 유효하지 않습니다."}, status=400)
