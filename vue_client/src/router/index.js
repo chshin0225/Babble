@@ -4,10 +4,12 @@ import VueRouter from 'vue-router'
 // Photos
 import PhotoMain from '@/views/photos/PhotoMain'
 import PhotoList from '@/views/photos/PhotoList'
-import PhotoLibrary from '@/views/photos/PhotoLibrary'
-import PhotoSearch from '@/views/photos/PhotoSearch'
 import PhotoCreate from '@/views/photos/PhotoCreate'
 import PhotoDetail from '@/views/photos/PhotoDetail'
+import PhotoSearch from '@/views/photos/PhotoSearch'
+import AlbumLibrary from '@/views/photos/AlbumLibrary'
+import AlbumCreate from '@/views/photos/AlbumCreate'
+import AlbumDetail from '@/views/photos/AlbumDetail'
 import TagSelect from '@/views/photos/TagSelect'
 
 // Diary
@@ -24,9 +26,9 @@ import DiaryDetail from '@/views/diaries/DiaryDetail'
 import Babblebox from '@/views/common/Babblebox'
 import Settings from '@/views/common/Settings'
 import BabySetting from '@/views/common/BabySetting'
-import GroupSetting from '@/views/common/GroupSetting'
-import UserEdit from '@/views/common/UserEdit'
-import GroupEdit from '@/views/common/GroupEdit'
+import RankSetting from '@/views/common/RankSetting'
+import RankSettingUser from '@/views/common/RankSettingUser'
+import RankSettingGroup from '@/views/common/RankSettingGroup'
 
 // Authentication
 import Login from '@/views/accounts/Login'
@@ -58,8 +60,8 @@ Vue.use(VueRouter)
       },
       {
         path: 'library',
-        component: PhotoLibrary,
-        name: 'PhotoLibrary'
+        component: AlbumLibrary,
+        name: 'AlbumLibrary'
       },
       {
         path: 'search',
@@ -83,6 +85,18 @@ Vue.use(VueRouter)
     component: TagSelect,
     name: 'TagSelect'
   },
+  {
+    path: '/photo/library/create',
+    component: AlbumCreate,
+    name: 'AlbumCreate'
+  },
+  {
+    path: '/photo/library/:albumId',
+    component: AlbumDetail,
+    name: 'AlbumDetail'
+  },
+
+
   // Authentication
   {
     path: '/login',
@@ -147,19 +161,19 @@ Vue.use(VueRouter)
     name: 'BabySetting'
   },
   {
-    path: '/group',
-    name: 'GroupSetting',
-    component: GroupSetting,
+    path: '/ranksetting',
+    name: 'RankSetting',
+    component: RankSetting,
     children: [
       {
         path: '',
-        component: UserEdit,
-        name: 'UserEdit'
+        component: RankSettingUser,
+        name: 'RankSettingUser'
       },
       {
-        path: 'edit',
-        name: 'GroupEdit',
-        component: GroupEdit
+        path: 'group',
+        name: 'RankSettingGroup',
+        component: RankSettingGroup
       },
     ]
   },
