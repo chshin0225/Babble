@@ -17,5 +17,12 @@ export default new Vuetify({
     lang: {
         locales: { ko },
         current: 'ko'
-    }
+    },
+    theme: {
+      themes: {
+        light: {
+          primary: '#FEA59C',
+        },
+      },
+    },
 });

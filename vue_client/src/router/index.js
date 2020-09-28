@@ -4,10 +4,12 @@ import VueRouter from 'vue-router'
 // Photos
 import PhotoMain from '@/views/photos/PhotoMain'
 import PhotoList from '@/views/photos/PhotoList'
-import PhotoLibrary from '@/views/photos/PhotoLibrary'
-import PhotoSearch from '@/views/photos/PhotoSearch'
 import PhotoCreate from '@/views/photos/PhotoCreate'
 import PhotoDetail from '@/views/photos/PhotoDetail'
+import PhotoSearch from '@/views/photos/PhotoSearch'
+import AlbumLibrary from '@/views/photos/AlbumLibrary'
+import AlbumCreate from '@/views/photos/AlbumCreate'
+import AlbumDetail from '@/views/photos/AlbumDetail'
 import TagSelect from '@/views/photos/TagSelect'
 
 // Diary
@@ -58,8 +60,8 @@ Vue.use(VueRouter)
       },
       {
         path: 'library',
-        component: PhotoLibrary,
-        name: 'PhotoLibrary'
+        component: AlbumLibrary,
+        name: 'AlbumLibrary'
       },
       {
         path: 'search',
@@ -83,6 +85,18 @@ Vue.use(VueRouter)
     component: TagSelect,
     name: 'TagSelect'
   },
+  {
+    path: '/photo/library/create',
+    component: AlbumCreate,
+    name: 'AlbumCreate'
+  },
+  {
+    path: '/photo/library/:albumId',
+    component: AlbumDetail,
+    name: 'AlbumDetail'
+  },
+
+
   // Authentication
   {
     path: '/login',
