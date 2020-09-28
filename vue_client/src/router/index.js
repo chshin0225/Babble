@@ -24,9 +24,9 @@ import DiaryDetail from '@/views/diaries/DiaryDetail'
 import Babblebox from '@/views/common/Babblebox'
 import Settings from '@/views/common/Settings'
 import BabySetting from '@/views/common/BabySetting'
-import GroupSetting from '@/views/common/GroupSetting'
-import UserEdit from '@/views/common/UserEdit'
-import GroupEdit from '@/views/common/GroupEdit'
+import RankSetting from '@/views/common/RankSetting'
+import RankSettingUser from '@/views/common/RankSettingUser'
+import RankSettingGroup from '@/views/common/RankSettingGroup'
 
 // Authentication
 import Login from '@/views/accounts/Login'
@@ -140,30 +140,6 @@ Vue.use(VueRouter)
     path: '/settings',
     name: 'Settings',
     component: Settings,
-    /*children: [
-      {
-        path: '/babysetting',
-        component: BabySetting,
-        name: 'BabySetting'
-      },
-      {
-        path: '/groupsetting',
-        name: 'GroupSetting',
-        component: GroupSetting,
-        children: [
-          {
-            path: '',
-            component: UserEdit,
-            name: 'UserEdit'
-          },
-          {
-            path: '/groupedit',
-            name: 'GroupEdit',
-            component: GroupEdit
-          },
-        ]
-      },
-    ]*/
   },
   {
     path: '/babysetting',
@@ -171,19 +147,19 @@ Vue.use(VueRouter)
     name: 'BabySetting'
   },
   {
-    path: '/groupsetting',
-    name: 'GroupSetting',
-    component: GroupSetting,
+    path: '/ranksetting',
+    name: 'RankSetting',
+    component: RankSetting,
     children: [
       {
         path: '',
-        component: UserEdit,
-        name: 'UserEdit'
+        component: RankSettingUser,
+        name: 'RankSettingUser'
       },
       {
-        path: '/groupedit',
-        name: 'GroupEdit',
-        component: GroupEdit
+        path: 'group',
+        name: 'RankSettingGroup',
+        component: RankSettingGroup
       },
     ]
   },
