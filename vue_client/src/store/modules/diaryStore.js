@@ -12,6 +12,7 @@ const diaryStore = {
         photoDiaries: null,
         diaryId: null,
         comments: null,
+        measurments: null,
     },
     getters: {
     },
@@ -27,13 +28,15 @@ const diaryStore = {
         },
         SET_COMMENTS(state, comments) {
             state.comments = comments
+        },
+        SET_MEASUREMENTS(state, measurements) {
+            state.measurements = measurements
         }
     },
     actions: {
         createDiary({ rootGetters }, diaryData) {
             axios.post(SERVER.URL + SERVER.ROUTES.diaries, diaryData, rootGetters.config)
                 .then(res => {
-                    console.log(res.data.id)
                     router.push({ name: 'DiaryDetail', params: { diaryId: res.data.id } })
                 })
                 .catch(err => {
@@ -44,7 +47,6 @@ const diaryStore = {
             axios.get(SERVER.URL + SERVER.ROUTES.diaries + SERVER.ROUTES.photo , rootGetters.config)
                 .then(res => {
                     commit('SET_PHOTO_DIARIES', res.data)
-                    console.log(res.data)
                 })
                 .catch(err => {
                     console.log(err.response)
@@ -54,7 +56,6 @@ const diaryStore = {
             axios.get(SERVER.URL + SERVER.ROUTES.diaries, rootGetters.config)
                 .then(res => {
                     commit('SET_DIARIES', res.data)
-                    console.log(res.data)
                 })
                 .catch(err => {
                     console.log(err.response)
@@ -64,7 +65,6 @@ const diaryStore = {
             axios.get(SERVER.URL + SERVER.ROUTES.diaries + diaryId + '/', rootGetters.config)
                 .then(res => {
                     commit('SET_DIARY', res.data)
-                    console.log("RES DATA", res.data)
                 })
                 .catch(err => {
                     console.log(err)
@@ -101,8 +101,7 @@ const diaryStore = {
         },
         createComment({ dispatch, rootGetters }, commentData) {
             axios.post(SERVER.URL + SERVER.ROUTES.diaries + commentData.diaryId + '/comments/', commentData, rootGetters.config)
-                .then(res => {
-                    console.log(res)
+                .then(() => {
                     dispatch('fetchComments', commentData.diaryId)
                 })
                 .catch(err => {
@@ -120,8 +119,7 @@ const diaryStore = {
         },
         updateComment({ dispatch, rootGetters }, commentUpdateData) {
             axios.put(SERVER.URL + SERVER.ROUTES.diaries + commentUpdateData.diaryId + SERVER.ROUTES.comments + commentUpdateData.commentId + '/', commentUpdateData, rootGetters.config)
-                .then((res) => {
-                    console.log(res)
+                .then(() => {
                     dispatch('fetchComments', commentUpdateData.diaryId)
                 })
                 .catch(err => {
@@ -129,7 +127,6 @@ const diaryStore = {
                 })
         },
         createRecord({ rootGetters }, babyRecord) {
-            console.log(babyRecord)
             axios.post(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements, babyRecord, rootGetters.config)
                 .then((res) => {
                     console.log(res.data)
@@ -139,7 +136,6 @@ const diaryStore = {
                 })
         },
         updateMeasurement({ rootGetters }, recordData) {
-            console.log(recordData)
             axios.put(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements + recordData.measurement_id + '/', recordData.babyRecord, rootGetters.config)
                 .then((res) => {
                     console.log(res.data)
@@ -147,6 +143,16 @@ const diaryStore = {
                 .catch(err => {
                     console.log(err.response)
                 })
+        },
+        fetchMeasurements({ rootGetters, commit }) {
+            console.log(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements)
+            axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements, rootGetters.config)
+            .then((res) => {
+                commit('SET_MEASUREMENTS', res.data)
+            })
+            .catch(err => {
+                console.log(err.response)
+            })
         }
     }
 }
