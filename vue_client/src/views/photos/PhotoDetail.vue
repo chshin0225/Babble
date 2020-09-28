@@ -1,25 +1,25 @@
 <template>
   <div class="">
-    <nav color="#FFFFFF" class="d-flex justify-content-between w-100">
+    <nav class="d-flex justify-content-between w-100 bg-pink">
       <v-icon 
         class="top-left-icons pointer" 
-        color="#FEA59C"
+        color="white"
         @click="clickBack"
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
-      <div>
-        <v-icon class="top-right-icons" color="#FEA59C">mdi-folder-outline</v-icon>
-        <v-icon class="top-right-icons" color="#FEA59C">mdi-heart-outline</v-icon>
+      <div class="d-flex align-items-center">
+        <v-icon class="top-right-icons" color="white">mdi-folder-outline</v-icon>
+        <v-icon class="top-right-icons" color="white">mdi-heart-outline</v-icon>
         <!-- <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon> -->
         
         <v-bottom-sheet v-model="photo_sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               class="top-right-icons"
-              color="#FEA59C"
+              color="white"
               v-bind="attrs"
               v-on="on" 
-              @click="clickPhotoMenu()">mdi-dots-vertical</v-icon>
+              >mdi-dots-vertical</v-icon>
           </template>
           <v-list>
             <v-list-item @click="photoDelete()">
@@ -385,6 +385,7 @@ export default {
 nav {
   background: white;
   position: fixed;  
+  height: 8vh;
 }
 
 .top-left-icons{
