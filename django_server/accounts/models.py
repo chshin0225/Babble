@@ -110,5 +110,5 @@ class Invitation(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     rank = models.ForeignKey(Rank, on_delete=models.CASCADE)
     token = models.TextField(blank=True)
-    closed = models.BooleanField(default=True)
+    closed = models.BooleanField(default=False)
 
