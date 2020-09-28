@@ -157,7 +157,7 @@ export default {
     },
     // navbar
     isAlbum() {
-      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate'   ) {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'AlbumLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate' || this.$route.name === 'AlbumCreate') {
         return true
       } else {
         return false
