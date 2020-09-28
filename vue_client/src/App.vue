@@ -157,14 +157,14 @@ export default {
     },
     // navbar
     isAlbum() {
-      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'AlbumLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate' || this.$route.name === 'AlbumCreate') {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'AlbumLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate' || this.$route.name === 'AlbumCreate' || this.$route.name === 'AlbumDetail') {
         return true
       } else {
         return false
       }
     },
     isDiary() {
-      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar' || this.$route.name === 'DiaryCreate' ) {
+      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar' || this.$route.name === 'DiaryCreate' || this.$route.name === 'DiaryDetail') {
         return true
       } else {
         return false
