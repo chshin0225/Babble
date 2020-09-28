@@ -11,11 +11,10 @@ import pickle
 import tensorflow as tf
 import cv2
 from keras import backend as KB
-import crypto
 import sys 
-sys.modules['Crypto'] = crypto
 import pyrebase
 from mtcnn import MTCNN
+import time
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -57,12 +56,14 @@ def tags():
     tags=[] # 추출된 tag가 담길 list
 
     # obj detection을 통한 tag 추출    
+    start = time.time()
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
-    
+    print(time.time() - start)
+    start = time.time()
     with graph.as_default():
         tags += GE.get_tag_emotion(img_emtion)  # add tags
-        
+    print(time.time() - start)
     data = {
         'tags': tags
     }
