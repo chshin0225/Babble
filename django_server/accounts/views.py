@@ -130,7 +130,7 @@ class GroupDetailView(APIView):
 
     # 그룹에서 멤버 제거
     def delete(self, request, group_id):
-        baby = request.user.current_baby
+        baby = request.user.current_baby.id
         user = get_object_or_404(User, id=request.data['user']).id
         group = get_object_or_404(Group, id=group_id)
         data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
