@@ -86,6 +86,28 @@ const settingStore = {
           console.log(err)
       })
     },
+    deleteBabbleUser({ rootGetters }, userData){
+      axios.delete(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', rootGetters.config)
+      .then(res => {
+          console.log(res)
+          router.go(0)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+
+    },
+    deleteBabbleGroup({ rootGetters }, groupData){
+      axios.delete(SERVER.URL + SERVER.ROUTES.groups + groupData.groupId + '/info/', rootGetters.config)
+      .then(res => {
+          console.log(res)
+          router.go(0)
+      })
+      .catch(err => {
+          console.log(err)
+      })
+
+    }
   }
 }
 
