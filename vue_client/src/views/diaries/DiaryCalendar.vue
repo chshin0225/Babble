@@ -16,9 +16,11 @@
           </div>
           <popover-row
             v-for="attr in attributes"
-            :key="attr.key"
-            :attribute="attr">
-            {{ attr.customData }}
+            :key="attr.id"
+            :attribute="attr"
+          >
+            <div class="pointer" v-if="attr.customData.id" @click="clickDiary(attr.customData.id)">{{ attr.customData.title }}</div>
+            <div v-else>{{ attr.customData.title }}</div>
           </popover-row>
         </div>
       </vc-calendar>
@@ -57,23 +59,26 @@ export default {
               visibility: 'focus',
               placement: 'auto'
             },
-            customData: diary.title,
+            customData: {
+              title: diary.title,
+              id: diary.id
+            },
           }
           diaryData.push(inputData)
         }
         console.log("여기있다.",this.measurements)
         for (var measurement of this.measurements) {
-          let customData = ''
+          let customData = {}
+          customData.title = ''
           if (measurement.height) {
-            customData = customData + '키: ' + measurement.height + '\n'
+            customData.title = customData.title + '키: ' + measurement.height + '\n'
           }
           if (measurement.weight) {
-            customData = customData + ' 체중: ' + measurement.weight + '\n'
+            customData.title = customData.title + ' 체중: ' + measurement.weight + '\n'
           }
           if (measurement.head_size) {
-            customData = customData + ' 머리둘레: ' + measurement.head_size
+            customData.title = customData.title + ' 머리둘레: ' + measurement.head_size
           }
-          console.log(customData)
           let inputData = {
             dates: measurement.measure_date,
             dot: {
@@ -97,6 +102,10 @@ export default {
   },
   methods: {
     ...mapActions( 'diaryStore', ['fetchDiaries', 'fetchMeasurements']),
+    clickDiary(diaryId) {
+      console.log(diaryId)
+      this.$router.push({ name: 'DiaryDetail', params: {diaryId: diaryId} })
+    }
   },
   mounted() {
     this.fetchDiaries()

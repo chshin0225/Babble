@@ -140,30 +140,6 @@ Vue.use(VueRouter)
     path: '/settings',
     name: 'Settings',
     component: Settings,
-    /*children: [
-      {
-        path: '/babysetting',
-        component: BabySetting,
-        name: 'BabySetting'
-      },
-      {
-        path: '/groupsetting',
-        name: 'GroupSetting',
-        component: GroupSetting,
-        children: [
-          {
-            path: '',
-            component: UserEdit,
-            name: 'UserEdit'
-          },
-          {
-            path: '/groupedit',
-            name: 'GroupEdit',
-            component: GroupEdit
-          },
-        ]
-      },
-    ]*/
   },
   {
     path: '/babysetting',
@@ -171,7 +147,7 @@ Vue.use(VueRouter)
     name: 'BabySetting'
   },
   {
-    path: '/groupsetting',
+    path: '/group',
     name: 'GroupSetting',
     component: GroupSetting,
     children: [
@@ -181,7 +157,7 @@ Vue.use(VueRouter)
         name: 'UserEdit'
       },
       {
-        path: '/groupedit',
+        path: 'edit',
         name: 'GroupEdit',
         component: GroupEdit
       },
