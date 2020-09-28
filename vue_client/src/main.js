@@ -11,6 +11,25 @@ Vue.use(VueCookies)
 import vueMoment from 'vue-moment' 
 Vue.use(vueMoment)
 
+//  calendar
+import VCalendar from 'v-calendar';
+
+// Use v-calendar & v-date-picker components
+Vue.use(VCalendar, {
+  componentPrefix: 'vc',  // Use <vc-calendar /> instead of <v-calendar />
+  locales: {
+    'ko-KR': {
+      firstDayOfWeek: 1,
+      masks: {
+        L: 'YYYY-MM-DD',
+        // ...optional `title`, `weekdays`, `navMonths`, etc
+        title: 'YYYY년 MM월',
+        dayPopover: 'YYYY년 MM월 DD일(WWW)'
+      }
+    }
+  }
+})
+
 // google login
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
