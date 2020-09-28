@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="nav">
+    <nav class="nav">
       <div class="row no-gutters text-center py-3">
         <router-link class="menu col-4" :to="{name: 'PhotoList'}">전체 사진</router-link>
         <router-link class="menu col-4" :to="{name: 'AlbumLibrary'}">라이브러리</router-link>
         <router-link class="menu col-4" :to="{name: 'PhotoSearch'}"><i class="fas fa-search"></i></router-link>
       </div>
-    </div>
+    </nav>
     <router-view></router-view>
   </div>
 </template>
@@ -23,6 +23,10 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  height: 8vh;
+}
+
 .menu:link, .menu:active, .menu:visited {
   color: black;
   text-decoration: none;
