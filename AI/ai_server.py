@@ -2,15 +2,19 @@ from flask import Flask, request
 from flask_cors import CORS
 from ObjDetection.yolo import YOLO
 from Emotion import get_emotion as GE
+from deepface.extendedmodels import Emotion
 from PIL import Image
 from io import BytesIO
 import json
-import pyrebase
 import requests
 import pickle
 import tensorflow as tf
 import cv2
 from keras import backend as KB
+import sys 
+import pyrebase
+from mtcnn import MTCNN
+import time
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -19,6 +23,10 @@ CORS(app)
 
 
 graph = tf.get_default_graph()
+
+mtcnn_detector = MTCNN()
+detector = cv2.dnn.readNetFromCaffe("emotion\\files\\deploy.prototxt", "emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
+emotion_model = Emotion.loadModel()
 
 # Initialize firebase app
 with open("config.pickle", "rb") as f:
@@ -30,27 +38,6 @@ storage = firebase.storage()
 @app.route('/')
 def index_page():
     return "AI Server!"
-
-@app.route('/emotion', methods=['POST'])
-def emotion():
-    path = json.loads(request.get_data(), encoding='utf-8')          
-    path = path['path']
-    url = storage.child(path).get_url(None)
-
-    print(url)
-    # url to img
-    img_emtion = GE.url_to_image(url) 
-    
-    cv2.imshow("test", img_emtion)
-    cv2.waitKey(1000)
-    cv2.destroyAllWindows()
-    tag = []
-    
-    KB.clear_session()
-    tag = GE.get_tag_emotion(img_emtion)        
-    KB.clear_session()
-    print(tag)
-    return "asdf"
 
 @app.route('/tags', methods=['POST'])
 def tags():
@@ -68,14 +55,15 @@ def tags():
 
     tags=[] # 추출된 tag가 담길 list
 
-    # obj detection을 통한 tag 추출
+    # obj detection을 통한 tag 추출    
+    start = time.time()
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
-    
+    print(time.time() - start)
+    start = time.time()
     with graph.as_default():
         tags += GE.get_tag_emotion(img_emtion)  # add tags
-        
-    
+    print(time.time() - start)
     data = {
         'tags': tags
     }

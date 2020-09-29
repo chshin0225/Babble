@@ -64,6 +64,7 @@
                     v-on="on"
                     @click.stop="modify_dialog = true"
                   >mdi-pencil</v-icon>
+                <v-icon color="red" @click="deleteGroup(group.id)">mdi-trash-can-outline</v-icon>
               </template>
               <v-card>
                 <v-card-title>
@@ -97,7 +98,11 @@
                 v-for="member in group.members"
                 :key="member.id"
               >
-                {{member.relationship_name}}{{member.name}}
+                <!-- {{member.relationship_name}}{{member.name}} -->
+                <v-list-item-content>
+                  <v-list-item-title>{{member.user.name}}</v-list-item-title>
+                  <v-list-item-subtitle>{{member.relationship_name}}</v-list-item-subtitle>
+                </v-list-item-content>
                 <v-spacer></v-spacer>
                 <v-icon color="red" @click="deleteUser(group.id, member.id)">mdi-trash-can-outline</v-icon>
               </v-list-item>
@@ -114,8 +119,7 @@
 
 <script>
 
-//import { mapActions, mapState } from 'vuex'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'GroupEdit',
@@ -124,59 +128,26 @@ export default {
       dialog:false,
       modify_dialog:false,
       newGroupName:"",
-      groups:[
-        {
-          id:"1",
-          group_name:"외가",
-          members:[
-            {name:"엄마 박지우"},
-            {name:"할아버지 박명환"},
-            {name:"할머니 최미숙"},
-          ]
-        },
-        {
-          id:"2",
-          group_name:"친가",
-          members:[
-            {name:"아빠 김호준"},
-            {name:"할아버지 김명수"},
-            {name:"할머니 이명자"},
-          ]
-        },
-        {
-          id:"3",
-          group_name:"지인",
-          members:[
-            {name:"이모 박지우"},
-            {name:"삼촌 김명수"},
-            {name:"고모 손유리"},
-          ]
-        },
-        {
-          id:"4",
-          group_name:"지인2",
-          members:[
-            {name:"아빠친구 심연우"},
-            {name:"이모 박소정"},
-            {name:"숙부 김권식"},
-          ]
-        },
-      ]
     }
   },
   computed: {
-    //...mapState('settingStore', ['groups', 'users'])
-    //...mapState('settingStore', ['users'])
+    ...mapState('settingStore', ['groups', 'users'])
   },
   mounted() {
     this.fetchGroups();
     
   },
   methods:{
-    ...mapActions('settingStore', ['fetchGroups', 'createGroup', 'deleteGroupUser', 'modifyGroup']),
+    ...mapActions('settingStore', ['fetchGroups', 'createGroup', 'deleteGroupUser', 'modifyGroup', 'deleteBabbleGroup']),
     addNewGroup(){
       let groupData = {group_name : this.newGroupName}
       this.createGroup(groupData);
+    },
+    deleteGroup(groupId){
+      if(confirm("그룹을 삭제하시겠습니까?")){
+        let groupData = {groupId : groupId}
+        this.deleteBabbleGroup(groupData);
+      }
     },
     deleteUser(groupId, userId){
       if(confirm("그룹에서 삭제하시겠습니까?")){
@@ -218,4 +189,5 @@ export default {
   display: none;
   overflow: hidden;
 }
+
 </style>

@@ -7,21 +7,23 @@ import firebase from 'firebase'
 const photoStore = {
   namespaced: true,
   state: {
-    photos: null,
     tags: null,
-    comments: null,
+    photos: null,
     photo: null,
+    comments: null,
     searchedPhotos: null,
+    albums: null,
+    album: null,
   },
   getters: {
-    
+    albumDataFetched: state => !!state.album,
   },
   mutations: {
-    SET_PHOTOS(state, photos) {
-      state.photos = photos
-    },
     SET_TAGS(state, tags) {
       state.tags = tags
+    },
+    SET_PHOTOS(state, photos) {
+      state.photos = photos
     },
     SET_PHOTO(state, photo) {
       state.photo = photo
@@ -32,6 +34,12 @@ const photoStore = {
     SET_PHOTO_COMMENTS(state, comments) {
       state.comments = comments
     },
+    SET_ALBUMS(state, albums) {
+      state.albums = albums
+    },
+    SET_ALBUM(state, album) {
+      state.album = album
+    },
   },
   actions: {
     fetchTags({ commit }) {
@@ -41,6 +49,8 @@ const photoStore = {
         })
         .catch(err => console.log(err.response.data))
     },
+
+    // photo CRUD
     fetchPhotos({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos, rootGetters.config)
         .then(res => {
@@ -52,14 +62,6 @@ const photoStore = {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
         .then(res => {
           commit('SET_PHOTO', res.data)
-          //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
-        })
-        .catch(err => console.log(err.response.data))
-    },
-    fetchComments({ rootGetters, commit }, photoId) {
-      axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
-        .then(res => {
-          commit('SET_PHOTO_COMMENTS', res.data)
           //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
         .catch(err => console.log(err.response.data))
@@ -165,6 +167,16 @@ const photoStore = {
           console.log(err)
       })
     },
+
+    // photo comment CRUD
+    fetchComments({ rootGetters, commit }, photoId) {
+      axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
+        .then(res => {
+          commit('SET_PHOTO_COMMENTS', res.data)
+          //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
+        })
+        .catch(err => console.log(err.response.data))
+    },
     createComment({ rootGetters, dispatch }, commentData) {
       axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photo_id + '/comments/', commentData, rootGetters.config)
       .then(res => {
@@ -196,6 +208,8 @@ const photoStore = {
             console.log(err)
         })
     },
+
+    // photo search
     searchPhotos({ commit, rootGetters }, keyword) {
       if (keyword == "") {
         commit('SET_SEARCHED_PHOTOS', null)
@@ -211,7 +225,34 @@ const photoStore = {
           console.log(err)
         })
       }
-    }
+    },
+
+    // album CRUD
+    fetchAlbums({ commit, rootGetters }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.albums, rootGetters.config) 
+        .then(res => commit('SET_ALBUMS', res.data))
+        .catch(err => console.error(err))
+    },
+    createAlbum({ rootGetters }, albumData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.albums, albumData, rootGetters.config)
+        .then(res => {
+          let albumId = res.data.id
+          router.push({ name: 'AlbumDetail', params: {albumId: albumId}})
+        })
+        .catch(err => console.error(err))
+    },
+    getAlbum({ commit, rootGetters }, album_id) {
+      commit('SET_ALBUM', null)
+      axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
+        .then(res => commit('SET_ALBUM', res.data))
+        .catch(err => console.error(err))
+    },
+    deleteAlbum({ rootGetters }, album_id) {
+      axios.delete(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
+        .then(() => router.push({ name: 'AlbumLibrary' }))
+        .catch(err => console.error(err))
+    },
+
   }
 }
 

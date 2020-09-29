@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div>
-      <div class="nav" v-if="!this.$route.name in this.routes || authToken != null" >
+      <div class="nav" v-if="routes.indexOf(this.$route.name)===-1" >
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer">
           <span>
@@ -11,7 +11,7 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </div>
-      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="this.$route.name!=='DiaryCreate' && this.$route.name!=='HowToRegisterBaby'">
+      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="authToken === null || routes2.indexOf(this.$route.name)!==-1">
         <span>
           <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
           <img src="@/assets/babble_logo.png" />
@@ -119,7 +119,8 @@ export default {
   data(){
     return {
       isBurgerActive: false,
-      routes: ['DiaryCreate', 'HowToRegisterBaby', 'Signup', 'Login'],
+      routes: [ 'DiaryCreate', 'DiaryUpdate', 'DiaryDetail', 'HowToRegisterBaby', 'Signup', 'SignupKakao', 'PasswordFind', 'PasswordFindEmail', 'Login', 'RegisterBaby', 'HowToRegisterBaby', 'RegisterBabyRelate', 'RegisterInviteLink', 'PhotoDetail', 'PhotoCreate'],
+      routes2: ['Signup', 'Login', 'HowToRegisterBaby', 'RegisterBaby', 'PasswordFind', 'PasswordFindEmail', 'SignupKakao'],
       days: null,
     }
   },
@@ -157,14 +158,14 @@ export default {
     },
     // navbar
     isAlbum() {
-      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'PhotoLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate'   ) {
+      if (this.$route.name === 'PhotoMain' || this.$route.name === 'PhotoList'|| this.$route.name === 'AlbumLibrary' || this.$route.name === 'PhotoSearch' || this.$route.name === 'PhotoCreate' || this.$route.name === 'AlbumCreate' || this.$route.name === 'AlbumDetail') {
         return true
       } else {
         return false
       }
     },
     isDiary() {
-      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar' || this.$route.name === 'DiaryCreate' ) {
+      if (this.$route.name === 'DiaryPhoto' || this.$route.name === 'DiaryTimeline' || this.$route.name === 'DiaryCalendar' || this.$route.name === 'DiaryCreate' || this.$route.name === 'DiaryDetail') {
         return true
       } else {
         return false
@@ -191,7 +192,7 @@ export default {
       this.$router.push({ name: 'DiaryPhoto'})
     },
     clickProfile() {
-      this.$router.push({ name: 'Profile'})
+      this.$router.push({ name: 'Profile', params: {'profileId': this.myaccount.id}})
     },
     clickLogout() {
       let backdrop = document.querySelector(".sidebar-backdrop")

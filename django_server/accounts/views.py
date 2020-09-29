@@ -84,6 +84,10 @@ class GroupListView(APIView):
         return_data = []
         for group, items in rows:
             items = list(items)
+            for item in items: 
+                user_id = item['user']
+                name = User.objects.get(id=user_id).name
+                item['name'] = name
             group_info = get_object_or_404(Group, id=group)
             group_serializer = GroupListSerializer(group_info)
             new_group_serializer = dict(group_serializer.data)
@@ -130,7 +134,7 @@ class GroupDetailView(APIView):
 
     # 그룹에서 멤버 제거
     def delete(self, request, group_id):
-        baby = request.user.current_baby
+        baby = request.user.current_baby.id
         user = get_object_or_404(User, id=request.data['user']).id
         group = get_object_or_404(Group, id=group_id)
         data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)

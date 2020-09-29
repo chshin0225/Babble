@@ -3,8 +3,8 @@
   <div>
     <div class="nav">
       <div class="row no-gutters text-center py-3">
-        <router-link class="menu col-6" :to="{name: 'UserEdit'}">회원 편집</router-link>
-        <router-link class="menu col-6" :to="{name: 'GroupEdit'}">그룹 편집</router-link>
+        <router-link class="menu col-6" :to="{name: 'RankSettingUser'}">회원 편집</router-link>
+        <router-link class="menu col-6" :to="{name: 'RankSettingGroup'}">그룹 편집</router-link>
       </div>
     </div>
     <router-view></router-view>
@@ -16,6 +16,9 @@
 
 export default {
   name: 'GroupSetting',
+  mounted() {
+    this.$router.push({ name: 'RankSettingUser'})
+  }
 }
 </script>
 

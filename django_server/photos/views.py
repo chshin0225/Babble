@@ -3,9 +3,9 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer
+from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer, AlbumListSerializer, AlbumDetailSerializer
 
-from .models import Tag, Photo, PhotoComment, PhotoTag
+from .models import Tag, Photo, PhotoComment, PhotoTag, Album, AlbumPhotoRelationship, AlbumTag
 # Create your views here.
 
 class TagListView(APIView):
@@ -141,3 +141,89 @@ class PhotoSearchView(APIView):
         searched_photos = searched_photos.filter(baby=cb)
         serializer = PhotoListSerializer(searched_photos, many=True)
         return Response(serializer.data)
+
+
+class AlbumListView(APIView):
+    # 전체 앨범 목록 가져오기
+    def get(self, request):
+        baby = request.user.current_baby
+        albums = Album.objects.filter(baby=baby)
+        serializer = AlbumListSerializer(albums, many=True)
+        return Response(serializer.data)
+
+    # 새 앨범 생성
+    def post(self, request):
+        baby = request.user.current_baby
+        serializer = AlbumDetailSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            created_album = serializer.save(baby=baby, creator=request.user)
+
+            # 만약 tags들이 있는 경우 태그 정보 저장 
+            if request.data['tags']:
+                for tag_name in request.data['tags']:
+                    try:
+                        tag = Tag.objects.get(tag_name=tag_name)
+                    except:
+                        tag = Tag(tag_name=tag_name)
+                        tag.save()
+                    AlbumTag(tag=tag, album=created_album).save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+
+class AlbumDetailView(APIView):
+    # 특정 앨범 내의 사진들 가져오기
+    def get(self, request, album_id):
+        album = get_object_or_404(Album, id=album_id)
+        serializer = AlbumDetailSerializer(album)
+        return Response(serializer.data)
+
+    # 앨범 정보(앨범명, 태그) 수정
+    def put(self, request, album_id):
+        album = get_object_or_404(Album, id=album_id)
+        serializer = AlbumDetailSerializer(album, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            # 태그 정보 수정하는 경우
+            if request.data['tags']:
+                album.album_tags.clear()
+                for tag_name in request.data['tags']:
+                    try:
+                        tag = Tag.objects.get(tag_name=tag_name)
+                    except:
+                        tag = Tag(tag_name=tag_name)
+                        tag.save()
+                    AlbumTag(tag=tag, album=album).save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    # 앨범 삭제
+    def delete(self, request, album_id):
+        album = get_object_or_404(Album, id=album_id)
+        album.delete()
+        return Response({"message":"앨범이 삭제되었습니다."})
+
+
+class AlbumPhotoView(APIView):
+    # 앨범에 사진 추가
+    def post(self, request, album_id):
+        album = get_object_or_404(Album, id=album_id)
+        for photo_id in photos:
+            photo = get_object_or_404(Photo, id=photo_id)
+            album_photo = AlbumPhotoRelationship(album=album, photo=photo)
+            album_photo.save()
+        return Response({"message":"사진(들)이 앨범에 추가되었습니다."})
+
+    # 앨범에서 사진 삭제
+    def delete(self, request, album_id):
+        album = get_object_or_404(Album, id=album_id)
+        for photo_id in photos:
+            photo = get_object_or_404(Photo, id=photo_id)
+            album_photo = get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
+            album_photo.delete()
+        return Response({"message":"사진(들)이 앨범에서 삭제되었습니다."})
+
+    

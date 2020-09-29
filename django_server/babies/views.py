@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 # from rest_framework.permissions import IsAuthenticated
 
 from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
-from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer
+from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer, UserBabyRelationshipNameSerializer
 
 from .models import Baby, BabyMeasurement
 from accounts.models import User, UserBabyRelationship, Rank
@@ -50,9 +50,9 @@ class BabyListView(APIView):
                 if baby_access_serializer.is_valid(raise_exception=True):
                     baby_access_serializer.save()
                     return Response(relationship_serializer.data)
-                return Response(baby_access_data.errors)
+                return Response(baby_access_serializer.errors)
             return Response(relationship_serializer.errors)
-        return Response(serializer.errors)
+        return Response(baby_serializer.errors)
 
 
 class BabyDetailView(APIView):
@@ -92,7 +92,7 @@ class UserBabyRelationshipListView(APIView):
     def get(self, request):
         baby = request.user.current_baby
         user_baby_relationships = UserBabyRelationship.objects.filter(baby=baby).all()
-        serializer = UserBabyRelationshipSerializer(user_baby_relationships, many=True)
+        serializer = UserBabyRelationshipNameSerializer(user_baby_relationships, many=True)
         return Response(serializer.data)
 
     # 새로운 유저를 babble box에 초대

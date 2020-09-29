@@ -1,10 +1,56 @@
 <template>
-  <div class="p-3" v-if="diary" data-app>
+  <div class="p-0" v-if="diary" data-app>
+    <nav class="d-flex justify-content-between bg-pink w-100">
+      <v-icon 
+        class="top-left-icons pointer" 
+        @click="clickBack"
+        color="white"
+      >mdi-arrow-left</v-icon>
+      <v-spacer></v-spacer>
+      <div class="d-flex align-items-center">
+        <v-bottom-sheet>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              class="top-right-icons"
+              color="white"
+              v-bind="attrs"
+              v-on="on" 
+              >mdi-dots-vertical</v-icon>
+          </template>
+          <v-list>
+             <v-list-item @click="clickShare">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-share-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>일기 공유</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="clickDelete">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>일기 삭제</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="clickEdit">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>일기 수정</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-bottom-sheet>
+      </div>
+    </nav>
     <div class="diary-top d-flex justify-content-between my-3">
       <div class="diary-date text-muted">
         <p>{{diary.diary.diary_date}}</p>
       </div>
-      <div class="diary-writer">
+      <!-- <div class="diary-writer">
         <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
         <button class="btn btn-pink" @click="sheet = !sheet">:</button>
         <v-bottom-sheet v-model="sheet">
@@ -12,14 +58,11 @@
             <div class="py-3">
               <div class="pointer diary-option mb-3" @click="clickShare">일기 공유</div>
               <hr>
-              <div class="pointer diary-option mb-3" @click="clickEdit"> 일기 수정</div>
-              <hr>
-              <div class="pointer diary-option" @click="clickDelete"> 일기 삭제</div>
             </div>
           </v-sheet>
         </v-bottom-sheet>
         
-      </div>
+      </div> -->
     </div>
     
     <div class="diary-title">
@@ -305,6 +348,9 @@ export default {
     clickEdit() {
       this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
     },
+    clickBack() {
+      this.$router.go(-1)
+    },
   },
   mounted() {
     this.findDiary(this.$route.params.diaryId)
@@ -314,6 +360,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+nav {
+  height: 8vh;
+}
+
 .diary-top {
   .diary-date {
     p {

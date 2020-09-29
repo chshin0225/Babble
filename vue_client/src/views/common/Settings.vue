@@ -4,7 +4,7 @@
     <!-- <div class="nav">
       <div class="row no-gutters text-center py-3">
         <router-link class="menu col-4" :to="{name: 'BabySetting'}">아기 설정</router-link>
-        <router-link class="menu col-4" :to="{name: 'GroupSetting'}">그룹 설정</router-link>
+        <router-link class="menu col-4" :to="{name: 'RankSetting'}">그룹 설정</router-link>
       </div>
     </div>
     <router-view></router-view> -->
@@ -17,7 +17,7 @@
       <button class="btn setting-button" @click="clickBabySetting">아기 설정</button>
     </div>
     <div class="buttons mt-5">
-      <button class="btn setting-button" @click="clickGroupSetting">그룹 설정</button>
+      <button class="btn setting-button" @click="clickRankSetting">그룹 설정</button>
     </div>
     <div class="buttons mt-5">
       <button class="btn setting-button" @click="clickInvitationCreate">초대 링크 생성</button>
@@ -39,6 +39,9 @@ export default {
     },
     clickInvitationCreate() {
       this.$router.push({ name: 'InvitationCreate' })
+    },
+    clickRankSetting(){
+      this.$router.push({ name: 'RankSetting'})
     }
   }
 }

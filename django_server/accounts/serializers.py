@@ -56,6 +56,14 @@ class UserBabyRelationshipSerializer(serializers.ModelSerializer):
         model = UserBabyRelationship
         fields = '__all__'
 
+class UserBabyRelationshipNameSerializer(serializers.ModelSerializer):
+    baby = BabySerializer(required=False)
+    user = UserSerializer(required=False)
+    # rank = RankSerializer(required=False)
+    class Meta:
+        model = UserBabyRelationship
+        fields = '__all__'
+
 class SimpleUserBabyRelationshipSerializer(serializers.ModelSerializer):
     # baby = BabySerializer(required=False)
     # rank = RankSerializer(required=False)
