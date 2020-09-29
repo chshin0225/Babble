@@ -40,7 +40,28 @@
       </div>
     </div>
 
-    {{ album }}
+    <div class="container">
+      <div class="photos row" v-if="album.photos.length">
+        <div v-for="photo in album.photos" :key="photo.id" class="photo-container col-4">
+          <div class="photo">             
+            <img 
+              :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+              class="card-img-top" 
+              :alt="photo.id"
+              @click="clickPhoto(photo.id)"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="text-center no-photos mt-5">
+        <!-- 만약 업로드 된이미지가 없을 경우 -->
+        <img class="crying-baby" src="@/assets/baby.png">
+        <h5>앨범에 사진이 없습니다.</h5>
+      </div>
+    </div>
+
+    <!-- {{ album }} -->
   </div>
 </template>
 
@@ -81,6 +102,10 @@ export default {
         }
       })
     },
+
+    clickPhoto(photo_id) {
+      this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
+    }
   },
 
   mounted() {
@@ -89,6 +114,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .photos img {
+    height: 30vw;
+    width: auto;
+  }
 
+  .photo-container img {
+    object-fit: cover;
+    object-position: 50% 50%;
+    width: 30vw;
+    overflow: hidden;
+  }
+
+  .photo-container {
+    overflow:hidden;
+  }
 </style>

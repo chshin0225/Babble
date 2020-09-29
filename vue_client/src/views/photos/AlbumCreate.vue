@@ -38,14 +38,33 @@
           color="secondary"
           @click:append="clickSearch"
         ></v-text-field>
+        <!-- photo selection toolbar -->
+        <div>
+          <div class="d-flex justify-content-between">
+            <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
+            <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
+          </div>
+        </div>
         <!-- photo grid -->
         <div class="photos row" v-if="photos.length">
-          <div v-for="photo in photos" :key="photo.id" class="photo-container col-4">
+          <!-- <div v-for="photo in photos" :key="photo.id" class="photo-container col-4">
             <div class="photo">             
               <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id">
             </div>
+          </div> -->
+
+          <div :class="activeImage(photo.id)" v-for="photo in photos" :key="photo.id" class="photo-container col-4">
+            <div class="photo">
+
+
+
+              <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
+              <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id" @click="onImageSelect(photo.id)">
+    
+            </div>
           </div>
         </div>
+
         <div v-else class="text-center no-photos mt-5">
           <!-- 만약 업로드 된이미지가 없을 경우 -->
           <img class="crying-baby" src="@/assets/baby.png">
@@ -97,7 +116,7 @@
       </div>
     </div>
 
-
+    <div class="footer"></div>
   </div>
 </template>
 
@@ -111,13 +130,16 @@ export default {
     return {
       albumData: {
         album_name: null,
-        tags: null
+        tags: null,
+        photos: [],
       },
       toggle: null,
       photoSearchKeyword: null,
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,
+
+      selectedIndexes: [],
     }
   },
 
@@ -147,9 +169,40 @@ export default {
       const index = data.indexOf(item)
       if (index >= 0) data.splice(index, 1)
     },
-    onSelectMultipleImage(data) {
-      console.log(data)
+
+
+
+
+
+
+    isSelected(photoId) {
+      return (this.albumData.photos.includes(photoId));
     },
+
+    activeImage(photoId) {
+      let classes = ['selectable-box'];
+      if (this.isSelected(photoId)) { 
+        classes.push('active');
+      }
+      return classes;
+    },
+
+    clear() {
+      this.albumData.photos = [];
+    },
+
+    onImageSelect(photoId) {
+      if (this.isSelected(photoId)) {
+        this.albumData.photos = this.albumData.photos.filter((selectedIndex) => {
+          return (selectedIndex !== photoId);
+        });
+      } else {
+        this.albumData.photos.push(photoId);
+      }
+    },
+
+
+
   },
 
   created() {
@@ -175,5 +228,13 @@ export default {
 
 .photo-container {
   overflow:hidden;
+}
+
+.selectedIcon {
+  position: absolute;
+}
+
+.footer {
+  height: 100px;
 }
 </style>
