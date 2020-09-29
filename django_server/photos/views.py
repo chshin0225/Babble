@@ -147,7 +147,7 @@ class AlbumListView(APIView):
     # 전체 앨범 목록 가져오기
     def get(self, request):
         baby = request.user.current_baby
-        albums = Album.objects.filter(baby=baby)
+        albums = Album.objects.filter(baby=baby).order_by('-create_date')
         serializer = AlbumListSerializer(albums, many=True)
         return Response(serializer.data)
 
@@ -171,11 +171,15 @@ class AlbumListView(APIView):
                         tag.save()
                     AlbumTag(tag=tag, album=created_album).save()
 
+            # 만약 photos들이 있는 경우 사진 정보 저장 
             if request.data['photos']:
                 for photo_id in request.data['photos']:
                     photo = get_object_or_404(Photo, id=photo_id)
                     album_photo = AlbumPhotoRelationship(album=created_album, photo=photo)
                     album_photo.save()
+                # 첫번째 사진을 cover_photo로 지정
+                created_album.cover_photo = get_object_or_404(Photo, id=request.data['photos'][0]).image_url
+                created_album.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)

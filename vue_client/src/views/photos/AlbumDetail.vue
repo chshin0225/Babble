@@ -1,5 +1,6 @@
 <template>
   <div v-if="albumDataFetched" class="container">
+
     <!-- top button bar -->
     <div class="d-flex justify-content-between">
       <v-btn icon color="primary" @click="clickBack">
@@ -15,9 +16,9 @@
       <v-bottom-sheet v-model="sheet">
         <v-sheet class="text-center" height="27vh">
           <div class="py-3">
-            <div class="mb-3" >앨범 표지 변경</div>
+            <div class="mb-3" >사진 편집</div>
             <hr>
-            <div class="mb-3" >앨범 수정</div>
+            <div class="mb-3" >앨범 정보 수정</div>
             <hr>
             <div @click="clickDelete">앨범 삭제</div>
           </div>
@@ -25,28 +26,21 @@
       </v-bottom-sheet>
     </div>
 
-    <div class="container">
+    <div class="container pb-0">
       <!-- album name -->
-      <h3>{{ album.album_name }}</h3>
+      <h2>{{ album.album_name }}</h2>
       <!-- album tags -->
-      <v-chip v-for="tag in album.album_tags" :key="tag.id" class="ma-2" outlined color="secondary">#{{ tag.tag_name }}</v-chip>
-      <div class="d-flex justify-content-around row">
-        <v-btn color="primary" outlined rounded class="col-5">
-          <v-icon class="mr-2">mdi-image</v-icon> 사진 추가
-        </v-btn>
-        <v-btn color="primary" outlined rounded class="col-5">
-          <v-icon small class="mr-2">mdi-pound</v-icon> 태그 추가
-        </v-btn>
-      </div>
+      <v-chip v-for="tag in album.album_tags" :key="tag.id" class="ma-1" outlined color="secondary">#{{ tag.tag_name }}</v-chip>
     </div>
 
-    <div class="container">
+    <hr>
+
+    <div class="mx-2">
       <div class="photos row" v-if="album.photos.length">
-        <div v-for="photo in album.photos" :key="photo.id" class="photo-container col-4">
+        <div v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             
             <img 
               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
-              class="card-img-top" 
               :alt="photo.id"
               @click="clickPhoto(photo.id)"
             >
@@ -129,5 +123,10 @@ export default {
 
   .photo-container {
     overflow:hidden;
+  }
+
+  .crying-baby {
+    height: 50vh;
+    width: auto;
   }
 </style>

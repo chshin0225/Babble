@@ -1,6 +1,7 @@
 <template>
   <div class="container">
 
+    <!-- top toolbar -->
     <div class="d-flex justify-content-between">
       <v-btn icon color="primary" @click="clickBack">
         <v-icon>
@@ -12,12 +13,12 @@
       </v-btn>
     </div>
 
+    <!-- input field and buttons -->
     <div class="container">
       <v-text-field
         label="앨범 제목"
         v-model="albumData.album_name"
       ></v-text-field>
-      <!-- button toggle -->
       <div class="d-flex justify-content-around row">
         <v-btn color="primary" outlined rounded class="col-5" retain-focus-on-click  @click="clickAddPhoto">
           <v-icon class="mr-2">mdi-image</v-icon> 사진 추가
@@ -28,9 +29,9 @@
       </div>
     </div>
 
-    <div class="container pt-0">
-      <!-- 사진 추가 -->
-      <div v-if="toggle == 0">
+    <!-- 사진 추가 -->
+    <div>
+      <div class="mx-2" v-if="toggle == 0">
         <v-text-field
           label="사진 검색"
           v-model="photoSearchKeyword"
@@ -47,20 +48,10 @@
         </div>
         <!-- photo grid -->
         <div class="photos row" v-if="photos.length">
-          <!-- <div v-for="photo in photos" :key="photo.id" class="photo-container col-4">
-            <div class="photo">             
-              <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id">
-            </div>
-          </div> -->
-
-          <div :class="activeImage(photo.id)" v-for="photo in photos" :key="photo.id" class="photo-container col-4">
+          <div :class="activeImage(photo.id)" v-for="photo in photos" :key="photo.id" class="photo-container pa-1 col-4">
             <div class="photo">
-
-
-
               <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
               <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id" @click="onImageSelect(photo.id)">
-    
             </div>
           </div>
         </div>
@@ -73,7 +64,7 @@
       </div>
 
       <!-- 태그 추가 -->
-      <div v-else-if="toggle == 1">
+      <div class="mx-2" v-else-if="toggle == 1">
         <v-combobox
           v-model="albumData.tags"
           :items="tags"
@@ -111,8 +102,6 @@
             </v-list-item>
           </template>
         </v-combobox>
-
-
       </div>
     </div>
 
@@ -138,8 +127,6 @@ export default {
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,
-
-      selectedIndexes: [],
     }
   },
 
@@ -170,11 +157,6 @@ export default {
       if (index >= 0) data.splice(index, 1)
     },
 
-
-
-
-
-
     isSelected(photoId) {
       return (this.albumData.photos.includes(photoId));
     },
@@ -200,9 +182,6 @@ export default {
         this.albumData.photos.push(photoId);
       }
     },
-
-
-
   },
 
   created() {
@@ -214,27 +193,33 @@ export default {
 </script>
 
 <style scoped>
-.photos img {
-  height: 30vw;
-  width: auto;
-}
+  .photos img {
+    height: 30vw;
+    width: auto;
+  }
 
-.photo-container img {
-  object-fit: cover;
-  object-position: 50% 50%;
-  width: 30vw;
-  overflow: hidden;
-}
+  .photo-container img {
+    object-fit: cover;
+    object-position: 50% 50%;
+    width: 30vw;
+    overflow: hidden;
+  }
 
-.photo-container {
-  overflow:hidden;
-}
+  .photo-container {
+    overflow:hidden;
+  }
 
-.selectedIcon {
-  position: absolute;
-}
+  .selectedIcon {
+    position: absolute;
+    font-size: 1.8rem;
+  }
 
-.footer {
-  height: 100px;
-}
+  .footer {
+    height: 100px;
+  }
+
+  .crying-baby {
+    height: 50vh;
+    width: auto;
+  }
 </style>
