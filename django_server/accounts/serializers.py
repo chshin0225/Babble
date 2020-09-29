@@ -4,7 +4,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
-from .models import User, BabyAccess, Rank, Group, UserBabyRelationship, BabyAccess
+from .models import User, BabyAccess, Rank, Group, UserBabyRelationship, BabyAccess, Invitation
 from babies.serializers import BabySerializer
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -61,4 +61,11 @@ class SimpleUserBabyRelationshipSerializer(serializers.ModelSerializer):
     # rank = RankSerializer(required=False)
     class Meta:
         model = UserBabyRelationship
+        fields = '__all__'
+
+class InvitationSerializer(serializers.ModelSerializer):
+    baby = BabySerializer(required=False)
+    rank = RankSerializer(required=False)
+    class Meta:
+        model = Invitation
         fields = '__all__'
