@@ -19,6 +19,9 @@
     <div class="buttons mt-5">
       <button class="btn setting-button" @click="clickGroupSetting">그룹 설정</button>
     </div>
+    <div class="buttons mt-5">
+      <button class="btn setting-button" @click="clickInvitationCreate">초대 링크 생성</button>
+    </div>
   </div>
 </template>
 
@@ -33,6 +36,9 @@ export default {
     },
     clickGroupSetting(){
       this.$router.push({ name: 'GroupSetting'})
+    },
+    clickInvitationCreate() {
+      this.$router.push({ name: 'InvitationCreate' })
     }
   }
 }

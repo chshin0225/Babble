@@ -16,7 +16,7 @@ const accountStore = {
 
     },
     actions: {
-        postAuthData1({ commit} , info) {
+        postAuthData1({ rootState, commit } , info) {
             axios.post(SERVER.URL + SERVER.ROUTES.signup, info.data)
               .then(res => {
                 commit('SET_TOKEN', res.data.key, { root: true })
@@ -35,7 +35,12 @@ const accountStore = {
                   icon: 'success',
                   title: "회원가입에 성공하였습니다."
                 })
-                router.push({name: 'HowToRegisterBaby'})
+                if (rootState.invitationToken) {
+                  console.log(rootState.invitationToken)
+                  router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
+                } else {
+                  router.push({name: 'HowToRegisterBaby'})
+                }
               })
 
               .catch(err => {
@@ -57,7 +62,7 @@ const accountStore = {
                 })
               })
           },
-        postAuthData2({ commit, dispatch }, info) {
+        postAuthData2({ rootState, commit, dispatch }, info) {
             axios.post(SERVER.URL + SERVER.ROUTES.login, info.data)
               .then(res => {
                 commit('SET_TOKEN', res.data.key, { root: true })
@@ -78,7 +83,12 @@ const accountStore = {
                 })
                 dispatch('findMyAccount', null, { root: true })
                 // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
+                if (rootState.invitationToken) {
+                  console.log(rootState.invitationToken)
+                  router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
+                } else {
                 router.push({name: 'PhotoList'})
+                }
               })
               .catch(() => {
                 const Toast = Swal.mixin({
@@ -126,7 +136,7 @@ const accountStore = {
               console.error(err)
             })
         },
-        socialLogin({ commit, dispatch }, userInfo) {
+        socialLogin({ commit, dispatch, rootState }, userInfo) {
           axios.post(SERVER.URL + SERVER.ROUTES.social, userInfo)
             .then(res => {
               commit('SET_TOKEN', res.data.key, { root: true });
@@ -147,9 +157,17 @@ const accountStore = {
                 title: "로그인에 성공하였습니다.",
               });
               if (res.data.state === 'login') {
-                router.push({name: 'PhotoList'});
+                if (rootState.invitationToken) {
+                  router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
+                } else {
+                  router.push({name: 'PhotoList'});
+                }
               } else if (res.data.state === 'signup') {
-                router.push({name: 'HowToRegisterBaby'})
+                if (rootState.invitationToken) {
+                  router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
+                } else {
+                  router.push({name: 'HowToRegisterBaby'})
+                } 
               }
             })
             .catch((err) => {

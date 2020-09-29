@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 // Photos
 import PhotoMain from '@/views/photos/PhotoMain'
@@ -41,6 +42,9 @@ import RegisterInviteLink from '@/views/accounts/RegisterInviteLink'
 
 // Profile
 import Profile from '@/views/profile/Profile'
+
+import InvitationConfirm from '@/views/common/InvitationConfirm'
+import InvitationCreate from '@/views/common/InvitationCreate'
 
 Vue.use(VueRouter)
 
@@ -171,6 +175,16 @@ Vue.use(VueRouter)
     name: 'BabySetting'
   },
   {
+    path: '/invitation/:token',
+    component: InvitationConfirm,
+    name: 'InvitationConfirm'
+  },
+  {
+    path: '/invitation/',
+    component: InvitationCreate,
+    name: 'InvitationCreate'
+  },
+  {
     path: '/groupsetting',
     name: 'GroupSetting',
     component: GroupSetting,
@@ -255,13 +269,20 @@ router.beforeEach((to, from, next) => {
   const unauthRequired = authPages.includes(to.name)
   const isLoggedIn = Vue.$cookies.isKey('auth-token')
 
+  
   if (unauthRequired && isLoggedIn){
     next({name:'PhotoList'})
   }
   
   if (authRequired && !isLoggedIn) {
+    if (to.name === "InvitationConfirm") {
+      store.commit('SET_INVITATION_TOKEN', to.params.token)
+    }
     next({ name: 'Login' })
   } else {
+    if (to.name === "InvitationConfirm") {
+      store.commit('SET_INVITATION_TOKEN', to.params.token)
+    }
     next()
   }
 })

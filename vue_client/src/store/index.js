@@ -20,6 +20,9 @@ export default new Vuex.Store({
     myaccount: null,
     currentBaby: null,
     babbleboxes: null,
+    invitationToken: null,
+    invitationData: null,
+    invitationURL: null
   },
   getters: {
     config: state => ({ headers: { Authorization: `Token ${state.authToken}`}}),
@@ -37,13 +40,21 @@ export default new Vuex.Store({
     },
     SET_BABBLEBOX(state, babbleboxes) {
       state.babbleboxes = babbleboxes
+    },
+    SET_INVITATION_TOKEN(state, token) {
+      state.invitationToken = token
+    },
+    SET_INVITATION_DATA(state, data) {
+      state.invitationData = data
+    },
+    SET_INVITATION_URL(state, url) {
+      state.invitationURL = url
     }
   },
   actions: {
     findBaby({ commit, getters }, baby_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.babies + baby_id, getters.config)
         .then(res => {
-          console.log(res)
           commit('SET_BABY', res.data)
         })
         .catch(err => {
@@ -102,6 +113,72 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    findInvitationData({ state, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.invitation + state.invitationToken + '/')
+        .then(res => {
+          commit('SET_INVITATION_DATA', res.data)
+        })
+        .catch(err => {
+          console.log(err.response.data.message)
+          const Toast = Swal.mixin({
+            position: 'top-center',
+            showConfirmButton: true,
+           })
+           Toast.fire({
+            icon: 'error',
+            title: err.response.data.message
+          }).then(() => {
+            commit('SET_INVITATION_TOKEN', null)
+            commit('SET_INVITATION_DATA', null)
+            router.push({ name: "PhotoList"})
+          })
+        })
+    },
+    verifyInvitation({ state, getters, commit, dispatch }, enrollData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.invitation + state.invitationToken + '/', enrollData, getters.config)
+        .then(res => {
+          commit('SET_BABY', res.data)
+          dispatch('findMyAccount')
+          commit('SET_INVITATION_TOKEN', null)
+          commit('SET_INVITATION_DATA', null)
+          router.push({ name: "PhotoList" })
+        })
+        .catch(err => {
+          console.log(err.response.data.message)
+          const Toast = Swal.mixin({
+            position: 'top-center',
+            showConfirmButton: true,
+           })
+           Toast.fire({
+            icon: 'error',
+            title: err.response.data.message
+          }).then(() => {
+            commit('SET_INVITATION_TOKEN', null)
+            commit('SET_INVITATION_DATA', null)
+            router.push({ name: "PhotoList"})
+          })
+        })
+    },
+    makeInvitation({getters, commit}, invitationInfo) {
+      axios.post(SERVER.URL + SERVER.ROUTES.invitation, invitationInfo, getters.config)
+        .then(res => {
+          commit('SET_INVITATION_URL', res.data.url)
+        })
+        .catch(err => {
+          console.log(err.response.data.message)
+          const Toast = Swal.mixin({
+            position: 'top-center',
+            showConfirmButton: true,
+           })
+           Toast.fire({
+            icon: 'error',
+            title: err.response.data.message
+          }).then(() => {
+            commit('SET_INVITATION_URL', null)
+            router.push({ name: "PhotoList"})
+          })
         })
     }
   },
