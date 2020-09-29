@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer, SocialRegisterSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer
+from .serializers import UserSerializer, SocialRegisterSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer, InvitationSerializer
 
 from .models import User, Rank, Group, BabyAccess, UserBabyRelationship, Invitation
 from babies.models import Baby
@@ -163,13 +163,12 @@ class GroupInfoView(APIView):
 class InvitationCreateView(APIView):
     def post(self, request):
         data = request.data
-        baby = data['baby']
+        baby = request.user.current_baby_id
         rank = data['rank']
-        master = get_object_or_404(Rank, id=1)
         try:
             relationship = get_object_or_404(UserBabyRelationship, baby_id=baby, user_id=request.user.id, rank=1)
             token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
-            invite_url = "http://j3a310.p.ssafy.io/invite/" + token
+            invite_url = "http://j3a310.p.ssafy.io/invitation/" + token
             invitation = Invitation(baby_id=baby, rank_id=rank, token=token)
             invitation.save()
             return Response({"url": invite_url}, status=200)
@@ -177,8 +176,15 @@ class InvitationCreateView(APIView):
             return Response({"message":"초대링크를 생성할 권한이 없습니다."}, status=400)
 
 class InvitationVerifyView(APIView):
-    def post(self, request):
-        token = request.data['token']
+    def get(self, request, token):
+        try:
+            invitation = get_object_or_404(Invitation, token=token, closed=False)
+            serializer = InvitationSerializer(invitation)
+            return Response(serializer.data)            
+        except:
+            return Response({"message":"초대 링크가 유효하지 않습니다."}, status=400)
+
+    def post(self, request, token):
         relationship_name = request.data['relationship_name']
         user = request.user
         try:

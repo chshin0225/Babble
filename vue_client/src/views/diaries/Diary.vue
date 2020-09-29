@@ -4,13 +4,13 @@
         <!-- 좌측 형태 정렬 -->
         <div class="nav-container bg-pink">
           <router-link :to="{ name: 'DiaryPhoto'}" class="view right-outline pointer">
-            <i class="fas fa-file-image fa"></i>
+            <i class="fas fa-file-image fa-lg"></i>
           </router-link>
           <router-link :to="{ name: 'DiaryTimeline'}" class="view right-outline pointer">
-            <i class="fas fa-stream fa"></i>
+            <i class="fas fa-stream fa-lg"></i>
           </router-link>
           <router-link :to="{ name: 'DiaryCalendar'}" class="view pointer">
-            <i class="fas fa-calendar-alt fa"></i>
+            <i class="fas fa-calendar-alt fa-lg"></i>
           </router-link>
         </div>
 
@@ -47,7 +47,8 @@ export default {
 }
 
 .fas {
-  padding: 0.5rem;
+  padding: 0.7rem;
+
 }
 
 

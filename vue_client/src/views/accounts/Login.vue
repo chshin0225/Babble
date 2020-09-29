@@ -84,7 +84,7 @@ export default {
         email: false,
         password: false,
       },
-      isSubmit: false,
+      isSubmit: false
     };
   },
   watch: {
@@ -190,7 +190,7 @@ export default {
     clickPasswordFind() {
       router.push({ name: "PasswordFind" });
     },
-  },
+  }
 };
 </script>
 

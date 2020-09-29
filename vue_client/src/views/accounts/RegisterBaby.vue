@@ -127,7 +127,7 @@ export default {
           birth: "",
           birth_height: "",
           birth_weight: "",
-          profile_image: "profileimage",
+          profile_image: "",
         },
         relationship_name: ""
       },

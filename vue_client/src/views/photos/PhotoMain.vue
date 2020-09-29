@@ -24,7 +24,7 @@ export default {
 
 <style scoped>
 nav {
-  height: 8vh;
+  height: 7vh;
 }
 
 .menu:link, .menu:active, .menu:visited {

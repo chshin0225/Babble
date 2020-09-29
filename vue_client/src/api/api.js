@@ -1,6 +1,6 @@
 export default {
     URL: 'http://j3a310.p.ssafy.io:8000',
-    //URL: 'http://127.0.0.1:8000',
+    // URL: 'http://127.0.0.1:8000',
     AIURL: "http://121.125.56.92:50740/tags",
     ROUTES: {
       // accounts
@@ -15,7 +15,8 @@ export default {
       access: '/accounts/access/',
       kakao: '/accounts/login/kakao/',
       social: '/accounts/login/social/',
-
+      invitation: '/accounts/invitation/',
+      
       // diary
       diaries: '/diaries/',
       comments: '/comments/',

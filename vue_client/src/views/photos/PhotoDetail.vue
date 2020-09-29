@@ -384,8 +384,8 @@ export default {
 <style scoped lang="scss">
 nav {
   background: white;
-  position: fixed;  
-  height: 8vh;
+  position: sticky;  
+  height: 7vh;
 }
 
 .top-left-icons{
