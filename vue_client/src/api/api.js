@@ -15,7 +15,8 @@ export default {
       access: '/accounts/access/',
       kakao: '/accounts/login/kakao/',
       social: '/accounts/login/social/',
-
+      invitation: '/accounts/invitation/',
+      
       // diary
       diaries: '/diaries/',
       comments: '/comments/',
