@@ -175,11 +175,6 @@ Vue.use(VueRouter)
     name: 'InvitationCreate'
   },
   {
-    path: '/groupsetting',
-    name: 'GroupSetting',
-    component: GroupSetting
-  },
-  {
     path: '/ranksetting',
     name: 'RankSetting',
     component: RankSetting,
