@@ -38,6 +38,7 @@
           color="secondary"
           @click:append="clickSearch"
         ></v-text-field>
+        <!-- photo grid -->
         <div class="photos row" v-if="photos.length">
           <div v-for="photo in photos" :key="photo.id" class="photo-container col-4">
             <div class="photo">             
@@ -146,9 +147,10 @@ export default {
       const index = data.indexOf(item)
       if (index >= 0) data.splice(index, 1)
     },
+    onSelectMultipleImage(data) {
+      console.log(data)
+    },
   },
-
-
 
   created() {
     this.fetchPhotos()

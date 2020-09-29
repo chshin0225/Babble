@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="albumDataFetched" class="container">
     <!-- top button bar -->
     <div class="d-flex justify-content-between">
       <v-btn icon color="primary" @click="clickBack">
@@ -26,7 +26,10 @@
     </div>
 
     <div class="container">
+      <!-- album name -->
       <h3>{{ album.album_name }}</h3>
+      <!-- album tags -->
+      <v-chip v-for="tag in album.album_tags" :key="tag.id" class="ma-2" outlined color="secondary">#{{ tag.tag_name }}</v-chip>
       <div class="d-flex justify-content-around row">
         <v-btn color="primary" outlined rounded class="col-5">
           <v-icon class="mr-2">mdi-image</v-icon> 사진 추가
@@ -42,7 +45,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
 
 export default {
@@ -56,6 +59,7 @@ export default {
 
   computed: {
     ...mapState('photoStore', ['album',]),
+    ...mapGetters('photoStore', ['albumDataFetched',])
   },
   
   methods: {
@@ -79,7 +83,7 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.getAlbum(this.$route.params.albumId)
   },
 }

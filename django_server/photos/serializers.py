@@ -42,6 +42,7 @@ class AlbumListSerializer(serializers.ModelSerializer):
 
 
 class AlbumDetailSerializer(serializers.ModelSerializer):
+    album_tags = TagListSerializer(required=False, many=True)
     class Meta:
         model = Album
         fields = '__all__'

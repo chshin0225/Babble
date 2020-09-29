@@ -16,7 +16,7 @@ const photoStore = {
     album: null,
   },
   getters: {
-    
+    albumDataFetched: state => !!state.album,
   },
   mutations: {
     SET_TAGS(state, tags) {
@@ -242,6 +242,7 @@ const photoStore = {
         .catch(err => console.error(err))
     },
     getAlbum({ commit, rootGetters }, album_id) {
+      commit('SET_ALBUM', null)
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
         .then(res => commit('SET_ALBUM', res.data))
         .catch(err => console.error(err))
