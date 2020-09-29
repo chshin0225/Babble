@@ -162,14 +162,13 @@ class GroupInfoView(APIView):
 
 class InvitationCreateView(APIView):
     def post(self, request):
-        print('hi')
         data = request.data
         baby = request.user.current_baby_id
         rank = data['rank']
         try:
             relationship = get_object_or_404(UserBabyRelationship, baby_id=baby, user_id=request.user.id, rank=1)
             token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
-            invite_url = "http://j3a310.p.ssafy.io/invite/" + token
+            invite_url = "http://j3a310.p.ssafy.io/invitation/" + token
             invitation = Invitation(baby_id=baby, rank_id=rank, token=token)
             invitation.save()
             return Response({"url": invite_url}, status=200)
