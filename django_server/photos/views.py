@@ -224,16 +224,16 @@ class AlbumPhotoView(APIView):
     # 앨범에 사진 추가
     def post(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)
-        for photo_id in photos:
+        for photo_id in request.data['photos']:
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = AlbumPhotoRelationship(album=album, photo=photo)
             album_photo.save()
         return Response({"message":"사진(들)이 앨범에 추가되었습니다."})
 
     # 앨범에서 사진 삭제
-    def delete(self, request, album_id):
+    def put(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)
-        for photo_id in photos:
+        for photo_id in request.data['photos']:
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
             album_photo.delete()
