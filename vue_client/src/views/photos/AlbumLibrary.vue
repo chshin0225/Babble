@@ -3,16 +3,18 @@
 
     <div class="albums row">
       <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center">
-        <div class="album d-flex justify-content-center align-items-center">
+        <div class="album add-album d-flex justify-content-center align-items-center">
           <v-btn icon color="primary" :to="{ name: 'AlbumCreate' }" class="text-decoration-none">
             <v-icon x-large>mdi-plus-circle</v-icon>      
           </v-btn>
         </div>
         <p class="album-title">새 앨범</p>
       </div>
+      <!-- 내 앨범들 -->
       <router-link v-for="album in albums" :key="album.id" :to="{ name: 'AlbumDetail', params: {albumId: album.id}}" class="col-6 d-flex flex-column justify-content-center align-items-center text-dark">
         <div class="album">
-          <img :src="album.cover_photo" :alt="album.album_name">
+          <v-img class="cover-photo" v-if="album.cover_photo" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + album.cover_photo + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" :alt="album.album_name"></v-img>
+          <v-img class="no-photo" v-else src="@/assets/baby_face.png"></v-img>
         </div>
         <p class="album-title">{{ album.album_name }}</p>
       </router-link>
@@ -50,67 +52,37 @@ export default {
 
 <style scoped>
 
-/* .crying-baby {
-  height: 50vh;
-  width: auto;
-}
+  .albums .add-album {
+    border : 1px solid #e9c6c2;
+    border-radius: 10vw;
+    min-width:45vw;
+    min-height:45vw;
+  }
 
-.albums img {
-  min-width:45vw;
-  min-height:45vw;
-  height: 45vw;
-  width: auto;
-} */
+  .no-photo {
+    border : 1px solid #e9c6c2;
+    border-radius: 10vw;
+    max-width:45vw;
+    max-height:45vw;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
 
-.albums .album{
-  border : 1px solid #888888;
-  border-radius: 10vw;
-  min-width:45vw;
-  min-height:45vw;
-}
+  .albums .album {
+    border-radius: 10vw;
+    min-width:45vw;
+    min-height:45vw;
+  }
 
-.footer {
-  height: 50px;
-}
+  .cover-photo {
+    border-radius: 10vw;
+    max-width:45vw;
+    min-height:45vw;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
 
-/*
-.album {
-  width: 45vw; 
-  height: 45vw;
-  display: table-cell; 
-  text-align: center; 
-  vertical-align: middle;
-}
-
-.albums-container{
-  width:45vw; 
-  margin-right:3.3vw; 
-  margin-bottom:3.3vw;
-}
-.album-container {      
-  position: relative;
-  width: 45vw; 
-  height: 45vw;
-  margin-right: 3.3vw;
-  overflow: hidden;
-  border-radius : 10vw;
-}
-.album-container .album img { 
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  right: -9999px;
-  bottom: -9999px;
-  margin: auto;
-}
-
-.album-title{
-  font-size: 4vw;
-  text-align:center; 
-  width:45vw; 
-  z-index:9999; 
-  float:left; 
-  height:auto;
-} */
-
+  .footer {
+    height: 100px;
+  }
 </style>

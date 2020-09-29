@@ -1,6 +1,7 @@
 <template>
   <div class="container">
 
+    <!-- top toolbar -->
     <div class="d-flex justify-content-between">
       <v-btn icon color="primary" @click="clickBack">
         <v-icon>
@@ -12,12 +13,12 @@
       </v-btn>
     </div>
 
+    <!-- input field and buttons -->
     <div class="container">
       <v-text-field
         label="앨범 제목"
         v-model="albumData.album_name"
       ></v-text-field>
-      <!-- button toggle -->
       <div class="d-flex justify-content-around row">
         <v-btn color="primary" outlined rounded class="col-5" retain-focus-on-click  @click="clickAddPhoto">
           <v-icon class="mr-2">mdi-image</v-icon> 사진 추가
@@ -28,9 +29,9 @@
       </div>
     </div>
 
-    <div class="container pt-0">
-      <!-- 사진 추가 -->
-      <div v-if="toggle == 0">
+    <!-- 사진 추가 -->
+    <div>
+      <div class="mx-2" v-if="toggle == 0">
         <v-text-field
           label="사진 검색"
           v-model="photoSearchKeyword"
@@ -38,14 +39,27 @@
           color="secondary"
           @click:append="clickSearch"
         ></v-text-field>
+        <!-- photo selection toolbar -->
+        <div>
+          <div class="d-flex justify-content-between">
+            <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
+            <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
+          </div>
+        </div>
         <!-- photo grid -->
         <div class="photos row" v-if="photos.length">
-          <div v-for="photo in photos" :key="photo.id" class="photo-container col-4">
-            <div class="photo">             
-              <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id">
+          <div :class="activeImage(photo.id)" v-for="photo in photos" :key="photo.id" class="photo-container pa-1 col-4">
+            <div class="photo">
+              <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
+              <img
+               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+               :alt="photo.id" 
+               @click="onImageSelect(photo.id)"
+              >
             </div>
           </div>
         </div>
+
         <div v-else class="text-center no-photos mt-5">
           <!-- 만약 업로드 된이미지가 없을 경우 -->
           <img class="crying-baby" src="@/assets/baby.png">
@@ -54,7 +68,7 @@
       </div>
 
       <!-- 태그 추가 -->
-      <div v-else-if="toggle == 1">
+      <div class="mx-2" v-else-if="toggle == 1">
         <v-combobox
           v-model="albumData.tags"
           :items="tags"
@@ -92,12 +106,10 @@
             </v-list-item>
           </template>
         </v-combobox>
-
-
       </div>
     </div>
 
-
+    <div class="footer"></div>
   </div>
 </template>
 
@@ -111,7 +123,8 @@ export default {
     return {
       albumData: {
         album_name: null,
-        tags: null
+        tags: null,
+        photos: [],
       },
       toggle: null,
       photoSearchKeyword: null,
@@ -147,8 +160,31 @@ export default {
       const index = data.indexOf(item)
       if (index >= 0) data.splice(index, 1)
     },
-    onSelectMultipleImage(data) {
-      console.log(data)
+
+    isSelected(photoId) {
+      return (this.albumData.photos.includes(photoId));
+    },
+
+    activeImage(photoId) {
+      let classes = ['selectable-box'];
+      if (this.isSelected(photoId)) { 
+        classes.push('active');
+      }
+      return classes;
+    },
+
+    clear() {
+      this.albumData.photos = [];
+    },
+
+    onImageSelect(photoId) {
+      if (this.isSelected(photoId)) {
+        this.albumData.photos = this.albumData.photos.filter((selectedIndex) => {
+          return (selectedIndex !== photoId);
+        });
+      } else {
+        this.albumData.photos.push(photoId);
+      }
     },
   },
 
@@ -161,19 +197,33 @@ export default {
 </script>
 
 <style scoped>
-.photos img {
-  height: 30vw;
-  width: auto;
-}
+  .photos img {
+    height: 30vw;
+    width: auto;
+  }
 
-.photo-container img {
-  object-fit: cover;
-  object-position: 50% 50%;
-  width: 30vw;
-  overflow: hidden;
-}
+  .photo-container img {
+    object-fit: cover;
+    object-position: 50% 50%;
+    width: 30vw;
+    overflow: hidden;
+  }
 
-.photo-container {
-  overflow:hidden;
-}
+  .photo-container {
+    overflow:hidden;
+  }
+
+  .selectedIcon {
+    position: absolute;
+    font-size: 1.8rem;
+  }
+
+  .footer {
+    height: 100px;
+  }
+
+  .crying-baby {
+    height: 50vh;
+    width: auto;
+  }
 </style>

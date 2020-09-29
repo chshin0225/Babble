@@ -147,14 +147,17 @@ class AlbumListView(APIView):
     # 전체 앨범 목록 가져오기
     def get(self, request):
         baby = request.user.current_baby
-        albums = Album.objects.filter(baby=baby)
+        albums = Album.objects.filter(baby=baby).order_by('-create_date')
         serializer = AlbumListSerializer(albums, many=True)
         return Response(serializer.data)
 
     # 새 앨범 생성
     def post(self, request):
         baby = request.user.current_baby
-        serializer = AlbumDetailSerializer(data=request.data)
+        data = {
+            'album_name': request.data['album_name']
+        }
+        serializer = AlbumDetailSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             created_album = serializer.save(baby=baby, creator=request.user)
 
@@ -167,6 +170,16 @@ class AlbumListView(APIView):
                         tag = Tag(tag_name=tag_name)
                         tag.save()
                     AlbumTag(tag=tag, album=created_album).save()
+
+            # 만약 photos들이 있는 경우 사진 정보 저장 
+            if request.data['photos']:
+                for photo_id in request.data['photos']:
+                    photo = get_object_or_404(Photo, id=photo_id)
+                    album_photo = AlbumPhotoRelationship(album=created_album, photo=photo)
+                    album_photo.save()
+                # 첫번째 사진을 cover_photo로 지정
+                created_album.cover_photo = get_object_or_404(Photo, id=request.data['photos'][0]).image_url
+                created_album.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)
@@ -211,16 +224,16 @@ class AlbumPhotoView(APIView):
     # 앨범에 사진 추가
     def post(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)
-        for photo_id in photos:
+        for photo_id in request.data['photos']:
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = AlbumPhotoRelationship(album=album, photo=photo)
             album_photo.save()
         return Response({"message":"사진(들)이 앨범에 추가되었습니다."})
 
     # 앨범에서 사진 삭제
-    def delete(self, request, album_id):
+    def put(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)
-        for photo_id in photos:
+        for photo_id in request.data['photos']:
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
             album_photo.delete()
