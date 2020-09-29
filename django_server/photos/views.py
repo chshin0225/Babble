@@ -154,7 +154,10 @@ class AlbumListView(APIView):
     # 새 앨범 생성
     def post(self, request):
         baby = request.user.current_baby
-        serializer = AlbumDetailSerializer(data=request.data)
+        data = {
+            'album_name': request.data['album_name']
+        }
+        serializer = AlbumDetailSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             created_album = serializer.save(baby=baby, creator=request.user)
 
@@ -167,6 +170,12 @@ class AlbumListView(APIView):
                         tag = Tag(tag_name=tag_name)
                         tag.save()
                     AlbumTag(tag=tag, album=created_album).save()
+
+            if request.data['photos']:
+                for photo_id in request.data['photos']:
+                    photo = get_object_or_404(Photo, id=photo_id)
+                    album_photo = AlbumPhotoRelationship(album=created_album, photo=photo)
+                    album_photo.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)
