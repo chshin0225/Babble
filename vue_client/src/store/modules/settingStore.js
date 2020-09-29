@@ -1,6 +1,6 @@
 import SERVER from '@/api/api'
 import axios from 'axios'
-import router from '@/router'
+//import router from '@/router'
 // import Swal from 'sweetalert2'
 //import firebase from 'firebase'
 
@@ -25,6 +25,9 @@ const settingStore = {
     fetchUsers({ rootGetters, commit }) { //현재 babble box 내 존재하는 유저 목록 조회
       axios.get(SERVER.URL + SERVER.ROUTES.babies + 'relationships/', rootGetters.config)
         .then(res => {
+          for(var i=0; i<res.data.length; i++){
+            res.data[i].isCheck = false;
+          }
           commit('SET_USERS', res.data)
         })
         .catch(err => console.log(err.response.data))
@@ -38,10 +41,9 @@ const settingStore = {
     },
     addUser({ rootGetters }, userData) {
       
-      axios.post(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
+      axios.put(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
-          //router.go(0)
       })
       .catch(err => {
           console.log(err)
@@ -51,7 +53,6 @@ const settingStore = {
       axios.delete(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
-          router.go(0)
       })
       .catch(err => {
           console.log(err)
@@ -61,7 +62,6 @@ const settingStore = {
       axios.put(SERVER.URL + SERVER.ROUTES.groups + groupData.groupId + '/info/', groupData, rootGetters.config)
       .then(res => {
           console.log(res)
-          router.go(0)
       })
       .catch(err => {
           console.log(err)
@@ -71,7 +71,6 @@ const settingStore = {
       axios.post(SERVER.URL + SERVER.ROUTES.groups, groupData, rootGetters.config)
         .then(res => {
           console.log(res)
-          router.go(0)
         })
         .catch(err => {
           console.log(err.response)
@@ -90,7 +89,6 @@ const settingStore = {
       axios.delete(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', rootGetters.config)
       .then(res => {
           console.log(res)
-          router.go(0)
       })
       .catch(err => {
           console.log(err)
@@ -101,7 +99,6 @@ const settingStore = {
       axios.delete(SERVER.URL + SERVER.ROUTES.groups + groupData.groupId + '/info/', rootGetters.config)
       .then(res => {
           console.log(res)
-          router.go(0)
       })
       .catch(err => {
           console.log(err)

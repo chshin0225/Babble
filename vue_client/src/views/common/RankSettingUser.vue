@@ -4,7 +4,7 @@
     
     <div style="width:100%;">
         <div style="float:right;">
-        <button class="btn btn-outline-pink" style="" @click="selectAll">전체선택</button>
+        <button class="btn btn-outline-pink" style="" @click="selectAll">{{!isCheckAll?'전체 선택':'선택 해제'}}</button>
         <v-bottom-sheet v-model="sheet">
           <template v-slot:activator="{ on, attrs }">
             <button 
@@ -72,6 +72,15 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Swal from 'sweetalert2'
+
+const swal = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success mr-2',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
 
 export default {
   name: 'UserEdit',
@@ -83,6 +92,7 @@ export default {
         {label: "Maintainer", value:"2"},
         {label: "Guest", value:"3"},
       ],
+      isCheckAll : false,
     }
   },
   computed: {
@@ -102,16 +112,23 @@ export default {
       for(var i=0; i<this.users.length; i++){
         if(this.users[i].isCheck == true){
         
-          let userData = {groupId : groupId, user : this.users[i].id};
+          let userData = {groupId : groupId, user : this.users[i].user.id};
+          console.log("userData", userData);
           this.addUser(userData);
         }
       }
-    
+      this.isCheckAll = false;
+      
+      for(var idx=0; idx<this.users.length; idx++){
+        this.users[idx].isCheck = false;
+      }
     },
     selectAll(){
-      for(var i=0; i<this.users.length; i++){
-        this.users[i].isCheck = true;
-      }
+      this.isCheckAll = !(this.isCheckAll);
+      
+        for(var idx=0; idx<this.users.length; idx++){
+          this.users[idx].isCheck = this.isCheckAll;
+        }
     },
     changeRank(userId, userRelationship, userRank){
       console.log("changeRank", userId);
@@ -120,10 +137,29 @@ export default {
     },
     deleteUser(userId){
       
-      if(confirm("BabbleBox에서 삭제하시겠습니까?")){
-        let userData = {userId : userId}
-        this.deleteBabbleUser(userData);
-      }
+      this.sheet = false;
+      swal.fire({
+        text: "BabbleBox에서 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: '네',
+        cancelButtonText: '아니요',
+        icon: "warning",
+      })
+      .then((result) => {
+        if (result.value) {
+          let userData = {userId : userId}
+          this.deleteBabbleUser(userData)
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              text: '삭제되었습니다.'
+            })
+            this.sheet = false;
+            this.fetchUsers();
+          });
+        } 
+      });
+
     },
     
   },
