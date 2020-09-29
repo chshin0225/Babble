@@ -42,8 +42,8 @@
         <!-- photo selection toolbar -->
         <div>
           <div class="d-flex justify-content-between">
-            <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
             <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
+            <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
           </div>
         </div>
         <!-- photo grid -->
@@ -51,7 +51,11 @@
           <div :class="activeImage(photo.id)" v-for="photo in photos" :key="photo.id" class="photo-container pa-1 col-4">
             <div class="photo">
               <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
-              <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top" :alt="photo.id" @click="onImageSelect(photo.id)">
+              <img
+               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+               :alt="photo.id" 
+               @click="onImageSelect(photo.id)"
+              >
             </div>
           </div>
         </div>

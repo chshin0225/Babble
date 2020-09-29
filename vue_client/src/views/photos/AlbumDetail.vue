@@ -3,7 +3,7 @@
 
     <!-- top button bar -->
     <div class="d-flex justify-content-between">
-      <v-btn icon color="primary" @click="clickBack">
+      <v-btn icon color="primary" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left
         </v-icon>
@@ -13,14 +13,17 @@
           mdi-dots-horizontal
         </v-icon>
       </v-btn>
+      <!-- 더보기 메뉴 -->
       <v-bottom-sheet v-model="sheet">
         <v-sheet class="text-center" height="27vh">
           <div class="py-3">
-            <div class="mb-3" >사진 편집</div>
+            <div class="mb-3" >
+              <router-link class="black--text" :to="{ name: 'AlbumEdit', params: {albumId: album.id}}">사진 편집</router-link>
+            </div>
             <hr>
-            <div class="mb-3" >앨범 정보 수정</div>
+            <router-link class="black--text" :to="{ name: 'AlbumInfoEdit', params: {albumId: album.id}}">앨범 정보 수정</router-link>
             <hr>
-            <div @click="clickDelete">앨범 삭제</div>
+            <div class="black--text" @click="clickDelete">앨범 삭제</div>
           </div>
         </v-sheet>
       </v-bottom-sheet>
@@ -32,9 +35,9 @@
       <!-- album tags -->
       <v-chip v-for="tag in album.album_tags" :key="tag.id" class="ma-1" outlined color="secondary">#{{ tag.tag_name }}</v-chip>
     </div>
-
     <hr>
 
+    <!-- photo grid -->
     <div class="mx-2">
       <div class="photos row" v-if="album.photos.length">
         <div v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
@@ -48,14 +51,12 @@
         </div>
       </div>
 
+      <!-- 만약 업로드 된 이미지가 없을 경우 -->
       <div v-else class="text-center no-photos mt-5">
-        <!-- 만약 업로드 된이미지가 없을 경우 -->
         <img class="crying-baby" src="@/assets/baby.png">
         <h5>앨범에 사진이 없습니다.</h5>
       </div>
     </div>
-
-    <!-- {{ album }} -->
   </div>
 </template>
 
@@ -79,8 +80,8 @@ export default {
   
   methods: {
     ...mapActions('photoStore', ['getAlbum', 'deleteAlbum',]),
-    clickBack() {
-      this.$router.go(-1)
+    goToLibrary() {
+      this.$router.push({ name: 'AlbumLibrary' })
     },
     clickDelete() {
       Swal.fire({

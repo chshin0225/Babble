@@ -252,6 +252,11 @@ const photoStore = {
         .then(() => router.push({ name: 'AlbumLibrary' }))
         .catch(err => console.error(err))
     },
+    deletePhotoFromAlbum({ rootGetters, dispatch }, albumData) {
+      axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
+        .then(() => dispatch('getAlbum', albumData.albumId))
+        .catch(err => console.error(err))
+    },
 
   }
 }

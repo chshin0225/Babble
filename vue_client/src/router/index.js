@@ -10,6 +10,8 @@ import PhotoSearch from '@/views/photos/PhotoSearch'
 import AlbumLibrary from '@/views/photos/AlbumLibrary'
 import AlbumCreate from '@/views/photos/AlbumCreate'
 import AlbumDetail from '@/views/photos/AlbumDetail'
+import AlbumEdit from '@/views/photos/AlbumEdit'
+import AlbumInfoEdit from '@/views/photos/AlbumInfoEdit'
 import TagSelect from '@/views/photos/TagSelect'
 
 // Diary
@@ -94,6 +96,16 @@ Vue.use(VueRouter)
     path: '/photo/library/:albumId',
     component: AlbumDetail,
     name: 'AlbumDetail'
+  },
+  {
+    path: '/photo/library/:albumId/edit',
+    component: AlbumEdit,
+    name: 'AlbumEdit'
+  },
+  {
+    path: '/photo/library/:albumId/info',
+    component: AlbumInfoEdit,
+    name: 'AlbumInfoEdit'
   },
 
 
