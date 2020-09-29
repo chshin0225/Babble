@@ -1,14 +1,15 @@
 <template>
   <div class="p-0" v-if="diary" data-app>
-    <nav class="d-flex justify-content-between bg-pink w-100">
+    <nav class="d-flex justify-content-between bg-pink w-100 p-2">
       <v-icon 
         class="top-left-icons pointer" 
         @click="clickBack"
         color="white"
       >mdi-arrow-left</v-icon>
+      <!-- <div class="d-flex align-items-center ml-3">다른 다이어리 보러가기</div> -->
       <v-spacer></v-spacer>
       <div class="d-flex align-items-center">
-        <v-bottom-sheet>
+        <v-bottom-sheet v-model="sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               class="top-right-icons"
@@ -24,15 +25,7 @@
                 <v-icon color="#FEA59C">mdi-share-outline</v-icon>
                 </v-avatar>
               </v-list-item-avatar>
-              <v-list-item-title>일기 공유</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="clickDelete">
-              <v-list-item-avatar>
-                <v-avatar size="32px" tile>
-                <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
-                </v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-title>일기 삭제</v-list-item-title>
+              <v-list-item-title>다이어리 공유</v-list-item-title>
             </v-list-item>
             <v-list-item @click="clickEdit">
               <v-list-item-avatar>
@@ -40,73 +33,79 @@
                 <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
                 </v-avatar>
               </v-list-item-avatar>
-              <v-list-item-title>일기 수정</v-list-item-title>
+              <v-list-item-title>다이어리 수정</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="clickDelete">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>다이어리 삭제</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-bottom-sheet>
       </div>
     </nav>
-    <div class="diary-top d-flex justify-content-between my-3">
-      <div class="diary-date text-muted">
-        <p>{{diary.diary.diary_date}}</p>
-      </div>
-      <!-- <div class="diary-writer">
-        <span class="mr-3">{{diary.relationship.relationship_name}} 작성</span>
-        <button class="btn btn-pink" @click="sheet = !sheet">:</button>
-        <v-bottom-sheet v-model="sheet">
-          <v-sheet class="text-center" height="27vh">
-            <div class="py-3">
-              <div class="pointer diary-option mb-3" @click="clickShare">일기 공유</div>
-              <hr>
-            </div>
-          </v-sheet>
-        </v-bottom-sheet>
-        
-      </div> -->
-    </div>
-    
-    <div class="diary-title">
-      <h5>{{diary.diary.title}}</h5>
-    </div>
-    <div class="diary-content p-2">
-      <p class="text" v-html="this.diaryContent">
-        <!-- {{diary.content}} -->
-      </p>
-      <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
-    </div>
-    <div class="measurement" v-if="diary.measurement">
-      <div class="scallop-down"></div>
-      <div class="mt-3 growth-title row no-gutters">
-        <div class="col-3 text-center">
-          <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
-          <img width="50px" src="../../assets/giraffe.png" /> -->
-          <img class="img-fluid" src="@/assets/giraffe.png" />
+    <!-- diary 시작 -->
+    <div class="m-3" v-if="currentBaby">
+      <div class="diary-top">
+        <div class="d-flex justify-content-between">
+          <h4>{{diary.diary.create_date | moment('YYYY.M.DD')}}</h4>
+          <span class="color-blue font-weight-bold">#{{ currentBaby.baby_name }} 태어난지 {{ countDays }}일</span>
         </div>
-        <div class="col-9">
-          <p class="growth d-flex justify-content-center">성장 기록</p>
-          <div class="d-flex justify-content-center text-center">
-            <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
-              <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
-            </p>
-            <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
-              <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
-            </p>
-            <p class="growth-record" v-if="diary.measurement.head_size">
-              <span class="growth-record-title">머리둘레</span><br>{{ diary.measurement.head_size }} cm
-            </p>          
+      </div>
+      <hr class="divider">
+      <div class="diary-title">
+        <h5>{{diary.diary.title}}</h5>
+      </div>
+      <div class="diary-content ">
+        <p class="text" v-html="this.diaryContent">
+          <!-- {{diary.content}} -->
+        </p>
+      </div>
+      <div class="measurement" v-if="diary.measurement">
+        <div class="scallop-down"></div>
+        <div class="mt-3 growth-title row no-gutters">
+          <div class="col-3 text-center">
+            <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+            <img width="50px" src="../../assets/giraffe.png" /> -->
+            <img class="img-fluid" src="@/assets/giraffe.png" />
+          </div>
+          <div class="col-9">
+            <p class="growth d-flex justify-content-center">성장 기록</p>
+            <div class="d-flex justify-content-center text-center">
+              <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
+                <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
+              </p>
+              <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
+                <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
+              </p>
+              <p class="growth-record" v-if="diary.measurement.head_size">
+                <span class="growth-record-title">머리둘레</span><br>{{ diary.measurement.head_size }} cm
+              </p>          
+            </div>
           </div>
         </div>
+        <div class="scallop-up"></div>
       </div>
-      <div class="scallop-up"></div>
+      <div class="diary-bottom d-flex justify-content-end my-3">
+        <div>
+          <p class=" m-0 diary-creator">
+            <!-- <img :src="diary.diary.creator.profile_img"> -->
+            <img class="profile-img mr-2" src="https://i.pinimg.com/236x/bf/ee/d2/bfeed24a2d24b42347faff4d27d3941c.jpg">
+            <span>{{diary.diary.creator.name}}({{ diary.relationship.relationship_name}})</span>
+          </p>
+        </div>
+      </div>
     </div>
-    
-    <div class="comment mb-5 mt-3">
-      <h5 class="comment-title mb-3">댓글</h5>
+    <div class="comment p-2">
+      <p class="comment-title mb-3">댓글 </p>
       <!-- 댓글 작성 -->
-      <div class="input-group row no-gutters comment-create mb-3" style="height:65px;">
-        <div class="input-group row no-gutters comment-create" style="height:65px;">
+      <div class="d-flex comment-create pt-2">
+        <div class="col-10">
           <textarea
-            class="col-10 textareaSection p-1" 
+            class="textareaSection w-100" 
             @keyup.enter="enterComment" 
             @input="activeBtn"
             v-model="commentData.content" 
@@ -115,15 +114,16 @@
             rows="1" 
             autofocus
           ></textarea>
+        </div>
+        <div class="col-2 d-flex align-items-center">
           <button 
             :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
-            class="btn col-2"
+            class="btn w-100"
             :disabled="!btnActive"
             @click="clickComment"
           >
-          작성</button>
+          <i class="fas fa-paper-plane"></i></button>
         </div>
-        
       </div>
       <!-- 댓글 리스트 -->
       <div class="comment-list">
@@ -135,18 +135,33 @@
                 <p class="comment-time mr-3">{{comment.modify_date |  moment("from", "now")}}</p>
                 <div v-if="comment.user.id === myaccount.id">
                   <div>
-                    <button 
-                      @click="sheet2=!sheet2" 
-                      type="button" 
-                      class="btn btn-pink">:</button>
                     <v-bottom-sheet v-model="sheet2">
-                      <v-sheet class="text-center" height="18vh">
-                        <div class="py-3">
-                          <div class="pointer diary-option mb-3" @click="clickInitUpdateComment(comment)">댓글 수정</div>
-                          <hr>
-                          <div class="pointer diary-option"  @click="clickDeleteComment(commentData, comment.id)"> 댓글 삭제</div>
-                        </div>
-                      </v-sheet>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                          class="top-right-icons"
+                          color="#FEA59C"
+                          v-bind="attrs"
+                          v-on="on" 
+                          >mdi-dots-vertical</v-icon>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="clickInitUpdateComment(comment)">
+                          <v-list-item-avatar>
+                            <v-avatar size="32px" tile>
+                            <v-icon color="#FEA59C">mdi-share-outline</v-icon>
+                            </v-avatar>
+                          </v-list-item-avatar>
+                          <v-list-item-title>댓글 수정</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item  @click="clickDeleteComment(commentData, comment.id)">
+                          <v-list-item-avatar>
+                            <v-avatar size="32px" tile>
+                            <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                            </v-avatar>
+                          </v-list-item-avatar>
+                          <v-list-item-title>댓글 삭제</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
                     </v-bottom-sheet>
                   </div>
                 </div>
@@ -183,7 +198,8 @@
         </div>
       </div>
     </div>
-    <div style="height: 10vh;"></div>
+
+    <div class="space" style="height: 10vh;"></div>
   </div>
 </template>
 
@@ -228,8 +244,19 @@ export default {
     }
   },
   computed: {
-    ...mapState(['myaccount']),
-    ...mapState('diaryStore', ['diary', 'comments'])
+    ...mapState(['myaccount', 'currentBaby']),
+    ...mapState('diaryStore', ['diary', 'comments']),
+    countDays() {
+      if (this.currentBaby) {
+        var d1 = new Date() 
+        var d2 = new Date(this.currentBaby.birth)
+        var days2 = Math.ceil(Math.abs(d1-d2)/(8.64e+7))
+        return days2
+      }
+      else {
+        return null
+      }
+    },
   },
   methods: {
     ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment', 'deleteComment', 'updateComment', 'deleteDiary']),
@@ -303,6 +330,7 @@ export default {
       }
     },
     clickDeleteComment(commentData, commentId){
+      this.sheet2 = !this.sheet2
        swal.fire({
         text: "정말 삭제하시겠습니까?",
         showCancelButton: true,
@@ -313,7 +341,6 @@ export default {
       .then((result) => {
         if (result.value) {
           this.deleteComment({ diaryId: commentData.diaryId, commentId: commentId })
-          this.sheet2 = !this.sheet2
         } 
       });
     },
@@ -327,6 +354,7 @@ export default {
       this.commentUpdateData.commentId = null
       this.commentUpdateData.content = null
       this.updateBtnActive = false
+      this.sheet2=false
     },
     enterUpdateComment() {
       if (this.commentUpdateData.content.length === 1){
@@ -361,32 +389,42 @@ export default {
 
 <style scoped lang="scss">
 nav {
-  height: 8vh;
+  height: 7vh;
 }
 
 .diary-top {
+  h4 {
+    font-weight: 900;
+  }
+}
+
+.divider {
+  margin-top: 0px;
+}
+
+.diary-bottom {
   .diary-date {
     p {
       margin: 0;
+      font-weight: 700;
     }
   }
-  .diary-writer {
+  .diary-creator {
     p {
       margin: 0;
     }
-    .diary-option {
-      font-size: 1.5rem !important;
-      // &hover {
-      //   color: #FEA59C;
-      // }
+    .profile-img {
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
     }
+    
   }
 }
 
 .diary-title {
   h5 {
-    margin: 0.5rem;
-    border-bottom: 1px solid black;
+    font-weight: 900;
   }
 }
 .diary-content {
@@ -396,7 +434,12 @@ nav {
   }
 }
 
+.diary-footer {
+  color: #979797;
+}
+
 .measurement {
+  border: 1px solid #9BC7FF;
   .growth {
     font-weight: 900;
     font-size: 1.5rem;
@@ -435,27 +478,40 @@ nav {
 
 // comment
 .comment {
+  background: #FAFAFA;
   .comment-title {
-    font-weight: 900;
-    color: #FEA59C;
+    font-weight: 500;
+    // color: #FEA59C;
   }
 
   .comment-create {
-    textarea {
-      border: 1px solid #FEA59C;
-      &:focus {
-        outline-style: none; 
+    background: white;
+    .col-10 {
+      padding: 0;
+      padding-left: 0.5rem;
+      textarea {
+        background: #FAFAFA;
+        border-radius: 15px;
+        padding: 5px;
+        &:focus {
+          outline-style: none; 
+        }
       }
     }
-
-    button {
-      border: 1px solid #FEA59C;
-      background-color: #979797;
-      color: white;
+    .col-2 {
+      padding: 0;
+      button {
+        color: #FEA59C;
+        padding: 0;
+      }
     }
+    
+
+    
   }
   
   .comment-list {
+    padding-top: 0.5rem;
     .comment-username {
       font-weight: 600;
     }
@@ -479,6 +535,10 @@ nav {
       }
     }
   }
+}
+
+.space {
+  background: #FAFAFA;
 }
 
 </style>

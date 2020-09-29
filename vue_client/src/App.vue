@@ -130,7 +130,7 @@ export default {
       if (this.currentBaby) {
         var d1 = new Date() 
         var d2 = new Date(this.currentBaby.birth)
-        var days2 = Math.floor(Math.abs(d1-d2)/(8.64e+7))
+        var days2 = Math.ceil(Math.abs(d1-d2)/(8.64e+7))
         return days2
       }
       else {
