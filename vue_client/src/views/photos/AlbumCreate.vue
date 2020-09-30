@@ -8,7 +8,7 @@
           mdi-arrow-left
         </v-icon>
       </v-btn>
-      <v-btn text color="primary" @click="createAlbum(albumData)">
+      <v-btn text color="primary" @click="clickCreate">
         <span class="font-weight-bold text-subtitle-1">생성</span>
       </v-btn>
     </div>
@@ -16,10 +16,11 @@
     <!-- input field and buttons -->
     <div class="container">
       <v-text-field
-        label="앨범 제목"
+        label="앨범 이름"
         v-model="albumData.album_name"
+        :rules="[rules.required]"
       ></v-text-field>
-      <div class="d-flex justify-content-around row">
+      <div class="d-flex justify-content-around row mt-2">
         <v-btn color="primary" outlined rounded class="col-5" retain-focus-on-click  @click="clickAddPhoto">
           <v-icon class="mr-2">mdi-image</v-icon> 사진 추가
         </v-btn>
@@ -32,15 +33,15 @@
     <!-- 사진 추가 -->
     <div>
       <div class="mx-2" v-if="toggle == 0">
-        <v-text-field
+        <!-- <v-text-field
           label="사진 검색"
           v-model="photoSearchKeyword"
           append-icon="mdi-magnify"
           color="secondary"
           @click:append="clickSearch"
-        ></v-text-field>
+        ></v-text-field> -->
         <!-- photo selection toolbar -->
-        <div>
+        <div class="pt-2">
           <div class="d-flex justify-content-between">
             <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
             <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
@@ -122,9 +123,12 @@ export default {
   data() {
     return {
       albumData: {
-        album_name: null,
+        album_name: '',
         tags: null,
         photos: [],
+      },
+      rules: {
+        required: value => !!value || '앨범 이름을 입력해주세요.',
       },
       toggle: null,
       photoSearchKeyword: null,
@@ -185,6 +189,12 @@ export default {
       } else {
         this.albumData.photos.push(photoId);
       }
+    },
+
+    clickCreate() {
+      if (this.albumData.album_name.trim() !== ''){
+        this.createAlbum(this.albumData)
+      } 
     },
   },
 

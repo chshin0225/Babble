@@ -21,7 +21,7 @@
               <router-link class="black--text" :to="{ name: 'AlbumEdit', params: {albumId: album.id}}">사진 편집</router-link>
             </div>
             <hr>
-            <router-link class="black--text" :to="{ name: 'AlbumInfoEdit', params: {albumId: album.id}}">앨범 정보 수정</router-link>
+            <div class="black--text" @click="clickEditAlbumInfo">앨범 정보 수정</div>
             <hr>
             <div class="black--text" @click="clickDelete">앨범 삭제</div>
           </div>
@@ -96,6 +96,18 @@ export default {
           this.deleteAlbum(this.$route.params.albumId)
         }
       })
+    },
+
+    clickEditAlbumInfo() {
+      // var albumData = {
+      //   id: this.album.id,
+      //   album_name: this.album.album_name,
+      //   tags: []
+      // }
+      // this.album.album_tags.forEach(tag => {
+      //   albumData.tags.push(tag.tag_name)
+      // })
+      this.$router.push({ name: "AlbumInfoEdit", params: { albumId: this.album.id}})
     },
 
     clickPhoto(photo_id) {
