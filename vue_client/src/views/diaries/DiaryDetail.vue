@@ -199,7 +199,7 @@
       </div>
     </div>
 
-    <div class="space" style="height: 10vh;"></div>
+    <div class="space" style="height: 6vh;"></div>
   </div>
 </template>
 
@@ -485,12 +485,12 @@ nav {
   }
 
   .comment-create {
-    background: white;
+    background: #FAFAFA;
     .col-10 {
       padding: 0;
       padding-left: 0.5rem;
       textarea {
-        background: #FAFAFA;
+        background: white;
         border-radius: 15px;
         padding: 5px;
         &:focus {
@@ -538,7 +538,7 @@ nav {
 }
 
 .space {
-  background: #FAFAFA;
+  background: white;
 }
 
 </style>
