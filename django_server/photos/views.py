@@ -1,4 +1,8 @@
+from operator import itemgetter
+from itertools import groupby
+
 from django.shortcuts import render, get_object_or_404
+from django.db.models.functions import TruncDate
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,9 +24,23 @@ class PhotoListView(APIView):
         cb = request.user.current_baby
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-        photos = Photo.objects.filter(baby=cb).order_by('-last_modified')
-        serializer = PhotoListSerializer(photos, many=True)
-        return Response(serializer.data)
+        # photos = Photo.objects.filter(baby=cb).order_by('-last_modified')
+        photos = Photo.objects.filter(baby=cb).values('id', 'last_modified', 'image_url', 'permitted_groups').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
+
+        key = itemgetter('last_modified_date')
+        rows = groupby(photos, key=key)
+
+        return_data = []
+        for date, items in rows:
+            items = list(items)
+            daily_photo = {
+                "date": date,
+                "photos": items
+            }
+            return_data.append(daily_photo)
+
+        return Response(return_data)
+
 
     # 아기 사진 업로드
     def post(self, request):
