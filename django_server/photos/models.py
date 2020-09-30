@@ -21,7 +21,6 @@ class Photo(models.Model):
     # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_photos')
-    # 사진의 metadata?
     create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
     modify_date = models.DateTimeField(auto_now=True)
