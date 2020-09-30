@@ -80,6 +80,7 @@
       <div v-else id="frame" class="row no-gutters">
       </div>
     </div>
+    <div style="height: 10vh"></div>
   </div>
 </template>
 
