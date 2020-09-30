@@ -13,7 +13,7 @@ class TagListSerializer(serializers.ModelSerializer):
 class PhotoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
-        fields = ['id', 'image_url']
+        fields = ['id', 'image_url', 'last_modified', 'create_date', 'modify_date']
 
 class PhotoDetailSerializer(serializers.ModelSerializer):
     permitted_groups = GroupListSerializer(required=False, many=True)
