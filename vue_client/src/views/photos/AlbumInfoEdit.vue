@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="albumDataFetched">
 
     <!-- top toolbar -->
     <div class="d-flex justify-content-between">
@@ -8,7 +8,7 @@
           mdi-arrow-left
         </v-icon>
       </v-btn>
-      <v-btn text color="primary" @click="createAlbum(albumData)">
+      <v-btn text color="primary" @click="editAlbum(albumData)">
         <span class="font-weight-bold text-subtitle-1">수정 완료</span>
       </v-btn>
     </div>
@@ -19,6 +19,7 @@
         label="앨범 제목"
         v-model="album.album_name"
       ></v-text-field>
+      <p>{{ album}}</p>
     </div>
 
     <!-- 사진 추가 -->
@@ -26,7 +27,7 @@
       <!-- 태그 추가 -->
       <div class="mx-2">
         <v-combobox
-          v-model="album.tags"
+          v-model="album.photo_tags"
           :items="tags"
           :search-input.sync="searchTag"
           hide-selected
@@ -70,18 +71,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'AlbumInfoEdit',
 
   data() {
     return {
-      albumData: {
-        album_name: null,
-        tags: null,
-        photos: [],
-      },
+      // albumData: {
+      //   album_name: this.$route.params.albumData.album_name,
+      //   tags: this.$route.parmas.albumData.tags,
+      // },
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,
@@ -89,14 +89,17 @@ export default {
   },
 
   computed: {
-    ...mapState('photoStore', ['album', 'tags'])
+    ...mapState('photoStore', ['album', 'tags']),
+    ...mapGetters('photoStore', ['albumDataFetched']),
+
   },
 
   methods: {
-    ...mapActions('photoStore', ['getAlbum', 'fetchPhotos',]),
+    ...mapActions('photoStore', ['getAlbum', 'fetchTags',]),
     clickBack() {
       this.$router.go(-1)
     },
+
 
   },
 

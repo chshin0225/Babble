@@ -55,15 +55,15 @@ export default {
   .albums .add-album {
     border : 1px solid #e9c6c2;
     border-radius: 10vw;
-    min-width:45vw;
-    min-height:45vw;
+    width:45vw;
+    height:45vw;
   }
 
   .no-photo {
     border : 1px solid #e9c6c2;
     border-radius: 10vw;
-    max-width:45vw;
-    max-height:45vw;
+    width:45vw;
+    height:45vw;
     object-fit: cover;
     object-position: 50% 50%;
   }
@@ -76,8 +76,8 @@ export default {
 
   .cover-photo {
     border-radius: 10vw;
-    max-width:45vw;
-    min-height:45vw;
+    width:45vw;
+    height:45vw;
     object-fit: cover;
     object-position: 50% 50%;
   }
