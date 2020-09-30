@@ -237,6 +237,16 @@ class AlbumPhotoView(APIView):
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
             album_photo.delete()
+        cover_photo = get_object_or_404(Photo, image_url=album.cover_photo).id
+
+        # 커버 사진으로 지정된 사진이 삭제되는 경우
+        if cover_photo in request.data['photos']:
+            try:
+                new_cover_photo = AlbumPhotoRelationship.objects.filter(album=album)[0].photo.image_url
+                album.cover_photo = new_cover_photo
+            except:
+                album.cover_photo = ''
+            album.save()
         return Response({"message":"사진(들)이 앨범에서 삭제되었습니다."})
 
     
