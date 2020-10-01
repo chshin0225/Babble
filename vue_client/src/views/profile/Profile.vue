@@ -6,7 +6,9 @@
       <div class="profile-image-outline">
         <img class="profile-image" src="@/assets/test.jpg" />
         <div id="circle">
-          <img class="photo-edit" src="@/assets/Camera_r.png" />
+          <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer">
+            <img class="photo-edit" src="@/assets/Camera_r.png" />
+          </router-link>
         </div>
       </div>
 
@@ -24,6 +26,16 @@
           readonly
         ></v-text-field>
       </div>
+
+      <router-link :to="{ name: 'ProfileInfoEdit' }" class="view pointer">
+        <button
+          class="btn new-button"
+          :class="{ disabled: !selectedRank }"
+          @click="clickMakeInvitation"
+        >
+          프로필 수정
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -35,6 +47,11 @@ export default {
 </script>
 
 <style scoped>
+.main-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin-top: 10%;
+}
 .profile-image-outline {
   border: 5px solid #fea59c;
   border-radius: 50%;
@@ -63,14 +80,14 @@ export default {
   transform: translate(0%, 30%);
 }
 
-.main-title {
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin-top: 20%;
-}
 .profile-info {
   position: relative;
   width: 85%;
   left: 7.5%;
+}
+.new-button {
+  background-color: #fea59c;
+  color: #f8f8f8;
+  /* width: 100%; */
 }
 </style>
