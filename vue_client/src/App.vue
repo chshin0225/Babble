@@ -3,10 +3,7 @@
     <div>
       <div class="nav" v-if="routes.indexOf(this.$route.name) === -1">
         <Burger class="left-align d-flex align-items-center"></Burger>
-        <div
-          @click="clickLogo"
-          class="logo-sect center-align d-flex align-items-center pointer"
-        >
+        <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer" >
           <span>
             <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
             <img src="@/assets/babble_logo.png" />
@@ -14,24 +11,15 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </div>
-      <nav
-        class="nav2 mt-5 d-flex justify-content-center"
-        v-else-if="
-          authToken === null || routes2.indexOf(this.$route.name) !== -1
-        "
-      >
+      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
         <span>
           <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
           <img src="@/assets/babble_logo.png" />
         </span>
-        <span class="nav2-title color-pink d-flex align-items-center"
-          >Babble</span
-        >
+        <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
       </nav>
-      <Sidebar
-        class="d-flex justify-content-between"
-        style="clear: both; z-index: 100"
-      >
+      
+      <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
         <div class="side d-flex flex-column justify-content-between h-100">
           <div class="sidebar-panel-nav">
             <!-- 현재 babble box info -->
@@ -41,8 +29,7 @@
                   <img src="@/assets/babble_logo.png" />
                 </div>
                 <div class="babble-box" v-if="currentBaby">
-                  <span>{{ currentBaby.baby_name }}</span
-                  ><br />
+                  <span>{{ currentBaby.baby_name }}</span><br />
                   <span>D + {{ countDays }}</span>
                 </div>
               </div>
@@ -53,27 +40,20 @@
 
             <div class="menu-container">
               <li class="list invite pointer" @click="clickInvitationCreate">
-                <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람
-                초대하기
-              </li>
+                <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
               <li class="list menu">
-                <a href="#about"
-                  ><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a
-                >
+                <a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a>
               </li>
               <li class="list menu">
-                <a href="#contact"
-                  ><i class="fas fa-video mr-3"></i> 성장 동영상</a
-                >
+                <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
               </li>
               <li class="list menu">
-                <a href="#contact"
-                  ><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a
-                >
+                <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
               </li>
               <li class="list menu pointer" @click="clickSettings">
-                <i class="fas fa-cog mr-3"></i> 설정
+                <i class="fas fa-cog mr-3"></i> 
+                설정
               </li>
             </div>
           </div>
@@ -94,9 +74,7 @@
               </div>
             </div>
             <div class="text-right mt-3">
-              <p @click="clickBabblebox" class="color-pink pointer">
-                아이들 더보기
-              </p>
+              <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
             </div>
             <div class="mb-5"></div>
           </div>
@@ -107,7 +85,7 @@
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
       <div class="footer row no-gutters bg-pink" v-if="authToken != null">
-        <div
+        <div 
           class="col-4 color-gray pointer"
           :class="{ 'color-red': isAlbum() }"
           @click="clickPhoto"
@@ -214,9 +192,9 @@ export default {
     // navbar
     isAlbum() {
       if (
-        this.$route.name === "PhotoMain" ||
-        this.$route.name === "PhotoList" ||
-        this.$route.name === "AlbumLibrary" ||
+        this.$route.name === "PhotoMain" ||  
+        this.$route.name === "PhotoList" || 
+        this.$route.name === "AlbumLibrary" || 
         this.$route.name === "PhotoSearch" ||
         this.$route.name === "PhotoCreate" ||
         this.$route.name === "AlbumCreate" ||
