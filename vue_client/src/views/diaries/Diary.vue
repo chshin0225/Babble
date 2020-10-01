@@ -3,16 +3,10 @@
     <nav class="nav d-flex justify-content-between p-2">
       <!-- 좌측 형태 정렬 -->
       <div class="nav-container bg-pink">
-        <router-link
-          :to="{ name: 'DiaryPhoto' }"
-          class="view right-outline pointer"
-        >
+        <router-link :to="{ name: 'DiaryPhoto' }" class="view right-outline pointer">
           <i class="fas fa-file-image fa-lg"></i>
         </router-link>
-        <router-link
-          :to="{ name: 'DiaryTimeline' }"
-          class="view right-outline pointer"
-        >
+        <router-link :to="{ name: 'DiaryTimeline' }" class="view right-outline pointer">
           <i class="fas fa-stream fa-lg"></i>
         </router-link>
         <router-link :to="{ name: 'DiaryCalendar' }" class="view pointer">
