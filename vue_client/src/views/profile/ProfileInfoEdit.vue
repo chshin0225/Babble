@@ -18,39 +18,30 @@
           v-model="curpassword"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"
-
           label="현재 비밀번호"
-          hint="At least 8 characters"
-          counter
           @click:append="show1 = !show1"
         ></v-text-field>
-    
+          <!--  hint="At least 8 characters"
+                counter -->
         <v-text-field
           v-model="newpassword"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show1 ? 'text' : 'password'"
-          name="input-10-1"
+          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show2 ? 'text' : 'password'"
           label="새 비밀번호"
-          hint="At least 8 characters"
-          counter
-          @click:append="show1 = !show1"
+          @click:append="show2 = !show2"
         ></v-text-field>
 
         <v-text-field
           v-model="confirmnewpassword"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show1 ? 'text' : 'password'"
-          name="input-10-1"
+          :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show3 ? 'text' : 'password'"
           label="새 비밀번호 확인"
-          hint="At least 8 characters"
-          counter
-          @click:append="show1 = !show1"
+          @click:append="show3 = !show3"
         ></v-text-field>
         <div class="text-center mt-5">
           <button
             class="btn new-button"
-            :class="{ disabled: !selectedRank }"
-            @click="clickMakeInvitation"
+            @click="profileBtn"
           >
             프로필 수정
           </button>
@@ -61,16 +52,31 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: "Profile",
+  computed: {
+    ...mapState([ 'myaccount' ]),
+  },
   data(){
     return{
-      name:"소윤이",
+      name:"",
       curpassword:"",
       newpassword:"",
       confirmnewpassword:"",
       show1:false,
+      show2:false,
+      show3:false,
     }
+  },
+  methods:{
+    profileBtn(){
+      console.log(this.myaccount.name)
+    }
+  },
+  mounted: function(){
+    this.name = this.myaccount.name
   }
 };
 </script>
