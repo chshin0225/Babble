@@ -12,12 +12,14 @@
         <v-text-field 
           label="이름"
           v-model="name"
+          :rules="[rules.required]"
         ></v-text-field>
 
         <v-text-field
           v-model="curpassword"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"
+          :rules="[rules.cmatch]"
           label="현재 비밀번호"
           @click:append="show1 = !show1"
         ></v-text-field>
@@ -27,6 +29,7 @@
           v-model="newpassword"
           :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show2 ? 'text' : 'password'"
+          :rules="[rules.minLen]"
           label="새 비밀번호"
           @click:append="show2 = !show2"
         ></v-text-field>
@@ -35,12 +38,14 @@
           v-model="confirmnewpassword"
           :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show3 ? 'text' : 'password'"
+          :rules="[rules.nmatch]"
           label="새 비밀번호 확인"
           @click:append="show3 = !show3"
         ></v-text-field>
         <div class="text-center mt-5">
           <button
             class="btn new-button"
+            :class="{ disabled: !(nickflag && passflag)}"
             @click="profileBtn"
           >
             프로필 수정
@@ -62,23 +67,82 @@ export default {
   data(){
     return{
       name:"",
+      loadedpassword:"asdf1234",
       curpassword:"",
       newpassword:"",
       confirmnewpassword:"",
       show1:false,
       show2:false,
       show3:false,
+      nickflag:false,
+      passflag:true,
+      rules:{
+        required: value => {
+          if (value.length == 0){
+            this.nickflag = false
+            return 'This field is required.'
+          }
+          else if(value === this.myaccount.name){
+            this.nickflag = false
+            return true
+          }
+          this.nickflag = true
+          return !!value || 'This field is required.'
+        },
+        cmatch: value => {
+          if (value.length != 0 && value != this.loadedpassword){
+            this.passflag = false
+            return "현재 비밀번호와 일치하지 않습니다."
+          }
+          this.passflag = true && this.flagPassword()
+          return true
+        },
+        minLen: value => {
+          if ((value.length < 8 && value.length >0) || (value.length !=0 && !this.validPassword(value))){
+            this.passflag = false
+            return "영문, 숫자 포함 8 자리 이상이어야 해요."
+          }
+
+          this.passflag = true && this.flagPassword()
+          return true
+        },
+        nmatch: value => {
+          if (value.length !=0 && value !== this.newpassword){
+            this.passflag = false
+            return "일치하지 않습니다."
+          }
+
+          this.passflag = true && this.flagPassword()
+          return true
+        },
+      }
     }
   },
   methods:{
     ...mapActions("profileStore", ["testAction"]),
     profileBtn(){
-      console.log(this.myaccount.name)
-      this.testAction("asd")
+      if (this.nickflag && this.passflag){
+        console.log(this.myaccount)
+        this.testAction("asd")
+      }
+    },
+    validPassword(password) {
+      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
+      return va.test(password);
+    },
+    flagPassword(){
+      if (this.curpassword.length == 0 && this.newpassword.length ==0 && this.confirmnewpassword ==0){
+        return true
+      }
+      else if(this.curpassword.length != 0 && this.newpassword.length !=0 && this.confirmnewpassword !=0){
+        return true
+      }
+      return false
     }
   },
   mounted: function(){
     this.name = this.myaccount.name
+    //this.loadedpassword = 
   }
 };
 </script>
