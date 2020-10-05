@@ -4,29 +4,35 @@
       <h5 class="main-title text-center color-pink">Profile</h5>
 
       <div class="profile-image-outline">
-        <img class="profile-image" src="@/assets/test.jpg" />
-        <div id="circle">
-          <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer">
-            <img class="photo-edit" src="@/assets/Camera_r.png" />
-          </router-link>
-        </div>
+        <img class="profile-image" src="@/assets/test.jpg" />        
       </div>
 
       <div class="profile-info">
-        <v-text-field
-          value="아기의 아버지"
-          label="User Name"
-          outlined
-          readonly
-        ></v-text-field>
-        <v-text-field
-          value="dlrmsdn135@naver.com"
-          label="E-mail"
-          outlined
-          readonly
-        ></v-text-field>
+        <h4 class="d-flex align-items-center">
+          <span class="badge badge-pill bg-pink mr-3" >Name</span>
+          <template>
+          <v-text-field class ="text-info" 
+            label="my name is"
+            solo
+            readonly
+            hide-details                     
+          ></v-text-field>        
+          </template>
+        </h4>
+        <h4 class="d-flex align-items-center">
+          <span class="badge badge-pill bg-pink mr-2" >e-mail</span>
+          <template>
+          <v-text-field class ="text-info" width="40%"
+            label="dlrmsdn135@naver.com"
+            solo
+            readonly
+            hide-details                     
+          ></v-text-field>        
+          </template>
+        </h4>
       </div>
 
+      <br><br>
       <router-link :to="{ name: 'ProfileInfoEdit' }" class="view pointer">
         <button
           class="btn new-button"
@@ -41,8 +47,10 @@
 </template>
 
 <script>
+
 export default {
   name: "Profile",
+  
 };
 </script>
 
@@ -58,6 +66,7 @@ export default {
   margin: 5vh auto;
   height: 70vw;
   width: 70vw;
+  overflow: hidden;
 }
 .profile-image {
   margin-top: -1px;
@@ -65,26 +74,13 @@ export default {
   width: 70vw;
   border-radius: 50%;
 }
-#circle {
-  position: relative;
-  left: 70%;
-  bottom: 20%;
-  width: 20%;
-  height: 20%;
-
-  background-color: #fea59c;
-  border-radius: 50%;
-}
-.photo-edit {
-  width: 60%;
-  transform: translate(0%, 30%);
-}
 
 .profile-info {
   position: relative;
-  width: 85%;
-  left: 7.5%;
+  width: 90%;
+  left: 3%;
 }
+
 .new-button {
   background-color: #fea59c;
   color: #f8f8f8;
