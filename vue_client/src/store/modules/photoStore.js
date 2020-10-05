@@ -56,7 +56,7 @@ const photoStore = {
         .then(res => {
           commit('SET_PHOTOS', res.data)
         })
-        .catch(err => console.log(err.response.data))
+        .catch(err => console.error(err))
     },
     findPhoto({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
