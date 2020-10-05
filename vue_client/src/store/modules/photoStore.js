@@ -56,7 +56,7 @@ const photoStore = {
         .then(res => {
           commit('SET_PHOTOS', res.data)
         })
-        .catch(err => console.log(err.response.data))
+        .catch(err => console.error(err))
     },
     findPhoto({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
@@ -255,6 +255,12 @@ const photoStore = {
     deletePhotoFromAlbum({ rootGetters, dispatch }, albumData) {
       axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
         .then(() => dispatch('getAlbum', albumData.albumId))
+        .catch(err => console.error(err))
+    },
+    editAlbum({ rootGetters }, albumData) {
+      console.log(albumData)
+      axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.id}/`, albumData, rootGetters.config)
+        .then(() => router.push({ name: 'AlbumDetail', params: {albumId: albumData.id}}))
         .catch(err => console.error(err))
     },
 
