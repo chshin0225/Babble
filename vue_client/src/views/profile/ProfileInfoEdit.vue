@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Profile",
@@ -71,8 +71,10 @@ export default {
     }
   },
   methods:{
+    ...mapActions("profileStore", ["testAction"]),
     profileBtn(){
       console.log(this.myaccount.name)
+      this.testAction("asd")
     }
   },
   mounted: function(){
