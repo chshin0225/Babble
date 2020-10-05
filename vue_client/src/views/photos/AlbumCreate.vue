@@ -48,7 +48,7 @@
           </div>
         </div>
         <!-- photo grid -->
-        <div class="photos row" v-if="photos">
+        <div v-if="photos">
           <div class="my-3" v-for="(dates, idx) in photos" :key="idx">
             <h5 class="dates">{{dates.date | moment("YYYY년 M월 DD일")}}</h5>
             <div class="photos row no-gutters" v-if="photos.length">
@@ -56,9 +56,9 @@
                 <div class="photo">
                   <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
                   <img
-                  :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
-                  :alt="photo.id" 
-                  @click="onImageSelect(photo.id)"
+                    :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+                    :alt="photo.id" 
+                    @click="onImageSelect(photo.id)"
                   >
                 </div>
               </div>
