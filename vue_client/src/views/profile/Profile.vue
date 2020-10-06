@@ -9,21 +9,22 @@
 
       <div class="profile-info">
         <h4 class="d-flex align-items-center">
-          <span class="badge badge-pill bg-pink mr-3" >Name</span>
-          <template>
+          <span class="badge badge-pill bg-pink mr-3" >Name</span>          
           <v-text-field class ="text-info" 
-            label="my name is"
+            label=name    
+            v-model="myaccount.name"       
             solo
             readonly
             hide-details                     
           ></v-text-field>        
-          </template>
+          
         </h4>
         <h4 class="d-flex align-items-center">
           <span class="badge badge-pill bg-pink mr-2" >e-mail</span>
           <template>
-          <v-text-field class ="text-info" width="40%"
-            label="dlrmsdn135@naver.com"
+          <v-text-field class ="text-info"
+            label="email"
+            v-model="myaccount.email"
             solo
             readonly
             hide-details                     
@@ -34,11 +35,7 @@
 
       <br><br>
       <router-link :to="{ name: 'ProfileInfoEdit' }" class="view pointer">
-        <button
-          class="btn new-button"
-          :class="{ disabled: !selectedRank }"
-          @click="clickMakeInvitation"
-        >
+        <button class="btn new-button" >
           프로필 수정
         </button>
       </router-link>
@@ -47,10 +44,24 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Profile",
-  
+  computed: {
+    ...mapState([ 'myaccount' ]),
+  },
+  data(){
+    return{      
+    }
+  },
+  methods:{
+    ...mapActions("profileStore", ["testAction"]),
+    ...mapActions(["findMyAccount"]),    
+  },
+  created(){
+    this.findMyAccount();
+  }
 };
 </script>
 
