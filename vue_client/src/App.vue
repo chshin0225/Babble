@@ -84,7 +84,7 @@
       <router-view></router-view>
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
-      <div class="footer row no-gutters bg-pink" v-if="authToken != null">
+      <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
         <div 
           class="col-4 color-gray pointer"
           :class="{ 'color-red': isAlbum() }"
@@ -130,9 +130,11 @@ export default {
     return {
       isBurgerActive: false,
       routes: [
+         // Diary
         "DiaryCreate",
         "DiaryUpdate",
         "DiaryDetail",
+        // Auth
         "HowToRegisterBaby",
         "Signup",
         "SignupKakao",
@@ -143,9 +145,11 @@ export default {
         "HowToRegisterBaby",
         "RegisterBabyRelate",
         "RegisterInviteLink",
+        // Photo
         "PhotoDetail",
         "PhotoCreate",
-        "PhotoUpdate"
+        "PhotoUpdate",
+        "AlbumDetail"
       ],
       routes2: [
         "Signup",
@@ -155,12 +159,13 @@ export default {
         "PasswordFind",
         "PasswordFindEmail",
         "SignupKakao",
+        "RegisterInviteLink",
       ],
       days: null,
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -175,7 +180,13 @@ export default {
   watch: {
     myaccount() {
       if (this.myaccount) {
-        this.findBaby(this.myaccount.current_baby);
+        if (!this.myaccount.current_baby) {
+          if (!this.invitationToken) {
+            this.$router.push({name: 'RegisterBaby'})
+          }
+        } else {
+          this.findBaby(this.myaccount.current_baby);
+        }
       }
     },
   },
@@ -270,7 +281,9 @@ export default {
     },
   },
   mounted() {
-    this.findMyAccount();
+    if (this.authToken) {
+      this.findMyAccount();
+    }
   },
 };
 </script>

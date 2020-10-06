@@ -39,7 +39,7 @@ const accountStore = {
                   console.log(rootState.invitationToken)
                   router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
                 } else {
-                  router.push({name: 'HowToRegisterBaby'})
+                  router.push({name: 'RegisterBaby'})
                 }
               })
 
@@ -166,7 +166,7 @@ const accountStore = {
                 if (rootState.invitationToken) {
                   router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
                 } else {
-                  router.push({name: 'HowToRegisterBaby'})
+                  router.push({name: 'RegisterBaby'})
                 } 
               }
             })
