@@ -23,6 +23,7 @@ export default new Vuex.Store({
     myaccount: null,
     currentBaby: null,
     babbleboxes: null,
+    accessLog: null,
     invitationToken: null,
     invitationData: null,
     invitationURL: null
@@ -43,6 +44,9 @@ export default new Vuex.Store({
     },
     SET_BABBLEBOX(state, babbleboxes) {
       state.babbleboxes = babbleboxes
+    },
+    SET_ACCESS_LOG(state, accessLog) {
+      state.accessLog = accessLog
     },
     SET_INVITATION_TOKEN(state, token) {
       state.invitationToken = token
@@ -107,6 +111,22 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+    fetchAccessLog({ getters, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.access, getters.config)
+        .then(res => {
+          if (res.data.length <= 3) {
+            commit('SET_ACCESS_LOG', res.data)
+          } else {
+            let accessLog = [
+              res.data[0],
+              res.data[1],
+              res.data[2],
+            ]
+            commit('SET_ACCESS_LOG', accessLog)
+          }
+        })
+        .catch(err => console.error(err))
     },
     accessBabbleBox({ dispatch, getters }, accessData) {
       axios.post(SERVER.URL + SERVER.ROUTES.access, accessData, getters.config)

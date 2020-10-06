@@ -59,18 +59,11 @@
           </div>
           <div class="sidebar-bottom">
             <hr />
-            <div class="d-flex justify-content-between">
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">사랑이</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">럭키</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">다롱이</p>
+            <div class="d-flex row">
+              <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
+                <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                <img v-else src="@/assets/babble_logo.png" />
+                <p class="text-center">{{ baby.baby_name }}</p>
               </div>
             </div>
             <div class="text-right mt-3">
@@ -160,7 +153,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "accessLog"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -178,10 +171,13 @@ export default {
         this.findBaby(this.myaccount.current_baby);
       }
     },
+    currentBaby() {
+      this.fetchAccessLog()
+    },
   },
 
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });
@@ -268,9 +264,15 @@ export default {
       backdrop.click();
       this.$router.push({ name: "WeightMeasurement" })
     },
+    clickOtherBaby(babyId) {
+      var babblebox = new Object()
+      babblebox.baby = babyId
+      this.accessBabbleBox(babblebox)
+    }
   },
   mounted() {
     this.findMyAccount();
+    this.fetchAccessLog()
   },
 };
 </script>
