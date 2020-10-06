@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 
 from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer, AlbumListSerializer, AlbumDetailSerializer
 
-from .models import Tag, Photo, PhotoComment, PhotoTag, Album, AlbumPhotoRelationship, AlbumTag
+from accounts.models import Group, UserBabyRelationship
+from .models import Tag, Photo, PhotoComment, PhotoTag, PhotoGroup, Album, AlbumPhotoRelationship, AlbumTag
 # Create your views here.
 
 class TagListView(APIView):
@@ -24,8 +25,16 @@ class PhotoListView(APIView):
         cb = request.user.current_baby
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-        # photos = Photo.objects.filter(baby=cb).order_by('-last_modified')
-        photos = Photo.objects.filter(baby=cb).values('id', 'last_modified', 'image_url', 'permitted_groups').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        if relationship.rank_id == 3:
+            if relationship.group:
+                photos_guest = Photo.objects.filter(baby=cb, photo_scope=2, permitted_groups=relationship.group)
+                photos_all = Photo.objects.filter(baby=cb, photo_scope=0)
+                photos = (photos_guest | photos_all).values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
+            else:
+                photos = Photo.objects.filter(baby=cb, photo_scope=0).values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
+        else:
+            photos = Photo.objects.filter(baby=cb).values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
 
         key = itemgetter('last_modified_date')
         rows = groupby(photos, key=key)
@@ -47,21 +56,30 @@ class PhotoListView(APIView):
         cb = request.user.current_baby.id
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-        
-        new_photos = request.data
+        new_photos = request.data["photoData"]
+        photo_scope = request.data["photoScope"]
+        if not photo_scope in [0, 1]:
+            groups = photo_scope
+            photo_scope = 2
         for photo in new_photos:
             photo["baby"] = cb
+            photo["photo_scope"] = photo_scope
             serializer = PhotoDetailSerializer(data=photo)
             if serializer.is_valid(raise_exception=True):
                 created_photo = serializer.save(creator=request.user, modifier=request.user)
-            # tag
-            for tag_name in photo['tags']:
-                try:
-                    tag = Tag.objects.get(tag_name=tag_name)
-                except:
-                    tag = Tag(tag_name=tag_name)
-                    tag.save()
-                PhotoTag(tag=tag, photo=created_photo).save()
+                # tag
+                for tag_name in photo['tags']:
+                    try:
+                        tag = Tag.objects.get(tag_name=tag_name)
+                    except:
+                        tag = Tag(tag_name=tag_name)
+                        tag.save()
+                    PhotoTag(tag=tag, photo=created_photo).save()
+                # groups
+                if photo_scope == 2:
+                    for group_id in groups:
+                        PhotoGroup(group=get_object_or_404(Group, pk=group_id), photo=created_photo).save()
+
         return Response({"message":"사진이 등록되었습니다."})
 
 class PhotoDetailView(APIView):
@@ -69,42 +87,61 @@ class PhotoDetailView(APIView):
     def get(self, request, photo_id):
         photo = get_object_or_404(Photo, id=photo_id)
         if request.user.current_baby == photo.baby:
-            serializer = PhotoDetailSerializer(photo)
-            return Response(serializer.data)
+            relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
+            if photo.photo_scope == 0 or relationship.rank_id in [1, 2]:
+                serializer = PhotoDetailSerializer(photo)
+                return Response(serializer.data)
+            else:
+                if photo.photo_scope == 1:
+                    return Response({"message": "접근 권한이 없습니다."}, status=400)
+                else:
+                    if len(PhotoGroup.objects.filter(photo=photo, group=relationship.group)):
+                        serializer = PhotoDetailSerializer(photo)
+                        return Response(serializer.data)
+                    else:
+                        return Response({"message": "접근 권한이 없습니다."}, status=400)
         else:
-            raise ValueError('해당 사진을 가져올 수 없습니다.')
+            return Response({"message": "접근 권한이 없습니다."}, status=400)
     
     # 특정 사진 디테일 정보 수정
     def put(self, request, photo_id):
-        cb = request.user.current_baby.id
+        data = request.data
+        cb = request.user.current_baby
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-        photo = get_object_or_404(Photo, id=photo_id)
-        request.data["baby"] = cb
-        # 여기서 권한 검증이 한 번 들어가줘야함
-        serializer = PhotoDetailSerializer(photo, data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(modifier=request.user)
-            
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
+        if relationship.rank_id == 3:
+            return Response({"message": "수정할 권한이 없습니다."}, status=400)
+        else:
+            photo = get_object_or_404(Photo, id=photo_id)        
+            # tags
             photo.photo_tags.clear()
-            for tag_name in request.data['tags']:
+            for tag_name in data['photo_tags']:
                 try:
                     tag = Tag.objects.get(tag_name=tag_name)
                 except:
                     tag = Tag(tag_name=tag_name)
                     tag.save()
                 PhotoTag(tag=tag, photo=photo).save()
-
+            # scope
+            photo.permitted_groups.clear()
+            photo.photo_scope = data['photo_scope']
+            if not data['photo_scope'] in [0, 1]:
+                for group_id in data['permitted_groups']:
+                        PhotoGroup(group=get_object_or_404(Group, pk=group_id), photo=photo).save()
+            photo.save()
+            serializer = PhotoDetailSerializer(photo)
             return Response(serializer.data)
-        return Response(serializer.errors)
 
     # 특정 사진 삭제
     def delete(self, request, photo_id):
-        photo = get_object_or_404(Photo, id=photo_id)
-        # 여기서 권한 검증이 한 번 들어가줘야함 
-        photo.delete()
-        return Response({"message":"사진이 삭제되었습니다."})
-
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
+        if relationship.rank_id == 3:
+            return Response({"message": "삭제할 권한이 없습니다."}, status=400)
+        else:
+            photo = get_object_or_404(Photo, id=photo_id)
+            photo.delete()
+            return Response({"message":"사진이 삭제되었습니다."}, status=200)
 
 class PhotoCommentListView(APIView):
     # 사진 댓글 리스트 조회

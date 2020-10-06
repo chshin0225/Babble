@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from accounts.models import Group
+from accounts.models import Group, Rank
 # from accounts.models import Group, UserBabyRelationship
 from babies.models import Baby
 
@@ -25,11 +25,19 @@ class Photo(models.Model):
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_DEFAULT, default=owner, related_name='modified_photos')
     modify_date = models.DateTimeField(auto_now=True)
 
-    permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos')
+    photo_scope = models.IntegerField()
+    # 0 => 전체 공개
+    # 1 => 양육자 공개
+    # 2 => 게스트 공개(그룹별)
+    permitted_groups = models.ManyToManyField(Group, related_name='allowed_photos', through='PhotoGroup')
     photo_tags = models.ManyToManyField(Tag, related_name='tagged_photos', through='PhotoTag')
 
 class PhotoTag(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+
+class PhotoGroup(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
 
 class PhotoComment(models.Model):
