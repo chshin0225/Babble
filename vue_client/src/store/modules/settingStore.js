@@ -104,7 +104,7 @@ const settingStore = {
           console.log(err)
       })
 
-    }
+    },
   }
 }
 
