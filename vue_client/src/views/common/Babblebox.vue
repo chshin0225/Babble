@@ -10,7 +10,7 @@
       <div class="babblebox d-flex justify-content-between my-3">
         <div class="babblebox-info d-flex">
           <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
+            <img src="@/assets/babble_logo_face2.png">
           </div>
           <div class="babble-box">
             <p>{{ babblebox.baby.baby_name }}</p>
@@ -26,7 +26,7 @@
       <div class="babblebox d-flex justify-content-between my-3">
         <div class="babblebox-info d-flex">
           <div class="profile mr-3">
-            <img src="http://bit.do/babbleprofile">
+            <img src="@/assets/babble_logo_face2.png">
           </div>
           <div class="babble-box d-flex align-items-center pointer" @click="clickCreate">
             <p>아기 추가하기</p>

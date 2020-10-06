@@ -190,15 +190,66 @@ const accountStore = {
             });
         },
         changePassword({ rootGetters }, passwordData) {
-          axios.put(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
+          axios.post(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
             .then(res => {
               console.log(res)
+              Swal.fire({
+                icon: 'success',
+                text: '비밀번호가 변경되었습니다.'
+              })
+              router.go(0)
+            })
+            .catch(err => {
+              console.log(err)
+              Swal.fire({
+                icon: 'error',
+                text: '비밀번호를 확인해주세요.'
+              })
+          })
+        },
+        changeProfile({ rootGetters }, profileData) {
+          axios.put(SERVER.URL + '/accounts/profilechange/', profileData, rootGetters.config)
+            .then(res => {
+              console.log(res)
+              Swal.fire({
+                icon: 'success',
+                text: '프로필 정보가 변경되었습니다.'
+              })
               router.go(0)
             })
             .catch(err => {
               console.log(err)
           })
         },
+        updateProfile({rootGetters, rootState, commit}, profileUpdateData){
+          if(profileUpdateData.newPassWord){
+            const passwordData = {
+              "old_password": profileUpdateData.currentPassword,
+              "new_password1": profileUpdateData.newPassword,
+              "new_password2": profileUpdateData.confirmNewPassword
+            }
+            axios.post(SERVER.URL + SERVER.ROUTES.passwordChange,  passwordData, rootGetters.config)
+              .then(res =>{
+                console.log(res)
+              })
+              .catch(err => {
+                console.log(err)
+            })
+          }
+
+          if(profileUpdateData.name != rootState.myaccount.name){
+            const nameData = {
+              "name": profileUpdateData.name
+            }
+            axios.put(SERVER.URL + SERVER.ROUTES.profileChange, nameData, rootGetters.config)
+              .then(res=>{
+                commit("SET_MYACCOUNT", res.data, {root:true})
+              })
+              .catch(err => {
+                console.log(err)
+            })
+          }
+        }
     }
 }
 

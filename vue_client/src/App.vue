@@ -42,35 +42,34 @@
               <li class="list invite pointer" @click="clickInvitationCreate">
                 <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
+              <li class="list menu pointer" @click="clickBabySettings">
+                  <i class="fas fa-cog mr-3"></i> 아기 설정
+              </li>
+              <li class="list menu pointer" @click="clickGroupSettings">
+                  <i class="fas fa-users-cog mr-3"></i> 그룹 설정
+              </li>
               <li class="list menu pointer" @click="clickMeasurements">
                   <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
-              <li class="list menu">
+              <!-- <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
               </li>
               <li class="list menu">
                 <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
-              </li>
-              <li class="list menu pointer" @click="clickSettings">
+              </li>  -->
+              <!-- <li class="list menu pointer" @click="clickSettings">
                 <i class="fas fa-cog mr-3"></i> 
                 설정
-              </li>
+              </li> -->
             </div>
           </div>
           <div class="sidebar-bottom">
             <hr />
-            <div class="d-flex justify-content-between">
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">사랑이</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">럭키</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">다롱이</p>
+            <div class="d-flex row">
+              <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
+                <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                <img v-else src="@/assets/babble_logo.png" />
+                <p class="text-center">{{ baby.baby_name }}</p>
               </div>
             </div>
             <div class="text-right mt-3">
@@ -165,7 +164,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -189,10 +188,13 @@ export default {
         }
       }
     },
+    currentBaby() {
+      this.fetchAccessLog()
+    },
   },
 
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });
@@ -264,10 +266,20 @@ export default {
       backdrop.click();
       this.logout();
     },
-    clickSettings() {
+    /*clickSettings() {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "Settings" });
+    },*/
+    clickBabySettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "BabySetting" });
+    },
+    clickGroupSettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "RankSetting" });
     },
     clickInvitationCreate() {
       let backdrop = document.querySelector(".sidebar-backdrop");
@@ -279,11 +291,17 @@ export default {
       backdrop.click();
       this.$router.push({ name: "WeightMeasurement" })
     },
+    clickOtherBaby(babyId) {
+      var babblebox = new Object()
+      babblebox.baby = babyId
+      this.accessBabbleBox(babblebox)
+    }
   },
   mounted() {
     if (this.authToken) {
       this.findMyAccount();
     }
+    this.fetchAccessLog()
   },
 };
 </script>

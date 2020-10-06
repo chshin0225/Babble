@@ -34,9 +34,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby', 'user_type']
 
 class BabyAccessSerializer(serializers.ModelSerializer):
+    baby_name = serializers.SerializerMethodField('get_baby_name')
+    profile_image = serializers.SerializerMethodField('get_profile_image')
     class Meta:
         model = BabyAccess
         fields = '__all__'
+
+    def get_baby_name(self, log):
+        return log.baby.baby_name
+
+    def get_profile_image(self, log):
+        return log.baby.profile_image
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:
