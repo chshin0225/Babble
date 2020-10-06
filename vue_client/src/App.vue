@@ -26,7 +26,9 @@
             <div class="upper bg-pink d-flex justify-content-between">
               <div class="d-flex">
                 <div class="profile float-left mr-3">
-                  <img src="@/assets/babble_logo.png" />
+                  <!-- <img src="@/assets/babble_logo.png" /> -->
+                  <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+                  <img v-else src="@/assets/babble_logo.png" />
                 </div>
                 <div class="babble-box" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name }}</span><br />
@@ -417,11 +419,13 @@ a:hover {
 
 .profile img,
 .other-profile img {
-  max-width: 50px;
-  height: auto;
+  /*max-width: 50px;
+  height: auto;*/
+  width: 50px;
+  height : 50px;
   border: 1px solid #fea59c;
   border-radius: 50%;
-  background-color: white;
+  /*background-color: white;*/
 }
 
 /*  footer */
