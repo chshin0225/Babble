@@ -2,7 +2,7 @@
   <div class="container" data-app>
 
     <div class="albums row">
-      <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center" v-if="relationship.rank in [1, 2]">
+      <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center" v-if="relationship.rank === 1 || relationship.rank === 2">
         <div class="album add-album d-flex justify-content-center align-items-center">
           <v-btn icon color="primary" :to="{ name: 'AlbumCreate' }" class="text-decoration-none">
             <v-icon x-large>mdi-plus-circle</v-icon>      
