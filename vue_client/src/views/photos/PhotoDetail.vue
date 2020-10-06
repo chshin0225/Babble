@@ -40,7 +40,7 @@
     </nav>
 
     <!-- photo -->
-    <div class="" v-if="photo">
+    <div class="photo-box p-3" v-if="photo">
       <div class="photo-content">
         <div class="photo-container">
           <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
@@ -404,6 +404,11 @@ nav {
   margin-left:5px;
   font-size:28px;
 }
+
+// .photo-box {
+//   padding: 2px;
+// }
+
 .photo-container{
     text-align:center;
 }
