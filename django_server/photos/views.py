@@ -186,7 +186,7 @@ class PhotoCommentDetailView(APIView):
 class PhotoSearchView(APIView):
     def post(self, request):
         keyword = request.data["keyword"]
-        cb = request.user.current_baby.id
+        cb = request.user.current_baby
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
         searched_photos = Photo.objects.none()
@@ -194,6 +194,18 @@ class PhotoSearchView(APIView):
         for tag in tags:
             searched_photos = searched_photos | tag.tagged_photos.all()
         searched_photos = searched_photos.filter(baby=cb)
+
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        if relationship.rank_id == 3:
+            if relationship.group:
+                photos_guest = searched_photos.filter(photo_scope=2, permitted_groups=relationship.group)
+                photos_all = searched_photos.filter(photo_scope=0)
+                searched_photos = (photos_guest | photos_all).order_by('-last_modified')
+            else:
+                searched_photos = searched_photos.filter(photo_scope=0).order_by('-last_modified')
+        else:
+            searched_photos = searched_photos.order_by('-last_modified')
+        
         serializer = PhotoListSerializer(searched_photos, many=True)
         return Response(serializer.data)
 
