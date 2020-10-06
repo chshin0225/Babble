@@ -79,6 +79,12 @@ class BabyAccessView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors)
 
+class RelationshipView(APIView):
+    def get(self, request):
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
+        serializer = UserBabyRelationshipSerializer(relationship)
+        return Response(serializer.data)
+
 class GroupListView(APIView):
     # 한 babble box 내의 존재하는 그룹들 조회
     def get(self, request):
