@@ -12,20 +12,22 @@
         v-if="this.profile_image"
         :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + this.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
         style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;">
-      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/baby.png" />
+      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />
 
 
-      <div id="circle" style="
-  position: relative;
-  left: 48vw;
-  bottom: 12vw;
-  width: 15vw;
-  height: 15vw;
-  background-color: #fea59c;
-  border-radius: 50%;">
+      <div id="circle" 
+          style="position: relative;
+                left: 48vw;
+                bottom: 12vw;
+                width: 15vw;
+                height: 15vw;
+                background-color: #fea59c;
+                border-radius: 50%;
+                cursor:pointer" 
+          @click="clickUpload()">
         <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
           <input @change="change4" type="file" id="file" name="file" hidden>
-          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png" @click="clickUpload()"/>
+          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
         <!-- </router-link> -->
       </div>
     </div>
