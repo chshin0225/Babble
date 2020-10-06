@@ -43,7 +43,7 @@
         <div class="text-center">
           <button
             class="btn new-button"
-            :class="{ disabled: !(nickflag && passflag)}"
+            :class="{ disabled: !(nickflag)}"
             @click="profileBtn"
           >
             프로필 수정
@@ -80,7 +80,7 @@
         <div class="text-center mt-5">
           <button
             class="btn new-button"
-            :class="{ disabled: !(nickflag && passflag)}"
+            :class="{ disabled: !(passflag)}"
             @click="changePW"
           >
             비밀번호 변경
@@ -104,7 +104,6 @@ export default {
     return{
       name:"",
       profile_image:"", 
-      //loadedpassword:"asdf1234",
       old_password:"",
       new_password1:"",
       new_password2:"",
@@ -113,7 +112,7 @@ export default {
       show2:false,
       show3:false,
       nickflag:false,
-      passflag:true,
+      passflag:false,
       rules:{
         required: value => {
           if (value.length == 0){
@@ -127,20 +126,15 @@ export default {
           this.nickflag = true
           return !!value || 'This field is required.'
         },
-        /*cmatch: value => {
-          if (value.length != 0 && value != this.loadedpassword){
-            this.passflag = false
-            return "현재 비밀번호와 일치하지 않습니다."
-          }
-          this.passflag = true && this.flagPassword()
-          return true
-        },*/
         minLen: value => {
           if ((value.length < 8 && value.length >0) || (value.length !=0 && !this.validPassword(value))){
             this.passflag = false
             return "영문, 숫자 포함 8 자리 이상이어야 해요."
           }
-
+          if (value.length == 0){
+            this.passflag = false
+            return true
+          }
           this.passflag = true && this.flagPassword()
           return true
         },
@@ -148,6 +142,10 @@ export default {
           if (value.length !=0 && value !== this.new_password1){
             this.passflag = false
             return "일치하지 않습니다."
+          }
+          else if(value.length == 0){
+            this.passflag = false
+            return true
           }
 
           this.passflag = true && this.flagPassword()
@@ -175,20 +173,25 @@ export default {
       })
     },
     profileBtn(){
+      if(this.nickflag){
+        var profileData = {
+                            name : this.name,
+                            profile_image : this.profile_image,
+                            };
+        this.changeProfile(profileData);
+      }
 
-      var profileData = {
-                          name : this.name,
-                          profile_image : this.profile_image,
-                          };
-      this.changeProfile(profileData);
     },
     changePW(){
-      var passwordData = {
-                          old_password : this.old_password,
-                          new_password1 : this.new_password1,
-                          new_password2 : this.new_password2 
-                          };
-      this.changePassword(passwordData);
+      if(this.passflag){
+        var passwordData = {
+                            old_password : this.old_password,
+                            new_password1 : this.new_password1,
+                            new_password2 : this.new_password2 
+                            };
+        this.changePassword(passwordData);
+      }
+
 
     },
     validPassword(password) {
