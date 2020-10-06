@@ -83,32 +83,35 @@
       <router-view></router-view>
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
-      <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
-        <div 
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isAlbum() }"
-          @click="clickPhoto"
-        >
-          <p><i class="fas fa-images"></i></p>
-          <p>Photo</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isDiary() }"
-          @click="clickDiary"
-        >
-          <p><i class="fas fa-book"></i></p>
-          <p>Diary</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isProfile() }"
-          @click="clickProfile"
-        >
-          <p><i class="fas fa-user"></i></p>
-          <p>Profile</p>
+      <div v-if="this.myaccount">
+        <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
+          <div 
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isAlbum() }"
+            @click="clickPhoto"
+          >
+            <p><i class="fas fa-images"></i></p>
+            <p>Photo</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isDiary() }"
+            @click="clickDiary"
+          >
+            <p><i class="fas fa-book"></i></p>
+            <p>Diary</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isProfile() }"
+            @click="clickProfile"
+          >
+            <p><i class="fas fa-user"></i></p>
+            <p>Profile</p>
+          </div>
         </div>
       </div>
+
     </div>
   </v-app>
 </template>
