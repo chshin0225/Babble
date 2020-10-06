@@ -51,7 +51,7 @@
           <!-- <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip> -->
           
         </div>
-f
+
         <div class="mt-2 photo-date text-muted">
           <p>{{photo.last_modified | convertDate}}</p>
         </div>
