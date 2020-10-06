@@ -5,8 +5,8 @@
       <div style="width:100%; text-align:center; padding: 0 10vw;">
       <!--<div class="profile-image-outline">
         <img v-if="myaccount.profile_image" class="profile-image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />-->
-        <img v-if="myaccount.profile_image" class="profile-image"  :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-        <img v-else class="profile-image" src="@/assets/babble_logo.png" />        
+        <img v-if="myaccount.profile_image" style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;"  :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+        <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />        
       </div>
 
       <div class="profile-info mt-10">
