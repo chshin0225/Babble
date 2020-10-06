@@ -45,7 +45,6 @@ import RegisterInviteLink from "@/views/accounts/RegisterInviteLink";
 
 // Profile
 import Profile from "@/views/profile/Profile";
-import ProfilePhotoEdit from "@/views/profile/ProfilePhotoEdit";
 import ProfileInfoEdit from "@/views/profile/ProfileInfoEdit";
 
 import InvitationConfirm from "@/views/common/InvitationConfirm";
@@ -246,11 +245,6 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
-  },
-  {
-    path: "/profile/photoedit",
-    name: "ProfilePhotoEdit",
-    component: ProfilePhotoEdit,
   },
   {
     path: "/profile/infoedit",
