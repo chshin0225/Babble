@@ -201,6 +201,10 @@ const accountStore = {
             })
             .catch(err => {
               console.log(err)
+              Swal.fire({
+                icon: 'error',
+                text: '비밀번호를 확인해주세요.'
+              })
           })
         },
         changeProfile({ rootGetters }, profileData) {
