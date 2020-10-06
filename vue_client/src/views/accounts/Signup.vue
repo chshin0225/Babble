@@ -135,7 +135,7 @@ export default {
         } else this.error.password1 = false;
     },
     validpassword1(password1) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
+      var va = /^(?=.*\d)(?=.*)(?=.*[a-zA-Z]).{8,}$/;
       return va.test(password1);
     },
     checkpassword2ationForm() {

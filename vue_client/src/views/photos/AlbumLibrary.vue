@@ -12,11 +12,11 @@
       </div>
       <!-- 내 앨범들 -->
       <router-link v-for="album in albums" :key="album.id" :to="{ name: 'AlbumDetail', params: {albumId: album.id}}" class="col-6 d-flex flex-column justify-content-center align-items-center text-dark">
-        <div class="album">
+        <div class="album add-album">
           <v-img class="cover-photo" v-if="album.cover_photo" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + album.cover_photo + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" :alt="album.album_name"></v-img>
           <v-img class="no-photo" v-else src="@/assets/baby_face.png"></v-img>
         </div>
-        <p class="album-title">{{ album.album_name }}</p>
+        <p class="album-title" mt-2>{{ album.album_name }}</p>
       </router-link>
     </div>
 

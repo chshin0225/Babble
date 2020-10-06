@@ -80,7 +80,7 @@
                 <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
                   <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
                 </p>
-                <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
+                <p class="growth-record mb-3" v-if="diary.measurement.height">
                   <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
                 </p>
                 <p class="growth-record" v-if="diary.measurement.head_size">
@@ -177,24 +177,27 @@
             </div>
             <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
             <div v-else>
-              <div class="input-group row no-gutters comment-create" style="height:65px;">
-              <textarea
-                class="col-10 textareaSection p-1" 
-                @keyup.enter="enterUpdateComment" 
-                @input="updateActiveBtn(comment.content)"
-                v-model="commentUpdateData.content" 
-                type="content" 
-                rows="1" 
-                autofocus
-              ></textarea>
-              <button 
-                :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
-                class="btn col-2"
-                :disabled="!updateBtnActive"
-                @click="clickUpdateComment(commentUpdateData)"
-              >
-                수정
-              </button>
+              <div class="d-flex comment-create pt-2">
+                <div class="col-10">
+                  <textarea
+                    class="textareaSection w-100" 
+                    @keyup.enter="enterUpdateComment" 
+                    @input="updateActiveBtn(comment.content)"
+                    v-model="commentUpdateData.content" 
+                    type="content" 
+                    rows="1" 
+                    autofocus
+                  ></textarea>
+                </div>
+                <div class="col-2 d-flex align-items-center">
+                  <button 
+                    :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
+                    class="btn w-100"
+                    :disabled="!updateBtnActive"
+                    @click="clickUpdateComment(commentUpdateData)"
+                  >
+                  <i class="fas fa-paper-plane"></i></button>
+                </div>
               </div>
             </div>
           </div>

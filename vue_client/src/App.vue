@@ -42,35 +42,34 @@
               <li class="list invite pointer" @click="clickInvitationCreate">
                 <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
+              <li class="list menu pointer" @click="clickBabySettings">
+                  <i class="fas fa-cog mr-3"></i> 아기 설정
+              </li>
+              <li class="list menu pointer" @click="clickGroupSettings">
+                  <i class="fas fa-users-cog mr-3"></i> 그룹 설정
+              </li>
               <li class="list menu pointer" @click="clickMeasurements">
                   <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
-              <li class="list menu">
+              <!-- <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
               </li>
               <li class="list menu">
                 <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
-              </li>
-              <li class="list menu pointer" @click="clickSettings">
+              </li>  -->
+              <!-- <li class="list menu pointer" @click="clickSettings">
                 <i class="fas fa-cog mr-3"></i> 
                 설정
-              </li>
+              </li> -->
             </div>
           </div>
           <div class="sidebar-bottom">
             <hr />
-            <div class="d-flex justify-content-between">
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">사랑이</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">럭키</p>
-              </div>
-              <div class="other-profile pointer">
-                <img src="@/assets/babble_logo.png" />
-                <p class="text-center">다롱이</p>
+            <div class="d-flex row">
+              <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
+                <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                <img v-else src="@/assets/babble_logo.png" />
+                <p class="text-center">{{ baby.baby_name }}</p>
               </div>
             </div>
             <div class="text-right mt-3">
@@ -84,32 +83,35 @@
       <router-view></router-view>
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
-      <div class="footer row no-gutters bg-pink" v-if="authToken != null">
-        <div 
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isAlbum() }"
-          @click="clickPhoto"
-        >
-          <p><i class="fas fa-images"></i></p>
-          <p>Photo</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isDiary() }"
-          @click="clickDiary"
-        >
-          <p><i class="fas fa-book"></i></p>
-          <p>Diary</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isProfile() }"
-          @click="clickProfile"
-        >
-          <p><i class="fas fa-user"></i></p>
-          <p>Profile</p>
+      <div v-if="this.myaccount">
+        <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
+          <div 
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isAlbum() }"
+            @click="clickPhoto"
+          >
+            <p><i class="fas fa-images"></i></p>
+            <p>Photo</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isDiary() }"
+            @click="clickDiary"
+          >
+            <p><i class="fas fa-book"></i></p>
+            <p>Diary</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isProfile() }"
+            @click="clickProfile"
+          >
+            <p><i class="fas fa-user"></i></p>
+            <p>Profile</p>
+          </div>
         </div>
       </div>
+
     </div>
   </v-app>
 </template>
@@ -130,9 +132,11 @@ export default {
     return {
       isBurgerActive: false,
       routes: [
+         // Diary
         "DiaryCreate",
         "DiaryUpdate",
         "DiaryDetail",
+        // Auth
         "HowToRegisterBaby",
         "Signup",
         "SignupKakao",
@@ -143,9 +147,11 @@ export default {
         "HowToRegisterBaby",
         "RegisterBabyRelate",
         "RegisterInviteLink",
+        // Photo
         "PhotoDetail",
         "PhotoCreate",
-        "PhotoUpdate"
+        "PhotoUpdate",
+        "AlbumDetail"
       ],
       routes2: [
         "Signup",
@@ -155,12 +161,14 @@ export default {
         "PasswordFind",
         "PasswordFindEmail",
         "SignupKakao",
+        "RegisterInviteLink",
       ],
       days: null,
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken", "relationship"]),
+    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog", "relationship"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -175,18 +183,24 @@ export default {
   watch: {
     myaccount() {
       if (this.myaccount) {
-        this.findBaby(this.myaccount.current_baby);
+        if (!this.myaccount.current_baby) {
+          if (!this.invitationToken) {
+            this.$router.push({name: 'RegisterBaby'})
+          }
+        } else {
+          this.findBaby(this.myaccount.current_baby);
+        }
       }
     },
     currentBaby() {
       if (this.currentBaby) {
         this.findRelationship()
+        this.fetchAccessLog()
       }
     }
   },
-
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout", "findRelationship"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox", "findRelationship"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });
@@ -258,10 +272,20 @@ export default {
       backdrop.click();
       this.logout();
     },
-    clickSettings() {
+    /*clickSettings() {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "Settings" });
+    },*/
+    clickBabySettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "BabySetting" });
+    },
+    clickGroupSettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "RankSetting" });
     },
     clickInvitationCreate() {
       let backdrop = document.querySelector(".sidebar-backdrop");
@@ -273,9 +297,17 @@ export default {
       backdrop.click();
       this.$router.push({ name: "WeightMeasurement" })
     },
+    clickOtherBaby(babyId) {
+      var babblebox = new Object()
+      babblebox.baby = babyId
+      this.accessBabbleBox(babblebox)
+    }
   },
   mounted() {
-    this.findMyAccount();
+    if (this.authToken) {
+      this.findMyAccount();
+    }
+    this.fetchAccessLog()
   },
 };
 </script>
