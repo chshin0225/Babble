@@ -137,24 +137,27 @@
               </div>
               <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
               <div v-else>
-                <div class="input-group row no-gutters comment-create" style="height:65px;">
-                  <textarea
-                    class="col-10 textareaSection p-1" 
-                    @keyup.enter="enterUpdateComment" 
-                    @input="updateActiveBtn(comment.content)"
-                    v-model="commentUpdateData.comment.content" 
-                    type="content" 
-                    rows="1" 
-                    autofocus
-                  ></textarea>
-                  <button 
-                    :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
-                    class="btn col-2"
-                    :disabled="!updateBtnActive"
-                    @click="clickUpdateComment(commentUpdateData)"
+                <div class="d-flex comment-create pt-2">
+                  <div class="col-10">
+                    <textarea
+                      class="textareaSection w-100 p-1" 
+                      @keyup.enter="enterUpdateComment" 
+                      @input="updateActiveBtn(comment.content)"
+                      v-model="commentUpdateData.comment.content" 
+                      type="content"
+                      rows="1" 
+                      autofocus
+                    ></textarea>
+                  </div>
+                  <div class="col-2 d-flex align-items-center">
+                    <button 
+                      :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
+                      class="btn w-100"
+                      :disabled="!updateBtnActive"
+                      @click="clickUpdateComment(commentUpdateData)"
                     >
-                    수정
-                  </button>
+                    <i class="fas fa-paper-plane"></i></button>
+                  </div>
                 </div>
               </div>
             </div>

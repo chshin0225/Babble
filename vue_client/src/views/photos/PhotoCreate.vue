@@ -9,18 +9,19 @@
         <div class="pointer" @click="clickBack">
           <i class="fas fa-chevron-left"></i>
         </div>
-        <div class="d-flex align-items-center">
+        <div>
           <input @change="change4" type="file" id="file" name="file" multiple hidden>
           <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
           <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
-          <v-app v-else> 
+          <div v-else class="d-flex flex-column"> 
             <v-bottom-sheet v-model="sheet">
-              <template v-slot:activator="{ on, attrs }">
+              <template v-slot:activator="{ on, attrs }" >
                 <v-btn
                   color="#FEA59C"
                   outlined
                   v-bind="attrs"
                   v-on="on"
+                  class="mt-2"
                 >
                   확인
                 </v-btn>
@@ -56,7 +57,7 @@
                 >확인</v-btn>
               </v-sheet>
             </v-bottom-sheet>
-          </v-app>
+          </div>
 
         </div>
       </div>
@@ -242,6 +243,10 @@ export default {
 
 .v-item-group {
   padding:0;
+}
+
+.v-btn {
+  margin-top: 5px;
 }
 
 .v-btn--active {
