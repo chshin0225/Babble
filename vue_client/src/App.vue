@@ -145,6 +145,7 @@ export default {
         "RegisterInviteLink",
         "PhotoDetail",
         "PhotoCreate",
+        "PhotoUpdate"
       ],
       routes2: [
         "Signup",

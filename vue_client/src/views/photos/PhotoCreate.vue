@@ -30,31 +30,19 @@
                 <h3>공개 범위</h3>
                 <v-container>
                   <v-radio-group v-model="radios" :mandatory="false">
-                    <v-radio label="전원 공개" value="All" color="#FEA59C"></v-radio>
-                    <v-radio label="부부 한정" value="Couple" color="#FEA59C"></v-radio>
-                    <v-radio @click="changeHeight" label="세부 설정" value="Others" color="#FEA59C"></v-radio>
+                    <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
+                    <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
+                    <v-radio @click="changeHeight" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
                   </v-radio-group>
                   <!-- 토글 부분 -->
-                    <v-btn-toggle
+                  <v-btn-toggle
                     v-model="toggle_exclusive"
                     multiple
                     class="py-2"
-                    v-if="radios=='Others'"
+                    v-if="radios=='guests'"
                   >
-                    <v-btn 
-                      value="부부" 
-                      outlined 
-                      color="#FEA59C">
-                      부부
-                    </v-btn>
-                    <v-btn value="친가" outlined color="#FEA59C">
-                      친가
-                    </v-btn>
-                    <v-btn value="외가" outlined color="#FEA59C">
-                      외가
-                    </v-btn>
-                    <v-btn value="친구/지인" outlined color="#FEA59C">
-                      친구/지인
+                    <v-btn v-for="group in groups" :key="group.id" :value="group.id" outlined color="#FEA59C">
+                      {{ group.group_name }}
                     </v-btn>
                   </v-btn-toggle>
                 </v-container>
@@ -85,7 +73,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 // var camera1 = document.getElementById('camera1');
 // var camera2 = document.getElementById('camera2');
 // var camera3 = document.getElementById('camera3');
@@ -111,8 +99,21 @@ export default {
       loading: false
     }
   },
+  computed: {
+    ...mapState('settingStore', ['groups']),
+    photoScope() {
+      if (this.radios === 'all') {
+        return 0
+      } else if (this.radios === 'maintainer') {
+        return 1
+      } else {
+        return this.toggle_exclusive
+      }
+    }
+  },
   methods: {
     ...mapActions('photoStore', ['createPhotos']),
+    ...mapActions('settingStore', ['fetchGroups']),
     clickBack() {
       this.$router.go(-1)
     },
@@ -123,7 +124,10 @@ export default {
     },
     clickFinal() {
       this.sheet = !this.sheet
-      this.createPhotos(this.photos)
+      this.createPhotos({
+        "photos": this.photos,
+        "photoScope": this.photoScope
+      })
       this.loading = true
     },
     changeHeight() {
@@ -168,6 +172,9 @@ export default {
         this.is_OK = false
       }
     },
+  },
+  created() {
+    this.fetchGroups()
   }
 }
 

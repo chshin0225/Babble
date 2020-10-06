@@ -18,21 +18,21 @@
               >mdi-dots-vertical</v-icon>
           </template>
           <v-list>
-            <v-list-item @click="photoDelete">
+            <v-list-item @click="photoUpdate()">
+              <v-list-item-avatar>
+                <v-avatar size="32px" tile>
+                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-title>사진 수정하기</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="photoDelete()">
               <v-list-item-avatar>
                 <v-avatar size="32px" tile>
                 <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-title>사진 삭제하기</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="photoTagUpdate">
-              <v-list-item-avatar>
-                <v-avatar size="32px" tile>
-                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
-                </v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-title>태그 수정하기</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-bottom-sheet>
@@ -51,9 +51,9 @@
           <!-- <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip> -->
           
         </div>
-
+f
         <div class="mt-2 photo-date text-muted">
-          <p>{{photo.create_date | convertDate}}</p>
+          <p>{{photo.last_modified | convertDate}}</p>
         </div>
 
       </div>
@@ -320,30 +320,13 @@ export default {
       this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
     },
     photoDelete(){
-      //this.clickFinal();
       this.photo_sheet = false;
-      console.log("photoDelete");
       if(confirm("사진을 삭제하시겠습니까?")){
-        
-        let commentData = {photoId : this.$route.params.photoId};
-        console.log("commentDelete", commentData);
-        this.deletePhoto(commentData);
+        this.deletePhoto(this.$route.params.photoId);
       }
-      
     },
-    photoTagUpdate() {
-      var photoData = {
-        id: this.photo.id,
-        image_url: this.photo.image_url,
-        last_modified: this.photo.last_modified,
-        size: this.photo.size,
-        file_type: this.photo.file_type,
-        tags: []
-      }
-      this.photo.photo_tags.forEach(tag => {
-        photoData.tags.push(tag.tag_name)
-      });
-      this.$router.push({ name: "TagSelect", params: { photoData: photoData, photoType: "update" }})
+    photoUpdate() {
+      this.$router.push({ name: "PhotoUpdate", params: { photoId: this.photo.id }})
     }
   },
   filters: {
