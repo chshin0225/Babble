@@ -16,6 +16,8 @@ export default {
       kakao: '/accounts/login/kakao/',
       social: '/accounts/login/social/',
       invitation: '/accounts/invitation/',
+      passwordChange: '/rest-auth/password/change/',
+      profileChange: '/accounts/profilechange/',
       
       // diary
       diaries: '/diaries/',
