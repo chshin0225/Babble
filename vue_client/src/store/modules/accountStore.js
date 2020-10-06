@@ -190,9 +190,27 @@ const accountStore = {
             });
         },
         changePassword({ rootGetters }, passwordData) {
-          axios.put(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
+          axios.post(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
             .then(res => {
               console.log(res)
+              Swal.fire({
+                icon: 'success',
+                text: '비밀번호가 변경되었습니다.'
+              })
+              router.go(0)
+            })
+            .catch(err => {
+              console.log(err)
+          })
+        },
+        changeProfile({ rootGetters }, profileData) {
+          axios.put(SERVER.URL + '/accounts/profilechange/', profileData, rootGetters.config)
+            .then(res => {
+              console.log(res)
+              Swal.fire({
+                icon: 'success',
+                text: '프로필 정보가 변경되었습니다.'
+              })
               router.go(0)
             })
             .catch(err => {

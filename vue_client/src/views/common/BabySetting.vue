@@ -3,9 +3,11 @@
     <div style="width:100%; text-align:center">
       <!-- <img src="http://bit.do/babbleprofile" style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;"> -->
       <img 
+        v-if="enrollData.profile_image"
         :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + enrollData.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
         style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;">
 
+      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/baby.png" />
 
 
       <div id="circle" style="
@@ -125,7 +127,6 @@ export default {
   data() {
     return {
       photoObj : null,
-      uploadPhotoUrl : null,
       enrollData: {
         baby_name: "",
         gender: "",
