@@ -45,7 +45,7 @@
         <div class="text-center mt-5">
           <button
             class="btn new-button"
-            :class="{ disabled: !(nickflag && passflag)}"
+            :class="{ disabled: !((nickflag && passflag) || (passflag && flagPassword() == 2) )}"
             @click="profileBtn"
           >
             프로필 수정
@@ -90,9 +90,9 @@ export default {
           return !!value || 'This field is required.'
         },
         cmatch: value => {
-          if (value.length != 0 && value != this.loadedpassword){
+          if ((value.length < 8 && value.length >0) || (value.length !=0 && !this.validPassword(value))){
             this.passflag = false
-            return "현재 비밀번호와 일치하지 않습니다."
+            return "영문, 숫자 포함 8 자리 이상이어야 해요."
           }
           this.passflag = true && this.flagPassword()
           return true
@@ -121,14 +121,17 @@ export default {
   methods:{
     ...mapActions('accountStore',['updateProfile']),
     profileBtn(){
-      const profileData = {
-        "currentPassword": this.curpassword,
-        "newPassword": this.newpassword,
-        "confirmNewPassword": this.confirmnewpassword,
-        "name": this.name
+      if((this.nickflag && this.passflag) || (this.passflag && this.flagPassword() == 2)){
+        const profileData = {
+          "currentPassword": this.curpassword,
+          "newPassword": this.newpassword,
+          "confirmNewPassword": this.confirmnewpassword,
+          "name": this.name
+        }
+
+        this.updateProfile(profileData)
       }
 
-      this.updateProfile(profileData)
     },
     validPassword(password) {
       var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
@@ -136,10 +139,10 @@ export default {
     },
     flagPassword(){
       if (this.curpassword.length == 0 && this.newpassword.length ==0 && this.confirmnewpassword ==0){
-        return true
+        return 1
       }
       else if(this.curpassword.length != 0 && this.newpassword.length !=0 && this.confirmnewpassword !=0){
-        return true
+        return 2
       }
       return false
     }
