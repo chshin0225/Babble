@@ -59,8 +59,8 @@
 
     <!-- photo grid -->
     <div class="grid">
-      <div class="photos row no-gutters" v-if="album.photos.length">
-        <div v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
+      <div class="photos row no-gutters" v-if="albumPhotos.length">
+        <div v-for="photo in albumPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             
             <img 
               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
