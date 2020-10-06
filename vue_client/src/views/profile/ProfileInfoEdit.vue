@@ -259,5 +259,10 @@ export default {
   color: #f8f8f8;
   /* width: 100%; */
 }
+
+div >>> .v-text-field__slot  {
+  font-family: sans-serif !important;
+}
+
 </style>
 
