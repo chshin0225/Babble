@@ -24,15 +24,19 @@
     <router-view></router-view>
 
     <!-- 다이어리 추가 버튼 구현 -->
-    <div @click="clickAdd" class="add-button color-pink pointer">
+    <div @click="clickAdd" class="add-button color-pink pointer" v-if="relationship.rank in [1, 2]">
       <i class="fas fa-plus-circle fa-2x"></i>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: "Diary",
+  computed: {
+    ...mapState(['relationship'])
+  },
   methods: {
     clickAdd() {
       this.$router.push({ name: "DiaryCreate" });

@@ -12,6 +12,7 @@ export default {
       babies: '/babies/',
       babblebox: 'mybabblebox',
       myaccount: '/accounts/myinfo/',
+      relationship: '/accounts/relationship/',
       access: '/accounts/access/',
       kakao: '/accounts/login/kakao/',
       social: '/accounts/login/social/',

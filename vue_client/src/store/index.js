@@ -21,6 +21,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     myaccount: null,
     currentBaby: null,
+    relationship: null,
     babbleboxes: null,
     invitationToken: null,
     invitationData: null,
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     SET_BABY(state, baby) {
       state.currentBaby = baby
+    },
+    SET_RELATIONSHIP(state, relationship) {
+      state.relationship = relationship
     },
     SET_BABBLEBOX(state, babbleboxes) {
       state.babbleboxes = babbleboxes
@@ -67,6 +71,15 @@ export default new Vuex.Store({
       axios.get(SERVER.URL + SERVER.ROUTES.myaccount, getters.config)
         .then(res => {
           commit('SET_MYACCOUNT', res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    findRelationship({ commit, getters}) {
+      axios.get(SERVER.URL + SERVER.ROUTES.relationship, getters.config)
+        .then(res => {
+          commit('SET_RELATIONSHIP', res.data)
         })
         .catch(err => {
           console.log(err)

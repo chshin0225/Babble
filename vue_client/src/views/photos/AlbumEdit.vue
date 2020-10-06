@@ -35,8 +35,8 @@
       </div>
 
       <!-- photo grid -->
-      <div class="photos row" v-if="album.photos.length">
-        <div :class="activeImage(photo.id)" v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
+      <div class="photos row" v-if="albumPhotos.length">
+        <div :class="activeImage(photo.id)" v-for="photo in albumPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">
             <v-icon v-if="isSelected(photo.id)" color="primary" class="selectedIcon">mdi-check-circle</v-icon>
             <img 
@@ -78,12 +78,12 @@ export default {
   },
 
   computed: {
-    ...mapState('photoStore', ['album',]),
+    ...mapState('photoStore', ['album', 'albumPhotos']),
     ...mapGetters('photoStore', ['albumDataFetched',])
   },
   
   methods: {
-    ...mapActions('photoStore', ['getAlbum', 'deletePhotoFromAlbum',]),
+    ...mapActions('photoStore', ['getAlbum', 'deletePhotoFromAlbum', 'fetchAlbumPhotos']),
     clickDone() {
       this.$router.go(-1)
     },
@@ -134,6 +134,7 @@ export default {
 
   mounted() {
     this.getAlbum(this.$route.params.albumId)
+    this.fetchAlbumPhotos(this.$route.params.albumId)
   },
 }
 </script>

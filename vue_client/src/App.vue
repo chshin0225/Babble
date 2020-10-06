@@ -160,7 +160,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "relationship"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -178,10 +178,15 @@ export default {
         this.findBaby(this.myaccount.current_baby);
       }
     },
+    currentBaby() {
+      if (this.currentBaby) {
+        this.findRelationship()
+      }
+    }
   },
 
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "findRelationship"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });

@@ -2,7 +2,7 @@
   <div v-if="albumDataFetched" class="container">
 
     <!-- top button bar -->
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between" v-if="relationship.rank in [1, 2]">
       <v-btn icon color="primary" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left
@@ -39,8 +39,8 @@
 
     <!-- photo grid -->
     <div class="mx-2">
-      <div class="photos row" v-if="album.photos.length">
-        <div v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
+      <div class="photos row" v-if="albumPhotos.length">
+        <div v-for="photo in albumPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             
             <img 
               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
@@ -74,12 +74,13 @@ export default {
   },
 
   computed: {
-    ...mapState('photoStore', ['album',]),
+    ...mapState(['relationship']),
+    ...mapState('photoStore', ['album', 'albumPhotos']),
     ...mapGetters('photoStore', ['albumDataFetched',])
   },
   
   methods: {
-    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum',]),
+    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum', 'fetchAlbumPhotos']),
     goToLibrary() {
       this.$router.push({ name: 'AlbumLibrary' })
     },
@@ -117,6 +118,7 @@ export default {
 
   mounted() {
     this.getAlbum(this.$route.params.albumId)
+    this.fetchAlbumPhotos(this.$route.params.albumId)
   },
 }
 </script>
