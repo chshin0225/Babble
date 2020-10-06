@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 export default {
   name: 'PhotoSearch',
   data() {
@@ -94,10 +94,15 @@ export default {
   },
   methods: {
     ...mapActions('photoStore', ['searchPhotos']),
+    ...mapMutations('photoStore', ['SET_SEARCHED_PHOTOS']),
     clickPhoto(photo_id) {
       this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
     }
-  } 
+  },
+  beforeRouteLeave(from, to, next) {
+    this.SET_SEARCHED_PHOTOS(null)
+    next()
+  }
 }
 </script>
 
