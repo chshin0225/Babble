@@ -7,6 +7,7 @@ import PhotoMain from "@/views/photos/PhotoMain";
 import PhotoList from "@/views/photos/PhotoList";
 import PhotoCreate from "@/views/photos/PhotoCreate";
 import PhotoDetail from "@/views/photos/PhotoDetail";
+import PhotoUpdate from "@/views/photos/PhotoUpdate";
 import PhotoSearch from "@/views/photos/PhotoSearch";
 import AlbumLibrary from "@/views/photos/AlbumLibrary";
 import AlbumCreate from "@/views/photos/AlbumCreate";
@@ -86,6 +87,11 @@ const routes = [
     path: "/photo/:photoId",
     component: PhotoDetail,
     name: "PhotoDetail",
+  },
+  {
+    path: "/photo/:photoId/update",
+    component: PhotoUpdate,
+    name: "PhotoUpdate",
   },
   {
     path: "/photo/tagselect",

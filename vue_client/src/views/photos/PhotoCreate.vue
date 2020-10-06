@@ -35,11 +35,11 @@
                     <v-radio @click="changeHeight" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
                   </v-radio-group>
                   <!-- 토글 부분 -->
-                    <v-btn-toggle
+                  <v-btn-toggle
                     v-model="toggle_exclusive"
                     multiple
                     class="py-2"
-                    v-if="radios=='Others'"
+                    v-if="radios=='guests'"
                   >
                     <v-btn v-for="group in groups" :key="group.id" :value="group.id" outlined color="#FEA59C">
                       {{ group.group_name }}
@@ -125,7 +125,6 @@ export default {
     clickFinal() {
       this.sheet = !this.sheet
       this.createPhotos({
-        this
         "photos": this.photos,
         "photoScope": this.photoScope
       })

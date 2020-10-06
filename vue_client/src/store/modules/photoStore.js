@@ -156,23 +156,23 @@ const photoStore = {
         .catch(err => console.log(err.response.data))
     },
     updatePhoto({ rootGetters, commit }, updateData) {
-      axios.put(SERVER.URL + SERVER.ROUTES.photos + updateData.photoData.id + '/', updateData, rootGetters.config)
+      axios.put(SERVER.URL + SERVER.ROUTES.photos + updateData.id + '/', updateData, rootGetters.config)
         .then(res => {
           commit('SET_PHOTO', res.data)
-          router.push({name: 'PhotoDetail', params: { photoId: updateData.photoData.id}})
+          router.push({name: 'PhotoDetail', params: { photoId: updateData.id}})
         })
         .catch(err => {
           console.log(err)
       })
     },
-    deletePhoto({ rootGetters }, commentData) {
-      axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/', rootGetters.config)
+    deletePhoto({ rootGetters }, photoId) {
+      axios.delete(SERVER.URL + SERVER.ROUTES.photos + photoId + '/', rootGetters.config)
       .then(res => {
           console.log(res)
           router.push({ name: 'PhotoList' })
       })
       .catch(err => {
-          console.log(err)
+          console.log(err.response.data)
       })
     },
 
