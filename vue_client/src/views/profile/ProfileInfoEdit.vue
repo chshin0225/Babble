@@ -104,8 +104,10 @@ export default {
   computed: {
     ...mapState([ 'myaccount' ]),
     isBasic: function(){
-      
-      return this.myaccount.user_type === "basic" 
+      if (this.myaccount) {
+        return this.myaccount.user_type === "basic"
+      }
+      return null
     }
   },
   data(){
@@ -217,8 +219,10 @@ export default {
     }
   },
   mounted: function(){
-    this.name = this.myaccount.name
-    this.profile_image = this.myaccount.profile_image
+    if (this.myaccount) {
+      this.name = this.myaccount.name
+      this.profile_image = this.myaccount.profile_image
+    }
   },
   watch: {
     myaccount() {
