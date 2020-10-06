@@ -1,7 +1,7 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory enroll-form">
-      <h3 class="color-pink">초대 코드 등록</h3>
+    <div class="container bg-light-ivory enroll-form">
+      <h3 class="color-pink text-center">초대 코드 등록</h3>
         <!-- <div class="mt-3" style="font-size:12px; text-align:center">
           초대 코드를 입력해주세요.
         </div> -->
@@ -114,7 +114,7 @@ h3 {
   background-repeat: repeat;
 }
 .enroll-form {
-  margin-top: 10vh !important;
+  margin-top: 5vh !important;
   opacity: 0.9;
 }
 
