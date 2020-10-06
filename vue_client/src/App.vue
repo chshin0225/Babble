@@ -42,19 +42,25 @@
               <li class="list invite pointer" @click="clickInvitationCreate">
                 <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
+              <li class="list menu pointer" @click="clickBabySettings">
+                  <i class="fas fa-cog mr-3"></i> 아기 설정
+              </li>
+              <li class="list menu pointer" @click="clickGroupSettings">
+                  <i class="fas fa-users-cog mr-3"></i> 그룹 설정
+              </li>
               <li class="list menu pointer" @click="clickMeasurements">
                   <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
-              <li class="list menu">
+              <!-- <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
-              </li>
+              </li> -->
               <li class="list menu">
                 <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
               </li>
-              <li class="list menu pointer" @click="clickSettings">
+              <!-- <li class="list menu pointer" @click="clickSettings">
                 <i class="fas fa-cog mr-3"></i> 
                 설정
-              </li>
+              </li> -->
             </div>
           </div>
           <div class="sidebar-bottom">
@@ -249,10 +255,20 @@ export default {
       backdrop.click();
       this.logout();
     },
-    clickSettings() {
+    /*clickSettings() {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "Settings" });
+    },*/
+    clickBabySettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "BabySetting" });
+    },
+    clickGroupSettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "RankSetting" });
     },
     clickInvitationCreate() {
       let backdrop = document.querySelector(".sidebar-backdrop");
