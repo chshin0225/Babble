@@ -1,6 +1,6 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory enroll-form">
+    <div class="container p-1 mt-3 bg-light-ivory enroll-form">
       <h3 class="color-pink">아기 등록</h3>
 
       <div class="mt-4 guide-text">

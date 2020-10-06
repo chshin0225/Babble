@@ -5,7 +5,7 @@
 
       <div class="profile-image-outline">
         <img v-if="myaccount.profile_image" class="profile-image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-        <img v-else class="profile-image" src="@/assets/baby.png" />        
+        <img v-else class="profile-image" src="@/assets/babble_logo.png" />        
       </div>
 
       <div class="profile-info">

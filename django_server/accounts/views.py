@@ -48,6 +48,14 @@ class UserDetailView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
+    def put(self, request):
+        user = request.user
+        user.name = request.data['name']
+        user.profile_image = request.data['profile_image']
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
 class BabyAccessView(APIView):
     # 현재 유저의 지난 babble box 접속 데이터 가져오기
     def get(self, request):
