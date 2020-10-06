@@ -205,7 +205,7 @@ export default {
 
     },
     validPassword(password) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
+      var va = /^(?=.*\d)(?=.*)(?=.*[a-zA-Z]).{8,}$/;
       return va.test(password);
     },
     flagPassword(){
