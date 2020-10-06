@@ -156,10 +156,15 @@ export default {
   watch: {
     myaccount() {
       if (this.myaccount) {
-        this.findBaby(this.myaccount.current_baby);
-        this.enrollData = this.currentBaby;
+        this.findBaby(this.myaccount.current_baby)
+        // this.enrollData = this.currentBaby;
       }
     },
+    currentBaby() {
+      if (this.currentBaby) {
+        this.enrollData = this.currentBaby
+      }
+    }
   },
   /*mounted() {
     this.enrollData = this.currentBaby;
