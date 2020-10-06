@@ -48,56 +48,60 @@
       </div>
     </nav>
     <!-- diary 시작 -->
-    <div class="m-3" v-if="currentBaby">
-      <div class="diary-top">
-        <div class="d-flex justify-content-between">
-          <h4>{{diary.diary.create_date | moment('YYYY.M.DD')}}</h4>
-          <span class="color-blue font-weight-bold">#{{ currentBaby.baby_name }} 태어난지 {{ countDays }}일</span>
-        </div>
-      </div>
-      <hr class="divider">
-      <div class="diary-title">
-        <h5>{{diary.diary.title}}</h5>
-      </div>
-      <div class="diary-content ">
-        <p class="text" v-html="this.diaryContent">
-          <!-- {{diary.content}} -->
-        </p>
-      </div>
-      <div class="measurement" v-if="diary.measurement">
-        <div class="scallop-down"></div>
-        <div class="mt-3 growth-title row no-gutters">
-          <div class="col-3 text-center">
-            <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
-            <img width="50px" src="../../assets/giraffe.png" /> -->
-            <img class="img-fluid" src="@/assets/giraffe.png" />
-          </div>
-          <div class="col-9">
-            <p class="growth d-flex justify-content-center">성장 기록</p>
-            <div class="d-flex justify-content-center text-center">
-              <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
-                <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
-              </p>
-              <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
-                <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
-              </p>
-              <p class="growth-record" v-if="diary.measurement.head_size">
-                <span class="growth-record-title">머리둘레</span><br>{{ diary.measurement.head_size }} cm
-              </p>          
-            </div>
+    <div class="m-3 diary-section d-flex flex-column justify-content-between" v-if="currentBaby">
+      <div>
+        <div class="diary-top">
+          <div class="d-flex justify-content-between">
+            <h4>{{diary.diary.create_date | moment('YYYY.M.DD')}}</h4>
+            <span class="color-blue font-weight-bold">#{{ currentBaby.baby_name }} 태어난지 {{ countDays }}일</span>
           </div>
         </div>
-        <div class="scallop-up"></div>
-      </div>
-      <div class="diary-bottom d-flex justify-content-end my-3">
-        <div>
-          <p class=" m-0 diary-creator">
-            <!-- <img :src="diary.diary.creator.profile_img"> -->
-            <img class="profile-img mr-2" src="https://i.pinimg.com/236x/bf/ee/d2/bfeed24a2d24b42347faff4d27d3941c.jpg">
-            <span>{{diary.diary.creator.name}}({{ diary.relationship.relationship_name}})</span>
+        <hr class="divider">
+        <div class="diary-title">
+          <h5>{{diary.diary.title}}</h5>
+        </div>
+        <div class="diary-content ">
+          <p class="text" v-html="this.diaryContent">
           </p>
         </div>
       </div>
+      <div>
+        <div class="measurement" v-if="diary.measurement">
+          <div class="scallop-down"></div>
+          <div class="mt-3 growth-title row no-gutters">
+            <div class="col-3 text-center">
+              <!-- <img width="50px" src="http://clipart-library.com/images/yckA5Azei.png" />
+              <img width="50px" src="../../assets/giraffe.png" /> -->
+              <img class="img-fluid" src="@/assets/giraffe.png" />
+            </div>
+            <div class="col-9">
+              <p class="growth d-flex justify-content-center">성장 기록</p>
+              <div class="d-flex justify-content-center text-center">
+                <p class="growth-record mr-3 mb-3" v-if="diary.measurement.weight">
+                  <span class="growth-record-title">무게</span><br>{{ diary.measurement.weight }} kg
+                </p>
+                <p class="growth-record mr-3 mb-3" v-if="diary.measurement.height">
+                  <span class="growth-record-title">키</span><br> {{ diary.measurement.height }} cm
+                </p>
+                <p class="growth-record" v-if="diary.measurement.head_size">
+                  <span class="growth-record-title">머리둘레</span><br>{{ diary.measurement.head_size }} cm
+                </p>          
+              </div>
+            </div>
+          </div>
+          <div class="scallop-up"></div>
+        </div>
+        <div class="diary-bottom d-flex justify-content-end my-3">
+          <div>
+            <p class=" m-0 diary-creator">
+              <!-- <img :src="diary.diary.creator.profile_img"> -->
+              <img class="profile-img mr-2" src="https://i.pinimg.com/236x/bf/ee/d2/bfeed24a2d24b42347faff4d27d3941c.jpg">
+              <span>{{diary.diary.creator.name}}({{ diary.relationship.relationship_name}})</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="comment p-2">
       <p class="comment-title mb-3">댓글 </p>
@@ -391,6 +395,9 @@ export default {
 nav {
   height: 7vh;
 }
+.diary-section {
+  min-height: 60vh; 
+}
 
 .diary-top {
   h4 {
@@ -479,6 +486,7 @@ nav {
 // comment
 .comment {
   background: #FAFAFA;
+  min-height: 23vh;
   .comment-title {
     font-weight: 500;
     // color: #FEA59C;

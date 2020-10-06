@@ -222,7 +222,6 @@ export default {
     isProfile() {
       if (
         this.$route.name === "Profile" ||
-        this.$route.name == "ProfilePhotoEdit" ||
         this.$route.name == "ProfileInfoEdit"
       ) {
         return true;

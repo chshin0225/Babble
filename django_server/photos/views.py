@@ -249,21 +249,22 @@ class AlbumDetailView(APIView):
 
     # 앨범 정보(앨범명, 태그) 수정
     def put(self, request, album_id):
+        print(request.data)
         album = get_object_or_404(Album, id=album_id)
         serializer = AlbumDetailSerializer(album, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
             # 태그 정보 수정하는 경우
-            if request.data['tags']:
-                album.album_tags.clear()
-                for tag_name in request.data['tags']:
-                    try:
-                        tag = Tag.objects.get(tag_name=tag_name)
-                    except:
-                        tag = Tag(tag_name=tag_name)
-                        tag.save()
-                    AlbumTag(tag=tag, album=album).save()
+            # if request.data['tags']:
+            #     album.album_tags.clear()
+            #     for tag_name in request.data['tags']:
+            #         try:
+            #             tag = Tag.objects.get(tag_name=tag_name)
+            #         except:
+            #             tag = Tag(tag_name=tag_name)
+            #             tag.save()
+            #         AlbumTag(tag=tag, album=album).save()
 
             return Response(serializer.data)
         return Response(serializer.errors)

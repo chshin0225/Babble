@@ -1,17 +1,13 @@
 <template>
   <div class="">
-    <nav class="d-flex justify-content-between w-100 bg-pink">
+    <nav class="d-flex justify-content-between w-100 bg-pink p-2">
       <v-icon 
         class="top-left-icons pointer" 
-        color="white"
         @click="clickBack"
+        color="white"
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
       <div class="d-flex align-items-center">
-        <v-icon class="top-right-icons" color="white">mdi-folder-outline</v-icon>
-        <v-icon class="top-right-icons" color="white">mdi-heart-outline</v-icon>
-        <!-- <v-icon class="top-right-icons" color="#FEA59C">mdi-dots-horizontal</v-icon> -->
-        
         <v-bottom-sheet v-model="photo_sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -43,7 +39,8 @@
       </div>
     </nav>
 
-    <div class="p-3" v-if="photo">
+    <!-- photo -->
+    <div class="" v-if="photo">
       <div class="photo-content">
         <div class="photo-container">
           <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
@@ -58,103 +55,115 @@ f
         <div class="mt-2 photo-date text-muted">
           <p>{{photo.last_modified | convertDate}}</p>
         </div>
-        <!-- <div class="mt-2 photo-location text-muted">
-          <p><v-icon>mdi-map-marker</v-icon>서울특별시 강남구 역삼동</p>
-        </div> -->
+
       </div>
+    </div>
       <div class="mt-4 comment-content">
         <div class="scallop-down"></div>
 
         <!-- 댓글 -->
-        <div class="comment mb-5 mt-3">
-          <h5 class="comment-title mb-3">댓글</h5>
-          <!-- 댓글 작성 -->
-          <div class="input-group row no-gutters comment-create mb-3" style="height:65px;">
-            <div class="input-group row no-gutters comment-create" style="height:65px;">
-              <textarea
-                class="col-10 textareaSection p-1" 
-                @keyup.enter="enterComment" 
-                @input="activeBtn"
-                v-model="commentData.content" 
-                type="content" 
-                placeholder="댓글을 작성하세요 :)" 
-                rows="1" 
-                autofocus
-              ></textarea>
-              <button 
-                :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
-                class="btn col-2"
-                :disabled="!btnActive"
-                @click="clickComment"
-              >
-              작성</button>
-            </div>
-            
+      <div class="comment p-2">
+        <p class="comment-title mb-3">댓글 </p>
+        <!-- 댓글 작성 -->
+        <div class="d-flex comment-create pt-2">
+          <div class="col-10">
+            <textarea
+              class="textareaSection w-100" 
+              @keyup.enter="enterComment" 
+              @input="activeBtn"
+              v-model="commentData.content" 
+              type="content" 
+              placeholder="댓글을 작성하세요 :)" 
+              rows="1" 
+              autofocus
+            ></textarea>
           </div>
-          <!-- 댓글 리스트 -->
-          <div class="comment-list" v-if="comments">
-            <div v-if="comments.length">
-              <div v-for="comment in comments" :key="`comment_${comment.id}`">
-                <div>
-                  <div class="d-flex justify-content-between">
-                    <p class="comment-username">{{comment.user.name}}</p>
-                    <div class="d-flex">
-                      <p class="comment-time">{{comment.modify_date |  moment("from", "now")}}</p>
-                      <div class="dropdown" v-if="comment.user.id === myaccount.id">
-                        <div class="btn-group dropleft">
-                          <button 
-                            @click="sheet2=!sheet2" 
-                            type="button" 
-                            class="btn btn-pink">:</button>
-                          <v-bottom-sheet v-model="sheet2">
-                            <v-sheet class="text-center" height="18vh">
-                              <div class="py-3">
-                                <div class="pointer diary-option mb-3" @click="clickInitUpdateComment(comment)">댓글 수정</div>
-                                <hr>
-                                <div class="pointer diary-option"  @click="clickDeleteComment(commentData, comment.id)"> 댓글 삭제</div>
-                              </div>
-                            </v-sheet>
-                          </v-bottom-sheet>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- 댓글 수정 X - 댓글 내용 노출 -->
-                  <div v-if="comment.id != commentUpdateData.comment_id">
-                    {{ comment.content }}
-                  </div>
-                  <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
-                  <div v-else>
-                    <div class="input-group row no-gutters comment-create" style="height:65px;">
-                    <textarea
-                      class="col-10 textareaSection p-1" 
-                      @keyup.enter="enterUpdateComment" 
-                      @input="updateActiveBtn(comment.content)"
-                      v-model="commentUpdateData.comment.content" 
-                      type="content" 
-                      rows="1" 
-                      autofocus
-                    ></textarea>
-                    <button 
-                      :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
-                      class="btn col-2"
-                      :disabled="!updateBtnActive"
-                      @click="clickUpdateComment(commentUpdateData)"
-                    >
-                      수정
-                    </button>
+          <div class="col-2 d-flex align-items-center">
+            <button 
+              :class="{ 'btn-pink': btnActive, 'pointer': btnActive }"
+              class="btn w-100"
+              :disabled="!btnActive"
+              @click="clickComment"
+            >
+            <i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        <!-- 댓글 리스트 -->
+        <div class="comment-list" v-if="comments">
+          <div v-for="comment in comments" :key="`comment_${comment.id}`">
+            <div>
+              <div class="d-flex justify-content-between">
+                <!-- <p class="comment-username">{{comment.user.name}}({{comment.relationship_name}})</p> -->
+                <p class="comment-username">{{comment.user.name}}({{comment.relationship_name}})</p>
+                <div class="d-flex">
+                  <p class="comment-time mr-3">{{comment.modify_date |  moment("from", "now")}}</p>
+                  <div v-if="comment.user.id === myaccount.id">
+                    <div>
+                      <v-bottom-sheet v-model="sheet2">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            class="top-right-icons"
+                            color="#FEA59C"
+                            v-bind="attrs"
+                            v-on="on" 
+                            >mdi-dots-vertical</v-icon>
+                        </template>
+                        <v-list>
+                          <v-list-item @click="clickInitUpdateComment(comment)">
+                            <v-list-item-avatar>
+                              <v-avatar size="32px" tile>
+                              <v-icon color="#FEA59C">mdi-share-outline</v-icon>
+                              </v-avatar>
+                            </v-list-item-avatar>
+                            <v-list-item-title>댓글 수정</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item  @click="clickDeleteComment(commentData, comment.id)">
+                            <v-list-item-avatar>
+                              <v-avatar size="32px" tile>
+                              <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                              </v-avatar>
+                            </v-list-item-avatar>
+                            <v-list-item-title>댓글 삭제</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-bottom-sheet>
                     </div>
                   </div>
                 </div>
-                <hr>
+              </div>
+              <!-- 댓글 수정 X - 댓글 내용 노출 -->
+              <div v-if="comment.id != commentUpdateData.comment_id">
+                {{ comment.content }}
+              </div>
+              <!-- 댓글 수정 클릭했을 때 - 댓글 수정란 노출 -->
+              <div v-else>
+                <div class="input-group row no-gutters comment-create" style="height:65px;">
+                  <textarea
+                    class="col-10 textareaSection p-1" 
+                    @keyup.enter="enterUpdateComment" 
+                    @input="updateActiveBtn(comment.content)"
+                    v-model="commentUpdateData.comment.content" 
+                    type="content" 
+                    rows="1" 
+                    autofocus
+                  ></textarea>
+                  <button 
+                    :class="{ 'btn-pink': updateBtnActive, 'pointer': updateBtnActive }"
+                    class="btn col-2"
+                    :disabled="!updateBtnActive"
+                    @click="clickUpdateComment(commentUpdateData)"
+                    >
+                    수정
+                  </button>
+                </div>
               </div>
             </div>
-
+            <hr>
           </div>
         </div>
       </div>
+    <div style="height:6vh"></div>
     </div>
-    <div style="height:15vh"></div>
   </div>
 </template>
 
@@ -407,29 +416,44 @@ nav {
   -webkit-background-size: 49px 100%;
 }
 
+
 // comment
 .comment {
+  background: #FAFAFA;
+  min-height: 23vh;
   .comment-title {
-    font-weight: 900;
-    color: #FEA59C;
+    font-weight: 500;
+    // color: #FEA59C;
   }
 
   .comment-create {
-    textarea {
-      border: 1px solid #FEA59C;
-      &:focus {
-        outline-style: none; 
+    background: #FAFAFA;
+    .col-10 {
+      padding: 0;
+      padding-left: 0.5rem;
+      textarea {
+        background: white;
+        border-radius: 15px;
+        padding: 5px;
+        &:focus {
+          outline-style: none; 
+        }
       }
     }
-
-    button {
-      border: 1px solid #FEA59C;
-      background-color: #979797;
-      color: white;
+    .col-2 {
+      padding: 0;
+      button {
+        color: #FEA59C;
+        padding: 0;
+      }
     }
+    
+
+    
   }
   
   .comment-list {
+    padding-top: 0.5rem;
     .comment-username {
       font-weight: 600;
     }
