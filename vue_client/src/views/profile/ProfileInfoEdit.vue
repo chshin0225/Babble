@@ -52,6 +52,7 @@
       </div>
       <div class="setting-form mt-10">
         <v-text-field
+          v-if="isBasic"
           v-model="old_password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"
@@ -61,6 +62,7 @@
           <!--  hint="At least 8 characters"
                 counter -->
         <v-text-field
+          v-if="isBasic"
           v-model="new_password1"
           :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show2 ? 'text' : 'password'"
@@ -70,6 +72,7 @@
         ></v-text-field>
 
         <v-text-field
+          v-if="isBasic"
           v-model="new_password2"
           :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show3 ? 'text' : 'password'"
@@ -79,6 +82,7 @@
         ></v-text-field>
         <div class="text-center mt-5">
           <button
+            v-if="isBasic"
             class="btn new-button"
             :class="{ disabled: !(passflag)}"
             @click="changePW"
@@ -99,6 +103,10 @@ export default {
   name: "Profile",
   computed: {
     ...mapState([ 'myaccount' ]),
+    isBasic: function(){
+      
+      return this.myaccount.user_type === "basic" 
+    }
   },
   data(){
     return{
