@@ -42,8 +42,8 @@
               <li class="list invite pointer" @click="clickInvitationCreate">
                 <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
-              <li class="list menu">
-                <a href="#about"><i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서</a>
+              <li class="list menu pointer" @click="clickMeasurements">
+                  <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
               <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
@@ -262,6 +262,11 @@ export default {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "InvitationCreate" });
+    },
+    clickMeasurements() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "WeightMeasurement" })
     },
   },
   mounted() {

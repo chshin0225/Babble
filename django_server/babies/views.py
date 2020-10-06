@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 # from rest_framework.permissions import IsAuthenticated
 
-from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer
+from .serializers import BabyListSerializer, BabySerializer, BabyMeasurementSerializer, WeightMeasurementSerializer, HeightMeasurementSerializer, HeadMeasurementSerializer
 from accounts.serializers import UserBabyRelationshipSerializer, BabyAccessSerializer, UserBabyRelationshipNameSerializer
 
 from .models import Baby, BabyMeasurement
@@ -136,7 +136,7 @@ class MyBabbleBoxView(APIView):
 class MeasurementListView(APIView):
     # 성장 기록 전체 목록 조회
     def get(self, request):
-        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby).all()
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby).order_by('measure_date')
         serializer = BabyMeasurementSerializer(measurements, many=True)
         return Response(serializer.data)
 
@@ -157,6 +157,27 @@ class MeasurementListView(APIView):
                 serializer.save(baby=request.user.current_baby, creator=request.user)
                 return Response(serializer.data)
             return Response(serializer.errors)
+
+
+class WeightListView(APIView):
+    def get(self, request):
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, weight__isnull=False).order_by('-measure_date')
+        serializer = WeightMeasurementSerializer(measurements, many=True)
+        return Response(serializer.data)
+
+
+class HeightListView(APIView):
+    def get(self, request):
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, height__isnull=False).order_by('-measure_date')
+        serializer = HeightMeasurementSerializer(measurements, many=True)
+        return Response(serializer.data)
+
+
+class HeadListView(APIView):
+    def get(self, request):
+        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, head_size__isnull=False).order_by('-measure_date')
+        serializer = HeadMeasurementSerializer(measurements, many=True)
+        return Response(serializer.data)
 
 
 class MeasurementDetailView(APIView):
