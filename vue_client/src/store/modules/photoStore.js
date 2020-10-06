@@ -14,6 +14,7 @@ const photoStore = {
     searchedPhotos: null,
     albums: null,
     album: null,
+    measurementList: [],
   },
   getters: {
     albumDataFetched: state => !!state.album,
@@ -39,6 +40,9 @@ const photoStore = {
     },
     SET_ALBUM(state, album) {
       state.album = album
+    },
+    SET_MEASUREMENT_LIST(state, measurements) {
+      state.measurementList = measurements 
     },
   },
   actions: {

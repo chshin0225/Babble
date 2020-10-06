@@ -48,6 +48,12 @@ import RegisterInviteLink from "@/views/accounts/RegisterInviteLink";
 import Profile from "@/views/profile/Profile";
 import ProfileInfoEdit from "@/views/profile/ProfileInfoEdit";
 
+// Measurement
+import MeasurementMain from "@/views/measurements/MeasurementMain"
+import WeightMeasurement from "@/views/measurements/WeightMeasurement"
+import HeightMeasurement from "@/views/measurements/HeightMeasurement"
+import HeadMeasurement from "@/views/measurements/HeadMeasurement"
+
 import InvitationConfirm from "@/views/common/InvitationConfirm";
 import InvitationCreate from "@/views/common/InvitationCreate";
 
@@ -257,6 +263,31 @@ const routes = [
     name: "ProfileInfoEdit",
     component: ProfileInfoEdit,
   },
+  // Measurement
+  {
+    path: "/measurement",
+    name: 'MeasurementMain',
+    component: MeasurementMain,
+    children: [
+      {
+        path: "/weight",
+        name: 'WeightMeasurement',
+        component: WeightMeasurement,
+      },
+      {
+        path: "/height",
+        name: 'HeightMeasurement',
+        component: HeightMeasurement,
+      },
+      {
+        path: "/head",
+        name: 'HeadMeasurement',
+        component: HeadMeasurement,
+      },
+    ]
+  },
+  
+  
 ];
 
 const router = new VueRouter({
