@@ -89,27 +89,16 @@
       </v-combobox>
     </v-col>
     </div>
-
+    
     <!-- scope update -->
     <div>
-      <!-- <v-bottom-sheet v-model="sheet">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="#FEA59C"
-            outlined
-            v-bind="attrs"
-            v-on="on"
-          >
-            확인
-          </v-btn>
-        </template> -->
-        <v-sheet class="text-center" :height="height">
-          <h5>공개 범위</h5>
-          <v-container>
+        <v-sheet class="text-center">
+          <h5 class="mb-0">공개 범위</h5>
+          <v-container class="py-0">
             <v-radio-group v-model="radios" :mandatory="false">
               <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
               <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
-              <v-radio @click="changeHeight" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
+              <v-radio label="세부 설정" value="guests" color="#FEA59C"></v-radio>
             </v-radio-group>
             <!-- 토글 부분 -->
             <v-btn-toggle
