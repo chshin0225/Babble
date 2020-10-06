@@ -167,7 +167,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog"]),
+    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog", "relationship"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -192,12 +193,14 @@ export default {
       }
     },
     currentBaby() {
-      this.fetchAccessLog()
-    },
+      if (this.currentBaby) {
+        this.findRelationship()
+        this.fetchAccessLog()
+      }
+    }
   },
-
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox", "findRelationship"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });

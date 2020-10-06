@@ -36,6 +36,7 @@ class PhotoCommentSerializer(serializers.ModelSerializer):
 
 
 class AlbumListSerializer(serializers.ModelSerializer):
+    album_tags = TagListSerializer(required=False, many=True)
     class Meta:
         model = Album
         fields = ['id', 'baby', 'album_name', 'cover_photo', 'album_tags']

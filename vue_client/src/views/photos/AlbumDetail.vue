@@ -2,7 +2,7 @@
   <div v-if="albumDataFetched">
 
     <!-- top button bar -->
-    <div class="d-flex justify-content-between bg-pink nav">
+    <div class="d-flex justify-content-between bg-pink nav" v-if="relationship.rank in [1, 2]">
       <v-btn icon color="white" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left
@@ -94,12 +94,13 @@ export default {
   },
 
   computed: {
-    ...mapState('photoStore', ['album',]),
+    ...mapState(['relationship']),
+    ...mapState('photoStore', ['album', 'albumPhotos']),
     ...mapGetters('photoStore', ['albumDataFetched',])
   },
   
   methods: {
-    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum',]),
+    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum', 'fetchAlbumPhotos']),
     goToLibrary() {
       this.$router.push({ name: 'AlbumLibrary' })
     },
@@ -141,6 +142,7 @@ export default {
 
   mounted() {
     this.getAlbum(this.$route.params.albumId)
+    this.fetchAlbumPhotos(this.$route.params.albumId)
   },
 }
 </script>

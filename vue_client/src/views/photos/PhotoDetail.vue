@@ -7,7 +7,7 @@
         color="white"
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center" v-if="relationship.rank in [1, 2]">
         <v-bottom-sheet v-model="photo_sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -208,7 +208,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['myaccount']),
+    ...mapState(['myaccount', 'relationship']),
     ...mapState('photoStore', ['photo', 'comments'])
   },
   watch: {

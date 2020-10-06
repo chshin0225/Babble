@@ -22,7 +22,7 @@
 
 
     <!-- 사진 추가 버튼 구현 -->
-    <div @click="clickAdd" class="add-button color-pink pointer">
+    <div @click="clickAdd" class="add-button color-pink pointer" v-if="relationship.rank in [1, 2]">
       <i class="fas fa-plus-circle fa-2x"></i>
     </div>
     <div style="height:15vh"></div>
@@ -39,6 +39,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['relationship']),
     ...mapState('photoStore', ['photos'])
   },
   methods: {
