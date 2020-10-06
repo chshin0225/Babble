@@ -59,13 +59,18 @@ class UserDetailView(APIView):
 class BabyAccessView(APIView):
     # 현재 유저의 지난 babble box 접속 데이터 가져오기
     def get(self, request):
-        access_log = BabyAccess.objects.filter(user=request.user).all()
+        access_log = BabyAccess.objects.filter(user=request.user).exclude(baby=request.user.current_baby).order_by('-last_access_date')
         serializer = BabyAccessSerializer(access_log, many=True)
         return Response(serializer.data)
 
     # 현재 유저가 새로운 babble box로 이동했을 때 BabyAccess에 log 추가
     def post(self, request):
-        serializer = BabyAccessSerializer(data=request.data)
+        next_baby = get_object_or_404(Baby, id=request.data['baby'])
+        if BabyAccess.objects.filter(baby=next_baby).exists():
+            log = get_object_or_404(BabyAccess, baby=next_baby.id)
+            serializer = BabyAccessSerializer(log, data=request.data)
+        else:
+            serializer = BabyAccessSerializer(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user)
