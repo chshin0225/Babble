@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Profile",
@@ -119,8 +119,16 @@ export default {
     }
   },
   methods:{
+    ...mapActions('accountStore',['updateProfile']),
     profileBtn(){
+      const profileData = {
+        "currentPassword": this.curpassword,
+        "newPassword": this.newpassword,
+        "confirmNewPassword": this.confirmnewpassword,
+        "name": this.name
+      }
 
+      this.updateProfile(profileData)
     },
     validPassword(password) {
       var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;

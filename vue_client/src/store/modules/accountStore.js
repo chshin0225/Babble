@@ -199,6 +199,35 @@ const accountStore = {
               console.log(err)
           })
         },
+        updateProfile({rootGetters, rootState, commit}, profileUpdateData){
+          if(profileUpdateData.newPassWord){
+            const passwordData = {
+              "old_password": profileUpdateData.currentPassword,
+              "new_password1": profileUpdateData.newPassword,
+              "new_password2": profileUpdateData.confirmNewPassword
+            }
+            axios.post(SERVER.URL + SERVER.ROUTES.passwordChange,  passwordData, rootGetters.config)
+              .then(res =>{
+                console.log(res)
+              })
+              .catch(err => {
+                console.log(err)
+            })
+          }
+
+          if(profileUpdateData.name != rootState.myaccount.name){
+            const nameData = {
+              "name": profileUpdateData.name
+            }
+            axios.put(SERVER.URL + SERVER.ROUTES.profileChange, nameData, rootGetters.config)
+              .then(res=>{
+                commit("SET_MYACCOUNT", res.data, {root:true})
+              })
+              .catch(err => {
+                console.log(err)
+            })
+          }
+        }
     }
 }
 
