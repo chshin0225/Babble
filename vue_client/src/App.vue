@@ -53,10 +53,10 @@
               </li>
               <!-- <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
-              </li> -->
+              </li>
               <li class="list menu">
                 <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
-              </li>
+              </li>  -->
               <!-- <li class="list menu pointer" @click="clickSettings">
                 <i class="fas fa-cog mr-3"></i> 
                 설정
