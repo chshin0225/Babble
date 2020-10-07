@@ -66,17 +66,15 @@ def tags():
     start = time.time()
     with graph.as_default():
         tags += app.yolo.extract_tag(img)
-    print(time.time() - start)
+    print('yolo',time.time() - start)
     start = time.time()
-    with graph.as_default():
-        tag_temp = GE.get_tag_emotion(img_emotion)
-        if tag_temp == []:
-            tag_temp = GE.get_tag_emotion(img_emotion, 500, 500)
-            if tag_temp == []:
-                tag_temp = GE.get_tag_emotion(img_emotion, 700, 700)
-
-        tags += tag_temp  # add tags
-    print(time.time() - start)
+    try:
+        with graph.as_default():
+            tag_temp = GE.get_tag_emotion(img_emotion)
+            tags += tag_temp  # add tags
+    except:
+        print("emotion exception")
+    print('emotion',time.time() - start)
     data = {
         'tags': tags
     }
