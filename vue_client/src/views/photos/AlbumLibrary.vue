@@ -2,13 +2,15 @@
   <div class="container" data-app>
 
     <div class="albums row">
-      <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center" v-if="relationship.rank === 1 || relationship.rank === 2">
-        <div class="album add-album d-flex justify-content-center align-items-center">
-          <v-btn icon color="primary" :to="{ name: 'AlbumCreate' }" class="text-decoration-none">
-            <v-icon x-large>mdi-plus-circle</v-icon>      
-          </v-btn>
+      <div v-if="relationship">
+        <div class="new-album col-6 d-flex flex-column justify-content-center align-items-center" v-if="[1, 2].includes(relationship.rank)">
+          <div class="album add-album d-flex justify-content-center align-items-center">
+            <v-btn icon color="primary" :to="{ name: 'AlbumCreate' }" class="text-decoration-none">
+              <v-icon x-large>mdi-plus-circle</v-icon>      
+            </v-btn>
+          </div>
+          <p class="album-title">새 앨범</p>
         </div>
-        <p class="album-title">새 앨범</p>
       </div>
       <!-- 내 앨범들 -->
       <router-link v-for="album in albums" :key="album.id" :to="{ name: 'AlbumDetail', params: {albumId: album.id}}" class="col-6 d-flex flex-column justify-content-center align-items-center text-dark">

@@ -82,9 +82,32 @@
           suffix="cm"
           v-model="tempRecord.babyHead"
         ></v-text-field>
+
+        <!-- 조회 권한 -->
+        <div class="text-center mt-3">
+          <h5 class="mb-0">공개 범위</h5>
+          <v-container>
+            <v-radio-group v-model="radios" :mandatory="false">
+              <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
+              <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
+              <v-radio @click="changeHeight" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
+            </v-radio-group>
+            <!-- 토글 부분 -->
+            <v-btn-toggle
+              v-model="diaryData.permitted_groups"
+              multiple
+              class="py-2"
+              v-if="radios=='guests'"
+            >
+              <v-btn v-for="group in groups" :key="group.id" :value="group.id" outlined color="#FEA59C">
+                {{ group.group_name }}
+              </v-btn>
+            </v-btn-toggle>
+          </v-container>
+        </div>
       </div>
-      <div class="p-2 d-flex justify-content-end">
-        <button @click="clickCreate()" class="btn btn-pink ">작성</button>
+      <div class="p-2 d-flex justify-content-center">
+        <button @click="clickCreate()" class="btn btn-pink">작성</button>
       </div>
       <div style="height:15vh"></div>
     </div>
@@ -109,7 +132,17 @@ export default {
   },
   computed: {
     ...mapState([ 'myaccount']),
-    ...mapGetters(['config'])
+    ...mapGetters(['config']),
+    ...mapState('settingStore', ['groups']),
+    diaryScope() {
+      if (this.radios === 'all') {
+        return 0
+      } else if (this.radios === 'maintainer') {
+        return 1
+      } else {
+        return 2
+      }
+    }
   },
   data() {
     return {
@@ -133,7 +166,10 @@ export default {
         title: '',
         content: '',
         content_html: '',
+        diary_scope: null,
+        permitted_groups: []
       },
+      createData: [],
       htmlForEditor:"",
       // Date
       menu2: false,
@@ -141,11 +177,15 @@ export default {
       today: new Date().toISOString().substr(0, 10),
       // files
       files: null,
-      loading: false
+      loading: false,
+      sheet: false,
+      radios: 'all',
+      height: '45vh'
     };
   },
   methods: {
     ...mapActions('diaryStore', ['createDiary', 'createRecord']),
+    ...mapActions('settingStore', ['fetchGroups']),
     clickBack() {
       this.$router.go(-1)
     },
@@ -164,13 +204,14 @@ export default {
           babyRecord.height = parseFloat(this.tempRecord.babyHeight)
         }
         babyRecord.measure_date = this.diaryData.diary_date
-        console.log(babyRecord)
         this.createRecord(babyRecord)
           .then(() => {
             flag = 1
             this.$router.push({ name: 'DiaryPhoto'})
           })
       }
+
+      this.diaryData.diary_scope = this.diaryScope;
 
       if (this.diaryData.content.length >= 1 && this.diaryData.title.length >= 1) {
         this.diaryData.content_html = this.diaryData.content;
@@ -184,20 +225,27 @@ export default {
         if (flag === 1) {
           this.$router.push({ name: 'DiaryPhoto' })
         } else if (flag === 2 || flag === 3) {
+          if (this.createData) {
+            this.createData.forEach(photo => {
+              photo.photo_scope = this.diaryData.diary_scope
+              photo.groups = this.diaryData.permitted_groups
+            });
+            axios.post(SERVER.URL + SERVER.ROUTES.photos, this.createData, this.config)
+              .then(() => {
+                console.log('야호')
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
           this.createDiary(this.diaryData)
         }
       }
-      
-
-      
-
-
-
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
       this.loading = true
       console.log("HANDLE IMAGE ADDED")
-      const createData = []
+      // const createData = []
       const promises = []
       const tagPromises = []
       var storageRef = firebase.storage().ref()
@@ -211,7 +259,9 @@ export default {
           "last_modified": file.lastModifiedDate,
           "size": file.size,
           "file_type": file.type,
-          "tags": []
+          "tags": [],
+          "photo_scope": null,
+          "groups": []
         };
         var imagePath = {
           "path": imageInfo.temp_url
@@ -223,28 +273,28 @@ export default {
                             .catch(err => console.log(err.response.data))
         tagPromises.push(tagExtract)
         Promise.all(tagPromises).then(() => {
-          createData.push(imageInfo)
-          axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, this.config)
-            .then(() => {
-              let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-              Editor.insertEmbed(cursorLocation, "image", url);
-              resetUploader();
-              this.loading = false
-            })
-            .catch(err => {
-              console.log(err);
-              this.loading = false
-            });
-            if ( this.files === null ) {
-              let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-              this.diaryData.cover_photo = url
-              this.files = true
-              console.log(this.diaryData)
-            }
+          this.createData.push(imageInfo)
+
+          let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+          Editor.insertEmbed(cursorLocation, "image", url);
+          resetUploader();
+          this.loading = false
+
+          if ( this.files === null ) {
+            let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
+            this.diaryData.cover_photo = url
+            this.files = true
+          }
         })
       })
-    }
+    },
+    changeHeight() {
+      this.height = '57vh'
+    },
   },
+  created() {
+    this.fetchGroups()
+  }
 }
 </script>
 
@@ -300,6 +350,15 @@ button:focus {
 .crying-baby {
   height: 50vh;
   width: auto;
+}
+
+.v-btn {
+  margin-top: 5px;
+}
+
+.v-btn--active {
+  background-color: #FEA59C;
+  color: white !important;
 }
 
 </style>

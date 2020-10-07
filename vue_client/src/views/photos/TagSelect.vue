@@ -2,14 +2,14 @@
   <div>
     <div class="photo-content">
       <div class="photo-container">
-        <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + createData.photoData.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+        <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + createData.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
       </div>
     </div>
     <h5 class="text-center mt-5">사진의 태그를 자유롭게 수정해주세요 :)</h5>
     <v-col cols="12">
       <v-combobox
         v-if="tags"
-        v-model="createData.photoData.tags"
+        v-model="createData.tags"
         :items="tags"
         :search-input.sync="searchTag"
         hide-selected
@@ -30,7 +30,7 @@
           <v-chip
             v-bind="data.attrs"
             close
-            @click:close="remove(createData.photoData.tags, data.item)"
+            @click:close="remove(createData.tags, data.item)"
           >
             {{ data.item }}
           </v-chip>
@@ -68,7 +68,6 @@ export default {
     return {
       createData: this.$route.params.createData,
       photoType: this.$route.params.photoType,
-      // createData: this.$route.params.createData,
       searchTag: null
     }
   },
@@ -85,10 +84,7 @@ export default {
       if (this.photoType === "update") {
         this.updatePhoto(this.createData)
       } else if (this.photoType === "create") {
-        var tempData = Array()
-        tempData.push(this.createData.photoData)
-        this.createData.photoData = tempData
-        this.completeCreatePhoto(this.createData)
+        this.completeCreatePhoto(Array(this.createData))
       }
     }
   },

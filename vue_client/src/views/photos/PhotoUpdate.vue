@@ -50,7 +50,7 @@
       <v-col cols="12">
       <v-combobox
         v-if="tags"
-        v-model="photoUpdateData.photo_tags"
+        v-model="photoUpdateData.tags"
         :items="tags"
         :search-input.sync="searchTag"
         hide-selected
@@ -72,7 +72,7 @@
           <v-chip
             v-bind="data.attrs"
             close
-            @click:close="remove(photoUpdateData.photo_tags, data.item)"
+            @click:close="remove(photoUpdateData.tags, data.item)"
           >
             {{ data.item }}
           </v-chip>
@@ -102,7 +102,7 @@
             </v-radio-group>
             <!-- 토글 부분 -->
             <v-btn-toggle
-              v-model="photoUpdateData.permitted_groups"
+              v-model="photoUpdateData.groups"
               multiple
               class="py-2"
               v-if="radios=='guests'"
@@ -137,10 +137,10 @@ export default {
       photo_sheet: false,
       searchTag: null,
       photoUpdateData: {
-        id: null,
-        photo_tags: [],
-        photo_scope: null,
-        permitted_groups: []
+        "id": null,
+        "tags": [],
+        "photo_scope": null,
+        "groups": []
       },
       sheet: false,
       radios: '',
@@ -185,7 +185,7 @@ export default {
     this.photoUpdateData.id = this.photo.id
     
     this.photo.photo_tags.forEach(tag => {
-      this.photoUpdateData.photo_tags.push(tag.tag_name)
+      this.photoUpdateData.tags.push(tag.tag_name)
     });
 
     if (this.photo.photo_scope === 0) {
@@ -198,7 +198,7 @@ export default {
 
     if (this.photo.permitted_groups) {
       this.photo.permitted_groups.forEach(group => {
-        this.photoUpdateData.permitted_groups.push(group.id)
+        this.photoUpdateData.groups.push(group.id)
       });
     }
   },

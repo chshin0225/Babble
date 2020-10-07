@@ -8,7 +8,7 @@
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
       <div v-if="relationship">
-        <div class="d-flex align-items-center" v-if="relationship.rank in [1, 2]">
+        <div class="d-flex align-items-center" v-if="[1, 2].includes(relationship.rank)">
           <v-bottom-sheet v-model="photo_sheet">
             <template v-slot:activator="{ on, attrs }">
               <v-icon

@@ -2,7 +2,7 @@
   <div v-if="albumDataFetched">
 
     <!-- top button bar -->
-    <div class="d-flex justify-content-between bg-pink nav" v-if="relationship.rank in [1, 2]">
+    <div class="d-flex justify-content-between bg-pink nav" v-if="[1, 2].includes(relationship.rank)">
       <v-btn icon color="white" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left

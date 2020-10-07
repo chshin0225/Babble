@@ -98,7 +98,7 @@ const photoStore = {
       var storageRef = firebase.storage().ref()
 
       if (createInfo.photos.length == 1) {
-        createInfo.photos.forEach( photo => {
+        createInfo.photos.forEach(photo => {
           const uploadTask = storageRef.child('babble_' + rootState.myaccount.current_baby).child(photo.name).put(photo)
           promises.push(uploadTask)
   
@@ -108,7 +108,9 @@ const photoStore = {
             "last_modified": photo.lastModifiedDate,
             "size": photo.size,
             "file_type": photo.type,
-            "tags": []
+            "tags": [],
+            "photo_scope": createInfo.photo_scope,
+            "groups": createInfo.groups
           }
           photoData.push(imageInfo)
         })
@@ -119,11 +121,7 @@ const photoStore = {
           axios.post(SERVER.AIURL, imagePath)
               .then(res => {
                 photoData[0].tags = res.data.tags
-                const createData = {
-                  "photoData": photoData[0],
-                  "photoScope": createInfo.photoScope
-                }
-                router.push({ name: "TagSelect", params: { createData: createData, photoType: 'create' }})
+                router.push({ name: "TagSelect", params: { createData: photoData[0], photoType: 'create' }})
               })
               .catch(err => console.log(err.response.data))
         })
@@ -138,7 +136,9 @@ const photoStore = {
             "last_modified": photo.lastModifiedDate,
             "size": photo.size,
             "file_type": photo.type,
-            "tags": []
+            "tags": [],
+            "photo_scope": createInfo.photo_scope,
+            "groups": createInfo.groups
           }
           photoData.push(imageInfo)
         })
@@ -158,11 +158,7 @@ const photoStore = {
           });
 
           Promise.all(tagPromises).then(() => {
-            const createData = {
-              "photoData": photoData,
-              "photoScope": createInfo.photoScope
-            }
-            axios.post(SERVER.URL + SERVER.ROUTES.photos, createData, rootGetters.config)
+            axios.post(SERVER.URL + SERVER.ROUTES.photos, photoData, rootGetters.config)
               .then(() => {
                 dispatch('fetchPhotos')
                 router.push({name: 'PhotoList'})

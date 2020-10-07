@@ -10,15 +10,28 @@ from .serializers import DiaryListSerializer, DiarySerializer, DiaryCommentSeria
 from accounts.serializers import SimpleUserBabyRelationshipSerializer
 from babies.serializers import BabyMeasurementSerializer
 
-from .models import Diary, DiaryComment
+from .models import Diary, DiaryComment, DiaryGroup
 from babies.models import Baby, BabyMeasurement
-from accounts.models import UserBabyRelationship
+from accounts.models import UserBabyRelationship, Group
 
 # Create your views here.
 class DiaryListView(APIView):
     def get(self, request):
-        baby_id = request.user.current_baby
-        diaries = Diary.objects.filter(baby=baby_id).order_by('-diary_date')
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        
+        if relationship.rank_id == 3:
+            if relationship.group:
+                diaries_guest = Diary.objects.filter(baby=cb, diary_scope=2, permitted_groups=relationship.group)
+                diaries_all = Diary.objects.filter(baby=cb, diary_scope=0)
+                diaries = (diaries_guest | diaries_all).distinct().order_by('-diary_date')
+            else:
+                diaries = Diary.objects.filter(baby=cb, diary_scope=0).order_by('-diary_date')
+        else:
+            diaries = Diary.objects.filter(baby=cb).order_by('-diary_date')
+            
         serializer = DiaryListSerializer(diaries, many=True)
         return Response(serializer.data)
 
@@ -27,16 +40,32 @@ class DiaryListView(APIView):
         baby = get_object_or_404(Baby, id=baby_id)
         serializer = DiarySerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save(creator=request.user, baby=baby)
+            new_diary = serializer.save(creator=request.user, baby=baby)
+            if request.data['diary_scope'] == 2:
+                for group_id in request.data['permitted_groups']:
+                    DiaryGroup(group=get_object_or_404(Group, pk=group_id), diary=new_diary).save()
             return Response(serializer.data)
         return Response(serializer.errors)
 
 
 class DiaryPhotoListView(APIView):
     def get(self, request):
-        baby_id = request.user.current_baby
-        photo_diaries = Diary.objects.filter( cover_photo__isnull=False, baby=baby_id).order_by('-diary_date')
-        serializer = DiaryListSerializer(photo_diaries, many=True)
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        
+        if relationship.rank_id == 3:
+            if relationship.group:
+                diaries_guest = Diary.objects.filter(baby=cb, diary_scope=2, cover_photo__isnull=False, permitted_groups=relationship.group)
+                diaries_all = Diary.objects.filter(baby=cb, diary_scope=0, cover_photo__isnull=False,)
+                diaries = (diaries_guest | diaries_all).distinct().order_by('-diary_date')
+            else:
+                diaries = Diary.objects.filter(baby=cb, diary_scope=0, cover_photo__isnull=False).order_by('-diary_date')
+        else:
+            diaries = Diary.objects.filter(baby=cb, cover_photo__isnull=False).order_by('-diary_date')
+            
+        serializer = DiaryListSerializer(diaries, many=True)
         return Response(serializer.data)
 
 
@@ -71,15 +100,16 @@ class DiaryDetailView(APIView):
         diary = get_object_or_404(Diary, id=diary_id)
         serializer = DiarySerializer(diary, data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # creator? modifier? 둘 다?
-            serializer.save(modifier=request.user, baby=baby)
+            updated_diary = serializer.save(modifier=request.user, baby=baby)
+            if request.data['diary_scope'] == 2:
+                updated_diary.permitted_groups.clear()
+                for group_id in request.data['permitted_groups']:
+                    DiaryGroup(group=get_object_or_404(Group, pk=group_id), diary=updated_diary).save()
             return Response(serializer.data)
         return Response(serializer.errors)
 
     def delete(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        print(request.user)
-        print(diary.creator)
         # if diary.creator == request.user:
         diary.delete()
         return Response()
