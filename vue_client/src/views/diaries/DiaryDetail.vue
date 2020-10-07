@@ -383,7 +383,7 @@ export default {
       }
     },
     clickEdit() {
-      this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
+      this.$router.replace({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
     },
     clickBack() {
       this.$router.go(-1)
