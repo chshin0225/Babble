@@ -78,7 +78,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import Swal from 'sweetalert2'=
+import Swal from 'sweetalert2'
 
 export default {
   name: 'PhotoCreate',
@@ -136,17 +136,21 @@ export default {
       var frame = document.getElementById('frame');
       for (var file of files) {
         if(file.type == "image/gif" || file.type == "image/jpeg" || file.type == "image/png"){
-            i.style.objectFit='cover'
-            i.style.objectPosition='50% 50%'
-            i.style.width='30vw'
-            i.style.height='30vw'
-            i.style.overflow='hidden'
-            i.style.marginRight='2.5vw'
-            i.style.marginBottom='2.5vw'
-            i.style.boxShadow='6px 6px 10px rgba(0, 0, 0, 0.5)'
-            div.appendChild(i)
-            frame.appendChild(div)
-            this.is_OK = false
+          var div = document.createElement("div")
+          div.classList.add("col-4");
+          var i = document.createElement("img")
+          i.src = URL.createObjectURL(file)
+          i.style.objectFit='cover'
+          i.style.objectPosition='50% 50%'
+          i.style.width='30vw'
+          i.style.height='30vw'
+          i.style.overflow='hidden'
+          i.style.marginRight='2.5vw'
+          i.style.marginBottom='2.5vw'
+          i.style.boxShadow='6px 6px 10px rgba(0, 0, 0, 0.5)'
+          div.appendChild(i)
+          frame.appendChild(div)
+          this.is_OK = false
         }else{
           isNotImage = true;
         }
