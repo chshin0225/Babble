@@ -22,9 +22,12 @@
 
 
     <!-- 사진 추가 버튼 구현 -->
-    <div @click="clickAdd" class="add-button color-pink pointer" v-if="relationship.rank in [1, 2]">
-      <i class="fas fa-plus-circle fa-2x"></i>
+    <div v-if="relationship">
+      <div @click="clickAdd" class="add-button color-pink pointer" v-if="relationship.rank in [1, 2]">
+        <i class="fas fa-plus-circle fa-2x"></i>
+      </div>
     </div>
+
     <div style="height:15vh"></div>
   </div>
 </template>
@@ -49,13 +52,20 @@ export default {
     },
     clickPhoto(photo_id) {
       this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
-      //this.$router.push({ path: '/photo/'+photo_id }) 
-      //this.findPhoto(photo_id);
     }
   },
   mounted() {
     this.fetchPhotos()
-  }
+  },
+  beforeRouteUpdate (to, from, next) {
+    // this.findPost(to.params.postId)
+    next()
+    // this.commentCreateData.postId = this.$route.params['postId']
+    // this.fetchComments(to.params.postId)
+    // this.findBook(this.selectedPost.book.id)
+  },
+
+
 }
 </script>
 
@@ -107,7 +117,8 @@ export default {
 }
 
 .crying-baby {
-  height: 50vh;
+  margin-top: 10vh;
+  height: 30vh;
   width: auto;
 }
 
