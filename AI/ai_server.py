@@ -62,7 +62,13 @@ def tags():
     print(time.time() - start)
     start = time.time()
     with graph.as_default():
-        tags += GE.get_tag_emotion(img_emtion)  # add tags
+        tag_temp = GE.get_tag_emotion(img_emtion)
+        if tag_temp == []:
+            tag_temp = GE.get_tag_emotion(img_emtion, 500, 500)
+            if tag_temp == []:
+                tag_temp = GE.get_tag_emotion(img_emtion, 700, 700)
+                
+        tags += tag_temp  # add tags
     print(time.time() - start)
     data = {
         'tags': tags
