@@ -36,15 +36,13 @@ const accountStore = {
                   title: "회원가입에 성공하였습니다."
                 })
                 if (rootState.invitationToken) {
-                  console.log(rootState.invitationToken)
                   router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
                 } else {
                   router.push({name: 'RegisterBaby'})
                 }
               })
 
-              .catch(err => {
-                console.log(err.response)
+              .catch(() => {
                 const Toast = Swal.mixin({
                   toast: true,
                   position: 'top-end',
@@ -84,7 +82,6 @@ const accountStore = {
                 dispatch('findMyAccount', null, { root: true })
                 // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
                 if (rootState.invitationToken) {
-                  console.log(rootState.invitationToken)
                   router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
                 } else {
                 router.push({name: 'PhotoList'})
@@ -124,17 +121,13 @@ const accountStore = {
           dispatch('postAuthData1', info)
         },
         enrollBaby({ rootGetters, dispatch }, enrollData) {
-          console.log(enrollData)
           axios.post(SERVER.URL + SERVER.ROUTES.babies, enrollData, rootGetters.config)
-            .then(res => {
-              console.log(res)
+            .then(() => {
               dispatch('findMyAccount', null, { root: true })
               // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
               router.push({ name: 'PhotoList'})
             })
-            .catch(err => {
-              console.error(err)
-            })
+
         },
         socialLogin({ commit, dispatch, rootState }, userInfo) {
           axios.post(SERVER.URL + SERVER.ROUTES.social, userInfo)
@@ -171,7 +164,6 @@ const accountStore = {
               }
             })
             .catch((err) => {
-              console.log(err)
               const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -191,16 +183,14 @@ const accountStore = {
         },
         changePassword({ rootGetters }, passwordData) {
           axios.post(SERVER.URL + SERVER.ROUTES.password + 'change/', passwordData, rootGetters.config)
-            .then(res => {
-              console.log(res)
+            .then(() => {
               Swal.fire({
                 icon: 'success',
                 text: '비밀번호가 변경되었습니다.'
               })
               router.go(0)
             })
-            .catch(err => {
-              console.log(err)
+            .catch(() => {
               Swal.fire({
                 icon: 'error',
                 text: '비밀번호를 확인해주세요.'
@@ -216,9 +206,6 @@ const accountStore = {
                 text: '프로필 정보가 변경되었습니다.'
               })
             })
-            .catch(err => {
-              console.log(err)
-          })
         },
         updateProfile({rootGetters, rootState, commit}, profileUpdateData){
           if(profileUpdateData.newPassWord){
@@ -228,12 +215,6 @@ const accountStore = {
               "new_password2": profileUpdateData.confirmNewPassword
             }
             axios.post(SERVER.URL + SERVER.ROUTES.passwordChange,  passwordData, rootGetters.config)
-              .then(res =>{
-                console.log(res)
-              })
-              .catch(err => {
-                console.log(err)
-            })
           }
 
           if(profileUpdateData.name != rootState.myaccount.name){
@@ -244,9 +225,6 @@ const accountStore = {
               .then(res=>{
                 commit("SET_MYACCOUNT", res.data, {root:true})
               })
-              .catch(err => {
-                console.log(err)
-            })
           }
         }
     }

@@ -30,23 +30,19 @@ const measurementStore = {
     fetchMeasurementList({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements, rootGetters.config)
         .then(res => commit('SET_MEASUREMENT_LIST', res.data))
-        .catch(err => console.error(err))
     },
     fetchWeightMeasurementList({ rootGetters, commit }) {
       commit('SET_WEIGHT_MEASUREMENT_LIST', null)
       axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements + 'weight/', rootGetters.config)
         .then(res => commit('SET_WEIGHT_MEASUREMENT_LIST', res.data))
-        .catch(err => console.error(err))
     },
     fetchHeightMeasurementList({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements + 'height/', rootGetters.config)
         .then(res => commit('SET_HEIGHT_MEASUREMENT_LIST', res.data))
-        .catch(err => console.error(err))
     },
     fetchHeadMeasurementList({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.babies + SERVER.ROUTES.measurements + 'head/', rootGetters.config)
         .then(res => commit('SET_HEAD_MEASUREMENT_LIST', res.data))
-        .catch(err => console.error(err))
     },
   }
 }
