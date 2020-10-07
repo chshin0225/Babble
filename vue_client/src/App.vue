@@ -11,12 +11,13 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </div>
-      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
-        <span>
-          <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
-          <img src="@/assets/babble_logo.png" />
-        </span>
-        <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+      <nav class="nav2 mt-5 " v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
+        <div class="d-flex justify-content-center">
+          <span>
+            <img src="@/assets/babble_logo.png" />
+          </span>
+          <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+        </div>
       </nav>
       
       <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
@@ -356,6 +357,15 @@ export default {
   font-size: 3rem;
   font-weight: 900;
   font-family: "Rammetto One", cursive;
+}
+
+.scallop-down{
+  height:40px;
+  /* width: 75%;
+  margin-left: auto;
+  margin-right: auto; */
+  background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+  -webkit-background-size: 49px 100%;
 }
 
 /* sidebar */
