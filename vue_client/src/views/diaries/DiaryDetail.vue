@@ -91,12 +91,13 @@
           </div>
           <div class="scallop-up"></div>
         </div>
+
         <div class="diary-bottom d-flex justify-content-end my-3">
           <div>
             <p class=" m-0 diary-creator">
               <!-- <img :src="diary.diary.creator.profile_img"> -->
               <!-- <img class="profile-img mr-2" src="https://i.pinimg.com/236x/bf/ee/d2/bfeed24a2d24b42347faff4d27d3941c.jpg"> -->
-              <img v-if="myaccount.profile_image" class="profile-img mr-2" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+              <img v-if="diary.diary.creator.profile_image" class="profile-img mr-2" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + diary.diary.creator.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
               <img v-else class="profile-img mr-2" src="@/assets/babble_logo.png" />
               <span>{{diary.diary.creator.name}}({{ diary.relationship.relationship_name}})</span>
             </p>

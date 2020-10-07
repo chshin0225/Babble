@@ -8,7 +8,7 @@
         <!-- <div v-for="user in users.maintainers" :key="`maintainer_${user.id}`"> -->
           
           <v-list-item 
-            class="d-flex justify-content-between align-items-center"
+            class="d-flex align-items-center"
             v-for="userItem in users.maintainers" 
             :key="`guest-${userItem.id}`"
           >
@@ -21,7 +21,6 @@
                 :items="items"
                 filled
                 dense
-                label="권한"
                 v-model="userItem.rank"
                 :item-text="'label'"
                 :item-value="'value'"
@@ -29,12 +28,13 @@
               ></v-select>
             </v-col>
           </v-list-item>
+          <v-divider></v-divider>
         </div>
       </div>
     <!-- 손님 -->
     <div v-if="users.guests">
       <div class="d-flex justify-content-between mt-3" v-if="users.guests.length">
-        <h5>손님</h5>
+        <h5 class="align-self-center mb-0">손님</h5>
         <div>
           <button class="btn btn-outline-pink" style="" @click="selectAll">{{!isCheckAll?'전체 선택':'선택 해제'}}</button>
           <v-bottom-sheet v-model="sheet">
@@ -79,17 +79,17 @@
                 <v-list-item-title>{{userItem.user.name}}</v-list-item-title>
                 <v-list-item-subtitle>{{userItem.relationship_name}}</v-list-item-subtitle>
               </v-list-item-content>
-              <v-list-item-content>
+              <v-list-item-content class="">
                 
                 <v-select
                   :items="items"
                   filled
                   dense
-                  label="권한"
                   v-model="userItem.rank"
                   :item-text="'label'"
                   :item-value="'value'"
                   @change="changeRank(userItem.user.id, userItem.relationship_name, userItem.rank)"
+                  hide-details
                 ></v-select>
               </v-list-item-content>
               <v-list-item-icon>
@@ -130,8 +130,8 @@ export default {
     return {
       sheet:false,
       items:[
-        {label: "공동양육자", value:"2"},
-        {label: "손님", value:"3"},
+        {label: "공동양육자", value:2},
+        {label: "손님", value:3},
       ],
       isCheckAll : false,
     }

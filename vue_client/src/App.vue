@@ -201,7 +201,8 @@ export default {
     ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox", "findRelationship"]),
     // Logo
     clickLogo() {
-      this.$router.push({ name: "PhotoList" });
+      this.$router.push({ name: "PhotoList" })
+        .catch(()=>{})
     },
     // sidebar
     toggle() {
@@ -263,16 +264,19 @@ export default {
       this.$router.push({ name: "Babblebox" });
     },
     clickPhoto() {
-      this.$router.push({ name: "PhotoList" });
+      this.$router.push({ name: "PhotoList" })
+        .catch(()=>{})
     },
     clickDiary() {
-      this.$router.push({ name: "DiaryPhoto" });
+      this.$router.push({ name: "DiaryPhoto" })
+        .catch(()=>{})
     },
     clickProfile() {
       this.$router.push({
         name: "Profile",
         params: { profileId: this.myaccount.id },
-      });
+      })
+        .catch(()=>{})
     },
     clickLogout() {
       let backdrop = document.querySelector(".sidebar-backdrop");
