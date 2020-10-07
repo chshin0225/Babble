@@ -32,70 +32,83 @@
         </div>
       </div>
     <!-- 손님 -->
-    <div class="d-flex justify-content-between mt-3">
-      <h5>손님</h5>
-      <div>
-        <button class="btn btn-outline-pink" style="" @click="selectAll">{{!isCheckAll?'전체 선택':'선택 해제'}}</button>
-        <v-bottom-sheet v-model="sheet">
-          <template v-slot:activator="{ on, attrs }">
-            <button 
-                class="btn btn-outline-pink" 
-                style="margin-left:6px !important;"
-                v-bind="attrs"
-                v-on="on">그룹에 추가</button>
-          </template>
-          <v-list>
-            <v-subheader>그룹 목록</v-subheader>
-            <v-list-item
-              v-for="group in groups"
-              :key="`group_${group.id}`"
-              @click="sheet = false"
-            >
-              <v-list-item-title @click="clickGroup(group.id)">{{ group.group_name }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-bottom-sheet>
+    <div v-if="users.guests">
+      <div class="d-flex justify-content-between mt-3" v-if="users.guests.length">
+        <h5>손님</h5>
+        <div>
+          <button class="btn btn-outline-pink" style="" @click="selectAll">{{!isCheckAll?'전체 선택':'선택 해제'}}</button>
+          <v-bottom-sheet v-model="sheet">
+            <template v-slot:activator="{ on, attrs }">
+              <button 
+                  class="btn btn-outline-pink" 
+                  style="margin-left:6px !important;"
+                  v-bind="attrs"
+                  v-on="on">그룹에 추가</button>
+            </template>
+            <v-list>
+              <v-subheader>그룹 목록</v-subheader>
+              <v-list-item
+                v-for="group in groups"
+                :key="`group_${group.id}`"
+                @click="sheet = false"
+              >
+                <v-list-item-title @click="clickGroup(group.id)">{{ group.group_name }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-bottom-sheet>
+        </div>
       </div>
     </div>
-    <div v-if="users.guests">
-      <v-list-item-group
-        multiple
-      >
-        <v-list-item v-for="userItem in users.guests" :key="`guest-${userItem.id}`">
-          <template v-slot:default="{ active }">
-            <v-list-item-action>
-              <v-checkbox
-                :input-value="active"
-                color="#FEA59C"
-                v-model="userItem.isCheck"
-              ></v-checkbox>
-            </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>{{userItem.user.name}}</v-list-item-title>
-              <v-list-item-subtitle>{{userItem.relationship_name}}</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-content>
-              
-              <v-select
-                :items="items"
-                filled
-                dense
-                label="권한"
-                v-model="userItem.rank"
-                :item-text="'label'"
-                :item-value="'value'"
-                @change="changeRank(userItem.user.id, userItem.relationship_name, userItem.rank)"
-              ></v-select>
-            </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon v-if="myaccount.id != userItem.user.id" color="red" @click="deleteUser(userItem.user.id)">mdi-trash-can-outline</v-icon>
-            </v-list-item-icon>
-          </template>
-        </v-list-item>
-      </v-list-item-group>
-      
+    <div v-if="users.guests">
+      <div v-if="users.guests.length">
+        <v-list-item-group
+          multiple
+        >
+          <v-list-item v-for="userItem in users.guests" :key="`guest-${userItem.id}`">
+            <template v-slot:default="{ active }">
+              <v-list-item-action>
+                <v-checkbox
+                  :input-value="active"
+                  color="#FEA59C"
+                  v-model="userItem.isCheck"
+                ></v-checkbox>
+              </v-list-item-action>
+
+              <v-list-item-content>
+                <v-list-item-title>{{userItem.user.name}}</v-list-item-title>
+                <v-list-item-subtitle>{{userItem.relationship_name}}</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-content>
+                
+                <v-select
+                  :items="items"
+                  filled
+                  dense
+                  label="권한"
+                  v-model="userItem.rank"
+                  :item-text="'label'"
+                  :item-value="'value'"
+                  @change="changeRank(userItem.user.id, userItem.relationship_name, userItem.rank)"
+                ></v-select>
+              </v-list-item-content>
+              <v-list-item-icon>
+                <v-icon v-if="myaccount.id != userItem.user.id" color="red" @click="deleteUser(userItem.user.id)">mdi-trash-can-outline</v-icon>
+              </v-list-item-icon>
+            </template>
+          </v-list-item>
+        </v-list-item-group>
+        
+      </div>
+      <div v-else class="text-center">
+        <img class="crying-baby" src="@/assets/baby.png">
+        <h5>
+          아직 초대된 회원이 없습니다.<br>
+          다른 회원을 초대해주세요.
+        </h5>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -146,20 +159,18 @@ export default {
       this.$router.go(-1)
     },
     clickGroup(groupId){
-      for(var i=0; i<this.users.length; i++){
-        if(this.users[i].isCheck == true){
-          console.log(this.users[i].group)
-          if(this.users[i].group === null) {
-            let userData = {groupId : groupId, user : this.users[i].user.id};
-            console.log("userData", userData);
+      for(var i=0; i<this.users.guests.length; i++){
+        if(this.users.guests[i].isCheck == true){
+          if(this.users.guests[i].group === null) {
+            let userData = {groupId : groupId, user : this.users.guests[i].user.id};
             this.addUser(userData);
           }
         }
       }
       this.isCheckAll = false;
       
-      for(var idx=0; idx<this.users.length; idx++){
-        this.users[idx].isCheck = false;
+      for(var idx=0; idx<this.users.guests.length; idx++){
+        this.users.guests[idx].isCheck = false;
       }
     },
     selectAll(){
@@ -224,5 +235,11 @@ export default {
     padding: 10px;
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .crying-baby {
+    margin-top: 20vh;
+    height: 30vh;
+    width: auto;
   }
 </style>

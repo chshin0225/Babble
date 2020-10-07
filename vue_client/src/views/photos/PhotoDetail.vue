@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <nav class="d-flex justify-content-between w-100 bg-pink p-2">
+    <nav class="d-flex justify-content-between align-items-center w-100 bg-pink p-2">
       <v-icon 
         class="top-left-icons pointer" 
         @click="clickBack"
@@ -323,9 +323,18 @@ export default {
     },
     photoDelete(){
       this.photo_sheet = false;
-      if(confirm("사진을 삭제하시겠습니까?")){
-        this.deletePhoto(this.$route.params.photoId);
-      }
+      swal.fire({
+        text: "사진을 삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: '네',
+        cancelButtonText: '아니요',
+        icon: "warning",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deletePhoto(this.$route.params.photoId);
+        } 
+      });
     },
     photoUpdate() {
       this.$router.replace({ name: "PhotoUpdate", params: { photoId: this.photo.id }})

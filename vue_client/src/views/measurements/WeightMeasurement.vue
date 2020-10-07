@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import LineGraph from './LineGraph.js'
 
 export default {
@@ -61,8 +61,7 @@ export default {
 
   computed: {
     ...mapState(['myaccount', 'currentBaby']),
-    ...mapState('measurementStore', ['weightMeasurementList', ]),
-    ...mapGetters('measurementStore', ['weightMeasurementFetched'])
+    ...mapState('measurementStore', ['weightMeasurementList']),
   },
 
   watch: {

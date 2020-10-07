@@ -1,6 +1,6 @@
 <template>
   <div class="p-0" v-if="diary" data-app>
-    <nav class="d-flex justify-content-between bg-pink w-100 p-2">
+    <nav class="d-flex justify-content-between bg-pink w-100 p-2" v-if="relationship">
       <v-icon 
         class="top-left-icons pointer" 
         @click="clickBack"
@@ -8,7 +8,7 @@
       >mdi-arrow-left</v-icon>
       <!-- <div class="d-flex align-items-center ml-3">다른 다이어리 보러가기</div> -->
       <v-spacer></v-spacer>
-      <div class="d-flex align-items-center" v-if="[1, 2].includes(relationship.rank)">
+      <div class="d-flex align-items-center">
         <v-bottom-sheet v-model="sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -27,7 +27,7 @@
               </v-list-item-avatar>
               <v-list-item-title>다이어리 공유</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="clickEdit">
+            <v-list-item @click="clickEdit" v-if="[1, 2].includes(relationship.rank)">
               <v-list-item-avatar>
                 <v-avatar size="32px" tile>
                 <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
@@ -35,7 +35,7 @@
               </v-list-item-avatar>
               <v-list-item-title>다이어리 수정</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="clickDelete">
+            <v-list-item @click="clickDelete" v-if="[1, 2].includes(relationship.rank)">
               <v-list-item-avatar>
                 <v-avatar size="32px" tile>
                 <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
@@ -52,7 +52,7 @@
       <div>
         <div class="diary-top">
           <div class="d-flex justify-content-between">
-            <h4>{{diary.diary.create_date | moment('YYYY.M.DD')}}</h4>
+            <h4>{{diary.diary.diary_date | moment('YYYY.M.DD')}}</h4>
             <span class="color-blue font-weight-bold">#{{ currentBaby.baby_name }} 태어난지 {{ countDays }}일</span>
           </div>
         </div>
@@ -270,13 +270,19 @@ export default {
   methods: {
     ...mapActions('diaryStore', ['findDiary', 'fetchComments', 'createComment', 'deleteComment', 'updateComment', 'deleteDiary']),
     clickShare() {
-      const copyText = document.createElement("input");
-      copyText.value = `http://j3a310.p.ssafy.io/diary/${this.$route.params.diaryId}`
-      document.body.appendChild(copyText)
-      
-      copyText.select();
-      document.execCommand("copy");
-      document.body.removeChild(copyText)
+      var textarea = document.createElement('textarea');
+      textarea.textContent = `http://j3a310.p.ssafy.io/diary/${this.$route.params.diaryId}`;
+      document.body.appendChild(textarea);
+
+      var selection = document.getSelection();
+      var range = document.createRange();
+      range.selectNode(textarea);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy')
+      selection.removeAllRanges();
+
+
       this.sheet = false;
       Swal.fire({
           icon: 'success',
@@ -440,7 +446,7 @@ nav {
   }
 }
 .diary-content {
-  height: 40vh;
+  min-height: 40vh;
   background-color: #FAFAFA;
   border-radius: 20px;
   p {

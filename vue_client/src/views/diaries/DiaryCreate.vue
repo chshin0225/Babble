@@ -147,7 +147,11 @@ export default {
   data() {
     return {
       // editorText: 'This is initialValue.',
-      customToolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["image", "code-block"]],
+      customToolbar: [
+        ["bold", "italic", "underline"], 
+        [{ list: "ordered" }, { list: "bullet" }], 
+        ["image", { color: []}]
+      ],
       editorSettings: {
         modules: {
           imageDrop: true,
