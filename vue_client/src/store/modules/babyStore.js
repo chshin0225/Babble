@@ -16,7 +16,6 @@ const babyStore = {
   actions: {
     
     modifyBaby({ rootGetters }, enrollData) {
-      console.log("enrollData", enrollData.profile_image);
       axios.put(SERVER.URL + SERVER.ROUTES.babies + enrollData.id + '/', enrollData, rootGetters.config)
       .then(res => {
           console.log(res)
@@ -27,6 +26,7 @@ const babyStore = {
       })
       .catch(err => {
           console.log(err)
+          console.log(err.response.data)
       })
     },
   }

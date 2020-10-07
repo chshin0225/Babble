@@ -10,7 +10,7 @@
           <i class="fas fa-chevron-left"></i>
         </div>
         <div>
-          <input @change="change4" type="file" id="file" name="file" multiple hidden>
+          <input @change="change4" type="file" accept="image/gif, image/jpeg, image/png" id="file" name="file" multiple hidden>
           <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
           <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
           <div v-else class="d-flex flex-column"> 
@@ -61,10 +61,13 @@
 
         </div>
       </div>
-      <!-- 만약 업로드 된이미지가 없을 경우 -->
+      <!-- 만약 업로드 버튼 누르기 전 일 경우 -->
       <div v-if="no_image" class="text-center mt-5">
-        <img class="crying-baby" src="@/assets/baby.png">
-        <h5>업로드 된 이미지가 없습니다.</h5>
+        <img class="crying-baby" src="@/assets/babble_logo.png" style="width: 100vw">
+        <h5>
+          우측 상단에 있는 업로드 버튼을 누른 후, <br>
+          이미지를 추가해주세요!
+        </h5>
       </div>
       <div v-else id="frame" class="row no-gutters">
       </div>
@@ -75,16 +78,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-// var camera1 = document.getElementById('camera1');
-// var camera2 = document.getElementById('camera2');
-// var camera3 = document.getElementById('camera3');
-// var camera4 = document.getElementById('camera4');
-
-// var frame1 = document.getElementById('frame1');
-// var frame2 = document.getElementById('frame2');
-// var frame3 = document.getElementById('frame3');
-// var frame4 = document.getElementById('frame4');
-
+import Swal from 'sweetalert2'
 
 export default {
   name: 'PhotoCreate',
@@ -135,43 +129,38 @@ export default {
     changeHeight() {
       this.height = '57vh'
     },
-    // change1(e) {
-    //   var file = e.target.files[0];
-    //   var frame1 = document.getElementById('frame1');
-    //   frame1.src = URL.createObjectURL(file)
-    // },
-    // change2(e) {
-    //   var file = e.target.files[0];
-    //   var frame2 = document.getElementById('frame2');
-    //   frame2.src = URL.createObjectURL(file)
-    // },
-    // change3(e) {
-    //   var file = e.target.files[0];
-    //   var frame3 = document.getElementById('frame3');
-    //   frame3.src = URL.createObjectURL(file)
-    // },
     change4(e) {
       var files = e.target.files
       this.photos = files
       console.log(files)
+      var isNotImage = false;
       var frame = document.getElementById('frame');
       for (var file of files) {
-        var div = document.createElement("div")
-        div.classList.add("col-4");
-        var i = document.createElement("img")
-        i.src = URL.createObjectURL(file)
-
-        i.style.objectFit='cover'
-        i.style.objectPosition='50% 50%'
-        i.style.width='30vw'
-        i.style.height='30vw'
-        i.style.overflow='hidden'
-        i.style.marginRight='2.5vw'
-        i.style.marginBottom='2.5vw'
-        // i.classList.add("img-fluid")
-        div.appendChild(i)
-        frame.appendChild(div)
-        this.is_OK = false
+        if(file.type == "image/gif" || file.type == "image/jpeg" || file.type == "image/png"){
+          var div = document.createElement("div")
+          div.classList.add("col-4");
+          var i = document.createElement("img")
+          i.src = URL.createObjectURL(file)
+          i.style.objectFit='cover'
+          i.style.objectPosition='50% 50%'
+          i.style.width='30vw'
+          i.style.height='30vw'
+          i.style.overflow='hidden'
+          i.style.marginRight='2.5vw'
+          i.style.marginBottom='2.5vw'
+          i.style.boxShadow='6px 6px 10px rgba(0, 0, 0, 0.5)'
+          div.appendChild(i)
+          frame.appendChild(div)
+          this.is_OK = false
+        }else{
+          isNotImage = true;
+        }
+        if(isNotImage){
+          Swal.fire({
+            icon: 'error',
+            text: 'jpg 또는 png 파일만 업로드할 수 있습니다.'
+          })
+        }
       }
     },
   },
@@ -208,19 +197,6 @@ export default {
   }
 }
 
-// #frame > {
-//   .col-4 >{
-//     img {
-//       object-fit: cover;
-//       object-position: 50% 50%;
-//       width: 30vw; 
-//       height: 30vw;
-//       overflow:hidden;
-//       margin-right: 2.5vw;
-//     }
-//   }
-// }
-
 .imgStyle {
   object-fit: cover;
   object-position: 50% 50%;
@@ -229,6 +205,7 @@ export default {
   overflow:hidden;
   margin-right: 2.5vw;
 }
+
 #app > div.v-dialog__content.v-dialog__content--active > div > div > div > div > div > div.v-input__slot {
   margin: 0;
 }
@@ -237,10 +214,6 @@ export default {
   margin: 0 !important;
   padding: 0 !important;
 }
-
-// .v-btn--outlined {
-//   outline: 1px solid#FEA59C;
-// }
 
 .v-item-group {
   padding:0;

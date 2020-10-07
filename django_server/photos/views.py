@@ -1,5 +1,6 @@
 from operator import itemgetter
 from itertools import groupby
+from collections import Counter 
 
 from django.shortcuts import render, get_object_or_404
 from django.db.models.functions import TruncDate
@@ -18,6 +19,36 @@ class TagListView(APIView):
         tags = Tag.objects.all()
         serializer = TagListSerializer(tags, many=True)
         return Response(serializer.data) 
+
+class BabyTagView(APIView):
+    def get(self, request):
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        if relationship.rank_id == 3:
+            if relationship.group:
+                photos_guest = Photo.objects.filter(baby=cb, photo_scope=2, permitted_groups=relationship.group)
+                photos_all = Photo.objects.filter(baby=cb, photo_scope=0)
+                photos = (photos_guest | photos_all)
+            else:
+                photos = Photo.objects.filter(baby=cb, photo_scope=0)
+        else:
+            photos = Photo.objects.filter(baby=cb)
+        tags = Tag.objects.none()
+        for photo in photos:
+            tags = tags | photo.photo_tags.all()
+        tags = list(tags)
+        tag_count = Counter(tags).most_common(5)
+        tags = [tag[0] for tag in tag_count]
+        # print(tag_count)
+        # tags = sorted(tags, key = tags.count, reverse = True) 
+        # print(tags)
+        # tags = list(set(tags))
+        serializer = TagListSerializer(tags, many=True)
+        return Response(serializer.data)
+
+
 
 class PhotoListView(APIView):
     # 아기의 전체 사진 조회
@@ -202,6 +233,25 @@ class PhotoSearchView(APIView):
         
         serializer = PhotoListSerializer(searched_photos, many=True)
         return Response(serializer.data)
+
+
+class PhotoEmotionView(APIView):
+    def get(self, request):
+        emotions = ['행복', '슬픔', '놀람', '화남', '역겹', '무섭']
+        return_data = []
+        for emotion in emotions:
+            if Tag.objects.filter(tag_name=emotion).exists():
+                emotion_tag = get_object_or_404(Tag, tag_name=emotion)
+                # print(emotion_tag.tagged_photos.all())
+                serializer = PhotoListSerializer(emotion_tag.tagged_photos.all().filter(baby=request.user.current_baby), many=True)
+                if serializer.data:
+                    return_data.append({
+                        'id': emotion_tag.id,
+                        'emotion': emotion,
+                        'photos': serializer.data
+                    })
+        return Response(return_data)
+                
 
 
 class AlbumListView(APIView):

@@ -29,8 +29,10 @@ export default {
       // photos
       photos: '/photos/',
       tags: '/photos/tags/',
+      babbleboxTags: '/photos/babblebox/tags/',
       searchPhoto: '/photos/search/',
       albums: '/photos/albums/',
+      emotionTags: '/photos/emotions/',
     }
   }
   

@@ -5,18 +5,18 @@
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer" >
           <span>
-            <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
             <img src="@/assets/babble_logo.png" />
           </span>
           <span class="logo-title color-pink">Babble</span>
         </div>
       </div>
-      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
-        <span>
-          <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
-          <img src="@/assets/babble_logo.png" />
-        </span>
-        <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+      <nav class="nav2 mt-5 " v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
+        <div class="d-flex justify-content-center">
+          <span>
+            <img src="@/assets/babble_logo.png" />
+          </span>
+          <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+        </div>
       </nav>
       
       <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
@@ -25,8 +25,9 @@
             <!-- 현재 babble box info -->
             <div class="upper bg-pink d-flex justify-content-between">
               <div class="d-flex">
-                <div class="profile float-left mr-3">
-                  <img src="@/assets/babble_logo.png" />
+                <div class="profile float-left mr-3" v-if="currentBaby">
+                  <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+                  <img v-else src="@/assets/babble_logo.png" />
                 </div>
                 <div class="babble-box" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name }}</span><br />
@@ -65,10 +66,12 @@
           </div>
           <div class="sidebar-bottom">
             <hr />
-            <div class="d-flex row">
+            <div class="d-flex row no-gutters" v-if="accessLog">
               <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
-                <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-                <img v-else src="@/assets/babble_logo.png" />
+                <div class="d-flex justify-content-center">
+                  <img class="w-100" v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                  <img class="" v-else src="@/assets/babble_logo.png" />
+                </div>
                 <p class="text-center">{{ baby.baby_name }}</p>
               </div>
             </div>
@@ -300,6 +303,8 @@ export default {
     clickOtherBaby(babyId) {
       var babblebox = new Object()
       babblebox.baby = babyId
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
       this.accessBabbleBox(babblebox)
     }
   },
@@ -307,7 +312,7 @@ export default {
     if (this.authToken) {
       this.findMyAccount();
     }
-    this.fetchAccessLog()
+    // this.fetchAccessLog()
   },
 };
 </script>
@@ -359,6 +364,15 @@ export default {
   font-size: 3rem;
   font-weight: 900;
   font-family: "Rammetto One", cursive;
+}
+
+.scallop-down{
+  height:40px;
+  /* width: 75%;
+  margin-left: auto;
+  margin-right: auto; */
+  background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+  -webkit-background-size: 49px 100%;
 }
 
 /* sidebar */
@@ -417,11 +431,13 @@ a:hover {
 
 .profile img,
 .other-profile img {
-  max-width: 50px;
-  height: auto;
+  /*max-width: 50px;
+  height: auto;*/
+  width: 50px;
+  height : 50px;
   border: 1px solid #fea59c;
   border-radius: 50%;
-  background-color: white;
+  /*background-color: white;*/
 }
 
 /*  footer */

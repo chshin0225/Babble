@@ -60,7 +60,7 @@
               </select>
             </v-list-item-content>
             <v-list-item-icon>
-              <v-icon color="red" @click="deleteUser(userItem.user.id)">mdi-trash-can-outline</v-icon>
+              <v-icon v-if="myaccount.id != userItem.user.id" color="red" @click="deleteUser(userItem.user.id)">mdi-trash-can-outline</v-icon>
             </v-list-item-icon>
           </template>
         </v-list-item>
@@ -96,7 +96,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('settingStore', ['groups', 'users'])
+    ...mapState('settingStore', ['groups', 'users']),
+    ...mapState(['myaccount'])
   },
   mounted() {
     this.fetchUsers();
@@ -131,7 +132,7 @@ export default {
         }
     },
     changeRank(userId, userRelationship, userRank){
-      console.log("changeRank", userId);
+      
       let userData = {userId : userId, rank : userRank, relationship_name : userRelationship}
       this.modifyUserRank(userData);
     },
