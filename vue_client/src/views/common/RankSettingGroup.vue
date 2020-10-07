@@ -41,69 +41,6 @@
       </div>
     </div>
     <div style="width:100%; display:inline-block;">
-      <!--
-      <v-expansion-panels focusable accordion>
-        <v-expansion-panel
-          v-for="group in groups"
-          :key="group.id"
-        >
-          <v-expansion-panel-header>
-            {{group.group_name}}
-            <v-spacer></v-spacer>
-                
-            <v-dialog v-model="modify_dialog" width="70vw">
-              <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    @click.stop="modify_dialog = true"
-                  >mdi-pencil</v-icon>
-                <v-icon color="red" @click="deleteGroup(group.id)">mdi-trash-can-outline</v-icon>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">그룹 이름 변경</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field label="그룹 이름*" required v-model="newGroupName"></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="modify_dialog = false">Close</v-btn>
-                  <v-btn color="blue darken-1" text @click="modifyGroupName(group.id)">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-
-
-            
-            </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-list>
-
-              <v-list-item
-                v-for="member in group.members"
-                :key="member.id"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{member.name}}</v-list-item-title>
-                  <v-list-item-subtitle>{{member.relationship_name}}</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-spacer></v-spacer>
-                <v-icon color="red" @click="deleteUser(group.id, member.id)">mdi-trash-can-outline</v-icon>
-              </v-list-item>
-            </v-list>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-       -->
       <v-list>
       <v-list-group
           v-for="group in groups"
@@ -288,6 +225,13 @@ export default {
 </script>
 
 <style scoped>
+div >>> .v-list-group {
+  border: 1px solid #FEA59C;
+  border-radius: 10px;
+  margin: 0 10px 10px 10px;
+
+}
+
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
   background-color: #eee;
