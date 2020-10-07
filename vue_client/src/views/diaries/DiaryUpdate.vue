@@ -89,7 +89,7 @@
       <div class="text-center mt-3">
         <h5 class="mb-0">공개 범위</h5>
         <v-container>
-          <v-radio-group v-model="radios" :mandatory="false">
+          <v-radio-group v-model="radios" :mandatory="false" v-if="groups">
             <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
             <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
             <v-radio v-if="groups.length" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
@@ -153,7 +153,12 @@ export default {
   data() {
     return {
       // editorText: 'This is initialValue.',
-      customToolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["image", "code-block"]],
+      customToolbar: [
+        [{ color: []}],
+        ["bold", "italic", "underline"], 
+        [{ list: "ordered" }, { list: "bullet" }], 
+        ["image"]
+      ],
       editorSettings: {
         modules: {
           imageDrop: true,
@@ -208,9 +213,6 @@ export default {
           photo.groups = this.diaryData.diaryUpdateData.permitted_groups
         });
         axios.post(SERVER.URL + SERVER.ROUTES.photos, this.createData, this.config)
-          .then(() => {
-            console.log('야호')
-          })
           .catch(err => {
             console.log(err);
           });
