@@ -39,14 +39,17 @@
               </div>
             </div>
 
-            <div class="menu-container">
-              <li class="list invite pointer" @click="clickInvitationCreate">
-                <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
-              <hr />
-              <li class="list menu pointer" @click="clickBabySettings">
+            <div class="menu-container" v-if="relationship">
+              <div v-if="[1, 2].includes(relationship.rank)">
+                <li class="list invite pointer" @click="clickInvitationCreate">
+                  <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
+                <hr />
+              </div>
+
+              <li class="list menu pointer" @click="clickBabySettings" v-if="[1, 2].includes(relationship.rank)">
                   <i class="fas fa-cog mr-3"></i> 아기 설정
               </li>
-              <li class="list menu pointer" @click="clickGroupSettings">
+              <li class="list menu pointer" @click="clickGroupSettings" v-if="[1, 2].includes(relationship.rank)">
                   <i class="fas fa-users-cog mr-3"></i> 그룹 설정
               </li>
               <li class="list menu pointer" @click="clickMeasurements">
@@ -161,7 +164,6 @@ export default {
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken"]),
     ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog", "relationship"]),
     countDays() {
       if (this.currentBaby) {
@@ -304,6 +306,7 @@ export default {
   mounted() {
     if (this.authToken) {
       this.findMyAccount();
+      this.findRelationship();
     }
     this.fetchAccessLog()
   },
