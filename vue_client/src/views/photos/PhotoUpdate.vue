@@ -95,7 +95,7 @@
         <v-sheet class="text-center">
           <h5 class="mb-0">공개 범위</h5>
           <v-container class="py-0">
-            <v-radio-group v-model="radios" :mandatory="false">
+            <v-radio-group v-model="radios" :mandatory="false" v-if="groups">
               <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
               <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
               <v-radio v-if="groups.length" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
