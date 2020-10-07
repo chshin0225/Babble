@@ -7,13 +7,15 @@ import firebase from 'firebase'
 const photoStore = {
   namespaced: true,
   state: {
-    tags: null,
-    photos: null,
-    photo: null,
-    comments: null,
-    searchedPhotos: null,
-    albums: null,
-    album: null,
+    tags: [],
+    emotionTagPhotos: [],
+    babbleboxTags: [],
+    photos: [],
+    photo: [],
+    comments: [],
+    searchedPhotos: [],
+    albums: [],
+    album: [],
     measurementList: [],
   },
   getters: {
@@ -22,6 +24,12 @@ const photoStore = {
   mutations: {
     SET_TAGS(state, tags) {
       state.tags = tags
+    },
+    SET_EMOTION_PHOTOS(state, emotionTagPhotos) {
+      state.emotionTagPhotos = emotionTagPhotos
+    },
+    SET_BABBLEBOX_TAGS(state, babbleboxTags) {
+      state.babbleboxTags = babbleboxTags
     },
     SET_PHOTOS(state, photos) {
       state.photos = photos
@@ -53,6 +61,25 @@ const photoStore = {
         })
         .catch(err => console.log(err.response.data))
     },
+
+    fetchEmotionTagPhotos({ rootGetters, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.emotionTags, rootGetters.config)
+        .then(res => {
+          // console.log(res.data)
+          commit('SET_EMOTION_PHOTOS', res.data)
+        })
+        .catch(err => console.error(err))
+    },
+
+    fetchBabbleboxTags({ rootGetters, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.babbleboxTags, rootGetters.config)
+        .then(res => {
+          console.log(res.data)
+          commit('SET_BABBLEBOX_TAGS', res.data)
+        })
+        .catch(err => console.error(err))
+    },
+
 
     // photo CRUD
     fetchPhotos({ rootGetters, commit }) {
@@ -231,6 +258,7 @@ const photoStore = {
         }
         axios.post(SERVER.URL + SERVER.ROUTES.searchPhoto, info, rootGetters.config)
         .then(res => {
+          // console.log(res.data)
           commit('SET_SEARCHED_PHOTOS', res.data)
         })
         .catch(err => {

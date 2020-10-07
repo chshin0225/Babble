@@ -1,80 +1,66 @@
 <template>
   <div class="grid" data-app>
-    <div style="text-align:center">
+    <!-- search bar -->
+    <div class="text-center mt-3">
       <div class="search-bar">
           <input 
             type="text" 
-            placeholder="Search" 
-            name="search" 
-            @keyup.enter="searchPhotos(searchKeyword)"
+            placeholder="태그 검색" 
+            @keypress.enter="clickSearch"
             v-model="searchKeyword"
             class="input-search"
           >
-          <button @click="searchPhotos(searchKeyword)"><i class="fa fa-search" style="color:#9BC7FF;"></i></button>
+          <button class="btn" @click="clickSearch"><i class="fa fa-search secondary--text"></i></button>
       </div>
     </div>
-    <div v-if="searchedPhotos">
-      <div class="photos row no-gutters mt-5" v-if="searchedPhotos.length">
-        <div v-for="photo in searchedPhotos" :key="`club_${photo.id}`" class="photo-container2 pointer" @click="clickPhoto(photo.id)">
-          <div class="photo">             
-            <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top " alt="">
-          </div>
+
+    <!-- search results -->
+    <!-- <div v-if="searched">
+      <div class="search-results row no-gutters mt-5" v-if="searchedPhotos.length">
+        <div v-for="photo in searchedPhotos" :key="`club_${photo.id}`" class="pointer photo-container" @click="clickPhoto(photo.id)">
+          <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="photo" :alt="photo.id">
         </div>
       </div>
-      <div class="d-flex flex-column justify-content-center align-items-center mt-5" v-else>
-        <h5>검색 결과가 없습니다.</h5>
+      <div v-else class="d-flex flex-column justify-content-center align-items-center">
+        <h5 class="my-5">검색 결과가 없습니다.</h5>
         <img class="crying-baby" src="@/assets/baby.png">
       </div>
-    </div>
-    <div v-else>
-      <div>
-        <h5 class="tag-name">인물</h5>
-        <div class="photos d-flex">
-          <div class="photo-container">
-            <div class="photo">
-              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top " alt="...">
-            </div>
-          </div>
-          <div class="photo-container">
-            <div class="photo">
-              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_03.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
-            </div>
-          </div>
-          <div class="photo-container">
-            <div class="photo">
-              <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_06.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
-            </div>
-          </div>
-        </div>
-      </div>
+    </div> -->
+
+    <!-- suggestions -->
+    <div>
+      <!-- <div>{{ tags }}</div> -->
+      <!-- emotions -->
       <div>
         <h5 class="tag-name">감정</h5>
-        <div class="photos d-flex">
-          <div class="emotion-container">
-            <div class="photo-container">
-              <div class="photo">
-                <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_11.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top " alt="...">
-              </div>
+        <div class="d-flex emotion-photo-scroll">
+          <div v-for="emotion in emotionTagPhotos" :key="emotion.id" class="d-flex flex-column align-items-center mx-2" @click="clickEmotionPhoto(emotion.emotion)">
+            <div class="emotion-photo-container">         
+              <v-img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + emotion.photos[0].image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="photo" alt="..."></v-img>
             </div>
-            <div style="text-align:center; width:30vw; float:left; height:auto;">웃음</div>
-          </div>
-          <div class="emotion-container">
-            <div class="photo-container">
-              <div class="photo">
-                <img src="https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/babble_1%2FKakaoTalk_20200924_233638829_01.jpg?alt=media&token=fc508930-5485-426e-8279-932db09009c0" class="card-img-top" alt="...">
-              </div>
-            </div>
-          <div style="text-align:center; width:30vw; float:left; height:auto;">울음</div>
+            <p class="mt-2">{{ emotion.emotion }}</p>
           </div>
         </div>
       </div>
+
+      <!-- tags -->
       <div>
-        <h5 class="tag-name">태그</h5>
-        <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FFFFFF;"> #놀이터 </v-chip>
-        <v-chip class="ma-2" color="#FEA59C" style="font-size:16px; color: #FFFFFF;"> #할머니 집 </v-chip>
+        <h5 class="tag-name">자주 사용되는 태그</h5>
+        <div class="mx-3">
+          <v-chip 
+            v-for="tag in babbleboxTags" 
+            :key="tag.id" 
+            :to="{name: 'PhotoSearchResult', params: {'keyword': tag.tag_name}}"
+            class="ma-1" 
+            color="secondary" 
+            outlined> 
+              # {{ tag.tag_name }} 
+          </v-chip>
+        </div>
       </div>
-      <div style="height:15vh"></div>
     </div>
+
+    <div class="footer"></div>
   </div>
 </template>
 
@@ -90,133 +76,136 @@ export default {
     }
   },
   computed: {
-    ...mapState('photoStore', ['searchedPhotos'])
+    ...mapState('photoStore', ['searchedPhotos', 'tags', 'emotionTagPhotos', 'babbleboxTags'])
   },
   methods: {
-    ...mapActions('photoStore', ['searchPhotos']),
+    ...mapActions('photoStore', ['searchPhotos', 'fetchTags', 'fetchEmotionTagPhotos', 'fetchBabbleboxTags']),
     ...mapMutations('photoStore', ['SET_SEARCHED_PHOTOS']),
     clickPhoto(photo_id) {
       this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
-    }
+    },
+    clickSearch() {
+      if (this.searchKeyword.trim() !== '') {
+        this.$router.push({ name: 'PhotoSearchResult', params: {'keyword': this.searchKeyword}})
+      }
+    },
+    clickEmotionPhoto(emotion) {
+      this.$router.push({ name: 'PhotoSearchResult', params: {'keyword': emotion}})
+    },
   },
+
   beforeRouteLeave(from, to, next) {
     this.SET_SEARCHED_PHOTOS(null)
     next()
-  }
+  },
+
+  mounted() {
+    this.fetchTags()
+    this.fetchEmotionTagPhotos()
+    this.fetchBabbleboxTags()
+  },
 }
 </script>
 
 <style scoped>
-.grid {
-  padding: 0 0 0 2.5vw;
-}
+  .grid {
+    padding: 0 0 0 2.5vw;
+  }
 
-img {
-  /* width: 90%; */
-  height: 30vw;
-  width: auto;
-}
+  .search-bar {
+    border : 2px solid #9BC7FF;
+    display:inline-block;
+    border-radius: 10px;
+    margin : 0 auto 0 auto;
+    padding : 5px 10px;
+  }
 
-/*.photo-container{
-  object-fit: cover;
-  object-position: 50% 50%;
-  width: 30vw; 
-  height: 30vw;
-  overflow:hidden;
-  margin-right: 2.5vw;
-}
+  .search-bar .input-search {
+    width:60vw;
+    outline: none;
+  }
 
-.photo-container .photo img{
-  max-width:initial;
-  margin-left:50%;
-}*/
-.emotion-container{
-  width:30vw;
-  margin-right: 2.5vw;
-}
+  .search-results img {
+    height: 30vw;
+    width: auto;
+  }
 
-/*
-.photo-container {      
-  position: relative;
-  width: 30vw; 
-  height: 30vw;
-  margin-right: 2.5vw;
-  overflow: hidden;
-  border-radius : 50%;
-}
-.photo-container .photo img { 
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  right: -9999px;
-  bottom: -9999px;
-  margin: auto;
-}
+  .search-results .photo-container img {
+    object-fit: cover;
+    object-position: 50% 50%;
+    width: 30vw; 
+    overflow: hidden;
+    margin-right: 2.5vw;
+    margin-top: 2.5vw;
+  }
 
-.photos img {
-  height: 30vw;
-  width: auto;
-}*/
-.albums-container{
-  width:30vw; 
-  margin-right:2.5vw; 
-  margin-bottom:2.5vw;
-  border-radius : 50%;
-}
-.photo-container {      
-  position: relative;
-  width: 30vw; 
-  height: 30vw;
-  margin-right: 2.5vw;
-  overflow: hidden;
-  border-radius : 50%;
-}
-.photo-container .photo img { 
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  right: -9999px;
-  bottom: -9999px;
-  margin: auto;
-}
+  .emotion-photo-scroll {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
 
-.photos img {
-  /* width: 90%; */
-  min-width:30vw;
-  min-height:30vw;
-  height: 30vw;
-  width: auto;
-}
+  .emotion-photo-scroll::-webkit-scrollbar {
+    height: 3px;
+  }
 
-.photos .photo{
-  border : 1px solid #888888;
-  border-radius: 50%;
-  min-width:30vw;
-  min-height:30vw;
-}
+  .emotion-photo-scroll::-webkit-scrollbar-thumb {
+    background: #FFFFFF;
+  }
 
-.tag-name {
-  
-  font-weight: 900;
-  margin: 5vw 0 2vw 3vw;
-}
+  .emotion-photo-scroll:hover::-webkit-scrollbar-thumb {
+    background: #FFFFFF;
+  }
 
-.search-bar {
-  border : 2px solid #9BC7FF;
-  display:inline-block;
-  border-radius: 10px;
-  margin : 0 auto 0 auto;
-  padding : 5px 10px;
-}
+  .emotion-photo-container {      
+    width: 30vw; 
+    height: 30vw;
+  }
 
-.search-bar .input-search {
-  width:60vw;
-}
+  .emotion-photo-container .photo {
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius : 50%;
+    min-width:30vw;
+    min-height:30vw;
+  }
+
+  .albums-container {
+    width:30vw; 
+    margin-right:2.5vw; 
+    margin-bottom:2.5vw;
+    border-radius : 50%;
+  }
+
+  img { 
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    right: -9999px;
+    bottom: -9999px;
+    margin: auto;
+  }
 
 
-.crying-baby {
-  height: 50vh;
-  width: auto;
-}
+  /* .photos .photo{
+    border : 1px solid #888888;
+    border-radius: 50%;
+    min-width:30vw;
+    min-height:30vw;
+  } */
+
+  .tag-name {
+    font-weight: 900;
+    margin: 5vw 0 2vw 3vw;
+  }
+
+  .crying-baby {
+    height: 50vh;
+    width: auto;
+  }
+
+  .footer {
+    height: 15vh;
+  }
 
 </style>
