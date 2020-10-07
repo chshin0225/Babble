@@ -101,7 +101,7 @@ class PhotoListView(APIView):
                         tag = Tag(tag_name=tag_name)
                         tag.save()
                     PhotoTag(tag=tag, photo=created_photo).save()
-                    for album in tag.tagged_albums.all():
+                    for album in tag.tagged_albums.all().filter(baby=cb):
                         album_photo = AlbumPhotoRelationship(album=album, photo=created_photo)
                         album_photo.save()
 
@@ -146,7 +146,7 @@ class PhotoDetailView(APIView):
             # tags
 
             for tag in photo.photo_tags.all():
-                for album in tag.tagged_albums.all():
+                for album in tag.tagged_albums.all().filter(baby=cb):
                     try:
                         get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo).delete()
                     except:
@@ -160,7 +160,7 @@ class PhotoDetailView(APIView):
                     tag = Tag(tag_name=tag_name)
                     tag.save()
                 PhotoTag(tag=tag, photo=photo).save()
-                for album in tag.tagged_albums.all():
+                for album in tag.tagged_albums.all().filter(baby=cb):
                     try:
                         get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
                     except:
