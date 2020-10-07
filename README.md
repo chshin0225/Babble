@@ -32,7 +32,7 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
-
+<br>
 
 
 ## ERD
@@ -48,7 +48,7 @@ python manage.py runserver
 - **AI 기반 사진 관리**
   - 사진 업로드 후 YOLO와 Deepface 모델을 이용한 사진 태그 추출
   - 태그를 기반으로 한 앨범 생성 및 사진 정리
-- 감정 태그에 따른 사진 분류
+  - 감정 태그에 따른 사진 분류
 - **일기 작성**
   - 육아일기 작성 및 관리
   - 일기와 함께 이미지를 추가한다면 Photo에 이미지 자동 추가
