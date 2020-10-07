@@ -2,7 +2,7 @@
   <div class="d-flex flex-column justify-content-center align-items-center">
     <hr>
     <div class="d-flex jusitfy-content-center align-items-center">
-      <img v-if="invitationData.baby.profile_image" src="invitationData.baby.profile_image" style="width:30vw; height:30vw; border-radius:50%; border:1px solid #888888;">
+      <img v-if="invitationData.baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + invitationData.baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" style="width:30vw; height:30vw; border-radius:50%; border:1px solid #888888;">
       <img v-else src="@/assets/babble_logo.png" style="width:30vw; height:30vw; border-radius:50%; border:1px solid #888888;">
     </div>
     <hr>
