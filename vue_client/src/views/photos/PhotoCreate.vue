@@ -61,10 +61,13 @@
 
         </div>
       </div>
-      <!-- 만약 업로드 된이미지가 없을 경우 -->
+      <!-- 만약 업로드 버튼 누르기 전 일 경우 -->
       <div v-if="no_image" class="text-center mt-5">
-        <img class="crying-baby" src="@/assets/baby.png">
-        <h5>업로드 된 이미지가 없습니다.</h5>
+        <img class="crying-baby" src="@/assets/babble_logo.png" style="width: 100vw">
+        <h5>
+          우측 상단에 있는 업로드 버튼을 누른 후, <br>
+          이미지를 추가해주세요!
+        </h5>
       </div>
       <div v-else id="frame" class="row no-gutters">
       </div>
@@ -75,16 +78,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-// var camera1 = document.getElementById('camera1');
-// var camera2 = document.getElementById('camera2');
-// var camera3 = document.getElementById('camera3');
-// var camera4 = document.getElementById('camera4');
-
-// var frame1 = document.getElementById('frame1');
-// var frame2 = document.getElementById('frame2');
-// var frame3 = document.getElementById('frame3');
-// var frame4 = document.getElementById('frame4');
-
 
 export default {
   name: 'PhotoCreate',
@@ -134,21 +127,6 @@ export default {
     changeHeight() {
       this.height = '57vh'
     },
-    // change1(e) {
-    //   var file = e.target.files[0];
-    //   var frame1 = document.getElementById('frame1');
-    //   frame1.src = URL.createObjectURL(file)
-    // },
-    // change2(e) {
-    //   var file = e.target.files[0];
-    //   var frame2 = document.getElementById('frame2');
-    //   frame2.src = URL.createObjectURL(file)
-    // },
-    // change3(e) {
-    //   var file = e.target.files[0];
-    //   var frame3 = document.getElementById('frame3');
-    //   frame3.src = URL.createObjectURL(file)
-    // },
     change4(e) {
       var files = e.target.files
       this.photos = files
@@ -167,6 +145,7 @@ export default {
         i.style.overflow='hidden'
         i.style.marginRight='2.5vw'
         i.style.marginBottom='2.5vw'
+        i.style.boxShadow='6px 6px 10px rgba(0, 0, 0, 0.5)'
         // i.classList.add("img-fluid")
         div.appendChild(i)
         frame.appendChild(div)
@@ -207,19 +186,6 @@ export default {
   }
 }
 
-// #frame > {
-//   .col-4 >{
-//     img {
-//       object-fit: cover;
-//       object-position: 50% 50%;
-//       width: 30vw; 
-//       height: 30vw;
-//       overflow:hidden;
-//       margin-right: 2.5vw;
-//     }
-//   }
-// }
-
 .imgStyle {
   object-fit: cover;
   object-position: 50% 50%;
@@ -228,6 +194,7 @@ export default {
   overflow:hidden;
   margin-right: 2.5vw;
 }
+
 #app > div.v-dialog__content.v-dialog__content--active > div > div > div > div > div > div.v-input__slot {
   margin: 0;
 }
@@ -236,10 +203,6 @@ export default {
   margin: 0 !important;
   padding: 0 !important;
 }
-
-// .v-btn--outlined {
-//   outline: 1px solid#FEA59C;
-// }
 
 .v-item-group {
   padding:0;
