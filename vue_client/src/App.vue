@@ -40,16 +40,16 @@
             </div>
 
             <div class="menu-container" v-if="relationship">
-              <div v-if="[1, 2].includes(relationship.rank)">
+              <div v-if="[1].includes(relationship.rank)">
                 <li class="list invite pointer" @click="clickInvitationCreate">
                   <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
                 <hr />
               </div>
 
-              <li class="list menu pointer" @click="clickBabySettings" v-if="[1, 2].includes(relationship.rank)">
+              <li class="list menu pointer" @click="clickBabySettings" v-if="[1].includes(relationship.rank)">
                   <i class="fas fa-cog mr-3"></i> 아기 설정
               </li>
-              <li class="list menu pointer" @click="clickGroupSettings" v-if="[1, 2].includes(relationship.rank)">
+              <li class="list menu pointer" @click="clickGroupSettings" v-if="[1].includes(relationship.rank)">
                   <i class="fas fa-users-cog mr-3"></i> 그룹 설정
               </li>
               <li class="list menu pointer" @click="clickMeasurements">
