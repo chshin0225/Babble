@@ -59,7 +59,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['verifyInvitation', 'findInvitationData']),
+    ...mapActions(['verifyInvitation', 'findInvitationData', 'findMyAccount']),
     checkrelationship_nameForm() {
       if ( this.relationship_name.length > 0) {
         this.error = false;
@@ -80,6 +80,7 @@ export default {
     },
   },
   created() {
+    this.findMyAccount()
     this.findInvitationData()
   }
 }
