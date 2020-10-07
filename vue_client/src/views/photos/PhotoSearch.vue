@@ -15,14 +15,17 @@
     </div>
 
     <!-- suggestions -->
-    <div>
-
+    <div v-if="relationship.rank !== 3">
       <div>
         <h5 class="tag-name">감정</h5>
         <div class="d-flex emotion-photo-scroll">
           <div v-for="emotion in emotionTagPhotos" :key="emotion.id" class="d-flex flex-column align-items-center mx-2" @click="clickEmotionPhoto(emotion.emotion)">
             <div class="emotion-photo-container">         
-              <v-img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + emotion.photos[0].image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="photo" alt="..."></v-img>
+              <v-img 
+                :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + emotion.photos[0].image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+                class="photo" 
+                :alt="emotion.photos[0].image_url"
+              ></v-img>
             </div>
             <p class="mt-2">{{ emotion.emotion }}</p>
           </div>
@@ -62,10 +65,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('photoStore', ['searchedPhotos', 'tags', 'emotionTagPhotos', 'babbleboxTags'])
+    ...mapState('photoStore', ['searchedPhotos', 'tags', 'emotionTagPhotos', 'babbleboxTags']),
+    ...mapState(['relationship'])
   },
   methods: {
     ...mapActions('photoStore', ['searchPhotos', 'fetchTags', 'fetchEmotionTagPhotos', 'fetchBabbleboxTags']),
+    ...mapActions(['findRelationship']),
     ...mapMutations('photoStore', ['SET_SEARCHED_PHOTOS']),
     clickPhoto(photo_id) {
       this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
@@ -143,17 +148,17 @@ export default {
     background: #FFFFFF;
   }
 
-  .emotion-photo-container {      
+  /* .emotion-photo-container {      
     width: 30vw; 
     height: 30vw;
-  }
+  } */
 
   .emotion-photo-container .photo {
     object-fit: cover;
     object-position: 50% 50%;
     border-radius : 50%;
-    min-width:30vw;
-    min-height:30vw;
+    width: 30vw;
+    height: 30vw;
   }
 
   .albums-container {

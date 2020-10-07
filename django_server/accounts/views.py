@@ -68,21 +68,21 @@ class BabyAccessView(APIView):
         next_baby = get_object_or_404(Baby, id=request.data['baby'])
         if BabyAccess.objects.filter(baby=next_baby).exists():
             log = get_object_or_404(BabyAccess, baby=next_baby.id)
-            serializer = BabyAccessSerializer(log, data=request.data)
+            log_serializer = BabyAccessSerializer(log, data=request.data)
         else:
-            serializer = BabyAccessSerializer(data=request.data)
+            log_serializer = BabyAccessSerializer(data=request.data)
 
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
+        if log_serializer.is_valid(raise_exception=True):
+            log_serializer.save(user=request.user)
 
             # 유저 정보에서 current_baby 업데이트
             user = request.user
             baby = get_object_or_404(Baby, id=request.data['baby'])
             user.current_baby = baby
             user.save()
-
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            print(log_serializer.data)
+            return Response(log_serializer.data)
+        return Response(log_serializer.errors)
 
 class RelationshipView(APIView):
     def get(self, request):

@@ -161,21 +161,26 @@ class MeasurementListView(APIView):
 
 class WeightListView(APIView):
     def get(self, request):
-        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, weight__isnull=False).order_by('-measure_date')
+        baby = request.user.current_baby
+        print(baby.birth_weight)
+        measurements = BabyMeasurement.objects.filter(baby=baby, weight__isnull=False).order_by('-measure_date')
         serializer = WeightMeasurementSerializer(measurements, many=True)
         return Response(serializer.data)
 
 
 class HeightListView(APIView):
     def get(self, request):
-        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, height__isnull=False).order_by('-measure_date')
+        baby = request.user.current_baby
+        print(baby.birth_height)
+        measurements = BabyMeasurement.objects.filter(baby=baby, height__isnull=False).order_by('-measure_date')
         serializer = HeightMeasurementSerializer(measurements, many=True)
         return Response(serializer.data)
 
 
 class HeadListView(APIView):
     def get(self, request):
-        measurements = BabyMeasurement.objects.filter(baby=request.user.current_baby, head_size__isnull=False).order_by('-measure_date')
+        baby = request.user.current_baby
+        measurements = BabyMeasurement.objects.filter(baby=baby, head_size__isnull=False).order_by('-measure_date')
         serializer = HeadMeasurementSerializer(measurements, many=True)
         return Response(serializer.data)
 
