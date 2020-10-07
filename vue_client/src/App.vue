@@ -54,7 +54,7 @@
               </li>
             </div>
           </div>
-          
+
           <div class="sidebar-bottom">
             <hr />
             <div class="d-flex row no-gutters" v-if="accessLog">

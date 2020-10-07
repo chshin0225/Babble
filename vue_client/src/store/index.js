@@ -127,7 +127,6 @@ export default new Vuex.Store({
     fetchAccessLog({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.access, getters.config)
         .then(res => {
-          console.log(res.data)
           if (res.data.length <= 3) {
             commit('SET_ACCESS_LOG', res.data)
           } else {
