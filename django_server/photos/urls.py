@@ -12,7 +12,9 @@ urlpatterns = [
 
     # tag
     path('tags/', views.TagListView.as_view()),
+    path('babblebox/tags/', views.BabyTagView.as_view()),
     path('search/', views.PhotoSearchView.as_view()),
+    path('emotions/', views.PhotoEmotionView.as_view()),
 
     # album
     path('albums/', views.AlbumListView.as_view()),
