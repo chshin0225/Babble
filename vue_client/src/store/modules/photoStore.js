@@ -11,7 +11,6 @@ const photoStore = {
     tags: [],
     emotionTagPhotos: [],
     babbleboxTags: [],
-    tags: null,
     photos: null,
     photo: null,
     comments: null,
