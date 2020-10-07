@@ -152,10 +152,10 @@ class GroupDetailView(APIView):
         return Response(serializer.data)
 
     # 그룹에서 멤버 제거
-    def delete(self, request, group_id):
-        baby = request.user.current_baby.id
+    def post(self, request, group_id):
+        baby = request.user.current_baby
         user = get_object_or_404(User, id=request.data['user']).id
-        group = get_object_or_404(Group, id=group_id)
+        group = get_object_or_404(Group, id=group_id)    
         data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
         data.group = None
         data.save()
