@@ -30,7 +30,7 @@ class BabyTagView(APIView):
             if relationship.group:
                 photos_guest = Photo.objects.filter(baby=cb, photo_scope=2, permitted_groups=relationship.group)
                 photos_all = Photo.objects.filter(baby=cb, photo_scope=0)
-                photos = (photos_guest | photos_all)
+                photos = (photos_guest | photos_all).distinct()
             else:
                 photos = Photo.objects.filter(baby=cb, photo_scope=0)
         else:
@@ -101,6 +101,10 @@ class PhotoListView(APIView):
                         tag = Tag(tag_name=tag_name)
                         tag.save()
                     PhotoTag(tag=tag, photo=created_photo).save()
+                    for album in tag.tagged_albums.all():
+                        album_photo = AlbumPhotoRelationship(album=album, photo=created_photo)
+                        album_photo.save()
+
                 # groups
                 if photo['photo_scope'] == 2:
                     for group_id in photo['groups']:
@@ -140,6 +144,14 @@ class PhotoDetailView(APIView):
         else:
             photo = get_object_or_404(Photo, id=photo_id)        
             # tags
+
+            for tag in photo.photo_tags.all():
+                for album in tag.tagged_albums.all():
+                    try:
+                        get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo).delete()
+                    except:
+                        pass
+
             photo.photo_tags.clear()
             for tag_name in data['tags']:
                 try:
@@ -148,6 +160,13 @@ class PhotoDetailView(APIView):
                     tag = Tag(tag_name=tag_name)
                     tag.save()
                 PhotoTag(tag=tag, photo=photo).save()
+                for album in tag.tagged_albums.all():
+                    try:
+                        get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
+                    except:
+                        album_photo = AlbumPhotoRelationship(album=album, photo=photo)
+                        album_photo.save()
+
             # scope
             photo.permitted_groups.clear()
             photo.photo_scope = data['photo_scope']
@@ -218,14 +237,14 @@ class PhotoSearchView(APIView):
         tags = Tag.objects.filter(tag_name__icontains=keyword)
         for tag in tags:
             searched_photos = searched_photos | tag.tagged_photos.all()
-        searched_photos = searched_photos.filter(baby=cb)
+        searched_photos = searched_photos.distinct().filter(baby=cb)
 
         relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
         if relationship.rank_id == 3:
             if relationship.group:
                 photos_guest = searched_photos.filter(photo_scope=2, permitted_groups=relationship.group)
                 photos_all = searched_photos.filter(photo_scope=0)
-                searched_photos = (photos_guest | photos_all).order_by('-last_modified')
+                searched_photos = (photos_guest | photos_all).distinct().order_by('-last_modified')
             else:
                 searched_photos = searched_photos.filter(photo_scope=0).order_by('-last_modified')
         else:
@@ -291,6 +310,15 @@ class AlbumListView(APIView):
                 # 첫번째 사진을 cover_photo로 지정
                 created_album.cover_photo = get_object_or_404(Photo, id=request.data['photos'][0]).image_url
                 created_album.save()
+            
+            # 현재 시점에서 태그가 걸려있는 사진을 앨범에 넣어줌(중복은 안됨)
+            for tag in created_album.album_tags.all():
+                for photo in tag.tagged_photos.all().filter(baby=baby):
+                    try: # 이미 들어있는 지 확인
+                        get_object_or_404(AlbumPhotoRelationship, album=created_album, photo=photo)
+                    except: # 없으면 앨범에 사진 추가
+                        album_photo = AlbumPhotoRelationship(album=created_album, photo=photo)
+                        album_photo.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)
@@ -305,21 +333,34 @@ class AlbumDetailView(APIView):
 
     # 앨범 정보(앨범명, 태그) 수정
     def put(self, request, album_id):
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
         album = get_object_or_404(Album, id=album_id)
         serializer = AlbumDetailSerializer(album, data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
             # 태그 정보 수정하는 경우
-            # if request.data['tags']:
-            #     album.album_tags.clear()
-            #     for tag_name in request.data['tags']:
-            #         try:
-            #             tag = Tag.objects.get(tag_name=tag_name)
-            #         except:
-            #             tag = Tag(tag_name=tag_name)
-            #             tag.save()
-            #         AlbumTag(tag=tag, album=album).save()
+            if request.data['tags']:
+                for photo in album.photos.all():
+                    if len(photo.photo_tags.all().intersection(album.album_tags.all())):
+                        get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo).delete()
+                album.album_tags.clear()
+                for tag_name in request.data['tags']:
+                    try:
+                        tag = Tag.objects.get(tag_name=tag_name)
+                    except:
+                        tag = Tag(tag_name=tag_name)
+                        tag.save()
+                    AlbumTag(tag=tag, album=album).save()
+                    for photo in tag.tagged_photos.all().filter(baby=cb):
+                        try: # 이미 들어있는 지 확인
+                            get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
+                        except: # 없으면 앨범에 사진 추가
+                            album_photo = AlbumPhotoRelationship(album=album, photo=photo)
+                            album_photo.save()
+
 
             return Response(serializer.data)
         return Response(serializer.errors)
@@ -350,11 +391,18 @@ class AlbumPhotoView(APIView):
             raise ValueError('아이를 생성하거나 선택해주세요.')
         album = get_object_or_404(Album, id=album_id)
         relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        # photos_album = album.photos
+        # photos_tag = Photo.objects.none()
+        # tags = album.album_tags.values()
+        # for tag in tags:
+        #     photos_tag = photos_tag | get_object_or_404(Tag, tag_name=tag['tag_name']).tagged_photos.all()
+        # temp_photos = (photos_album.all() | photos_tag.all().filter(baby=cb)).distinct()
+
         if relationship.rank_id == 3:
             if relationship.group:
                 photos_guest = album.photos.filter(photo_scope=2, permitted_groups=relationship.group)
                 photos_all = album.photos.filter(photo_scope=0)
-                photos = (photos_guest | photos_all).order_by('-last_modified')
+                photos = (photos_guest.all() | photos_all.all()).distinct().order_by('-last_modified')
             else:
                 photos = album.photos.filter(photo_scope=0).order_by('-last_modified')
         else:
