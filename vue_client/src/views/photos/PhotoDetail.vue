@@ -321,9 +321,6 @@ export default {
         })  
       }
     },
-    clickEdit() {
-      this.$router.push({ name: 'DiaryUpdate', params: { diaryId: this.$route.params.diaryId }})
-    },
     photoDelete(){
       this.photo_sheet = false;
       if(confirm("사진을 삭제하시겠습니까?")){
@@ -331,7 +328,7 @@ export default {
       }
     },
     photoUpdate() {
-      this.$router.push({ name: "PhotoUpdate", params: { photoId: this.photo.id }})
+      this.$router.replace({ name: "PhotoUpdate", params: { photoId: this.photo.id }})
     }
   },
   filters: {

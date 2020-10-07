@@ -185,7 +185,7 @@ const photoStore = {
       axios.put(SERVER.URL + SERVER.ROUTES.photos + updateData.id + '/', updateData, rootGetters.config)
         .then(res => {
           commit('SET_PHOTO', res.data)
-          router.push({name: 'PhotoDetail', params: { photoId: updateData.id}})
+          router.replace({name: 'PhotoDetail', params: { photoId: updateData.id}})
         })
         .catch(err => {
           console.log(err)
