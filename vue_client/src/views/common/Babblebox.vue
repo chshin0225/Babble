@@ -10,7 +10,8 @@
       <div class="babblebox d-flex justify-content-between my-3">
         <div class="babblebox-info d-flex">
           <div class="profile mr-3">
-            <img src="@/assets/babble_logo_face2.png">
+            <img v-if="babblebox.baby.profile_image" class="profile-img mr-2" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + babblebox.baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+            <img v-else src="@/assets/babble_logo_face2.png">
           </div>
           <div class="babble-box">
             <p>{{ babblebox.baby.baby_name }}</p>
