@@ -3,8 +3,8 @@
 
     <!-- top button bar -->
     <div class="d-flex justify-content-between">
-      <!-- 사진 추가 버튼? -->
-      <v-btn icon color="primary" >
+      <!-- 사진 추가 버튼 -->
+      <v-btn icon color="primary" :to="{ name: 'AlbumAddPhoto', params: { albumId: album.id } }">
         <v-icon>
           mdi-plus
         </v-icon>
@@ -85,7 +85,7 @@ export default {
   methods: {
     ...mapActions('photoStore', ['getAlbum', 'deletePhotoFromAlbum', 'fetchAlbumPhotos']),
     clickDone() {
-      this.$router.go(-1)
+      this.$router.push({ name: 'AlbumDetail', params: {photoId: this.album.id}})
     },
 
     deletePhotos() {

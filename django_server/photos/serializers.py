@@ -10,6 +10,11 @@ class TagListSerializer(serializers.ModelSerializer):
         model = Tag
         fields = '__all__'
 
+class SimplePhotoListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = ['id']
+
 class PhotoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo

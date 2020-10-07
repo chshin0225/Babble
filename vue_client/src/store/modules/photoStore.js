@@ -10,17 +10,19 @@ const photoStore = {
     tags: [],
     emotionTagPhotos: [],
     babbleboxTags: [],
-    photos: null,
+    photos: [],
     photo: null,
     comments: null,
     searchedPhotos: [],
     albums: null,
     album: null,
     albumPhotos: null,
+    albumPhotoIdList: [],
     measurementList: [],
   },
   getters: {
     albumDataFetched: state => !!state.album,
+    albumPhotoIdListFetched: state => !!state.albumPhotoIdList,
   },
   mutations: {
     SET_TAGS(state, tags) {
@@ -49,6 +51,9 @@ const photoStore = {
     },
     SET_ALBUM(state, album) {
       state.album = album
+    },
+    SET_ALBUM_PHOTO_ID_LIST(state, albumPhotoIdList) {
+      state.albumPhotoIdList = albumPhotoIdList
     },
     SET_ALBUM_PHOTOS(state, photos) {
       state.albumPhotos = photos
@@ -277,6 +282,11 @@ const photoStore = {
         .then(res => commit('SET_ALBUM', res.data))
         .catch(err => console.error(err))
     },
+    fetchAlbumPhotoIds({ commit, rootGetters }, album_id) {
+      axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/simple/`, rootGetters.config)
+        .then(res => commit('SET_ALBUM_PHOTO_ID_LIST', res.data))
+        .catch(err => console.error(err))
+    },
     fetchAlbumPhotos({ commit, rootGetters }, album_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/`, rootGetters.config)
         .then(res => commit('SET_ALBUM_PHOTOS', res.data))
@@ -285,6 +295,11 @@ const photoStore = {
     deleteAlbum({ rootGetters }, album_id) {
       axios.delete(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
         .then(() => router.push({ name: 'AlbumLibrary' }))
+        .catch(err => console.error(err))
+    },
+    addPhotoToAlbum({ rootGetters }, albumData) {
+      axios.post(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
+        .then(() => router.push({ name: 'AlbumEdit', params: {albumId: albumData.albumId}}))
         .catch(err => console.error(err))
     },
     deletePhotoFromAlbum({ rootGetters, dispatch }, albumData) {

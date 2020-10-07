@@ -33,14 +33,6 @@
     <!-- 사진 추가 -->
     <div>
       <div class="mx-2" v-if="toggle == 0">
-        <!-- <v-text-field
-          label="사진 검색"
-          v-model="photoSearchKeyword"
-          append-icon="mdi-magnify"
-          color="secondary"
-          @click:append="clickSearch"
-        ></v-text-field> -->
-        <!-- photo selection toolbar -->
         <div class="pt-2">
           <div class="d-flex justify-content-between">
             <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
@@ -135,7 +127,6 @@ export default {
         required: value => !!value || '앨범 이름을 입력해주세요.',
       },
       toggle: null,
-      photoSearchKeyword: null,
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,
