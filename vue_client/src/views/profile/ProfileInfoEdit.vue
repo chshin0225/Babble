@@ -189,18 +189,18 @@ export default {
                 icon: 'error',
                 text: '닉네임을 입력해주세요.'
               })
-      }else if(this.nickflag){
+      }else if(this.name == this.myaccount.name && this.profile_image == this.myaccount.profile_image){
+        Swal.fire({
+                icon: 'error',
+                text: '변경된 내용이 없습니다.'
+              })
+      }else{
         var profileData = {
           name : this.name,
           profile_image : this.profile_image,
         };
         this.changeProfile(profileData);
         this.nickflag = !this.nickflag
-      }else{
-        Swal.fire({
-                icon: 'error',
-                text: '변경된 내용이 없습니다.'
-              })
       }
 
     },
