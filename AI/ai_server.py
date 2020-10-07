@@ -15,6 +15,7 @@ import sys
 import pyrebase
 from mtcnn import MTCNN
 import time
+import os
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -44,6 +45,12 @@ def tags():
     # firebase image path
     path = json.loads(request.get_data(), encoding='utf-8')
     path = path['path']
+    fname, fex = os.path.splitext(path)
+    if fex == ".gif" or fex==".GIF":
+        data = {
+            'tags': []
+        } 
+        return data
 
     # load image
     url = storage.child(path).get_url(None)    
