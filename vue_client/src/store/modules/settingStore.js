@@ -50,7 +50,7 @@ const settingStore = {
       })
     },
     deleteGroupUser({ rootGetters }, userData) {
-      axios.delete(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
+      axios.patch(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
       })
