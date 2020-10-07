@@ -110,7 +110,7 @@ export default {
     ...mapActions('photoStore', ['createPhotos']),
     ...mapActions('settingStore', ['fetchGroups']),
     clickBack() {
-      this.$router.go(-1)
+      this.$router.push({ name: 'PhotoList' })
     },
     clickUpload() {
       this.no_image = false

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="d-flex justify-content-between w-100 bg-pink">
+    <nav class="d-flex justify-content-between w-100 bg-pink p-2">
       <v-icon 
         class="top-left-icons pointer" 
         color="white"
@@ -154,7 +154,7 @@ export default {
     ...mapActions('photoStore', ['findPhoto', 'deletePhoto', 'fetchTags', 'updatePhoto']),
     ...mapActions('settingStore', ['fetchGroups']),
     clickBack() {
-      this.$router.go(-1)
+      this.$router.replace({ name: 'PhotoDetail', params: { photoId : this.$route.params.photoId } })
     },
     photoDelete(){
       this.photo_sheet = false;
