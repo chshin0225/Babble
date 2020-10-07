@@ -152,8 +152,7 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
                 if em == emotion_res[0]:
                     flag = 1
             if flag == 0:
-                emotion_res_list.append(emotion_res[0])
-    
+                emotion_res_list.append(emotion_res[0])    
         
     '''
     for i, instance in face_list_df.iterrows():  # draw rectangle and text
