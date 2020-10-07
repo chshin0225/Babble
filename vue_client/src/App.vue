@@ -52,27 +52,18 @@
               <li class="list menu pointer" @click="clickMeasurements">
                   <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
-              <!-- <li class="list menu">
-                <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
-              </li>
-              <li class="list menu">
-                <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
-              </li>  -->
-              <!-- <li class="list menu pointer" @click="clickSettings">
-                <i class="fas fa-cog mr-3"></i> 
-                설정
-              </li> -->
             </div>
           </div>
+          
           <div class="sidebar-bottom">
             <hr />
             <div class="d-flex row no-gutters" v-if="accessLog">
               <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
                 <div class="d-flex justify-content-center">
-                  <img class="w-100" v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-                  <img class="" v-else src="@/assets/babble_logo.png" />
+                  <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                  <img v-else src="@/assets/babble_logo.png" />
                 </div>
-                <p class="text-center">{{ baby.baby_name }}</p>
+                <p class="text-center mt-1">{{ baby.baby_name }}</p>
               </div>
             </div>
             <div class="text-right mt-3">
@@ -312,7 +303,7 @@ export default {
     if (this.authToken) {
       this.findMyAccount();
     }
-    // this.fetchAccessLog()
+    this.fetchAccessLog()
   },
 };
 </script>

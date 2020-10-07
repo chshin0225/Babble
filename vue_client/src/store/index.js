@@ -127,6 +127,7 @@ export default new Vuex.Store({
     fetchAccessLog({ getters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.access, getters.config)
         .then(res => {
+          console.log(res.data)
           if (res.data.length <= 3) {
             commit('SET_ACCESS_LOG', res.data)
           } else {
@@ -144,7 +145,11 @@ export default new Vuex.Store({
       axios.post(SERVER.URL + SERVER.ROUTES.access, accessData, getters.config)
         .then(() => {
           dispatch('findBaby',accessData.baby)
-          router.push({ name: 'PhotoList' })
+          if (router.history.current.path === '/photo/') {
+            dispatch('photoStore/fetchPhotos', null, {root:true})
+          } else {
+            router.push({ name: 'PhotoList' })
+          }
         })
         .catch(err => {
           console.log(err)

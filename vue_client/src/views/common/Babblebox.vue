@@ -56,6 +56,7 @@ export default {
   computed: {
     ...mapState([ 'myaccount', 'babbleboxes']),
   },
+
   filters: {
     countDays(date) {
       var d1 = new Date() 
