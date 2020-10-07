@@ -185,10 +185,11 @@ export default {
     profileBtn(){
       if(this.nickflag){
         var profileData = {
-                            name : this.name,
-                            profile_image : this.profile_image,
-                            };
+          name : this.name,
+          profile_image : this.profile_image,
+        };
         this.changeProfile(profileData);
+        this.nickflag = !this.nickflag
       }
 
     },
