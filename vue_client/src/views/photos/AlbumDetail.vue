@@ -1,46 +1,66 @@
 <template>
-  <div v-if="albumDataFetched" class="container">
+  <div v-if="albumDataFetched">
 
     <!-- top button bar -->
-    <div class="d-flex justify-content-between">
-      <v-btn icon color="primary" @click="goToLibrary">
+    <div class="d-flex justify-content-between bg-pink nav" v-if="relationship.rank in [1, 2]">
+      <v-btn icon color="white" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left
         </v-icon>
       </v-btn>
-      <v-btn icon color="primary" @click="sheet = !sheet">
-        <v-icon>
-          mdi-dots-horizontal
-        </v-icon>
-      </v-btn>
       <!-- 더보기 메뉴 -->
       <v-bottom-sheet v-model="sheet">
-        <v-sheet class="text-center" height="27vh">
-          <div class="py-3">
-            <div class="mb-3" >
-              <router-link class="black--text" :to="{ name: 'AlbumEdit', params: {albumId: album.id}}">사진 편집</router-link>
-            </div>
-            <hr>
-            <div class="black--text" @click="clickEditAlbumInfo">앨범 정보 수정</div>
-            <hr>
-            <div class="black--text" @click="clickDelete">앨범 삭제</div>
-          </div>
-        </v-sheet>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            class="top-right-icons"
+            color="white"
+            v-bind="attrs"
+            v-on="on" 
+            >mdi-dots-vertical</v-icon>
+        </template>
+        <v-list>
+          <v-list-item @click="clickEditAlbum">
+            <v-list-item-avatar>
+              <v-avatar size="32px" tile>
+              <v-icon color="#FEA59C">mdi-image-area</v-icon>
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-title>사진 편집</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="clickEditAlbumInfo">
+            <v-list-item-avatar>
+              <v-avatar size="32px" tile>
+              <v-icon color="#FEA59C">mdi-share-outline</v-icon>
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-title>앨범 정보 수정</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="clickDelete">
+            <v-list-item-avatar>
+              <v-avatar size="32px" tile>
+              <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-title>앨범 삭제</v-list-item-title>
+          </v-list-item>
+        </v-list>
       </v-bottom-sheet>
     </div>
 
-    <div class="container pb-0">
+    <div class="container text-center pb-0">
       <!-- album name -->
-      <h2>{{ album.album_name }}</h2>
+      <div class="">
+        <h4>{{ album.album_name }}</h4>
+      </div>
       <!-- album tags -->
       <v-chip v-for="tag in album.album_tags" :key="tag.id" class="ma-1" outlined color="secondary">#{{ tag.tag_name }}</v-chip>
     </div>
     <hr>
 
     <!-- photo grid -->
-    <div class="mx-2">
-      <div class="photos row" v-if="album.photos.length">
-        <div v-for="photo in album.photos" :key="photo.id" class="photo-container pa-1 col-4">
+    <div class="grid">
+      <div class="photos row no-gutters" v-if="albumPhotos.length">
+        <div v-for="photo in albumPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             
             <img 
               :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
@@ -74,12 +94,13 @@ export default {
   },
 
   computed: {
-    ...mapState('photoStore', ['album',]),
+    ...mapState(['relationship']),
+    ...mapState('photoStore', ['album', 'albumPhotos']),
     ...mapGetters('photoStore', ['albumDataFetched',])
   },
   
   methods: {
-    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum',]),
+    ...mapActions('photoStore', ['getAlbum', 'deleteAlbum', 'fetchAlbumPhotos']),
     goToLibrary() {
       this.$router.push({ name: 'AlbumLibrary' })
     },
@@ -112,16 +133,29 @@ export default {
 
     clickPhoto(photo_id) {
       this.$router.push({ name: 'PhotoDetail' , params : {photoId : photo_id}})
+    },
+
+    clickEditAlbum() {
+      this.$router.push({ name: 'AlbumEdit', params: {albumId: this.album.id}})
     }
   },
 
   mounted() {
     this.getAlbum(this.$route.params.albumId)
+    this.fetchAlbumPhotos(this.$route.params.albumId)
   },
 }
 </script>
 
 <style scoped>
+  .nav {
+    height: 6vh;
+  }
+
+  .grid {
+    margin-left: 2.5vw;
+  }
+
   .photos img {
     height: 30vw;
     width: auto;
@@ -136,6 +170,7 @@ export default {
 
   .photo-container {
     overflow:hidden;
+    box-shadow:5px 6px 10px rgba(0, 0, 0, 0.1);
   }
 
   .crying-baby {

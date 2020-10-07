@@ -303,15 +303,14 @@ class AlbumListView(APIView):
 
 
 class AlbumDetailView(APIView):
-    # 특정 앨범 내의 사진들 가져오기
+    # 특정 앨범 정보 가져오기
     def get(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)
-        serializer = AlbumDetailSerializer(album)
+        serializer = AlbumListSerializer(album)
         return Response(serializer.data)
 
     # 앨범 정보(앨범명, 태그) 수정
     def put(self, request, album_id):
-        print(request.data)
         album = get_object_or_404(Album, id=album_id)
         serializer = AlbumDetailSerializer(album, data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -339,6 +338,26 @@ class AlbumDetailView(APIView):
 
 
 class AlbumPhotoView(APIView):
+    # 앨범 사진 리스트
+    def get(self, request, album_id):
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        album = get_object_or_404(Album, id=album_id)
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
+        if relationship.rank_id == 3:
+            if relationship.group:
+                photos_guest = album.photos.filter(photo_scope=2, permitted_groups=relationship.group)
+                photos_all = album.photos.filter(photo_scope=0)
+                photos = (photos_guest | photos_all).order_by('-last_modified')
+            else:
+                photos = album.photos.filter(photo_scope=0).order_by('-last_modified')
+        else:
+            photos = album.photos.order_by('-last_modified')
+            
+        serializer = PhotoListSerializer(photos, many=True)
+        return Response(serializer.data)
+
     # 앨범에 사진 추가
     def post(self, request, album_id):
         album = get_object_or_404(Album, id=album_id)

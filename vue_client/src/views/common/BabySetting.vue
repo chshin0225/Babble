@@ -7,7 +7,7 @@
         :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + enrollData.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
         style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;">
 
-      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/baby.png" />
+      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />
 
 
       <div id="circle" style="
@@ -17,10 +17,11 @@
   width: 15vw;
   height: 15vw;
   background-color: #fea59c;
-  border-radius: 50%;">
+  border-radius: 50%;
+  cursor:pointer" @click="clickUpload()">
         <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
           <input @change="change4" type="file" id="file" name="file" hidden>
-          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png" @click="clickUpload()"/>
+          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
         <!-- </router-link> -->
       </div>
     </div>
@@ -121,6 +122,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import firebase from 'firebase'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'BabySetting',
@@ -146,7 +148,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['myaccount', 'currentBaby']),
+    ...mapState(['myaccount', 'currentBaby', 'relationship']),
   },
   created(){
 
@@ -158,7 +160,6 @@ export default {
     myaccount() {
       if (this.myaccount) {
         this.findBaby(this.myaccount.current_baby)
-        // this.enrollData = this.currentBaby;
       }
     },
     currentBaby() {
@@ -167,15 +168,37 @@ export default {
       }
     }
   },
-  /*mounted() {
-    this.enrollData = this.currentBaby;
-  },*/
   methods:{
     ...mapActions('babyStore', ['modifyBaby']),
     ...mapActions(['findBaby', 'findMyAccount']),
 
     modifyBabyInfo(){
+      if(this.relationship.rank != 1){
+        Swal.fire({
+                icon: 'error',
+                text: '변경 권한이 없습니다.'
+              })
+      }else if(!(this.enrollData.baby_name)){
+        Swal.fire({
+                icon: 'error',
+                text: '아기의 이름을 입력해주세요.'
+              })
+        return;
+      }else if(!(this.enrollData.gender)){
+        Swal.fire({
+                icon: 'error',
+                text: '성별을 선택해주세요.'
+              })
+        return;
+      }else if(!(this.enrollData.birth)){
+        Swal.fire({
+                icon: 'error',
+                text: '생년월일을 입력해주세요.'
+              })
+        return;
+      }else {
       this.modifyBaby(this.enrollData);
+      }
     },
     clickGirlBtn(){
       this.enrollData.gender = 'F';
@@ -188,11 +211,7 @@ export default {
       fileInput.click()
     },
     change4(e) {
-      console.log("e", e);
-      console.log("e.target", e.target);
-      console.log("e.target.files", e.target.files[0]);
       this.photoObj = e.target.files[0];
-      console.log("this.photoObj", this.photoObj);
       
       const promises = []
       var storageRef = firebase.storage().ref()
@@ -200,9 +219,7 @@ export default {
       const uploadTask = storageRef.child('babble_' + this.myaccount.current_baby).child(this.photoObj.name).put(this.photoObj)
       promises.push(uploadTask)
       Promise.all(promises).then(() => {
-        console.log("this.enrollData", this.enrollData);
         this.enrollData.profile_image = 'babble_' + this.myaccount.current_baby + '%2F' + this.photoObj.name;
-        console.log("this.enrollData.profile_image", this.enrollData.profile_image);
       })
     },
   }

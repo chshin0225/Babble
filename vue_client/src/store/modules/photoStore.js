@@ -7,15 +7,18 @@ import firebase from 'firebase'
 const photoStore = {
   namespaced: true,
   state: {
+
     tags: [],
     emotionTagPhotos: [],
     babbleboxTags: [],
-    photos: [],
-    photo: [],
-    comments: [],
+    tags: null,
+    photos: null,
+    photo: null,
+    comments: null,
     searchedPhotos: [],
-    albums: [],
-    album: [],
+    albums: null,
+    album: null,
+    albumPhotos: null,
     measurementList: [],
   },
   getters: {
@@ -48,6 +51,9 @@ const photoStore = {
     },
     SET_ALBUM(state, album) {
       state.album = album
+    },
+    SET_ALBUM_PHOTOS(state, photos) {
+      state.albumPhotos = photos
     },
     SET_MEASUREMENT_LIST(state, measurements) {
       state.measurementList = measurements 
@@ -287,6 +293,13 @@ const photoStore = {
         .then(res => commit('SET_ALBUM', res.data))
         .catch(err => console.error(err))
     },
+    fetchAlbumPhotos({ commit, rootGetters }, album_id) {
+      axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/`, rootGetters.config)
+        .then(res => {
+          commit('SET_ALBUM_PHOTOS', res.data)
+        })
+        .catch(err => console.error(err))
+    },
     deleteAlbum({ rootGetters }, album_id) {
       axios.delete(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
         .then(() => router.push({ name: 'AlbumLibrary' }))
@@ -294,7 +307,7 @@ const photoStore = {
     },
     deletePhotoFromAlbum({ rootGetters, dispatch }, albumData) {
       axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
-        .then(() => dispatch('getAlbum', albumData.albumId))
+        .then(() => dispatch('fetchAlbumPhotos', albumData.albumId))
         .catch(err => console.error(err))
     },
     editAlbum({ rootGetters }, albumData) {

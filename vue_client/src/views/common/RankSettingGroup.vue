@@ -1,7 +1,6 @@
 <template>
-
-  <div style="padding : 0 5vw;">
-    <div style="width:100%;">
+  <div class="mt-2">
+    <div >
         <div style="float:right;">
         <!-- <button class="btn btn-outline-pink" style="">전체선택</button> -->
         <!-- <button class="btn btn-outline-pink" style="margin-left:6px !important;">그룹추가</button> -->
@@ -14,7 +13,7 @@
               class="btn btn-outline-pink" 
               style="margin-left:6px !important;"
               @click="newGroupName=''"
-              @click.stop="dialog = true">그룹추가</button>
+              @click.stop="dialog = true">그룹 생성</button>
           </template>
           <v-card>
             <v-card-title>
@@ -125,7 +124,7 @@
                     @click="newGroupName = group.group_name"
                     @click.stop="modify_dialog = true"
                   >mdi-pencil</v-icon>
-                <v-icon color="red" @click="deleteGroup(group.id)">mdi-trash-can-outline</v-icon>
+                <v-icon color="pink" @click="deleteGroup(group.id)">mdi-trash-can-outline</v-icon>
               </template>
               <v-card>
                 <v-card-title>
@@ -148,26 +147,30 @@
               </v-card>
             </v-dialog>
         </template>
+        <div v-if="group.members.length">
+          <v-list-item
+            v-for="member in group.members"
+            :key="member.id"
+          >
+            <v-list-item-avatar>
+              <!-- <v-img
+                :src=""
+              ></v-img> -->
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-avatar>
 
-        <v-list-item
-          v-for="member in group.members"
-          :key="member.id"
-        >
-          <v-list-item-avatar>
-            <!-- <v-img
-              :src=""
-            ></v-img> -->
-            <v-icon>mdi-account</v-icon>
-          </v-list-item-avatar>
-
-          <v-list-item-content>
-            <v-list-item-title>{{member.name}}</v-list-item-title>
-            <v-list-item-subtitle>{{member.relationship_name}}</v-list-item-subtitle>
-          </v-list-item-content>
-          <v-list-item-icon>
-              <v-icon color="red" @click="deleteUser(group.id, member.id)">mdi-trash-can-outline</v-icon>
-          </v-list-item-icon>
-        </v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>{{member.name}}</v-list-item-title>
+              <v-list-item-subtitle>{{member.relationship_name}}</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-icon>
+                <v-icon color="red" @click="deleteUser(group.id, member.id)">mdi-trash-can-outline</v-icon>
+            </v-list-item-icon>
+          </v-list-item>
+        </div>
+        <div v-else>
+          <p class="pl-2">아직 해당 그룹에 속한 유저가 없습니다.</p>
+        </div>
       </v-list-group>
     </v-list>
 

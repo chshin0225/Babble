@@ -12,20 +12,22 @@
         v-if="this.profile_image"
         :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + this.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
         style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;">
-      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/baby.png" />
+      <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />
 
 
-      <div id="circle" style="
-  position: relative;
-  left: 48vw;
-  bottom: 12vw;
-  width: 15vw;
-  height: 15vw;
-  background-color: #fea59c;
-  border-radius: 50%;">
+      <div id="circle" 
+          style="position: relative;
+                left: 48vw;
+                bottom: 12vw;
+                width: 15vw;
+                height: 15vw;
+                background-color: #fea59c;
+                border-radius: 50%;
+                cursor:pointer" 
+          @click="clickUpload()">
         <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
           <input @change="change4" type="file" id="file" name="file" hidden>
-          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png" @click="clickUpload()"/>
+          <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
         <!-- </router-link> -->
       </div>
     </div>
@@ -41,7 +43,7 @@
         <div class="text-center">
           <button
             class="btn new-button"
-            :class="{ disabled: !(nickflag && passflag)}"
+            :class="{ disabled: !(nickflag)}"
             @click="profileBtn"
           >
             프로필 수정
@@ -50,6 +52,7 @@
       </div>
       <div class="setting-form mt-10">
         <v-text-field
+          v-if="isBasic"
           v-model="old_password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show1 ? 'text' : 'password'"
@@ -59,6 +62,7 @@
           <!--  hint="At least 8 characters"
                 counter -->
         <v-text-field
+          v-if="isBasic"
           v-model="new_password1"
           :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show2 ? 'text' : 'password'"
@@ -68,6 +72,7 @@
         ></v-text-field>
 
         <v-text-field
+          v-if="isBasic"
           v-model="new_password2"
           :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show3 ? 'text' : 'password'"
@@ -77,8 +82,9 @@
         ></v-text-field>
         <div class="text-center mt-5">
           <button
+            v-if="isBasic"
             class="btn new-button"
-            :class="{ disabled: !(nickflag && passflag)}"
+            :class="{ disabled: !(passflag)}"
             @click="changePW"
           >
             비밀번호 변경
@@ -92,17 +98,23 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import firebase from 'firebase'
+import Swal from 'sweetalert2'
 
 export default {
   name: "Profile",
   computed: {
     ...mapState([ 'myaccount' ]),
+    isBasic: function(){
+      if (this.myaccount) {
+        return this.myaccount.user_type === "basic"
+      }
+      return null
+    }
   },
   data(){
     return{
       name:"",
       profile_image:"", 
-      //loadedpassword:"asdf1234",
       old_password:"",
       new_password1:"",
       new_password2:"",
@@ -111,7 +123,7 @@ export default {
       show2:false,
       show3:false,
       nickflag:false,
-      passflag:true,
+      passflag:false,
       rules:{
         required: value => {
           if (value.length == 0){
@@ -125,20 +137,15 @@ export default {
           this.nickflag = true
           return !!value || 'This field is required.'
         },
-        /*cmatch: value => {
-          if (value.length != 0 && value != this.loadedpassword){
-            this.passflag = false
-            return "영문, 숫자 포함 8 자리 이상이어야 해요."
-          }
-          this.passflag = true && this.flagPassword()
-          return true
-        },*/
         minLen: value => {
           if ((value.length < 8 && value.length >0) || (value.length !=0 && !this.validPassword(value))){
             this.passflag = false
             return "영문, 숫자 포함 8 자리 이상이어야 해요."
           }
-
+          if (value.length == 0){
+            this.passflag = false
+            return true
+          }
           this.passflag = true && this.flagPassword()
           return true
         },
@@ -146,6 +153,10 @@ export default {
           if (value.length !=0 && value !== this.new_password1){
             this.passflag = false
             return "일치하지 않습니다."
+          }
+          else if(value.length == 0){
+            this.passflag = false
+            return true
           }
 
           this.passflag = true && this.flagPassword()
@@ -173,34 +184,45 @@ export default {
       })
     },
     profileBtn(){
-      if((this.nickflag && this.passflag) || (this.passflag && this.flagPassword() == 2)){
-        const profileData = {
-          "currentPassword": this.curpassword,
-          "newPassword": this.newpassword,
-          "confirmNewPassword": this.confirmnewpassword,
-          "name": this.name
-        }
-
-        this.updateProfile(profileData)
+      if(!(this.name)){
+        Swal.fire({
+                icon: 'error',
+                text: '닉네임을 입력해주세요.'
+              })
+      }else if(this.nickflag){
+        var profileData = {
+          name : this.name,
+          profile_image : this.profile_image,
+        };
+        this.changeProfile(profileData);
+        this.nickflag = !this.nickflag
+      }else{
+        Swal.fire({
+                icon: 'error',
+                text: '변경된 내용이 없습니다.'
+              })
       }
 
-      var profileData = {
-                          name : this.name,
-                          profile_image : this.profile_image,
-                          };
-      this.changeProfile(profileData);
     },
     changePW(){
-      var passwordData = {
-                          old_password : this.old_password,
-                          new_password1 : this.new_password1,
-                          new_password2 : this.new_password2 
-                          };
-      this.changePassword(passwordData);
+      if(this.passflag){
+        var passwordData = {
+                            old_password : this.old_password,
+                            new_password1 : this.new_password1,
+                            new_password2 : this.new_password2 
+                            };
+        this.changePassword(passwordData);
+      }else{
+        Swal.fire({
+                icon: 'error',
+                text: '비밀번호를 확인해주세요.'
+              })
+      }
+
 
     },
     validPassword(password) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
+      var va = /^(?=.*\d)(?=.*)(?=.*[a-zA-Z]).{8,}$/;
       return va.test(password);
     },
     flagPassword(){
@@ -214,8 +236,10 @@ export default {
     }
   },
   mounted: function(){
-    this.name = this.myaccount.name
-    this.profile_image = this.myaccount.profile_image
+    if (this.myaccount) {
+      this.name = this.myaccount.name
+      this.profile_image = this.myaccount.profile_image
+    }
   },
   watch: {
     myaccount() {
@@ -269,4 +293,10 @@ export default {
   color: #f8f8f8;
   /* width: 100%; */
 }
+
+div >>> .v-text-field__slot  {
+  font-family: sans-serif !important;
+}
+
 </style>
+

@@ -11,12 +11,13 @@
           <span class="logo-title color-pink">Babble</span>
         </div>
       </div>
-      <nav class="nav2 mt-5 d-flex justify-content-center" v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
-        <span>
-          <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
-          <img src="@/assets/babble_logo.png" />
-        </span>
-        <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+      <nav class="nav2 mt-5 " v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
+        <div class="d-flex justify-content-center">
+          <span>
+            <img src="@/assets/babble_logo.png" />
+          </span>
+          <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+        </div>
       </nav>
       
       <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
@@ -26,7 +27,9 @@
             <div class="upper bg-pink d-flex justify-content-between">
               <div class="d-flex">
                 <div class="profile float-left mr-3">
-                  <img src="@/assets/babble_logo.png" />
+                  <!-- <img src="@/assets/babble_logo.png" /> -->
+                  <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+                  <img v-else src="@/assets/babble_logo.png" />
                 </div>
                 <div class="babble-box" v-if="currentBaby">
                   <span>{{ currentBaby.baby_name }}</span><br />
@@ -42,19 +45,25 @@
               <li class="list invite pointer" @click="clickInvitationCreate">
                 <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
               <hr />
+              <li class="list menu pointer" @click="clickBabySettings">
+                  <i class="fas fa-cog mr-3"></i> 아기 설정
+              </li>
+              <li class="list menu pointer" @click="clickGroupSettings">
+                  <i class="fas fa-users-cog mr-3"></i> 그룹 설정
+              </li>
               <li class="list menu pointer" @click="clickMeasurements">
                   <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
               </li>
-              <li class="list menu">
+              <!-- <li class="list menu">
                 <a href="#contact" ><i class="fas fa-video mr-3"></i> 성장 동영상</a>
               </li>
               <li class="list menu">
                 <a href="#contact"><i class="fas fa-concierge-bell mr-3"></i> 고객센터</a>
-              </li>
-              <li class="list menu pointer" @click="clickSettings">
+              </li>  -->
+              <!-- <li class="list menu pointer" @click="clickSettings">
                 <i class="fas fa-cog mr-3"></i> 
                 설정
-              </li>
+              </li> -->
             </div>
           </div>
           <div class="sidebar-bottom">
@@ -77,32 +86,35 @@
       <router-view></router-view>
       <!-- <div style="height:100px"></div> -->
       <!-- footer -->
-      <div class="footer row no-gutters bg-pink" v-if="authToken != null">
-        <div 
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isAlbum() }"
-          @click="clickPhoto"
-        >
-          <p><i class="fas fa-images"></i></p>
-          <p>Photo</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isDiary() }"
-          @click="clickDiary"
-        >
-          <p><i class="fas fa-book"></i></p>
-          <p>Diary</p>
-        </div>
-        <div
-          class="col-4 color-gray pointer"
-          :class="{ 'color-red': isProfile() }"
-          @click="clickProfile"
-        >
-          <p><i class="fas fa-user"></i></p>
-          <p>Profile</p>
+      <div v-if="this.myaccount">
+        <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
+          <div 
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isAlbum() }"
+            @click="clickPhoto"
+          >
+            <p><i class="fas fa-images"></i></p>
+            <p>Photo</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isDiary() }"
+            @click="clickDiary"
+          >
+            <p><i class="fas fa-book"></i></p>
+            <p>Diary</p>
+          </div>
+          <div
+            class="col-4 color-gray pointer"
+            :class="{ 'color-red': isProfile() }"
+            @click="clickProfile"
+          >
+            <p><i class="fas fa-user"></i></p>
+            <p>Profile</p>
+          </div>
         </div>
       </div>
+
     </div>
   </v-app>
 </template>
@@ -123,9 +135,11 @@ export default {
     return {
       isBurgerActive: false,
       routes: [
+         // Diary
         "DiaryCreate",
         "DiaryUpdate",
         "DiaryDetail",
+        // Auth
         "HowToRegisterBaby",
         "Signup",
         "SignupKakao",
@@ -136,9 +150,11 @@ export default {
         "HowToRegisterBaby",
         "RegisterBabyRelate",
         "RegisterInviteLink",
+        // Photo
         "PhotoDetail",
         "PhotoCreate",
-        "PhotoUpdate"
+        "PhotoUpdate",
+        "AlbumDetail"
       ],
       routes2: [
         "Signup",
@@ -148,12 +164,14 @@ export default {
         "PasswordFind",
         "PasswordFindEmail",
         "SignupKakao",
+        "RegisterInviteLink",
       ],
       days: null,
     };
   },
   computed: {
-    ...mapState(["myaccount", "currentBaby", "authToken", "accessLog"]),
+    ...mapState(["myaccount", "currentBaby", "authToken"]),
+    ...mapState(["myaccount", "currentBaby", "authToken", "invitationToken", "accessLog", "relationship"]),
     countDays() {
       if (this.currentBaby) {
         var d1 = new Date();
@@ -168,16 +186,24 @@ export default {
   watch: {
     myaccount() {
       if (this.myaccount) {
-        this.findBaby(this.myaccount.current_baby);
+        if (!this.myaccount.current_baby) {
+          if (!this.invitationToken) {
+            this.$router.push({name: 'RegisterBaby'})
+          }
+        } else {
+          this.findBaby(this.myaccount.current_baby);
+        }
       }
     },
     currentBaby() {
-      this.fetchAccessLog()
-    },
+      if (this.currentBaby) {
+        this.findRelationship()
+        this.fetchAccessLog()
+      }
+    }
   },
-
   methods: {
-    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox"]),
+    ...mapActions(["findBaby", "findMyAccount", "logout", "fetchAccessLog", "accessBabbleBox", "findRelationship"]),
     // Logo
     clickLogo() {
       this.$router.push({ name: "PhotoList" });
@@ -249,10 +275,20 @@ export default {
       backdrop.click();
       this.logout();
     },
-    clickSettings() {
+    /*clickSettings() {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "Settings" });
+    },*/
+    clickBabySettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "BabySetting" });
+    },
+    clickGroupSettings() {
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
+      this.$router.push({ name: "RankSetting" });
     },
     clickInvitationCreate() {
       let backdrop = document.querySelector(".sidebar-backdrop");
@@ -271,7 +307,9 @@ export default {
     }
   },
   mounted() {
-    this.findMyAccount();
+    if (this.authToken) {
+      this.findMyAccount();
+    }
     this.fetchAccessLog()
   },
 };
@@ -324,6 +362,15 @@ export default {
   font-size: 3rem;
   font-weight: 900;
   font-family: "Rammetto One", cursive;
+}
+
+.scallop-down{
+  height:40px;
+  /* width: 75%;
+  margin-left: auto;
+  margin-right: auto; */
+  background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
+  -webkit-background-size: 49px 100%;
 }
 
 /* sidebar */
@@ -382,11 +429,13 @@ a:hover {
 
 .profile img,
 .other-profile img {
-  max-width: 50px;
-  height: auto;
+  /*max-width: 50px;
+  height: auto;*/
+  width: 50px;
+  height : 50px;
   border: 1px solid #fea59c;
   border-radius: 50%;
-  background-color: white;
+  /*background-color: white;*/
 }
 
 /*  footer */

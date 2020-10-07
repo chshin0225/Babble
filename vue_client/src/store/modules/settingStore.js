@@ -1,7 +1,7 @@
 import SERVER from '@/api/api'
 import axios from 'axios'
 //import router from '@/router'
-// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
 //import firebase from 'firebase'
 
 const settingStore = {
@@ -80,6 +80,21 @@ const settingStore = {
       axios.put(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+           })
+           Toast.fire({
+            icon: 'success',
+            title: "유저 권한을 변경하였습니다."
+          })
       })
       .catch(err => {
           console.log(err)

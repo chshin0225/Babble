@@ -2,13 +2,14 @@
   <div>
     <div class="text-center mt-5">
       <h5 class="main-title text-center color-pink">Profile</h5>
-
-      <div class="profile-image-outline">
-        <img v-if="myaccount.profile_image" class="profile-image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-        <img v-else class="profile-image" src="@/assets/babble_logo.png" />        
+      <div style="width:100%; text-align:center; padding: 0 10vw;">
+      <!--<div class="profile-image-outline">
+        <img v-if="myaccount.profile_image" class="profile-image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />-->
+        <img v-if="myaccount.profile_image" style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;"  :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+        <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />        
       </div>
 
-      <div class="profile-info">
+      <div class="profile-info mt-10">
         <h4 class="d-flex align-items-center">
           <span class="badge badge-pill bg-pink mr-3" >Name</span>          
           <v-text-field class ="text-info" 
@@ -80,11 +81,14 @@ export default {
   width: 70vw;
   overflow: hidden;
 }
-.profile-image {
+/*.profile-image {
   margin-top: -1px;
   margin-left: -1px;
   width: 70vw;
   border-radius: 50%;
+}*/
+profile-image{
+  width:70vw; height:70vw; border-radius:50%; border: 5px solid #fea59c;
 }
 
 .profile-info {
