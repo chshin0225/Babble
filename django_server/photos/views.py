@@ -202,18 +202,15 @@ class PhotoDetailView(APIView):
             return Response({"message": "삭제할 권한이 없습니다."}, status=400)
         else:
             photo = get_object_or_404(Photo, id=photo_id)
-            for tag in photo.photo_tags.all():
-                for album in tag.tagged_albums.all().filter(baby=cb):
-                    try:
-                        get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo).delete()
-                        if album.cover_photo == photo.image_url:
-                            if album.photos.first():
-                                album.cover_photo = album.photos.first().image_url
-                            else:
-                                album.cover_photo = ''
-                            album.save()
-                    except:
-                        pass
+            for temp_relationship in AlbumPhotoRelationship.objects.filter(photo=photo).all():
+                album = temp_relationship.album
+                temp_relationship.delete()
+                if album.cover_photo == photo.image_url:
+                    if album.photos.first():
+                        album.cover_photo = album.photos.first().image_url
+                    else:
+                        album.cover_photo = ''
+                    album.save()
             photo.delete()
             return Response({"message":"사진이 삭제되었습니다."}, status=200)
 
