@@ -66,7 +66,6 @@ export default {
           }
           diaryData.push(inputData)
         }
-        console.log("여기있다.",this.measurements)
         for (var measurement of this.measurements) {
           let customData = {}
           customData.title = ''
