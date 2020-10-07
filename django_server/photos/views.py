@@ -104,6 +104,9 @@ class PhotoListView(APIView):
                     for album in tag.tagged_albums.all().filter(baby=cb):
                         album_photo = AlbumPhotoRelationship(album=album, photo=created_photo)
                         album_photo.save()
+                        if not album.cover_photo:
+                            album.cover_photo = created_photo.image_url
+                            album.save()
 
                 # groups
                 if photo['photo_scope'] == 2:
@@ -163,9 +166,15 @@ class PhotoDetailView(APIView):
                 for album in tag.tagged_albums.all().filter(baby=cb):
                     try:
                         get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
+                        if not album.cover_photo:
+                            album.cover_photo = photo.image_url
+                            album.save()
                     except:
                         album_photo = AlbumPhotoRelationship(album=album, photo=photo)
                         album_photo.save()
+                        if not album.cover_photo:
+                            album.cover_photo = photo.image_url
+                            album.save()
 
             # scope
             photo.permitted_groups.clear()
@@ -319,6 +328,11 @@ class AlbumListView(APIView):
                     except: # 없으면 앨범에 사진 추가
                         album_photo = AlbumPhotoRelationship(album=created_album, photo=photo)
                         album_photo.save()
+            
+            if not created_album.cover_photo:
+                if created_album.photos.first():
+                    created_album.cover_photo = created_album.photos.first().image_url
+                    created_album.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)
@@ -361,6 +375,10 @@ class AlbumDetailView(APIView):
                             album_photo = AlbumPhotoRelationship(album=album, photo=photo)
                             album_photo.save()
 
+            if not album.cover_photo:
+                if album.photos.first():
+                    album.cover_photo = album.photos.first().image_url
+                    album.save()
 
             return Response(serializer.data)
         return Response(serializer.errors)
@@ -420,6 +438,9 @@ class AlbumPhotoView(APIView):
                 continue
             album_photo = AlbumPhotoRelationship(album=album, photo=photo)
             album_photo.save()
+            if not album.cover_photo:
+                album.cover_photo = photo.image_url
+                album.save()
         return Response({"message":"사진(들)이 앨범에 추가되었습니다."})
 
     # 앨범에서 사진 삭제
@@ -429,16 +450,25 @@ class AlbumPhotoView(APIView):
             photo = get_object_or_404(Photo, id=photo_id)
             album_photo = get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo)
             album_photo.delete()
-        cover_photo = get_object_or_404(Photo, image_url=album.cover_photo).id
+
+            if album.cover_photo == photo.image_url:
+                album.cover_photo = ''
+                album.save()
+        if not album.cover_photo:
+            if album.photos.first():
+                album.cover_photo = album.photos.first().image_url
+                album.save()
+
+        # cover_photo = get_object_or_404(Photo, image_url=album.cover_photo).id
 
         # 커버 사진으로 지정된 사진이 삭제되는 경우
-        if cover_photo in request.data['photos']:
-            try:
-                new_cover_photo = AlbumPhotoRelationship.objects.filter(album=album)[0].photo.image_url
-                album.cover_photo = new_cover_photo
-            except:
-                album.cover_photo = ''
-            album.save()
+        # if cover_photo in request.data['photos']:
+        #     try:
+        #         new_cover_photo = AlbumPhotoRelationship.objects.filter(album=album)[0].photo.image_url
+        #         album.cover_photo = new_cover_photo
+        #     except:
+        #         album.cover_photo = ''
+        #     album.save()
         return Response({"message":"사진(들)이 앨범에서 삭제되었습니다."})
 
     
