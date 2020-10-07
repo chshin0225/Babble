@@ -5,7 +5,7 @@
 > **감정인식과정**
 >  1. Face Detect
 >  2. Emotion Recognize
-<p align="center"><img src="https://raw.githubusercontent.com/serengil/deepface/master/icon/deepface-icon-labeled.png" width="200" height="240"></p>
+<p align="left"><img src="AI/Emotion/images/emotion_recogition_example.jpg" width="300" height="300"></p>
 - Face Detect
   - 얼굴인식 모델은 대표적으로 ['opencv', 'ssd', 'dlib', 'mtcnn'] 가 있다.
   - <img src="https://i0.wp.com/sefiks.com/wp-content/uploads/2020/08/face-detector-perf.png?resize=768%2C422&ssl=1">
