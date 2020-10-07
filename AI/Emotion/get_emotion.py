@@ -82,16 +82,14 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     detector.setInput(imageBlob)
     detections = detector.forward()
 
-    column_labels = ["img_id", "is_face",
-                     "confidence", "left", "top", "right", "bottom"]
+    column_labels = ["img_id", "is_face", "confidence", "left", "top", "right", "bottom"]
     detections_df = pd.DataFrame(detections[0][0], columns=column_labels)
 
     # 0: background, 1: face, confidence 가 높은게 얼굴일 확률이 높다
     detections_df = detections_df[detections_df['is_face'] == 1]
     detections_df = detections_df[detections_df['confidence'] > 0.90]
 
-    detections_df['left'] = (detections_df['left'] *
-                             tx).astype(int)  # 좌표값을 정수형 데이터로 변환
+    detections_df['left'] = (detections_df['left'] * tx).astype(int)  # 좌표값을 정수형 데이터로 변환
     detections_df['bottom'] = (detections_df['bottom'] * ty).astype(int)
     detections_df['right'] = (detections_df['right'] * tx).astype(int)
     detections_df['top'] = (detections_df['top'] * ty).astype(int)
@@ -115,8 +113,6 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     face_list_df = face_list_df.astype(int)
     # time to get face : 20ms    
     
-    #emotion_model = Emotion.loadModel() # time to load model : 20ms     
-
     emotion_res_list = []  # return emotion each face
     emotion_labels = ['화남', '역겹', '무섭', '행복', '슬픔', '놀람', '무']    
     # emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
