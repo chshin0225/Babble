@@ -132,7 +132,7 @@ export default {
         }
     },
     changeRank(userId, userRelationship, userRank){
-      console.log("changeRank", userId);
+      
       let userData = {userId : userId, rank : userRank, relationship_name : userRelationship}
       this.modifyUserRank(userData);
     },
