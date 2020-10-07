@@ -10,7 +10,7 @@
           <i class="fas fa-chevron-left"></i>
         </div>
         <div>
-          <input @change="change4" type="file" id="file" name="file" multiple hidden>
+          <input @change="change4" type="file" accept="image/gif, image/jpeg, image/png" id="file" name="file" multiple hidden>
           <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
           <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
           <div v-else class="d-flex flex-column"> 
@@ -75,6 +75,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import Swal from 'sweetalert2'
 // var camera1 = document.getElementById('camera1');
 // var camera2 = document.getElementById('camera2');
 // var camera3 = document.getElementById('camera3');
@@ -153,24 +154,36 @@ export default {
       var files = e.target.files
       this.photos = files
       console.log(files)
+      var isNotImage = false;
       var frame = document.getElementById('frame');
       for (var file of files) {
-        var div = document.createElement("div")
-        div.classList.add("col-4");
-        var i = document.createElement("img")
-        i.src = URL.createObjectURL(file)
+        if(file.type == "image/gif" || file.type == "image/jpeg" || file.type == "image/png"){
 
-        i.style.objectFit='cover'
-        i.style.objectPosition='50% 50%'
-        i.style.width='30vw'
-        i.style.height='30vw'
-        i.style.overflow='hidden'
-        i.style.marginRight='2.5vw'
-        i.style.marginBottom='2.5vw'
-        // i.classList.add("img-fluid")
-        div.appendChild(i)
-        frame.appendChild(div)
-        this.is_OK = false
+          var div = document.createElement("div")
+          div.classList.add("col-4");
+          var i = document.createElement("img")
+          i.src = URL.createObjectURL(file)
+
+          i.style.objectFit='cover'
+          i.style.objectPosition='50% 50%'
+          i.style.width='30vw'
+          i.style.height='30vw'
+          i.style.overflow='hidden'
+          i.style.marginRight='2.5vw'
+          i.style.marginBottom='2.5vw'
+          // i.classList.add("img-fluid")
+          div.appendChild(i)
+          frame.appendChild(div)
+          this.is_OK = false
+        }else{
+          isNotImage = true;
+        }
+        if(isNotImage){
+          Swal.fire({
+            icon: 'error',
+            text: 'jpg 또는 png 파일만 업로드할 수 있습니다.'
+          })
+        }
       }
     },
   },
