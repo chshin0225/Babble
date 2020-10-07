@@ -15,9 +15,9 @@
       </div>
 
       <!-- 우측 검색 -->
-      <div>
+      <!-- <div>
         <i class="fas fa-search pointer"></i>
-      </div>
+      </div> -->
     </nav>
 
     <!-- router-view -->

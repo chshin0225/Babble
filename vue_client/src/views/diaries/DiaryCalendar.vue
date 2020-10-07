@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <h5 v-if="currentBaby" class="main-title text-center color-pink">{{currentBaby.baby_name}}의 캘린더</h5>
     <div class="p-3">
       <vc-calendar

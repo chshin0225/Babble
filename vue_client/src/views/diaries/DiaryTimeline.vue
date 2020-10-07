@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <h5 v-if="currentBaby" class="main-title text-center color-pink">{{currentBaby.baby_name}}의 타임라인</h5>
     <div v-if="diaries">
       <div v-if="diaries.length">
