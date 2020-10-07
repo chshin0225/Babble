@@ -189,17 +189,3 @@ def url_to_image(url):
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 	# return the image
     return image
-
-
-#imgpath = "images\\image1.png"
-#url = "https://lh3.googleusercontent.com/proxy/BpcEYIdSKbhvftvfiDDMjkr1peSbnfVYRpjN3z1Lz2dQI4EAUzJ7-YBvc9v4T2c_gips_V_d1HsZHIZfub0bJuIpmAxtP-Z3FqF8l--jRL3d3sAmIf8o"
-#imS = url_to_image(url)
-#cv2.imshow("test", imS)
-#cv2.waitKey(5000)
-#cv2.destroyAllWindows()
-#img = cv2.imread(imgpath)
-#print(get_tag_emotion(img))
-
-# get_tag_emotion(imgpath)  # default target size is 300, 300 and don't need to code
-# get_tag_emotion(imgpath, 400, 400)  # you can resize target like this. big size is good for small face
-
