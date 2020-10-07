@@ -8,7 +8,7 @@ from django.db.models.functions import TruncDate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer, AlbumListSerializer, AlbumDetailSerializer
+from .serializers import TagListSerializer, PhotoListSerializer, PhotoDetailSerializer, PhotoCommentSerializer, SimplePhotoListSerializer, AlbumListSerializer, AlbumDetailSerializer
 
 from accounts.models import Group, UserBabyRelationship
 from .models import Tag, Photo, PhotoComment, PhotoTag, PhotoGroup, Album, AlbumPhotoRelationship, AlbumTag
@@ -330,6 +330,17 @@ class AlbumDetailView(APIView):
         album.delete()
         return Response({"message":"앨범이 삭제되었습니다."})
 
+class AlbumPhotoListView(APIView):
+    def get(self, request, album_id):
+        print("HELLO")
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        album = get_object_or_404(Album, id=album_id)
+        photos = album.photos.order_by('-last_modified').values_list('id', flat=True)
+        # serializer = SimplePhotoListSerializer(photos, many=True)
+        # return Response(serializer.data)
+        return Response({ 'photos': photos })
 
 class AlbumPhotoView(APIView):
     # 앨범 사진 리스트
@@ -357,6 +368,8 @@ class AlbumPhotoView(APIView):
         album = get_object_or_404(Album, id=album_id)
         for photo_id in request.data['photos']:
             photo = get_object_or_404(Photo, id=photo_id)
+            if AlbumPhotoRelationship.objects.filter(album=album, photo=photo).exists():
+                continue
             album_photo = AlbumPhotoRelationship(album=album, photo=photo)
             album_photo.save()
         return Response({"message":"사진(들)이 앨범에 추가되었습니다."})

@@ -7,7 +7,10 @@
           <div class="photos row no-gutters" v-if="photos.length">
             <div v-for="photo in dates.photos" :key="`photo${photo.id}`" class="photo-container pointer" @click="clickPhoto(photo.id)">
               <div class="photo">             
-                <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="card-img-top " alt="">
+                <img
+                 :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
+                 class="card-img-top" 
+                 :alt="photo.id">
               </div>
             </div>
           </div>

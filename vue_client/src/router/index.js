@@ -14,6 +14,7 @@ import AlbumLibrary from "@/views/photos/AlbumLibrary";
 import AlbumCreate from "@/views/photos/AlbumCreate";
 import AlbumDetail from "@/views/photos/AlbumDetail";
 import AlbumEdit from "@/views/photos/AlbumEdit";
+import AlbumAddPhoto from "@/views/photos/AlbumAddPhoto"
 import AlbumInfoEdit from "@/views/photos/AlbumInfoEdit";
 import TagSelect from "@/views/photos/TagSelect";
 
@@ -123,6 +124,11 @@ const routes = [
     path: "/photo/library/:albumId/edit",
     component: AlbumEdit,
     name: "AlbumEdit",
+  },
+  {
+    path: "/photo/library/:albumId/add",
+    component: AlbumAddPhoto,
+    name: "AlbumAddPhoto"
   },
   {
     path: "/photo/library/:albumId/info",
