@@ -261,10 +261,6 @@ export default {
           let userData = {groupId : groupId , user : userId}
           this.deleteGroupUser(userData)
           .then(() => {
-            Swal.fire({
-              icon: 'success',
-              text: '그룹에서 삭제되었습니다.'
-            })
             this.modify_dialog = false;
             this.dialog = false;
             this.fetchGroups();
