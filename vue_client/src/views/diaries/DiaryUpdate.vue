@@ -200,7 +200,7 @@ export default {
     ...mapActions('diaryStore', ['updateDiary', 'updateMeasurement']),
     ...mapActions('settingStore', ['fetchGroups']),
     clickBack() {
-      this.$router.go(-1)
+      this.$router.replace({ name: 'DiaryDetail', params: { diaryId: this.$route.params.diaryId }})
     },
     clickUpdate() {
       if (this.createData) {
@@ -223,7 +223,7 @@ export default {
       if (this.diary.measurement) {
         this.updateMeasurement(this.recordData)
         .then(() => {
-          this.$router.push({ name: 'DiaryDetail', params: { diaryId: this.diary.diary.id } })
+          this.$router.replace({ name: 'DiaryDetail', params: { diaryId: this.diary.diary.id } })
         })
       }
     },
