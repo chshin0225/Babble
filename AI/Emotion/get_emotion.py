@@ -15,15 +15,12 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from ai_server import mtcnn_detector, detector, emotion_model
 
-# need 20 ms
-#detector = cv2.dnn.readNetFromCaffe("emotion\\files\\deploy.prototxt", "emotion\\files\\res10_300x300_ssd_iter_140000.caffemodel")
 
 def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate image
     # this function aligns given face in img based on left and right eye coordinates
     left_eye_x, left_eye_y = left_eye
     right_eye_x, right_eye_y = right_eye
 
-    # -----------------------
     # find rotation direction
     if left_eye_y > right_eye_y:
         point_3rd = (right_eye_x, left_eye_y)
@@ -31,32 +28,30 @@ def alignment_procedure(img, left_eye, right_eye):  # find degree and rotate ima
     else:
         point_3rd = (left_eye_x, right_eye_y)
         direction = 1  # rotate inverse direction of clock
-    # -----------------------
+    
     # find length of triangle edges
     a = distance.findEuclideanDistance(np.array(left_eye), np.array(point_3rd))
     b = distance.findEuclideanDistance(
         np.array(right_eye), np.array(point_3rd))
-    c = distance.findEuclideanDistance(np.array(right_eye), np.array(left_eye))
-    # -----------------------
+    c = distance.findEuclideanDistance(np.array(right_eye), np.array(left_eye))    
     # apply cosine rule
 
     if b != 0 and c != 0:  # this multiplication causes division by zero in cos_a calculation
         cos_a = (b*b + c*c - a*a)/(2*b*c)
         angle = np.arccos(cos_a)  # angle in radian
         angle = (angle * 180) / math.pi  # radian to degree
-        # -----------------------
+        
         # rotate base image
         if direction == -1:
             angle = 90 - angle
 
         img = Image.fromarray(img)
         img = np.array(img.rotate(direction * angle))
-    # -----------------------
+    
     return img  # return img anyway
 
 
-def align_face(img):  # rotate face to horizontal        
-    #mtcnn_detector = MTCNN()    
+def align_face(img):  # rotate face to horizontal            
     detections = mtcnn_detector.detect_faces(img)
     
     if len(detections) > 0:
@@ -179,13 +174,10 @@ def get_tag_emotion(image_file, tx=300, ty=300):  # return tag list
     return emotion_res_list
 
 
-# METHOD #1: OpenCV, NumPy, and urllib
 def url_to_image(url):
 	# download the image, convert it to a NumPy array, and then read
-	# it into OpenCV format
-    # req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+	# it into OpenCV format    
     resp = urllib.request.urlopen(url)    
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-	# return the image
-    return image
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)	
+    return image 
