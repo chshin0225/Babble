@@ -26,7 +26,7 @@
                 cursor:pointer" 
           @click="clickUpload()">
         <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
-          <input @change="change4" type="file" id="file" name="file" hidden>
+          <input @change="change4" type="file" accept="image/jpeg, image/png" id="file" name="file" hidden>
           <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
         <!-- </router-link> -->
       </div>
@@ -172,16 +172,26 @@ export default {
       fileInput.click()
     },
     change4(e) {
-      this.photoObj = e.target.files[0];
-      
-      const promises = []
-      var storageRef = firebase.storage().ref()
-      
-      const uploadTask = storageRef.child('user_' + this.myaccount.id).child(this.photoObj.name).put(this.photoObj)
-      promises.push(uploadTask)
-      Promise.all(promises).then(() => {
-        this.profile_image = 'user_' + this.myaccount.id + '%2F' + this.photoObj.name;
-      })
+      var fileType = e.target.files[0].type;
+      if(fileType == "image/jpeg" || fileType == "image/png"){
+
+        this.photoObj = e.target.files[0];
+        
+        const promises = []
+        var storageRef = firebase.storage().ref()
+        
+        const uploadTask = storageRef.child('user_' + this.myaccount.id).child(this.photoObj.name).put(this.photoObj)
+        promises.push(uploadTask)
+        Promise.all(promises).then(() => {
+          this.profile_image = 'user_' + this.myaccount.id + '%2F' + this.photoObj.name;
+        })
+
+      }else{
+        Swal.fire({
+          icon: 'error',
+          text: 'jpg 또는 png 파일만 업로드할 수 있습니다.'
+        })
+      }
     },
     profileBtn(){
       if(!(this.name)){
