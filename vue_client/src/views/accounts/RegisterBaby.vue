@@ -17,6 +17,7 @@
           type="text" 
           autocapitalize="none"
           autocorrect="none"
+          @change="changeName"
         />
         <label for="baby_name"></label>
         <div class="error-text ml-2" v-if="error.baby_name">{{error.baby_name}}</div>
@@ -47,6 +48,7 @@
           autocapitalize="none"
           autocorrect="none"
           required
+          @change="changeBirth"
           />
         <label for="birth"></label>
         <div class="error-text ml-2" v-if="error.birth">{{error.birth}}</div>
@@ -58,7 +60,7 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.relationship_name" 
-          
+          @change="changeRelationship"
           v-bind:class="{errorText: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
           class="inputs"
           id="relationship_name" 
@@ -140,26 +142,35 @@ export default {
       isSubmit: false,
     };
   },
+  watch: { 
+    enrollData: {
+      handler() {
+        // 버튼 활성화
+        if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
+          let isSubmit = true;
+          Object.values(this.error).map(v => {
+            if (v) isSubmit = false;
+          });
+          this.isSubmit = isSubmit;
+        }
+        else {
+          this.isSubmit = false
+        }
+      },
+      deep: true
+    }
+  },
   created() {
     this.component = this;
-  },
-  watch: {
-    enrollData: {
-      deep: true,
-      handler() {
-        this.checkbaby_nameForm();
-        this.checkGenderForm();
-        this.checkBirthForm();
-        this.checkrelationship_nameForm();
-      }
-    }
   },
   methods: {
     clickGirlBtn(){
       this.enrollData.baby.gender = 'F';
+      this.error.gender = false;
     },
     clickBoyBtn(){
       this.enrollData.baby.gender = 'M';
+      this.error.gender = false;
     },
     checkbaby_nameForm() {
       if ( this.enrollData.baby.baby_name.length > 0) {
@@ -184,27 +195,42 @@ export default {
         this.error.relationship_name = false;
       }
       else this.error.relationship_name = "아기와의 관계를 입력해 주세요."
-      
-      // 버튼 활성화
-      if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
-        let isSubmit = true;
-        Object.values(this.error).map(v => {
-          if (v) isSubmit = false;
-        });
-        this.isSubmit = isSubmit;
-      }
+    
     },
     clickEnroll() {
       if ( this.isSubmit ){
         this.enrollData.baby.birth_height = Number(this.enrollData.baby.birth_height)
         this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)        
         this.enrollBaby(this.enrollData)
+      } else {
+        if (this.enrollData.baby.baby_name.length < 1) {
+          this.error.baby_name = "아기의 이름을 입력해 주세요."
+        }
+        if (this.enrollData.baby.birth.length < 1) {
+          this.error.birth = "아기의 출생일자를 선택해 주세요."
+        }
+        if ( this.enrollData.baby.gender.length < 1) {
+          this.error.gender = "아기의 성별을 선택해 주세요."
+        }
+        if ( this.enrollData.relationship_name.length < 1) {
+          this.error.relationship_name = "아기와의 관계를 입력해 주세요."
+        }
+
       }
     },
     toLogin() {
       this.$router.push({name: "Login"});
     },
-    ...mapActions('accountStore', ['enrollBaby'])
+    ...mapActions('accountStore', ['enrollBaby']),
+    changeName() {
+      this.checkbaby_nameForm();
+    },
+    changeBirth() {
+      this.checkBirthForm();
+    },
+    changeRelationship() {
+      this.checkrelationship_nameForm();
+    },
   }
 }
 </script>
