@@ -20,7 +20,7 @@
   border-radius: 50%;
   cursor:pointer" @click="clickUpload()">
         <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
-          <input @change="change4" type="file" accept="image/jpeg, image/png" id="file" name="file" hidden>
+          <input @change="change4" type="file" accept="image/gif, image/jpeg, image/png" id="file" name="file" hidden>
           <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
         <!-- </router-link> -->
       </div>
@@ -212,7 +212,7 @@ export default {
     },
     change4(e) {
       var fileType = e.target.files[0].type;
-      if(fileType == "image/jpeg" || fileType == "image/png"){
+      if(fileType == "image/gif" || fileType == "image/jpeg" || fileType == "image/png"){
 
         this.photoObj = e.target.files[0];
         
