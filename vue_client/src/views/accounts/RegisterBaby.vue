@@ -1,7 +1,7 @@
 <template>
   <div class="background1">
     <div class="container p-3 bg-light-ivory enroll-form">
-      <h3 class="color-pink text-center">아기 등록</h3>
+      <h3 class="color-blue text-center">아기 등록</h3>
 
       <div class="mt-4 guide-text">
         아기의 이름을 입력해 주세요.
@@ -106,8 +106,8 @@
         <label for="birth_weight"></label>
       </div>
       
-      <div class="buttons mt-5">
-        <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
+      <div class="buttons mt-5 text-center">
+        <button class="btn btn-blue" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
       </div>
     </div>
     <div style="height:6vh"></div>
