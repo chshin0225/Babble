@@ -21,10 +21,12 @@ class Diary(models.Model):
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name='modified_diaries')
     modify_date = models.DateTimeField(auto_now=True)
     cover_photo = models.TextField(blank=True, null=True)
-
-    permitted_groups = models.ManyToManyField(Group, blank=True, related_name='allowed_diaries')
+    diary_scope = models.IntegerField()
+    # 0 => 전체 공개
+    # 1 => 양육자 공개
+    # 2 => 게스트 공개(그룹별)
+    permitted_groups = models.ManyToManyField(Group, blank=True, related_name='allowed_diaries', through='DiaryGroup')
     featured_photos = models.ManyToManyField(Photo, blank=True, related_name='related_diaries')
-
 
 class DiaryComment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE, related_name='diary_comments')
@@ -33,3 +35,6 @@ class DiaryComment(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     modify_date = models.DateTimeField(auto_now=True)
     
+class DiaryGroup(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    diary = models.ForeignKey(Diary, on_delete=models.CASCADE)

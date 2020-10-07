@@ -30,7 +30,7 @@ class PhotoListView(APIView):
             if relationship.group:
                 photos_guest = Photo.objects.filter(baby=cb, photo_scope=2, permitted_groups=relationship.group)
                 photos_all = Photo.objects.filter(baby=cb, photo_scope=0)
-                photos = (photos_guest | photos_all).values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
+                photos = (photos_guest | photos_all).distinct().values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
             else:
                 photos = Photo.objects.filter(baby=cb, photo_scope=0).values('id', 'last_modified', 'image_url').order_by('-last_modified').annotate(last_modified_date=TruncDate('last_modified'))
         else:
@@ -56,14 +56,9 @@ class PhotoListView(APIView):
         cb = request.user.current_baby.id
         if not cb:
             raise ValueError('아이를 생성하거나 선택해주세요.')
-        new_photos = request.data["photoData"]
-        photo_scope = request.data["photoScope"]
-        if not photo_scope in [0, 1]:
-            groups = photo_scope
-            photo_scope = 2
+        new_photos = request.data
         for photo in new_photos:
             photo["baby"] = cb
-            photo["photo_scope"] = photo_scope
             serializer = PhotoDetailSerializer(data=photo)
             if serializer.is_valid(raise_exception=True):
                 created_photo = serializer.save(creator=request.user, modifier=request.user)
@@ -76,10 +71,9 @@ class PhotoListView(APIView):
                         tag.save()
                     PhotoTag(tag=tag, photo=created_photo).save()
                 # groups
-                if photo_scope == 2:
-                    for group_id in groups:
+                if photo['photo_scope'] == 2:
+                    for group_id in photo['groups']:
                         PhotoGroup(group=get_object_or_404(Group, pk=group_id), photo=created_photo).save()
-
         return Response({"message":"사진이 등록되었습니다."})
 
 class PhotoDetailView(APIView):
@@ -116,7 +110,7 @@ class PhotoDetailView(APIView):
             photo = get_object_or_404(Photo, id=photo_id)        
             # tags
             photo.photo_tags.clear()
-            for tag_name in data['photo_tags']:
+            for tag_name in data['tags']:
                 try:
                     tag = Tag.objects.get(tag_name=tag_name)
                 except:
@@ -126,8 +120,8 @@ class PhotoDetailView(APIView):
             # scope
             photo.permitted_groups.clear()
             photo.photo_scope = data['photo_scope']
-            if not data['photo_scope'] in [0, 1]:
-                for group_id in data['permitted_groups']:
+            if data['photo_scope'] == 2:
+                for group_id in data['groups']:
                         PhotoGroup(group=get_object_or_404(Group, pk=group_id), photo=photo).save()
             photo.save()
             serializer = PhotoDetailSerializer(photo)
