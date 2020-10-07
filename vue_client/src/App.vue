@@ -5,7 +5,6 @@
         <Burger class="left-align d-flex align-items-center"></Burger>
         <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer" >
           <span>
-            <!-- <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png"> -->
             <img src="@/assets/babble_logo.png" />
           </span>
           <span class="logo-title color-pink">Babble</span>
@@ -26,8 +25,7 @@
             <!-- 현재 babble box info -->
             <div class="upper bg-pink d-flex justify-content-between">
               <div class="d-flex">
-                <div class="profile float-left mr-3">
-                  <!-- <img src="@/assets/babble_logo.png" /> -->
+                <div class="profile float-left mr-3" v-if="currentBaby">
                   <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
                   <img v-else src="@/assets/babble_logo.png" />
                 </div>
@@ -68,10 +66,12 @@
           </div>
           <div class="sidebar-bottom">
             <hr />
-            <div class="d-flex row">
+            <div class="d-flex row no-gutters" v-if="accessLog">
               <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
-                <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-                <img v-else src="@/assets/babble_logo.png" />
+                <div class="d-flex justify-content-center">
+                  <img class="w-100" v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                  <img class="" v-else src="@/assets/babble_logo.png" />
+                </div>
                 <p class="text-center">{{ baby.baby_name }}</p>
               </div>
             </div>
@@ -303,6 +303,8 @@ export default {
     clickOtherBaby(babyId) {
       var babblebox = new Object()
       babblebox.baby = babyId
+      let backdrop = document.querySelector(".sidebar-backdrop");
+      backdrop.click();
       this.accessBabbleBox(babblebox)
     }
   },
@@ -310,7 +312,7 @@ export default {
     if (this.authToken) {
       this.findMyAccount();
     }
-    this.fetchAccessLog()
+    // this.fetchAccessLog()
   },
 };
 </script>

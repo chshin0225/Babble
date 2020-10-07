@@ -1,44 +1,27 @@
 <template>
   <div>
-    <div class="text-center mt-5">
-      <h5 class="main-title text-center color-pink">Profile</h5>
-      <div style="width:100%; text-align:center; padding: 0 10vw;">
-      <!--<div class="profile-image-outline">
-        <img v-if="myaccount.profile_image" class="profile-image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />-->
+    <div class="text-center mt-5" v-if="myaccount">
+      <h3 class="main-title text-center color-pink mb-3">Profile</h3>
+      <div style="width:100%; text-align:center; padding: 0 10vw;" >
         <img v-if="myaccount.profile_image" style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;"  :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + myaccount.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
         <img v-else style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;" src="@/assets/babble_logo.png" />        
       </div>
 
       <div class="profile-info mt-10">
-        <h4 class="d-flex align-items-center">
-          <span class="badge badge-pill bg-pink mr-3" >Name</span>          
-          <v-text-field class ="text-info" 
-            label=name    
-            v-model="myaccount.name"       
-            solo
-            readonly
-            hide-details                     
-          ></v-text-field>        
-          
-        </h4>
-        <h4 class="d-flex align-items-center">
-          <span class="badge badge-pill bg-pink mr-2" >e-mail</span>
-          <template>
-          <v-text-field class ="text-info"
-            label="email"
-            v-model="myaccount.email"
-            solo
-            readonly
-            hide-details                     
-          ></v-text-field>        
-          </template>
-        </h4>
+        <div class="d-flex align-items-center mb-3">
+          <span class="badge badge-pill badge-pink mr-2" >Name</span>          
+          <h5>{{ myaccount.name }}</h5>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="badge badge-pill badge-pink mr-2" >Email</span>
+          <h5>{{ myaccount.email }}</h5>
+        </div>
       </div>
 
       <br><br>
       <router-link :to="{ name: 'ProfileInfoEdit' }" class="view pointer">
-        <button class="btn new-button" >
-          프로필 수정
+        <button class="btn new-button">
+          프로필 수정하러 가기
         </button>
       </router-link>
     </div>
@@ -69,7 +52,7 @@ export default {
 
 <style scoped>
 .main-title {
-  font-size: 1.3rem;
+  /* font-size: 1.3rem; */
   font-weight: 900;
   margin-top: 10%;
 }
@@ -81,13 +64,8 @@ export default {
   width: 70vw;
   overflow: hidden;
 }
-/*.profile-image {
-  margin-top: -1px;
-  margin-left: -1px;
-  width: 70vw;
-  border-radius: 50%;
-}*/
-profile-image{
+
+.profile-image{
   width:70vw; height:70vw; border-radius:50%; border: 5px solid #fea59c;
 }
 
@@ -97,9 +75,21 @@ profile-image{
   left: 3%;
 }
 
-.new-button {
-  background-color: #fea59c;
-  color: #f8f8f8;
-  /* width: 100%; */
+.badge-pink {
+  border: 1px solid #FEA59C;
+  color: #FEA59C;
+  font-size: 1.2rem;
 }
+
+h5 {
+  font-weight: 600;
+  margin: 0;
+}
+
+.new-button {
+  background-color: #FEA59C;
+  color: #f8f8f8;
+}
+
+
 </style>

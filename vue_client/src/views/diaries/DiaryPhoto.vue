@@ -1,7 +1,7 @@
 
 <template>
 <div>
-  <div>
+  <div v-if="currentBaby">
     <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 {{date | moment('M')}}월</h5>
     <!-- Date Picker -->
     <v-row class="d-flex justify-content-center no-gutters">

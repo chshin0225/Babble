@@ -7,60 +7,62 @@
         color="white"
       >mdi-arrow-left</v-icon>
       <v-spacer></v-spacer>
-      <div class="d-flex align-items-center" v-if="relationship.rank in [1, 2]">
-        <v-bottom-sheet v-model="photo_sheet">
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              class="top-right-icons"
-              color="white"
-              v-bind="attrs"
-              v-on="on" 
-              >mdi-dots-vertical</v-icon>
-          </template>
-          <v-list>
-            <v-list-item @click="photoUpdate()">
-              <v-list-item-avatar>
-                <v-avatar size="32px" tile>
-                <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
-                </v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-title>사진 수정하기</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="photoDelete()">
-              <v-list-item-avatar>
-                <v-avatar size="32px" tile>
-                <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
-                </v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-title>사진 삭제하기</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-bottom-sheet>
+      <div v-if="relationship">
+        <div class="d-flex align-items-center" v-if="relationship.rank in [1, 2]">
+          <v-bottom-sheet v-model="photo_sheet">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                class="top-right-icons"
+                color="white"
+                v-bind="attrs"
+                v-on="on" 
+                >mdi-dots-vertical</v-icon>
+            </template>
+            <v-list>
+              <v-list-item @click="photoUpdate()">
+                <v-list-item-avatar>
+                  <v-avatar size="32px" tile>
+                  <v-icon color="#FEA59C">mdi-square-edit-outline</v-icon>
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>사진 수정하기</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="photoDelete()">
+                <v-list-item-avatar>
+                  <v-avatar size="32px" tile>
+                  <v-icon color="#FEA59C">mdi-trash-can-outline</v-icon>
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>사진 삭제하기</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-bottom-sheet>
+        </div>
       </div>
+
     </nav>
 
     <!-- photo -->
-    <div class="photo-box p-3" v-if="photo">
-      <div class="photo-content">
+    <div class="content-box p-3" v-if="photo">
+      <div class="photo-content d-flex flex-column justify-content-center">
         <div class="photo-container">
           <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
           <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
         </div>
+      </div>
+      <div class="mt-auto">
         <div class="mt-3 tag-container">
           <v-chip v-for="tag in photo.photo_tags" :key="tag.id" class="ma-2" outlined color="#FEA59C" style="font-size:16px; margin-right:10px; color: #FEA59C;">#{{ tag.tag_name }}</v-chip>
-          <!-- <v-chip class="ma-2" outlined color="#FEA59C" style="font-size:16px; color: #FEA59C;"> #할머니 집 </v-chip> -->
-          
         </div>
-
         <div class="mt-2 photo-date text-muted">
           <p>{{photo.last_modified | convertDate}}</p>
         </div>
-
       </div>
     </div>
-      <div class="mt-4 comment-content">
-        <div class="scallop-down"></div>
 
+    <!-- 댓글 부분 시작 -->
+    <div class="mt-4 comment-content">
+      <div class="scallop-down"></div>
         <!-- 댓글 -->
       <div class="comment p-2">
         <p class="comment-title mb-3">댓글 </p>
@@ -391,26 +393,33 @@ nav {
   font-size:28px;
 }
 
-// .photo-box {
-//   padding: 2px;
-// }
-
-.photo-container{
+.content-box {
+  min-height: 56vh;
+  .photo-content{
     text-align:center;
-}
-.photo-content .photo-container img{
-    width: 100%;  
+    min-height: 40vh;
+
+    .photo-container {
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .tag-container{
+    margin-top:10px;
+  }
+
+  .photo-date p{
+    font-size:1.2rem;
+  }
+
+  .photo-date p, .photo-location p{
+    margin:0;
+  }
 }
 
-.tag-container{
-   margin-top:10px;
-}
-.photo-date p{
-  font-size:1.2rem;
-}
-.photo-date p, .photo-location p{
-  margin:0;
-}
+
 .comment-content .nickname{
   font-weight:bold;
 }
