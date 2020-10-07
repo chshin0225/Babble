@@ -194,6 +194,9 @@ class PhotoDetailView(APIView):
 
     # 특정 사진 삭제
     def delete(self, request, photo_id):
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
         relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
         if relationship.rank_id == 3:
             return Response({"message": "삭제할 권한이 없습니다."}, status=400)
