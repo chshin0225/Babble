@@ -98,7 +98,7 @@
             <v-radio-group v-model="radios" :mandatory="false">
               <v-radio label="전체 공개" value="all" color="#FEA59C"></v-radio>
               <v-radio label="양육자 한정" value="maintainer" color="#FEA59C"></v-radio>
-              <v-radio label="세부 설정" value="guests" color="#FEA59C"></v-radio>
+              <v-radio v-if="groups.length" label="세부 설정" value="guests" color="#FEA59C"></v-radio>
             </v-radio-group>
             <!-- 토글 부분 -->
             <v-btn-toggle

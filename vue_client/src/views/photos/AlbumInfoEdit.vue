@@ -8,7 +8,7 @@
           mdi-arrow-left
         </v-icon>
       </v-btn>
-      <v-btn text color="primary" @click="editAlbum({'album_name': album.album_name, 'id': album.id})">
+      <v-btn text color="primary" @click="clickEdit()">
         <span class="font-weight-bold text-subtitle-1">수정 완료</span>
       </v-btn>
     </div>
@@ -17,16 +17,16 @@
     <div class="container">
       <v-text-field
         label="앨범 제목"
-        v-model="album.album_name"
+        v-model="albumInfoData.album_name"
       ></v-text-field>
       <!-- <p>{{ album}}</p> -->
     </div>
 
     <!-- 태그 추가 -->
-    <!-- <div>
+    <div>
       <div class="mx-2">
         <v-combobox
-          v-model="album.photo_tags"
+          v-model="albumInfoData.tags"
           :items="tags"
           :search-input.sync="searchTag"
           hide-selected
@@ -47,7 +47,7 @@
             <v-chip
               v-bind="data.attrs"
               close
-              @click:close="remove(albumData.tags, data.item)"
+              @click:close="remove(albumInfoData.tags, data.item)"
             >
               {{ data.item }}
             </v-chip>
@@ -63,7 +63,7 @@
           </template>
         </v-combobox>
       </div>
-    </div> -->
+    </div>
 
     <div class="footer"></div>
   </div>
@@ -84,6 +84,11 @@ export default {
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,
+      albumInfoData : {
+        id: null,
+        album_name: null,
+        tags: null
+      }
     }
   },
 
@@ -95,13 +100,28 @@ export default {
 
   methods: {
     ...mapActions('photoStore', ['getAlbum', 'fetchTags', 'editAlbum']),
+    remove (data, item) {
+      const index = data.indexOf(item)
+      if (index >= 0) data.splice(index, 1)
+    },
     clickBack() {
       this.$router.go(-1)
     },
-
-
+    clickEdit() {
+      this.editAlbum(this.albumInfoData)
+    }
   },
-
+  watch: {
+    album() {
+      this.albumInfoData.id = this.album.id
+      this.albumInfoData.album_name = this.album.album_name
+      const tempTags = []
+      this.album.album_tags.forEach(tag => {
+        tempTags.push(tag.tag_name)
+      });
+      this.albumInfoData.tags = tempTags
+    },
+  },
   created() {
     this.getAlbum(this.$route.params.albumId)
     this.fetchTags()
