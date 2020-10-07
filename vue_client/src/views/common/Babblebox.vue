@@ -92,8 +92,8 @@ p {
 }
 
 .profile img {
-  max-width: 50px;
-  height: auto;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 }
 
