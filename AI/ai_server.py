@@ -51,7 +51,7 @@ def tags():
     img = Image.open(BytesIO(res.content))
     
     # url to img
-    img_emtion = GE.url_to_image(url) 
+    img_emotion = GE.url_to_image(url) 
 
     tags=[] # 추출된 tag가 담길 list
 
@@ -62,12 +62,12 @@ def tags():
     print(time.time() - start)
     start = time.time()
     with graph.as_default():
-        tag_temp = GE.get_tag_emotion(img_emtion)
+        tag_temp = GE.get_tag_emotion(img_emotion)
         if tag_temp == []:
-            tag_temp = GE.get_tag_emotion(img_emtion, 500, 500)
+            tag_temp = GE.get_tag_emotion(img_emotion, 500, 500)
             if tag_temp == []:
-                tag_temp = GE.get_tag_emotion(img_emtion, 700, 700)
-                
+                tag_temp = GE.get_tag_emotion(img_emotion, 700, 700)
+
         tags += tag_temp  # add tags
     print(time.time() - start)
     data = {
