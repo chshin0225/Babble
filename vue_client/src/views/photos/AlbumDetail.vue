@@ -2,14 +2,14 @@
   <div v-if="albumDataFetched">
 
     <!-- top button bar -->
-    <div class="d-flex justify-content-between bg-pink nav" v-if="[1, 2].includes(relationship.rank)">
+    <div class="d-flex justify-content-between align-items-center bg-pink nav" >
       <v-btn icon color="white" @click="goToLibrary">
         <v-icon>
           mdi-arrow-left
         </v-icon>
       </v-btn>
       <!-- 더보기 메뉴 -->
-      <v-bottom-sheet v-model="sheet">
+      <v-bottom-sheet v-model="sheet" v-if="[1, 2].includes(relationship.rank)">
         <template v-slot:activator="{ on, attrs }">
           <v-icon
             class="top-right-icons"
@@ -58,7 +58,7 @@
     <hr>
 
     <!-- photo grid -->
-    <div class="grid">
+    <div class="grid" v-if="albumPhotos">
       <div class="photos row no-gutters" v-if="albumPhotos.length">
         <div v-for="photo in albumPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             
