@@ -29,6 +29,9 @@ const diaryStore = {
         SET_COMMENTS(state, comments) {
             state.comments = comments
         },
+        SET_MEASUREMENTS(state, measurements) {
+            state.measurements = measurements
+        }
     },
     actions: {
         createDiary({ rootGetters }, diaryData) {
