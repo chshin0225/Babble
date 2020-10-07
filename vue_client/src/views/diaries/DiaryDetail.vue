@@ -61,12 +61,12 @@
           <h5>{{diary.diary.title}}</h5>
         </div>
         <div class="diary-content ">
-          <p class="text" v-html="this.diaryContent">
+          <p class="text m-0" v-html="this.diaryContent">
           </p>
         </div>
       </div>
       <div>
-        <div class="measurement" v-if="diary.measurement">
+        <div class="measurement mt-3" v-if="diary.measurement">
           <div class="scallop-down"></div>
           <div class="mt-3 growth-title row no-gutters">
             <div class="col-3 text-center">
@@ -440,6 +440,9 @@ nav {
   }
 }
 .diary-content {
+  height: 40vh;
+  background-color: #FAFAFA;
+  border-radius: 20px;
   p {
   white-space: pre-wrap;
   word-wrap: break-word;
