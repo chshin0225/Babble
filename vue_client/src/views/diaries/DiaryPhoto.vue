@@ -2,9 +2,9 @@
 <template>
 <div>
   <div v-if="currentBaby">
-    <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 {{date | moment('M')}}월</h5>
+    <h5 class="main-title text-center color-pink mt-3">{{currentBaby.baby_name}}의 포토카드</h5>
     <!-- Date Picker -->
-    <v-row class="d-flex justify-content-center no-gutters">
+    <!-- <v-row class="d-flex justify-content-center no-gutters">
       <v-col cols="3" sm="3" class="erase-padding">
         <v-dialog
           ref="dialog"
@@ -28,10 +28,10 @@
           </v-date-picker>
         </v-dialog>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <!-- Swiper -->
-    <div v-if="photoDiaries">
+    <div v-if="photoDiaries" class="mt-5">
       <swiper class="swiper" :options="swiperOption" v-if="photoDiaries.length">
         <swiper-slide v-for="diary in photoDiaries" :key="diary.id">
           <div class="card" v-if="diary.cover_photo" @click="clickCard(diary.id)" :style="`background-image:url(${diary.cover_photo})`">
