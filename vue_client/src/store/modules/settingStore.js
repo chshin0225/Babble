@@ -44,6 +44,21 @@ const settingStore = {
       axios.put(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+           })
+           Toast.fire({
+            icon: 'success',
+            title: "그룹에 추가되었습니다."
+          })
       })
       .catch(err => {
           console.log(err)
@@ -101,12 +116,20 @@ const settingStore = {
       })
     },
     deleteBabbleUser({ rootGetters }, userData){
-      axios.delete(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', rootGetters.config)
+      axios.put(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', rootGetters.config)
       .then(res => {
-          console.log(res)
+        console.log(res)
+        Swal.fire({
+          icon: 'success',
+          text: '그룹에서 삭제되었습니다.'
+        })
       })
       .catch(err => {
-          console.log(err)
+        console.log(err)
+        Swal.fire({
+          icon: 'error',
+          text: '오류가 발생했습니다.'
+        })
       })
 
     },
