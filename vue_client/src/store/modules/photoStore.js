@@ -7,11 +7,13 @@ import firebase from 'firebase'
 const photoStore = {
   namespaced: true,
   state: {
-    tags: null,
+    tags: [],
+    emotionTagPhotos: [],
+    babbleboxTags: [],
     photos: null,
     photo: null,
     comments: null,
-    searchedPhotos: null,
+    searchedPhotos: [],
     albums: null,
     album: null,
     albumPhotos: null,
@@ -23,6 +25,12 @@ const photoStore = {
   mutations: {
     SET_TAGS(state, tags) {
       state.tags = tags
+    },
+    SET_EMOTION_PHOTOS(state, emotionTagPhotos) {
+      state.emotionTagPhotos = emotionTagPhotos
+    },
+    SET_BABBLEBOX_TAGS(state, babbleboxTags) {
+      state.babbleboxTags = babbleboxTags
     },
     SET_PHOTOS(state, photos) {
       state.photos = photos
@@ -52,11 +60,20 @@ const photoStore = {
   actions: {
     fetchTags({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.tags)
-        .then(res => {
-          commit('SET_TAGS', res.data)
-        })
+        .then(res => commit('SET_TAGS', res.data))
         .catch(err => console.log(err.response.data))
     },
+    fetchEmotionTagPhotos({ rootGetters, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.emotionTags, rootGetters.config)
+        .then(res => commit('SET_EMOTION_PHOTOS', res.data))
+        .catch(err => console.error(err))
+    },
+    fetchBabbleboxTags({ rootGetters, commit }) {
+      axios.get(SERVER.URL + SERVER.ROUTES.babbleboxTags, rootGetters.config)
+        .then(res => commit('SET_BABBLEBOX_TAGS', res.data))
+        .catch(err => console.error(err))
+    },
+
 
     // photo CRUD
     fetchPhotos({ rootGetters, commit }) {
@@ -235,6 +252,7 @@ const photoStore = {
         }
         axios.post(SERVER.URL + SERVER.ROUTES.searchPhoto, info, rootGetters.config)
         .then(res => {
+          // console.log(res.data)
           commit('SET_SEARCHED_PHOTOS', res.data)
         })
         .catch(err => {
@@ -265,9 +283,7 @@ const photoStore = {
     },
     fetchAlbumPhotos({ commit, rootGetters }, album_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/`, rootGetters.config)
-        .then(res => {
-          commit('SET_ALBUM_PHOTOS', res.data)
-        })
+        .then(res => commit('SET_ALBUM_PHOTOS', res.data))
         .catch(err => console.error(err))
     },
     deleteAlbum({ rootGetters }, album_id) {
@@ -281,7 +297,6 @@ const photoStore = {
         .catch(err => console.error(err))
     },
     editAlbum({ rootGetters }, albumData) {
-      console.log(albumData)
       axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.id}/`, albumData, rootGetters.config)
         .then(() => router.push({ name: 'AlbumDetail', params: {albumId: albumData.id}}))
         .catch(err => console.error(err))

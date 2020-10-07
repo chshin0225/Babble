@@ -197,8 +197,7 @@ export default {
     clickEnroll() {
       if ( this.isSubmit ){
         this.enrollData.baby.birth_height = Number(this.enrollData.baby.birth_height)
-        this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)
-        console.log("HELLO")
+        this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)        
         this.enrollBaby(this.enrollData)
       }
     },

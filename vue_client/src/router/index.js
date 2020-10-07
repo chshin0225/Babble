@@ -9,6 +9,7 @@ import PhotoCreate from "@/views/photos/PhotoCreate";
 import PhotoDetail from "@/views/photos/PhotoDetail";
 import PhotoUpdate from "@/views/photos/PhotoUpdate";
 import PhotoSearch from "@/views/photos/PhotoSearch";
+import PhotoSearchResult from "@/views/photos/PhotoSearchResult";
 import AlbumLibrary from "@/views/photos/AlbumLibrary";
 import AlbumCreate from "@/views/photos/AlbumCreate";
 import AlbumDetail from "@/views/photos/AlbumDetail";
@@ -82,6 +83,11 @@ const routes = [
         name: "PhotoSearch",
       },
     ],
+  },
+  {
+    path: "/photo/search/:keyword",
+    component: PhotoSearchResult,
+    name: "PhotoSearchResult"
   },
   {
     path: "/photo/create",

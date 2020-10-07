@@ -15,6 +15,7 @@ import sys
 import pyrebase
 from mtcnn import MTCNN
 import time
+import os
 
 app = Flask(__name__)
 app.yolo = YOLO()
@@ -44,6 +45,12 @@ def tags():
     # firebase image path
     path = json.loads(request.get_data(), encoding='utf-8')
     path = path['path']
+    fname, fex = os.path.splitext(path)
+    if fex == ".gif" or fex==".GIF":
+        data = {
+            'tags': []
+        } 
+        return data
 
     # load image
     url = storage.child(path).get_url(None)    
@@ -51,7 +58,7 @@ def tags():
     img = Image.open(BytesIO(res.content))
     
     # url to img
-    img_emtion = GE.url_to_image(url) 
+    img_emotion = GE.url_to_image(url) 
 
     tags=[] # 추출된 tag가 담길 list
 
@@ -62,7 +69,13 @@ def tags():
     print(time.time() - start)
     start = time.time()
     with graph.as_default():
-        tags += GE.get_tag_emotion(img_emtion)  # add tags
+        tag_temp = GE.get_tag_emotion(img_emotion)
+        if tag_temp == []:
+            tag_temp = GE.get_tag_emotion(img_emotion, 500, 500)
+            if tag_temp == []:
+                tag_temp = GE.get_tag_emotion(img_emotion, 700, 700)
+
+        tags += tag_temp  # add tags
     print(time.time() - start)
     data = {
         'tags': tags

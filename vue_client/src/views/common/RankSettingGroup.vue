@@ -164,7 +164,7 @@
               <v-list-item-subtitle>{{member.relationship_name}}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-icon>
-                <v-icon color="red" @click="deleteUser(group.id, member.id)">mdi-trash-can-outline</v-icon>
+                <v-icon color="red" @click="deleteUser(group.id, member.user)">mdi-trash-can-outline</v-icon>
             </v-list-item-icon>
           </v-list-item>
         </div>
@@ -181,7 +181,7 @@
 
 <script>
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
 
 const swal = Swal.mixin({
@@ -202,12 +202,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('settingStore', ['groups', 'users'])
+    ...mapState('settingStore', ['groups', 'users']),
+    ...mapGetters(['config'])
   },
-  mounted() {
-    this.fetchGroups();
-    
-  },
+  
   methods:{
     ...mapActions('settingStore', ['fetchGroups', 'createGroup', 'deleteGroupUser', 'modifyGroup', 'deleteBabbleGroup']),
     addNewGroup(){
@@ -248,7 +246,6 @@ export default {
       });
     },
     deleteUser(groupId, userId){
-      
       swal.fire({
         text: "그룹에서 삭제하시겠습니까?",
         showCancelButton: true,
@@ -261,10 +258,6 @@ export default {
           let userData = {groupId : groupId , user : userId}
           this.deleteGroupUser(userData)
           .then(() => {
-            Swal.fire({
-              icon: 'success',
-              text: '그룹에서 삭제되었습니다.'
-            })
             this.modify_dialog = false;
             this.dialog = false;
             this.fetchGroups();
@@ -284,7 +277,12 @@ export default {
           this.dialog = false;
           this.fetchGroups();
         });
-    }
+    },
+
+  },
+
+  mounted() {
+    this.fetchGroups();
   },
 }
 </script>
