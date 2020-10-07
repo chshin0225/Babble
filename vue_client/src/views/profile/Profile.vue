@@ -82,7 +82,7 @@ export default {
 }
 
 h5 {
-  font-weight: 600;
+  font-weight: 400;
   margin: 0;
 }
 
