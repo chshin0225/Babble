@@ -77,7 +77,6 @@ const diaryStore = {
                 })
         },
         updateDiary({ rootGetters }, diaryData) {
-            console.log(diaryData.diaryUpdateData)
             axios.put(SERVER.URL + SERVER.ROUTES.diaries + diaryData.diaryId + '/', diaryData.diaryUpdateData, rootGetters.config)
                 .then(() => {
                     router.push({ name: 'DiaryDetail', params: { diaryId: diaryData.diaryId } })

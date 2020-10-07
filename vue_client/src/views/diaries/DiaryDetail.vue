@@ -8,7 +8,7 @@
       >mdi-arrow-left</v-icon>
       <!-- <div class="d-flex align-items-center ml-3">다른 다이어리 보러가기</div> -->
       <v-spacer></v-spacer>
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center" v-if="[1, 2].includes(relationship.rank)">
         <v-bottom-sheet v-model="sheet">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -253,7 +253,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['myaccount', 'currentBaby']),
+    ...mapState(['myaccount', 'currentBaby', 'relationship']),
     ...mapState('diaryStore', ['diary', 'comments']),
     countDays() {
       if (this.currentBaby) {

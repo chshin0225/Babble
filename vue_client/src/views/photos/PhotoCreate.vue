@@ -92,7 +92,7 @@ export default {
     return {
       is_OK: true,
       sheet: false,
-      radios: '',
+      radios: 'all',
       toggle_exclusive: [],
       height: '45vh',
       no_image: true,
@@ -108,7 +108,7 @@ export default {
       } else if (this.radios === 'maintainer') {
         return 1
       } else {
-        return this.toggle_exclusive
+        return 2
       }
     }
   },
@@ -127,7 +127,8 @@ export default {
       this.sheet = !this.sheet
       this.createPhotos({
         "photos": this.photos,
-        "photoScope": this.photoScope
+        "photo_scope": this.photoScope,
+        "groups": this.toggle_exclusive
       })
       this.loading = true
     },
