@@ -34,7 +34,7 @@
     <div>
       <div class="mx-2" v-if="toggle == 0">
         <div class="pt-2">
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between" v-if="albumData.photos">
             <p class="mb-2"><span v-text="albumData.photos.length"></span> 장 선택</p>
             <v-btn @click="clear" outlined small color="secondary"><v-icon color="secondary" small class="mr-1">mdi-close</v-icon> 선택 해제</v-btn>
           </div>
@@ -228,7 +228,7 @@ export default {
   }
 
   .crying-baby {
-    height: 50vh;
+    height: 30vh;
     width: auto;
   }
 </style>

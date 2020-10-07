@@ -25,10 +25,25 @@ const settingStore = {
     fetchUsers({ rootGetters, commit }) { //현재 babble box 내 존재하는 유저 목록 조회
       axios.get(SERVER.URL + SERVER.ROUTES.babies + 'relationships/', rootGetters.config)
         .then(res => {
+          var master = []
+          var maintainers = []
+          var guests = []
           for(var i=0; i<res.data.length; i++){
-            res.data[i].isCheck = false;
+            if (res.data[i].rank === 1) {
+              master.push(res.data[i])
+            } else if (res.data[i].rank === 2) {
+              maintainers.push(res.data[i])
+            } else {
+              res.data[i].isCheck = false;
+              guests.push(res.data[i])
+            }
           }
-          commit('SET_USERS', res.data)
+          var total  = {
+            "master" : master,
+            "maintainers" : maintainers,
+            "guests": guests
+          } 
+          commit('SET_USERS', total)
         })
         .catch(err => console.log(err.response.data))
     },
@@ -77,10 +92,11 @@ const settingStore = {
         .then(res => console.log(res))
         .catch(err => console.log(err.response))
     },
-    modifyUserRank({ rootGetters }, userData) {
+    modifyUserRank({ rootGetters, dispatch }, userData) {
       axios.put(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', userData, rootGetters.config)
       .then(res => {
           console.log(res)
+          dispatch("fetchUsers")
           const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',

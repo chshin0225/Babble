@@ -14,23 +14,9 @@
       </div>
     </div>
 
-    <!-- search results -->
-    <!-- <div v-if="searched">
-      <div class="search-results row no-gutters mt-5" v-if="searchedPhotos.length">
-        <div v-for="photo in searchedPhotos" :key="`club_${photo.id}`" class="pointer photo-container" @click="clickPhoto(photo.id)">
-          <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" class="photo" :alt="photo.id">
-        </div>
-      </div>
-      <div v-else class="d-flex flex-column justify-content-center align-items-center">
-        <h5 class="my-5">검색 결과가 없습니다.</h5>
-        <img class="crying-baby" src="@/assets/baby.png">
-      </div>
-    </div> -->
-
     <!-- suggestions -->
     <div>
-      <!-- <div>{{ tags }}</div> -->
-      <!-- emotions -->
+
       <div>
         <h5 class="tag-name">감정</h5>
         <div class="d-flex emotion-photo-scroll">

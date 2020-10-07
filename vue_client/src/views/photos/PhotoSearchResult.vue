@@ -16,7 +16,7 @@
     <hr>
 
     <!-- photo grid -->
-    <div class="mx-2">
+    <div class="mx-2" v-if="searchedPhotos">
       <div class="photos row" v-if="searchedPhotos.length">
         <div v-for="photo in searchedPhotos" :key="photo.id" class="photo-container pa-1 col-4">
           <div class="photo">             

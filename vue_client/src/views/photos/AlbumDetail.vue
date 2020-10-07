@@ -174,7 +174,8 @@ export default {
   }
 
   .crying-baby {
-    height: 50vh;
+    margin-top: 15vh;
+    height: 30vh;
     width: auto;
   }
 </style>

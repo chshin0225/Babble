@@ -106,7 +106,7 @@ export default {
       this.$router.push({ name: 'DiaryDetail', params: {diaryId: diaryId} })
     }
   },
-  mounted() {
+  created() {
     this.fetchDiaries()
     this.fetchMeasurements()
   }
