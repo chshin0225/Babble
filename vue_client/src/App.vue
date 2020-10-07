@@ -216,7 +216,14 @@ export default {
         this.$route.name === "PhotoSearch" ||
         this.$route.name === "PhotoCreate" ||
         this.$route.name === "AlbumCreate" ||
-        this.$route.name === "AlbumDetail"
+        this.$route.name === "AlbumDetail" ||
+        this.$route.name === "AlbumInfoEdit" ||
+        this.$route.name === "AlbumLibrary" ||
+        this.$route.name === "AlbumEdit" ||
+        this.$route.name === "PhotoDetail" ||
+        this.$route.name === "PhotoSearch" ||
+        this.$route.name === "PhotoSearchResult" ||
+        this.$route.name === "PhotoUpdate"
       ) {
         return true;
       } else {
@@ -225,11 +232,13 @@ export default {
     },
     isDiary() {
       if (
+        this.$route.name === "Diary" ||
         this.$route.name === "DiaryPhoto" ||
         this.$route.name === "DiaryTimeline" ||
         this.$route.name === "DiaryCalendar" ||
         this.$route.name === "DiaryCreate" ||
-        this.$route.name === "DiaryDetail"
+        this.$route.name === "DiaryDetail" ||
+        this.$route.name === "DiaryUpdate"
       ) {
         return true;
       } else {

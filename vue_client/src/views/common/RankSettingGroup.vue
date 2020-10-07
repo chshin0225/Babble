@@ -10,7 +10,7 @@
             <button
               v-bind="attrs"
               v-on="on" 
-              class="btn btn-outline-pink" 
+              class="btn btn-pink mr-3" 
               style="margin-left:6px !important;"
               @click="newGroupName=''"
               @click.stop="dialog = true">그룹 생성</button>

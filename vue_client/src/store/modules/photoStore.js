@@ -66,17 +66,14 @@ const photoStore = {
     fetchTags({ commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.tags)
         .then(res => commit('SET_TAGS', res.data))
-        .catch(err => console.log(err.response.data))
     },
     fetchEmotionTagPhotos({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.emotionTags, rootGetters.config)
         .then(res => commit('SET_EMOTION_PHOTOS', res.data))
-        .catch(err => console.error(err))
     },
     fetchBabbleboxTags({ rootGetters, commit }) {
       axios.get(SERVER.URL + SERVER.ROUTES.babbleboxTags, rootGetters.config)
         .then(res => commit('SET_BABBLEBOX_TAGS', res.data))
-        .catch(err => console.error(err))
     },
 
 
@@ -86,7 +83,6 @@ const photoStore = {
         .then(res => {
           commit('SET_PHOTOS', res.data)
         })
-        .catch(err => console.error(err))
     },
     findPhoto({ rootGetters, commit }, photoId) {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/',  rootGetters.config)
@@ -94,7 +90,6 @@ const photoStore = {
           commit('SET_PHOTO', res.data)
           //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
-        .catch(err => console.log(err.response.data))
     },
     createPhotos({ rootState, rootGetters, dispatch }, createInfo) {
       const photoData = []
@@ -128,7 +123,6 @@ const photoStore = {
                 photoData[0].tags = res.data.tags
                 router.push({ name: "TagSelect", params: { createData: photoData[0], photoType: 'create' }})
               })
-              .catch(err => console.log(err.response.data))
         })
       } else {
         createInfo.photos.forEach( photo => {
@@ -158,7 +152,6 @@ const photoStore = {
               .then(res => {
                 photoInfo.tags = res.data.tags
               })
-              .catch(err => console.log(err.response.data))
             tagPromises.push(tagExtract)
           });
 
@@ -168,7 +161,6 @@ const photoStore = {
                 dispatch('fetchPhotos')
                 router.push({name: 'PhotoList'})
               })
-              .catch(err => console.log(err.response.data))
           })
         })
       }
@@ -179,7 +171,6 @@ const photoStore = {
           dispatch('fetchPhotos')
           router.push({name: 'PhotoList'})
         })
-        .catch(err => console.log(err.response.data))
     },
     updatePhoto({ rootGetters, commit }, updateData) {
       axios.put(SERVER.URL + SERVER.ROUTES.photos + updateData.id + '/', updateData, rootGetters.config)
@@ -187,18 +178,11 @@ const photoStore = {
           commit('SET_PHOTO', res.data)
           router.replace({name: 'PhotoDetail', params: { photoId: updateData.id}})
         })
-        .catch(err => {
-          console.log(err)
-      })
     },
     deletePhoto({ rootGetters }, photoId) {
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + photoId + '/', rootGetters.config)
-      .then(res => {
-          console.log(res)
+      .then(() => {
           router.push({ name: 'PhotoList' })
-      })
-      .catch(err => {
-          console.log(err.response.data)
       })
     },
 
@@ -207,39 +191,24 @@ const photoStore = {
       axios.get(SERVER.URL + SERVER.ROUTES.photos + photoId + '/' + 'comments/',  rootGetters.config)
         .then(res => {
           commit('SET_PHOTO_COMMENTS', res.data)
-          //router.push({name: 'PhotoDetail', params: { photoId: photoId}})
         })
-        .catch(err => console.log(err.response.data))
     },
     createComment({ rootGetters, dispatch }, commentData) {
       axios.post(SERVER.URL + SERVER.ROUTES.photos + commentData.photo_id + '/comments/', commentData, rootGetters.config)
-      .then(res => {
-          console.log(res)
+      .then(() => {
           dispatch('fetchComments', commentData.photo_id)
-      })
-      .catch(err => {
-          console.log(err)
       })
     },
     updateComment({ rootGetters, dispatch }, commentData) {
       axios.put(SERVER.URL + SERVER.ROUTES.photos + commentData.photo_id + '/comments/' + commentData.comment_id + '/', commentData.comment, rootGetters.config)
-      .then(res => {
-          console.log(res)
+      .then(() => {
           dispatch('fetchComments', commentData.photo_id)
-      })
-      .catch(err => {
-          console.log(err.response)
       })
     },
     deleteComment({ rootGetters, dispatch }, commentData) {
-      console.log(commentData)
       axios.delete(SERVER.URL + SERVER.ROUTES.photos + commentData.photoId + '/comments/' + commentData.commentId + '/', rootGetters.config)
-        .then(res => {
-            console.log(res)
+        .then(() => {
             dispatch('fetchComments', commentData.photoId)
-        })
-        .catch(err => {
-            console.log(err)
         })
     },
 
@@ -253,11 +222,7 @@ const photoStore = {
         }
         axios.post(SERVER.URL + SERVER.ROUTES.searchPhoto, info, rootGetters.config)
         .then(res => {
-          // console.log(res.data)
           commit('SET_SEARCHED_PHOTOS', res.data)
-        })
-        .catch(err => {
-          console.log(err)
         })
       }
     },
@@ -266,7 +231,6 @@ const photoStore = {
     fetchAlbums({ commit, rootGetters }) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums, rootGetters.config) 
         .then(res => commit('SET_ALBUMS', res.data))
-        .catch(err => console.error(err))
     },
     createAlbum({ rootGetters }, albumData) {
       axios.post(SERVER.URL + SERVER.ROUTES.albums, albumData, rootGetters.config)
@@ -274,43 +238,35 @@ const photoStore = {
           let albumId = res.data.id
           router.push({ name: 'AlbumDetail', params: {albumId: albumId}})
         })
-        .catch(err => console.error(err))
     },
     getAlbum({ commit, rootGetters }, album_id) {
       commit('SET_ALBUM', null)
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
         .then(res => commit('SET_ALBUM', res.data))
-        .catch(err => console.error(err))
     },
     fetchAlbumPhotoIds({ commit, rootGetters }, album_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/simple/`, rootGetters.config)
         .then(res => commit('SET_ALBUM_PHOTO_ID_LIST', res.data))
-        .catch(err => console.error(err))
     },
     fetchAlbumPhotos({ commit, rootGetters }, album_id) {
       axios.get(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/photo/`, rootGetters.config)
         .then(res => commit('SET_ALBUM_PHOTOS', res.data))
-        .catch(err => console.error(err))
     },
     deleteAlbum({ rootGetters }, album_id) {
       axios.delete(SERVER.URL + SERVER.ROUTES.albums + `${album_id}/`, rootGetters.config)
         .then(() => router.push({ name: 'AlbumLibrary' }))
-        .catch(err => console.error(err))
     },
     addPhotoToAlbum({ rootGetters }, albumData) {
       axios.post(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
         .then(() => router.push({ name: 'AlbumEdit', params: {albumId: albumData.albumId}}))
-        .catch(err => console.error(err))
     },
     deletePhotoFromAlbum({ rootGetters, dispatch }, albumData) {
       axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.albumId}/photo/`, albumData.body, rootGetters.config)
         .then(() => dispatch('fetchAlbumPhotos', albumData.albumId))
-        .catch(err => console.error(err))
     },
     editAlbum({ rootGetters }, albumData) {
       axios.put(SERVER.URL + SERVER.ROUTES.albums + `${albumData.id}/`, albumData, rootGetters.config)
         .then(() => router.push({ name: 'AlbumDetail', params: {albumId: albumData.id}}))
-        .catch(err => console.error(err))
     },
 
   }

@@ -45,17 +45,14 @@ const settingStore = {
           } 
           commit('SET_USERS', total)
         })
-        .catch(err => console.log(err.response.data))
     },
     fetchGroups({ rootGetters, commit }) { //현재 babble box 내 존재하는 그룹 및 그룹에 속한 유저 목록 조회
       axios.get(SERVER.URL + SERVER.ROUTES.groups, rootGetters.config)
         .then(res => commit('SET_GROUPS', res.data))
-        .catch(err => console.log(err.response.data))
     },
     addUser({ rootGetters }, userData) {
       axios.put(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
-        .then(res => {
-            console.log(res)
+        .then(() => {
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
@@ -72,30 +69,20 @@ const settingStore = {
               title: "그룹에 추가되었습니다."
             })
         })
-        .catch(err => console.log(err))
     },
     deleteGroupUser({ rootGetters, dispatch }, userData) {
-      // console.log('userData', userData)
       axios.post(SERVER.URL + SERVER.ROUTES.groups + userData.groupId + '/', userData, rootGetters.config)
         .then(() => dispatch('fetchGroups'))
-        .catch(err => console.log(err))
     },
-
-
     modifyGroup({ rootGetters }, groupData) {
       axios.put(SERVER.URL + SERVER.ROUTES.groups + groupData.groupId + '/info/', groupData, rootGetters.config)
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
     },
     createGroup({ rootGetters }, groupData) {
       axios.post(SERVER.URL + SERVER.ROUTES.groups, groupData, rootGetters.config)
-        .then(res => console.log(res))
-        .catch(err => console.log(err.response))
     },
     modifyUserRank({ rootGetters, dispatch }, userData) {
       axios.put(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', userData, rootGetters.config)
-      .then(res => {
-          console.log(res)
+      .then(() => {
           dispatch("fetchUsers")
           const Toast = Swal.mixin({
             toast: true,
@@ -113,21 +100,16 @@ const settingStore = {
             title: "유저 권한을 변경하였습니다."
           })
       })
-      .catch(err => {
-          console.log(err)
-      })
     },
     deleteBabbleUser({ rootGetters }, userData){
       axios.delete(SERVER.URL + SERVER.ROUTES.babies + 'relationships/' + userData.userId + '/', rootGetters.config)
-        .then(res => {
-          console.log(res)
+        .then(() => {
           Swal.fire({
             icon: 'success',
             text: '그룹에서 삭제되었습니다.'
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch(() => {
           Swal.fire({
             icon: 'error',
             text: '오류가 발생했습니다.'
@@ -137,9 +119,6 @@ const settingStore = {
     },
     deleteBabbleGroup({ rootGetters }, groupData){
       axios.delete(SERVER.URL + SERVER.ROUTES.groups + groupData.groupId + '/info/', rootGetters.config)
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-
     },
   }
 }
