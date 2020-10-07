@@ -177,7 +177,8 @@ export default {
           content: '',
           content_html: '',
           diary_scope: null,
-          permitted_groups: []
+          permitted_groups: [],
+          cover_photo: null
         },
         diaryId: this.$route.params.diaryId,
       },
@@ -261,9 +262,9 @@ export default {
           resetUploader();
           this.loading = false
 
-          if ( this.files === null ) {
+          if (!this.diaryData.diaryUpdateData.cover_photo && this.files === null ) {
             let url = "https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/" + imageInfo.image_url + "?alt=media&token=fc508930-5485-426e-8279-932db09009c0"
-            this.diaryData.cover_photo = url
+            this.diaryData.diaryUpdateData.cover_photo = url
             this.files = true
           }
         })
@@ -275,6 +276,7 @@ export default {
     this.diaryData.diaryUpdateData.title = this.diary.diary.title
     this.diaryData.diaryUpdateData.content = this.diary.diary.content
     this.diaryData.diaryUpdateData.content_html = this.diary.diary.content_html
+    this.diaryData.diaryUpdateData.cover_photo = this.diary.diary.cover_photo
     if (this.diary.diary.diary_scope === 0) {
       this.radios = 'all'
     } else if (this.diary.diary.diary_scope === 1) {
