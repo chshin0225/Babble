@@ -180,6 +180,8 @@ export default {
         if (!this.myaccount.current_baby) {
           if (!this.invitationToken) {
             this.$router.push({name: 'RegisterBaby'})
+          } else {
+            this.$router.push({name: 'InvitationConfirm', params: { token: this.invitationToken }})
           }
         } else {
           this.findBaby(this.myaccount.current_baby);
