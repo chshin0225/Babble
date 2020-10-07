@@ -344,7 +344,7 @@ class AlbumDetailView(APIView):
             # 태그 정보 수정하는 경우
             if request.data['tags']:
                 for photo in album.photos.all():
-                    if len(photo.photo_tags.all().intersection(album.album_tags.all())):
+                    if len(photo.photo_tags.all() & album.album_tags.all()):
                         get_object_or_404(AlbumPhotoRelationship, album=album, photo=photo).delete()
                 album.album_tags.clear()
                 for tag_name in request.data['tags']:
