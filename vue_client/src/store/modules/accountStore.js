@@ -207,15 +207,14 @@ const accountStore = {
               })
           })
         },
-        changeProfile({ rootGetters }, profileData) {
+        changeProfile({ rootGetters, commit }, profileData) {
           axios.put(SERVER.URL + '/accounts/profilechange/', profileData, rootGetters.config)
             .then(res => {
-              console.log(res)
+              commit('SET_MYACCOUNT', res.data, { root : true })
               Swal.fire({
                 icon: 'success',
                 text: '프로필 정보가 변경되었습니다.'
               })
-              router.go(0)
             })
             .catch(err => {
               console.log(err)
