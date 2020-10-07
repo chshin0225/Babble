@@ -98,6 +98,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import firebase from 'firebase'
+import Swal from 'sweetalert2'
 
 export default {
   name: "Profile",
@@ -183,12 +184,22 @@ export default {
       })
     },
     profileBtn(){
-      if(this.nickflag){
+      if(!(this.name)){
+        Swal.fire({
+                icon: 'error',
+                text: '닉네임을 입력해주세요.'
+              })
+      }else if(this.nickflag){
         var profileData = {
                             name : this.name,
                             profile_image : this.profile_image,
                             };
         this.changeProfile(profileData);
+      }else{
+        Swal.fire({
+                icon: 'error',
+                text: '변경된 내용이 없습니다.'
+              })
       }
 
     },
@@ -200,6 +211,11 @@ export default {
                             new_password2 : this.new_password2 
                             };
         this.changePassword(passwordData);
+      }else{
+        Swal.fire({
+                icon: 'error',
+                text: '비밀번호를 확인해주세요.'
+              })
       }
 
 
