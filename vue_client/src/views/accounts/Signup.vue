@@ -1,7 +1,7 @@
 <template>
   <div class="background1">
     <div class="container p-3 bg-light-ivory signup-form">
-      <!-- <h3 class="color-pink">회원가입</h3> -->
+      <h3 class="color-blue">회원가입</h3>
       <div class="input-with-label">
         <input 
           v-model="signupData.name"
@@ -67,9 +67,9 @@
       <div class="buttons mt-3">
         <button class="btn signup-button" :class="{disabled: !isSubmit}" @click="clickSignup">가입하기</button>
       </div>
-      <p class="my-3">
-        <span class="items" @click="toLogin">로그인하기</span>
-      </p>
+      <div class="buttons mt-3">
+        <button class="btn signup-button" @click="toLogin">로그인 하러 가기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -245,9 +245,10 @@ input[type="password"] {
   background-repeat: repeat;
 }
 .signup-form {
-  margin-top: 2.5vh !important;
+  margin-top:7.5vh !important;
   opacity: 0.9;
   text-align: center;
+  background: #fafafa;
 }
 .items:hover {
   cursor: pointer;

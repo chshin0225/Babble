@@ -39,8 +39,8 @@ import RankSettingGroup from "@/views/common/RankSettingGroup";
 import Login from "@/views/accounts/Login";
 import Signup from "@/views/accounts/Signup";
 import SignupKakao from "@/views/accounts/SignupKakao";
-import PasswordFind from "@/views/accounts/PasswordFind";
-import PasswordFindEmail from "@/views/accounts/PasswordFindEmail";
+// import PasswordFind from "@/views/accounts/PasswordFind";
+// import PasswordFindEmail from "@/views/accounts/PasswordFindEmail";
 import HowToRegisterBaby from "@/views/accounts/HowToRegisterBaby";
 import RegisterBaby from "@/views/accounts/RegisterBaby";
 import RegisterBabyRelate from "@/views/accounts/RegisterBabyRelate";
@@ -152,16 +152,16 @@ const routes = [
     name: "SignupKakao",
     component: SignupKakao,
   },
-  {
-    path: "/pwfind",
-    name: "PasswordFind",
-    component: PasswordFind,
-  },
-  {
-    path: "/pwfindemail",
-    name: "PasswordFindEmail",
-    component: PasswordFindEmail,
-  },
+  // {
+  //   path: "/pwfind",
+  //   name: "PasswordFind",
+  //   component: PasswordFind,
+  // },
+  // {
+  //   path: "/pwfindemail",
+  //   name: "PasswordFindEmail",
+  //   component: PasswordFindEmail,
+  // },
   {
     path: "/howtoregisterbaby",
     name: "HowToRegisterBaby",
@@ -320,15 +320,15 @@ router.beforeEach((to, from, next) => {
     "Login",
     "Signup",
     "SignupKakao",
-    "PasswordFind",
-    "PasswordFindEmail",
+    // "PasswordFind",
+    // "PasswordFindEmail",
   ]; // Login 안해도 됨
   const authPages = [
     "Login",
     "Signup",
     "SignupKakao",
-    "PasswordFind",
-    "PasswordFindEmail",
+    // "PasswordFind",
+    // "PasswordFindEmail",
   ]; // Login 되어있으면 안됨
   // const pubicPages = ['Login', 'Signup'] // Login 안해도 됨
   // const authPages = ['Login', 'Signup'] // Login 되어있으면 안됨

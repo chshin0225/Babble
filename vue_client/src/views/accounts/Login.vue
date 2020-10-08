@@ -1,6 +1,7 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory login-form">
+    <div class="container p-3 mt-5 bg-light-ivory login-form mb-5">
+      <h3 class="color-blue">로그인</h3>
       <div class="input-with-label">
         <input
           v-model="loginData.email"
@@ -31,13 +32,19 @@
         <label for="password"></label>
         <div class="error-text ml-3" v-if="error.password">{{error.password}}</div>
       </div>
-      <p class="my-3">
-        <span class="items" @click="clickSignup">회원가입하기</span>ㆍ
+      <!-- <p class="my-3">
+        <span class="items" @click="clickSignup">회원가입하기</span>
         <span class="items" @click="clickPasswordFind">비밀번호 찾기</span>
-      </p>
+      </p> -->
       <div class="buttons mt-3">
         <button class="btn login-button" :class="{disabled: !isSubmit}" @click="clickLogin">로그인하기</button>
       </div>
+      <div class="buttons mt-3">
+        <button class="btn btn-blue signup-button" @click="clickSignup">회원가입 하러 가기</button>
+      </div>
+      <!-- <div class="d-flex justify-content-end mt-3">
+        <p>회원가입</p>
+      </div> -->
 
       <hr class="divide" />
 
@@ -196,9 +203,10 @@ export default {
 
 <style scoped>
 .login-form {
-  margin-top: 2.5vh !important;
+  margin-top: 7.5vh !important;
   text-align: center;
   opacity: 0.9;
+  background: #fafafa;
   /* border: 1px solid #FEA59C; */
 }
 .container {
@@ -219,6 +227,10 @@ export default {
   background-color: #FEA59C;
   box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   color: #f8f8f8;
+  width: 100%;
+}
+.signup-button {
+  box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   width: 100%;
 }
 .divide {
@@ -244,9 +256,7 @@ export default {
   border-bottom: 2px solid #d6cbbd;
   outline-style: none;
 }
-input[type="password"] {
-  font-family: sans-serif;
-}
+
 .errorText,
 .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7);
@@ -263,7 +273,7 @@ input[type="password"] {
 }
 .disabled,
 .disabled:hover {
-  /*background-color: rgb(136, 154, 152, 0.25);*/
+  /* background-color: rgb(136, 154, 152, 0.25); */
   background-color: rgb(176, 127, 122, 0.25);
   color: #f8f8f8;
   cursor: inherit;
