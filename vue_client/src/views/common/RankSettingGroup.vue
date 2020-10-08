@@ -110,9 +110,8 @@
         </div>
       </v-list-group>
     </v-list>
-
-
     </div>
+    <div style="height:6vh;"></div>
   </div>
 </template>
 
