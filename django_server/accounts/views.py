@@ -1,5 +1,5 @@
 import datetime
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from itertools import groupby
 
 from django.shortcuts import render, get_object_or_404
@@ -98,7 +98,7 @@ class GroupListView(APIView):
         group_data = UserBabyRelationship.objects.filter(baby=baby, group__isnull=False).values('id', 'user', 'group', 'relationship_name')
 
         key = itemgetter('group')
-        rows = groupby(group_data, key=key)
+        rows = groupby(sorted(group_data, key=key), key=key)
 
         return_data = []
         for group, items in rows:
@@ -124,14 +124,6 @@ class GroupListView(APIView):
 
         return Response(return_data)
 
-    # 새로운 그룹 생성
-    def post(self, request):
-        baby = request.user.current_baby
-        serializer = GroupListSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(baby=baby)
-            return Response(serializer.data)
-        return Response(serializer.errors)
 
 class GroupDetailView(APIView):
     # 한 그룹 내의 유저 목록 조회
