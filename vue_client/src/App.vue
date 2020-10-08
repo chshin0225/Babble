@@ -1,116 +1,125 @@
 <template>
-  <v-app>
-    <div>
-      <div class="nav" v-if="routes.indexOf(this.$route.name) === -1">
-        <Burger class="left-align d-flex align-items-center"></Burger>
-        <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer" >
-          <span>
-            <img src="@/assets/babble_logo.png" />
-          </span>
-          <span class="logo-title color-pink">Babble</span>
+  <div>
+    <v-app id="app">
+      <div>
+        <div class="nav" v-if="routes.indexOf(this.$route.name) === -1">
+          <Burger class="left-align d-flex align-items-center"></Burger>
+          <div @click="clickLogo" class="logo-sect center-align d-flex align-items-center pointer" >
+            <span>
+              <img src="@/assets/babble_logo.png" />
+            </span>
+            <span class="logo-title color-pink">Babble</span>
+          </div>
         </div>
+        <nav class="nav2 mt-5 " v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
+          <div class="d-flex justify-content-center">
+            <span>
+              <img src="@/assets/babble_logo.png" />
+            </span>
+            <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
+          </div>
+        </nav>
+        
+        <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
+          <div class="side d-flex flex-column justify-content-between h-100">
+            <div class="sidebar-panel-nav">
+              <!-- 현재 babble box info -->
+              <div class="upper bg-pink d-flex justify-content-between">
+                <div class="d-flex">
+                  <div class="profile float-left mr-3" v-if="currentBaby">
+                    <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
+                    <img v-else src="@/assets/babble_logo.png" />
+                  </div>
+                  <div class="babble-box" v-if="currentBaby">
+                    <span>{{ currentBaby.baby_name }}</span><br />
+                    <span>D + {{ countDays }}</span>
+                  </div>
+                </div>
+                <div class="logout-btn" @click="clickLogout">
+                  <p class="text-muted pointer">로그아웃</p>
+                </div>
+              </div>
+
+              <div class="menu-container" v-if="relationship">
+                <div v-if="[1].includes(relationship.rank)">
+                  <li class="list invite pointer" @click="clickInvitationCreate">
+                    <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
+                  <hr />
+                </div>
+
+                <li class="list menu pointer" @click="clickBabySettings" v-if="[1].includes(relationship.rank)">
+                    <i class="fas fa-cog mr-3"></i> 아기 설정
+                </li>
+                <li class="list menu pointer" @click="clickGroupSettings" v-if="[1].includes(relationship.rank)">
+                    <i class="fas fa-users-cog mr-3"></i> 그룹 설정
+                </li>
+                <li class="list menu pointer" @click="clickMeasurements">
+                    <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
+                </li>
+              </div>
+            </div>
+
+            <div class="sidebar-bottom">
+              <hr />
+              <div class="d-flex row no-gutters" v-if="accessLog">
+                <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
+                  <div class="d-flex justify-content-center">
+                    <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
+                    <img v-else src="@/assets/babble_logo.png" />
+                  </div>
+                  <p class="text-center mt-1">{{ baby.baby_name }}</p>
+                </div>
+              </div>
+              <div class="text-right mt-3">
+                <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
+              </div>
+              <div class="mb-5"></div>
+            </div>
+          </div>
+        </Sidebar>
+
+        <router-view></router-view>
+        <!-- <div style="height:100px"></div> -->
+        <!-- footer -->
+        <div v-if="this.myaccount">
+          <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
+            <div 
+              class="col-4 color-gray pointer"
+              :class="{ 'color-red': isAlbum() }"
+              @click="clickPhoto"
+            >
+              <p><i class="fas fa-images"></i></p>
+              <p>Photo</p>
+            </div>
+            <div
+              class="col-4 color-gray pointer"
+              :class="{ 'color-red': isDiary() }"
+              @click="clickDiary"
+            >
+              <p><i class="fas fa-book"></i></p>
+              <p>Diary</p>
+            </div>
+            <div
+              class="col-4 color-gray pointer"
+              :class="{ 'color-red': isProfile() }"
+              @click="clickProfile"
+            >
+              <p><i class="fas fa-user"></i></p>
+              <p>Profile</p>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <nav class="nav2 mt-5 " v-else-if="authToken === null || routes2.indexOf(this.$route.name) !== -1">
-        <div class="d-flex justify-content-center">
-          <span>
-            <img src="@/assets/babble_logo.png" />
-          </span>
-          <span class="nav2-title color-pink d-flex align-items-center">Babble</span>
-        </div>
-      </nav>
-      
-      <Sidebar class="d-flex justify-content-between" style="clear: both; z-index: 100">
-        <div class="side d-flex flex-column justify-content-between h-100">
-          <div class="sidebar-panel-nav">
-            <!-- 현재 babble box info -->
-            <div class="upper bg-pink d-flex justify-content-between">
-              <div class="d-flex">
-                <div class="profile float-left mr-3" v-if="currentBaby">
-                  <img v-if="currentBaby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + currentBaby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
-                  <img v-else src="@/assets/babble_logo.png" />
-                </div>
-                <div class="babble-box" v-if="currentBaby">
-                  <span>{{ currentBaby.baby_name }}</span><br />
-                  <span>D + {{ countDays }}</span>
-                </div>
-              </div>
-              <div class="logout-btn" @click="clickLogout">
-                <p class="text-muted pointer">로그아웃</p>
-              </div>
-            </div>
-
-            <div class="menu-container" v-if="relationship">
-              <div v-if="[1].includes(relationship.rank)">
-                <li class="list invite pointer" @click="clickInvitationCreate">
-                  <i class="fas fa-envelope color-pink mr-3"></i> 함께할 사람 초대하기</li>
-                <hr />
-              </div>
-
-              <li class="list menu pointer" @click="clickBabySettings" v-if="[1].includes(relationship.rank)">
-                  <i class="fas fa-cog mr-3"></i> 아기 설정
-              </li>
-              <li class="list menu pointer" @click="clickGroupSettings" v-if="[1].includes(relationship.rank)">
-                  <i class="fas fa-users-cog mr-3"></i> 그룹 설정
-              </li>
-              <li class="list menu pointer" @click="clickMeasurements">
-                  <i class="fas fa-chart-bar mr-3"></i> 성장 분석 보고서
-              </li>
-            </div>
-          </div>
-
-          <div class="sidebar-bottom">
-            <hr />
-            <div class="d-flex row no-gutters" v-if="accessLog">
-              <div class="other-profile pointer col-4" v-for="baby in accessLog" :key="baby.id" @click="clickOtherBaby(baby.baby)">
-                <div class="d-flex justify-content-center">
-                  <img v-if="baby.profile_image" :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + baby.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" />
-                  <img v-else src="@/assets/babble_logo.png" />
-                </div>
-                <p class="text-center mt-1">{{ baby.baby_name }}</p>
-              </div>
-            </div>
-            <div class="text-right mt-3">
-              <p @click="clickBabblebox" class="color-pink pointer">아이들 더보기</p>
-            </div>
-            <div class="mb-5"></div>
-          </div>
-        </div>
-      </Sidebar>
-
-      <router-view></router-view>
-      <!-- <div style="height:100px"></div> -->
-      <!-- footer -->
-      <div v-if="this.myaccount">
-        <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
-          <div 
-            class="col-4 color-gray pointer"
-            :class="{ 'color-red': isAlbum() }"
-            @click="clickPhoto"
-          >
-            <p><i class="fas fa-images"></i></p>
-            <p>Photo</p>
-          </div>
-          <div
-            class="col-4 color-gray pointer"
-            :class="{ 'color-red': isDiary() }"
-            @click="clickDiary"
-          >
-            <p><i class="fas fa-book"></i></p>
-            <p>Diary</p>
-          </div>
-          <div
-            class="col-4 color-gray pointer"
-            :class="{ 'color-red': isProfile() }"
-            @click="clickProfile"
-          >
-            <p><i class="fas fa-user"></i></p>
-            <p>Profile</p>
-          </div>
-        </div>
+    </v-app>
+    <div id="app2">
+      <div class="media-q d-flex flex-column justify-content-center align-items-center">
+        <img src="@/assets/baby.png" width="250px" class="mt-3">
+        <h5>이용에 불편을 드려 죄송합니다.</h5>
+        <h5>좀 더 <strong>작은 창</strong>에서 봐주세요 :) </h5>
       </div>
-
     </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -327,6 +336,17 @@ export default {
 </script>
 
 <style scoped>
+@media (min-width: 576px) {
+  #app {
+    display: none;
+  }
+}
+ @media (max-width: 576px) {
+  #app2 {
+    display: none;
+  }
+}
+
 /* top-navbar */
 .nav {
   -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.1);
