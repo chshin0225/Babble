@@ -166,5 +166,5 @@ python manage.py runserver
 
 ## 🎞 최종산출물
 
-<a href="">최종발표 시연영상</a>
+<a href="https://youtu.be/SGNa6G4QaAI">최종발표 시연영상</a>
 <a href="documentation/Presentation/Babble_presentation.pdf">최종발표 pdf</a>
