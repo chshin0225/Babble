@@ -13,16 +13,16 @@ from keras.models import load_model
 from keras.layers import Input
 from PIL import Image, ImageFont, ImageDraw
 
-from yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
-from yolo3.utils import letterbox_image
+from ObjDetection.yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
+from ObjDetection.yolo3.utils import letterbox_image
 import os
 from keras.utils import multi_gpu_model
 
 class YOLO(object):
     _defaults = {
-        "model_path": 'model_data/yolo.h5',
-        "anchors_path": 'model_data/yolo_anchors.txt',
-        "classes_path": 'model_data/coco_classes.txt',
+        "model_path": 'ObjDetection/model_data/yolo.h5',
+        "anchors_path": 'ObjDetection/model_data/yolo_anchors.txt',
+        "classes_path": 'ObjDetection/model_data/coco_classes.txt',
         "score" : 0.3,
         "iou" : 0.45,
         "model_image_size" : (416, 416),

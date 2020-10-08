@@ -1,9 +1,9 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 enroll-form text-center">
+    <div class="container p-0 mt-5 enroll-form text-center">
       <h2 class="color-pink">아기 등록</h2>
       <div class="image-sect">
-        <img src="https://user-images.githubusercontent.com/25967949/93062400-d9ae2600-f6af-11ea-948c-219574892c76.png">
+        <img src="@/assets/babble_logo_face2.png">
       </div>
       <div class="mt-4 desc-title">
         <h5>아기의 정보를 등록해볼까요?</h5></div>
@@ -20,6 +20,7 @@
         <button class="btn btn-blue" @click="clickInviteLink">링크로 초대받았습니다.</button>
       </div>
     </div>
+    <div style="height:15vh;"></div>
   </div>
 </template>
 

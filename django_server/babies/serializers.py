@@ -13,9 +13,51 @@ class BabySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BabyMeasurementSerializer(serializers.ModelSerializer):
-    baby = BabySerializer(required=False)
+    # baby = BabySerializer(required=False)
     # creator = UserSerializer(required=False)
     # modifer = UserSerializer(required=False)
     class Meta:
-        model = Baby
+        model = BabyMeasurement
         fields = '__all__'
+
+
+class WeightMeasurementSerializer(serializers.ModelSerializer):
+    x = serializers.SerializerMethodField('get_measure_date')
+    y = serializers.SerializerMethodField('get_weight')
+    class Meta:
+        model = BabyMeasurement
+        fields = ['x', 'y']
+
+    def get_measure_date(self, measurement):
+        return measurement.measure_date
+
+    def get_weight(self, measurement):
+        return measurement.weight
+
+
+class HeightMeasurementSerializer(serializers.ModelSerializer):
+    x = serializers.SerializerMethodField('get_measure_date')
+    y = serializers.SerializerMethodField('get_height')
+    class Meta:
+        model = BabyMeasurement
+        fields = ['x', 'y']
+
+    def get_measure_date(self, measurement):
+        return measurement.measure_date
+
+    def get_height(self, measurement):
+        return measurement.height
+
+
+class HeadMeasurementSerializer(serializers.ModelSerializer):
+    x = serializers.SerializerMethodField('get_measure_date')
+    y = serializers.SerializerMethodField('get_head_size')
+    class Meta:
+        model = BabyMeasurement
+        fields = ['x', 'y']
+
+    def get_measure_date(self, measurement):
+        return measurement.measure_date
+
+    def get_head_size(self, measurement):
+        return measurement.head_size

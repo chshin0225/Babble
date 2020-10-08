@@ -78,7 +78,7 @@ INSTALLED_APPS = [
     'babies',
 
     # # provider
-    # 'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.kakao',
 ]
 
 MIDDLEWARE = [
@@ -120,15 +120,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        # 'NAME': 'babble',
-        # 'USER': 'dragon',
-        # 'PASSWORD': get_secret('DB_PASSWORD'),
-        # 'HOST': 'j3a310.p.ssafy.io',
-
         'NAME': 'babble',
-        'USER': 'root',
-        'PASSWORD': get_secret('LOCAL_PASSWORD'),
-        'HOST': '',
+        'USER': 'dragon',
+        'PASSWORD': get_secret('DB_PASSWORD'),
+        'HOST': 'j3a310.p.ssafy.io',
+
+        # 'NAME': 'babble',
+        # 'USER': 'root',
+        # 'PASSWORD': get_secret('LOCAL_PASSWORD'),
+        # 'HOST': '',
 
         'PORT': '3306',
     }
@@ -140,6 +140,7 @@ DATABASES = {
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+#
 
 
 # Password validation
@@ -245,15 +246,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # DEFAULT_FROM_MAIL = EMAIL_HOST_USER
 
 # # Social Login
-# SOCIALACCOUNT_PROVIDERS = {
-#     'kakao': {
-#         'APP': {
-#             'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
-#             'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
-#             'key': ''
-#         }
-#     }
-# }
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': get_secret('OAUTH')['KAKAO']['CLIENT_ID'],
+            'secret': get_secret('OAUTH')['KAKAO']['SECRET'],
+            'key': ''
+        }
+    }
+}
 
 
 # AWS s3

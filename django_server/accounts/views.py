@@ -1,127 +1,223 @@
+import datetime
+from operator import itemgetter, attrgetter
+from itertools import groupby
+
 from django.shortcuts import render, get_object_or_404
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, SocialRegisterSerializer, GroupListSerializer, BabyAccessSerializer, UserBabyRelationshipSerializer, InvitationSerializer
 
-from .models import User
+from .models import User, Rank, Group, BabyAccess, UserBabyRelationship, Invitation
+from babies.models import Baby
+from babies.serializers import BabySerializer
+from rest_framework.authtoken.models import Token
 
+import random
+import string
+class CustomLoginView(APIView):
+    def post(self, request):
+        data = request.data
+        userset = User.objects.filter(email=data['email'])
+        if len(userset):
+            user = userset[0]
+            if user.user_type == data['user_type']:
+                user.last_login = datetime.datetime.now()
+                user.save()
+                tokenset = Token.objects.filter(user_id=user.id)
+                if len(tokenset):
+                    token = tokenset[0]
+                    token.delete()
+                token = Token.objects.create(user=user)
+                return Response({"key": token.key, "state": "login"})
+            else:
+                return Response({"message":"이미 가입된 이메일입니다."}, status=400)
+        else:
+            serializer = SocialRegisterSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+            user = get_object_or_404(User, email=data['email'])
+            user.last_login = datetime.datetime.now()
+            user.save()
+            token = Token.objects.create(user=user)
+            return Response({"key": token.key, "state": "signup"})
+        
 class UserDetailView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
+    def put(self, request):
+        user = request.user
+        user.name = request.data['name']
+        user.profile_image = request.data['profile_image']
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
+class BabyAccessView(APIView):
+    # 현재 유저의 지난 babble box 접속 데이터 가져오기
+    def get(self, request):
+        access_log = BabyAccess.objects.filter(user=request.user).exclude(baby=request.user.current_baby).order_by('-last_access_date')
+        serializer = BabyAccessSerializer(access_log, many=True)
+        return Response(serializer.data)
 
+    # 현재 유저가 새로운 babble box로 이동했을 때 BabyAccess에 log 추가
+    def post(self, request):
+        next_baby = get_object_or_404(Baby, id=request.data['baby'])
+        if BabyAccess.objects.filter(baby=next_baby).exists():
+            log = get_object_or_404(BabyAccess, baby=next_baby.id)
+            log_serializer = BabyAccessSerializer(log, data=request.data)
+        else:
+            log_serializer = BabyAccessSerializer(data=request.data)
 
+        if log_serializer.is_valid(raise_exception=True):
+            log_serializer.save(user=request.user)
 
+            # 유저 정보에서 current_baby 업데이트
+            user = request.user
+            baby = get_object_or_404(Baby, id=request.data['baby'])
+            user.current_baby = baby
+            user.save()
+            print(log_serializer.data)
+            return Response(log_serializer.data)
+        return Response(log_serializer.errors)
 
-# from rest_framework import generics, views, status, permissions
-# from rest_framework.response import Response
+class RelationshipView(APIView):
+    def get(self, request):
+        relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=request.user.current_baby)
+        serializer = UserBabyRelationshipSerializer(relationship)
+        return Response(serializer.data)
 
-# from django.utils.encoding import force_text
-# from django.utils.http import urlsafe_base64_decode
-# from django.shortcuts import render, redirect
-# from rest_framework.views import APIView
+class GroupListView(APIView):
+    # 한 babble box 내의 존재하는 그룹들 조회
+    def get(self, request):
+        baby = request.user.current_baby
+        groups = list(Group.objects.filter(baby=baby).values_list('id', flat=True))
+        group_data = UserBabyRelationship.objects.filter(baby=baby, group__isnull=False).values('id', 'user', 'group', 'relationship_name')
 
-# from . import models, serializers, token
+        key = itemgetter('group')
+        rows = groupby(sorted(group_data, key=key), key=key)
 
-# import urllib
-
-
-# # 자체 구현
-# import jwt
-# import json
-
-# from .models import User
-# from .token import account_activation_token
-# from .text import message
-
-# from django.views import View
-# from django.http import HttpResponse, JsonResponse
-# from django.core.exceptions import ValidationError
-# from django.core.validators import validate_email
-# from django.shortcuts import redirect
-# from django.contrib.sites.shortcuts import get_current_site
-# from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-# from django.core.mail import EmailMessage
-# from django.utils.encoding import force_bytes, force_text
-
-# class SignUpView(View):
-#     def post(self, request):
-#         data = json.loads(request.body)
-#         try:
-#             validate_email(data["email"])
-
-#             if User.objects.filter(email=data["email"]).exists():
-#                 return JsonResponse({"message":"EXISTS_EMAIL"}, status=400)
-
-#             user = User.objects.create(
-#                 email = data["email"],
-#                 password = bcrypt.hashpw(data["password"].encode("UTF-8"), bcrypt.gensalt()).decode("UTF-8"),
-#                 is_active = False
-#             )
-
-#             current_site = get_current_site(request)
-#             domain = current_site.domain
-#             uidb64 = urlsafy_base64_encode(force_bytes(user.pk))
-#             token = account_activation_token.make_token(user)
-#             message_data = message(domain, uid64, token)
-
-#             mail_title = "이메일 인증을 완료해주세요!"
-#             mail_to = data['email']
-#             email = EmailMessage(mail_title, message_data, to=[mail_to])
-#             email.send()
-
-#             return JsonResponse({"message":"SUCCESS"}, status=200)
+        return_data = []
+        for group, items in rows:
+            items = list(items)
+            for item in items: 
+                user_id = item['user']
+                name = User.objects.get(id=user_id).name
+                item['name'] = name
+            group_info = get_object_or_404(Group, id=group)
+            group_serializer = GroupListSerializer(group_info)
+            new_group_serializer = dict(group_serializer.data)
+            new_group_serializer['members'] = items
+            return_data.append(new_group_serializer)
+            groups.remove(group)
         
-#         except KeyError:
-#             return JsonResponse({"message":"INVALID_KEY"}, status=400)
-#         except TypeError:
-#             return JsonResponse({"message":"INVALID_TYPE"}, status=400)
-#         except ValidationError:
-#             return JsonResponse({"message":"VALIDATION_ERROR"}, status=400)
+        if groups:
+            for g in groups:
+                group_info = get_object_or_404(Group, id=g)
+                group_serializer = GroupListSerializer(group_info)
+                new_group_serializer = dict(group_serializer.data)
+                new_group_serializer['members'] = []
+                return_data.append(new_group_serializer)
+
+        return Response(return_data)
 
 
-# class Activate(View):
-#     def get(self, request, uidb64, token):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-
-#             if account_activation_token.check_token(user, token):
-#                 user.is_active = True
-#                 user.save()
-
-#                 return redirect('/')
-
-#             return JsonResponse({"message" : "AUTH FAIL"}, status=400)
-        
-#         except KeyError:
-#             return JsonResponse({"message" : "INVALID_KEY"}, status=400)
-#         except ValidationError:
-#             return JsonResponse({"message" : "TYPE_ERROR"}, status=400)
-        
-
-
-
-
-
-
-
-
-
-# # code 요청
-# def kakao_login(request):
-#     app_rest_api_key = '6b1c8dd547b0885585c9f4e21d64d1f2',
-#     redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback"
-#     return redirect(
-#         f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
-#     )
+class GroupDetailView(APIView):
+    # 한 그룹 내의 유저 목록 조회
+    def get(self, request, group_id):
+        group_members = UserBabyRelationship.objects.filter(group=group_id).all()
+        serializer = UserBabyRelationshipSerializer(group_members, many=True)
+        return Response(serializer.data)
     
-    
-# # access token 요청
-# def kakao_callback(request):                                                                  
-#     params = urllib.parse.urlencode(request.GET)                                      
-#     return redirect(f'http://127.0.0.1:8000/accounts/login/kakao/callback?{params}') 
+    # 그룹에 유저 추가(초대하려는 유저는 babble box 멤버여야함)
+    def put(self, request, group_id):
+        baby = request.user.current_baby
+        user = get_object_or_404(User, id=request.data['user']).id
+        group = get_object_or_404(Group, id=group_id)
+        data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
+        data.group = group
+        data.save()
+        serializer = UserBabyRelationshipSerializer(data)
+        return Response(serializer.data)
+
+    # 그룹에서 멤버 제거
+    def post(self, request, group_id):
+        baby = request.user.current_baby
+        user = get_object_or_404(User, id=request.data['user']).id
+        group = get_object_or_404(Group, id=group_id)    
+        data = get_object_or_404(UserBabyRelationship, baby=baby, user=user)
+        data.group = None
+        data.save()
+        serializer = UserBabyRelationshipSerializer(data)
+        return Response(serializer.data)
+
+class GroupInfoView(APIView):
+    # 그룹명 수정
+    def put(self, request, group_id):
+        group = get_object_or_404(Group, id=group_id)
+        serializer = GroupListSerializer(group, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(baby=request.user.current_baby)
+            return Response(serializer.data)
+        return Response(serializer.errors)
+
+    # 그룹 삭제
+    def delete(self,request, group_id):
+        baby = request.user.current_baby
+        group = get_object_or_404(Group, id=group_id)
+        group.delete()
+        return Response({'message': '그룹 삭제가 완료되었습니다.'})
+
+class InvitationCreateView(APIView):
+    def post(self, request):
+        data = request.data
+        baby = request.user.current_baby_id
+        rank = data['rank']
+        try:
+            relationship = get_object_or_404(UserBabyRelationship, baby_id=baby, user_id=request.user.id, rank=1)
+            token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(16))
+            invite_url = "http://j3a310.p.ssafy.io/invitation/" + token
+            invitation = Invitation(baby_id=baby, rank_id=rank, token=token)
+            invitation.save()
+            return Response({"url": invite_url}, status=200)
+        except:
+            return Response({"message":"초대링크를 생성할 권한이 없습니다."}, status=400)
+
+class InvitationVerifyView(APIView):
+    def get(self, request, token):
+        try:
+            invitation = get_object_or_404(Invitation, token=token, closed=False)
+            serializer = InvitationSerializer(invitation)
+            return Response(serializer.data)            
+        except:
+            return Response({"message":"초대 링크가 유효하지 않습니다."}, status=400)
+
+    def post(self, request, token):
+        relationship_name = request.data['relationship_name']
+        user = request.user
+        try:
+            invitation = get_object_or_404(Invitation, token=token, closed=False)
+            try:
+                relationship = get_object_or_404(UserBabyRelationship, baby_id=invitation.baby_id, user_id=user.id)
+                relationship.rank_id = invitation.rank_id
+                relationship.relationship_name = relationship_name
+                relationship.save()
+            except:
+                relationship = UserBabyRelationship(
+                                baby_id=invitation.baby_id,
+                                rank_id=invitation.rank_id,
+                                user_id=user.id,
+                                relationship_name=relationship_name)
+                relationship.save()
+            baby = get_object_or_404(Baby, id=invitation.baby_id)
+            user.current_baby = baby
+            user.save()
+            invitation.closed = True
+            invitation.save()
+            serializer = BabySerializer(baby)
+            return Response(serializer.data)
+        except:
+            return Response({"message":"초대 링크가 유효하지 않습니다."}, status=400)

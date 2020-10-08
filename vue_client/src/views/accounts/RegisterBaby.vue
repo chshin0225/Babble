@@ -1,7 +1,7 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory enroll-form">
-      <h3 class="color-pink">아기 등록</h3>
+    <div class="container p-3 bg-light-ivory enroll-form">
+      <h3 class="color-blue text-center">아기 등록</h3>
 
       <div class="mt-4 guide-text">
         아기의 이름을 입력해 주세요.
@@ -9,7 +9,7 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.baby.baby_name"
-          v-bind:class="{error: error.baby_name, complete:!error.baby_name&&enrollData.baby.baby_name.length!==0}"
+          v-bind:class="{errorText: error.baby_name, complete:!error.baby_name&&enrollData.baby.baby_name.length!==0}"
           class="inputs"
           style="margin-top:0px"
           id="baby_name"
@@ -17,6 +17,7 @@
           type="text" 
           autocapitalize="none"
           autocorrect="none"
+          @change="changeName"
         />
         <label for="baby_name"></label>
         <div class="error-text ml-2" v-if="error.baby_name">{{error.baby_name}}</div>
@@ -39,7 +40,7 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.baby.birth" 
-          v-bind:class="{error : error.birth, complete:!error.birth&&enrollData.baby.birth.length!==0}"
+          v-bind:class="{errorText : error.birth, complete:!error.birth&&enrollData.baby.birth.length!==0}"
           class="inputs"
           id="birth" 
           placeholder="년 월 일" 
@@ -47,6 +48,7 @@
           autocapitalize="none"
           autocorrect="none"
           required
+          @change="changeBirth"
           />
         <label for="birth"></label>
         <div class="error-text ml-2" v-if="error.birth">{{error.birth}}</div>
@@ -58,8 +60,8 @@
       <div class="input-with-label">
         <input 
           v-model="enrollData.relationship_name" 
-          
-          v-bind:class="{error: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
+          @change="changeRelationship"
+          v-bind:class="{errorText: error.relationship_name, complete:!error.relationship_name&&enrollData.relationship_name.length!==0}"
           class="inputs"
           id="relationship_name" 
           type="text"
@@ -106,11 +108,11 @@
         <label for="birth_weight"></label>
       </div>
       
-      <div class="buttons mt-5">
-        <button class="btn new-button" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
+      <div class="buttons mt-5 text-center">
+        <button class="btn btn-blue" :class="{disabled: !isSubmit}" @click="clickEnroll">아기를 새로 등록합니다.</button>
       </div>
     </div>
-    <div style="height:15vh"></div>
+    <div style="height:6vh"></div>
   </div>
 </template>
 
@@ -127,7 +129,7 @@ export default {
           birth: "",
           birth_height: "",
           birth_weight: "",
-          profile_image: "profileimage",
+          profile_image: "",
         },
         relationship_name: ""
       },
@@ -140,26 +142,35 @@ export default {
       isSubmit: false,
     };
   },
+  watch: { 
+    enrollData: {
+      handler() {
+        // 버튼 활성화
+        if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
+          let isSubmit = true;
+          Object.values(this.error).map(v => {
+            if (v) isSubmit = false;
+          });
+          this.isSubmit = isSubmit;
+        }
+        else {
+          this.isSubmit = false
+        }
+      },
+      deep: true
+    }
+  },
   created() {
     this.component = this;
-  },
-  watch: {
-    enrollData: {
-      deep: true,
-      handler() {
-        this.checkbaby_nameForm();
-        this.checkGenderForm();
-        this.checkBirthForm();
-        this.checkrelationship_nameForm();
-      }
-    }
   },
   methods: {
     clickGirlBtn(){
       this.enrollData.baby.gender = 'F';
+      this.error.gender = false;
     },
     clickBoyBtn(){
       this.enrollData.baby.gender = 'M';
+      this.error.gender = false;
     },
     checkbaby_nameForm() {
       if ( this.enrollData.baby.baby_name.length > 0) {
@@ -184,28 +195,42 @@ export default {
         this.error.relationship_name = false;
       }
       else this.error.relationship_name = "아기와의 관계를 입력해 주세요."
-
-      // 버튼 활성화
-      if (this.enrollData.baby.baby_name.length > 0 && this.enrollData.baby.gender.length > 0 && this.enrollData.baby.birth.length > 0 && this.enrollData.relationship_name.length > 0){
-        let isSubmit = true;
-        Object.values(this.error).map(v => {
-          if (v) isSubmit = false;
-        });
-        this.isSubmit = isSubmit;
-      }
+    
     },
     clickEnroll() {
       if ( this.isSubmit ){
         this.enrollData.baby.birth_height = Number(this.enrollData.baby.birth_height)
-        this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)
-        console.log("HELLO")
+        this.enrollData.baby.birth_weight = Number(this.enrollData.baby.birth_weight)        
         this.enrollBaby(this.enrollData)
+      } else {
+        if (this.enrollData.baby.baby_name.length < 1) {
+          this.error.baby_name = "아기의 이름을 입력해 주세요."
+        }
+        if (this.enrollData.baby.birth.length < 1) {
+          this.error.birth = "아기의 출생일자를 선택해 주세요."
+        }
+        if ( this.enrollData.baby.gender.length < 1) {
+          this.error.gender = "아기의 성별을 선택해 주세요."
+        }
+        if ( this.enrollData.relationship_name.length < 1) {
+          this.error.relationship_name = "아기와의 관계를 입력해 주세요."
+        }
+
       }
     },
     toLogin() {
       this.$router.push({name: "Login"});
     },
-    ...mapActions('accountStore', ['enrollBaby'])
+    ...mapActions('accountStore', ['enrollBaby']),
+    changeName() {
+      this.checkbaby_nameForm();
+    },
+    changeBirth() {
+      this.checkBirthForm();
+    },
+    changeRelationship() {
+      this.checkrelationship_nameForm();
+    },
   }
 }
 </script>
@@ -262,7 +287,7 @@ h3 {
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
 }
-.error, .error:focus {
+.errorText, .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
 }
 .error-text {
@@ -291,7 +316,6 @@ h3 {
   background-repeat: repeat;
 }
 .enroll-form {
-  margin-top: 10vh !important;
   opacity: 0.9;
 }
 

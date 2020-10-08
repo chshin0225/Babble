@@ -4,7 +4,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
-from .models import User, BabyAccess, Rank, Group, UserBabyRelationship
+from .models import User, BabyAccess, Rank, Group, UserBabyRelationship, BabyAccess, Invitation
 from babies.serializers import BabySerializer
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -24,10 +24,27 @@ class CustomRegisterSerializer(RegisterSerializer):
         data_dict['profile_image'] = self.validated_data.get('profile_image', '')
         return data_dict
 
+class SocialRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'name', 'user_type']
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby']
+        fields = ['id', 'email', 'name', 'profile_image', 'groups', 'visited_babies', 'current_baby', 'user_type']
+
+class BabyAccessSerializer(serializers.ModelSerializer):
+    baby_name = serializers.SerializerMethodField('get_baby_name')
+    profile_image = serializers.SerializerMethodField('get_profile_image')
+    class Meta:
+        model = BabyAccess
+        fields = '__all__'
+
+    def get_baby_name(self, log):
+        return log.baby.baby_name
+
+    def get_profile_image(self, log):
+        return log.baby.profile_image
 
 class RankSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,14 +52,36 @@ class RankSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class GroupListSerializer(serializers.ModelSerializer):
-    baby = BabySerializer(required=False)
+    # baby = BabySerializer(required=False)
     class Meta:
         model = Group
         fields = '__all__'
 
 class UserBabyRelationshipSerializer(serializers.ModelSerializer):
     baby = BabySerializer(required=False)
-    rank = RankSerializer(required=False)
+    # rank = RankSerializer(required=False)
     class Meta:
         model = UserBabyRelationship
+        fields = '__all__'
+
+class UserBabyRelationshipNameSerializer(serializers.ModelSerializer):
+    baby = BabySerializer(required=False)
+    user = UserSerializer(required=False)
+    # rank = RankSerializer(required=False)
+    class Meta:
+        model = UserBabyRelationship
+        fields = '__all__'
+
+class SimpleUserBabyRelationshipSerializer(serializers.ModelSerializer):
+    # baby = BabySerializer(required=False)
+    # rank = RankSerializer(required=False)
+    class Meta:
+        model = UserBabyRelationship
+        fields = '__all__'
+
+class InvitationSerializer(serializers.ModelSerializer):
+    baby = BabySerializer(required=False)
+    rank = RankSerializer(required=False)
+    class Meta:
+        model = Invitation
         fields = '__all__'

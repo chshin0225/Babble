@@ -1,14 +1,11 @@
 <template>
   <div class="background1">
-    <div class="container p-3 mt-5 bg-light-ivory login-form">
-      <!-- <h3 class="login-title color-pink">
-        로그인
-      </h3> -->
-
+    <div class="container p-3 mt-5 bg-light-ivory login-form mb-5">
+      <h3 class="color-blue">로그인</h3>
       <div class="input-with-label">
         <input
           v-model="loginData.email"
-          v-bind:class="{error : error.email, complete:!error.email&&loginData.email.length!==0}"
+          v-bind:class="{errorText : error.email, complete:!error.email&&loginData.email.length!==0}"
           class="inputs"
           id="email"
           placeholder="이메일"
@@ -24,7 +21,7 @@
       <div class="input-with-label">
         <input
           v-model="loginData.password"
-          v-bind:class="{error : error.password, complete:!error.password&&loginData.password.length!==0}"
+          v-bind:class="{errorText : error.password, complete:!error.password&&loginData.password.length!==0}"
           class="inputs"
           id="password"
           type="password"
@@ -35,13 +32,19 @@
         <label for="password"></label>
         <div class="error-text ml-3" v-if="error.password">{{error.password}}</div>
       </div>
-      <p class="my-3">
-        <span class="items" @click="clickSignup">회원가입하기</span>ㆍ
+      <!-- <p class="my-3">
+        <span class="items" @click="clickSignup">회원가입하기</span>
         <span class="items" @click="clickPasswordFind">비밀번호 찾기</span>
-      </p>
+      </p> -->
       <div class="buttons mt-3">
         <button class="btn login-button" :class="{disabled: !isSubmit}" @click="clickLogin">로그인하기</button>
       </div>
+      <div class="buttons mt-3">
+        <button class="btn btn-blue signup-button" @click="clickSignup">회원가입 하러 가기</button>
+      </div>
+      <!-- <div class="d-flex justify-content-end mt-3">
+        <p>회원가입</p>
+      </div> -->
 
       <hr class="divide" />
 
@@ -59,7 +62,6 @@
           class="btn google d-flex align-items-center justify-content-center"
           @click="handleClickSignIn"
         >
-          <!-- <i class="fab fa-google-plus-g"></i> -->
           <img
             class="google-logo"
             src="https://user-images.githubusercontent.com/57381062/88908677-291dcb80-d295-11ea-8a24-2a96837dd714.png"
@@ -74,10 +76,8 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
-//import Swal from "sweetalert2";
-//import axios from "axios";
-//import SERVER from "@/api/api";
+import { mapActions } from "vuex";
+import router from '@/router';
 
 export default {
   name: "Login",
@@ -91,11 +91,8 @@ export default {
         email: false,
         password: false,
       },
-      isSubmit: false,
+      isSubmit: false
     };
-  },
-  created() {
-    this.component = this;
   },
   watch: {
     loginData: {
@@ -107,128 +104,51 @@ export default {
     },
   },
   methods: {
-     ...mapMutations(["SET_TOKEN"]),
-     ...mapActions("accountStore", ["login"]),
+    ...mapActions("accountStore", ["login", "socialLogin"]),
     async handleClickSignIn() {
-      /*const googleUser = await this.$gAuth.signIn();
+      const googleUser = await this.$gAuth.signIn();
       const profile = googleUser.getBasicProfile();
       const userInfo = {
-        nickName: profile.getName(),
+        name: profile.getName(),
         email: profile.getEmail(),
-        platformType: "GOOGLE",
+        user_type: "google",
       };
-      axios
-        .post(SERVER.URL + SERVER.ROUTES.social, userInfo)
-        .then((res) => {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          this.SET_TOKEN(res.data);
-          Toast.fire({
-            icon: "success",
-            title: "로그인에 성공하였습니다.",
-          });
-          this.$router.push("/");
-        })
-        .catch((err) => {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-              toast.addEventListener("mouseenter", Swal.stopTimer);
-              toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-          });
-          Toast.fire({
-            icon: "error",
-            title: err.response.data.message,
-          });
-          this.$router.push("/");
-        });*/
+      this.socialLogin(userInfo)
+    },
+    kakaoLogin() {
+      window.Kakao.Auth.login({
+        scope: "profile, account_email",
+        success: this.GetMe
+      });
+    },
+    GetMe() {
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: res => {
+          const kakao_account = res.kakao_account;
+          const userInfo = {
+            name: kakao_account.profile.nickname,
+            email: kakao_account.email,
+            user_type: "kakao",
+          };
+          if (userInfo.email === undefined) {
+            router.push({
+              name: "SignupKakao",
+              params: {
+                name: userInfo.name,
+                user_type: userInfo.user_type,
+              },
+            });
+          } else {
+            this.socialLogin(userInfo)
+          }
+        },
+      });
     },
     clickLogin() {
       if (this.isSubmit) {
         this.login(this.loginData);
       }
-    },
-    kakaoLogin() {
-      /*window.Kakao.Auth.login({
-        scope: "profile, account_email",
-        success: this.GetMe,
-      });*/
-    },
-    GetMe() {
-      /*window.Kakao.API.request({
-        url: "/v2/user/me",
-        success: (res) => {
-          const kakao_account = res.kakao_account;
-          const userInfo = {
-            nickName: kakao_account.profile.nickname,
-            email: kakao_account.email,
-            platformType: "KAKAO",
-          };
-          if (userInfo.email === undefined) {
-            this.$router.push({
-              name: "SignupKakao",
-              params: {
-                nickName: userInfo.nickName,
-                platformType: userInfo.platformType,
-              },
-            });
-          } else {
-            axios
-              .post(SERVER.URL + SERVER.ROUTES.social, userInfo)
-              .then((res) => {
-                this.SET_TOKEN(res.data);
-                const Toast = Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  onOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                  },
-                });
-                Toast.fire({
-                  icon: "success",
-                  title: "로그인에 성공하였습니다.",
-                });
-                this.$router.push("/");
-              })
-              .catch((err) => {
-                const Toast = Swal.mixin({
-                  toast: true,
-                  position: "top-end",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  onOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                  },
-                });
-                Toast.fire({
-                  icon: "error",
-                  title: err.response.data.message,
-                });
-                this.$router.push("/");
-              });
-          }
-        },
-      });*/
     },
     checkEmailForm() {
       if (
@@ -272,20 +192,21 @@ export default {
       return va.test(password);
     },
     clickSignup() {
-      this.$router.push({ name: "Signup" });
+      router.push({ name: "Signup" });
     },
     clickPasswordFind() {
-      this.$router.push({ name: "PasswordFind" });
+      router.push({ name: "PasswordFind" });
     },
-  },
+  }
 };
 </script>
 
 <style scoped>
 .login-form {
-  margin-top: 2.5vh !important;
+  margin-top: 7.5vh !important;
   text-align: center;
   opacity: 0.9;
+  background: #fafafa;
   /* border: 1px solid #FEA59C; */
 }
 .container {
@@ -306,6 +227,10 @@ export default {
   background-color: #FEA59C;
   box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   color: #f8f8f8;
+  width: 100%;
+}
+.signup-button {
+  box-shadow: 3px 3px 3px 0px rgb(0, 0, 0, 0.2);
   width: 100%;
 }
 .divide {
@@ -331,11 +256,9 @@ export default {
   border-bottom: 2px solid #d6cbbd;
   outline-style: none;
 }
-input[type="password"] {
-  font-family: sans-serif;
-}
-.error,
-.error:focus {
+
+.errorText,
+.errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7);
 }
 .error-text {
@@ -350,7 +273,7 @@ input[type="password"] {
 }
 .disabled,
 .disabled:hover {
-  /*background-color: rgb(136, 154, 152, 0.25);*/
+  /* background-color: rgb(136, 154, 152, 0.25); */
   background-color: rgb(176, 127, 122, 0.25);
   color: #f8f8f8;
   cursor: inherit;
@@ -370,5 +293,9 @@ input[type="password"] {
 }
 .formatting {
   opacity: 0.9;
+}
+
+.v-application >>> .error {
+  background-color: none !important;
 }
 </style>

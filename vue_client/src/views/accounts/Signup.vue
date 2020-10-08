@@ -1,11 +1,11 @@
 <template>
   <div class="background1">
     <div class="container p-3 bg-light-ivory signup-form">
-      <!-- <h3 class="color-pink">회원가입</h3> -->
+      <h3 class="color-blue">회원가입</h3>
       <div class="input-with-label">
         <input 
           v-model="signupData.name"
-          v-bind:class="{error: error.name, complete:!error.name&&signupData.name.length!==0}"
+          v-bind:class="{errorText: error.name, complete:!error.name&&signupData.name.length!==0}"
           class="inputs"
           id="name"
           placeholder="닉네임" 
@@ -21,7 +21,7 @@
       <div class="input-with-label">
         <input 
           v-model="signupData.email" 
-          v-bind:class="{error : error.email, complete:!error.email&&signupData.email.length!==0}"
+          v-bind:class="{errorText : error.email, complete:!error.email&&signupData.email.length!==0}"
           class="inputs"
           id="email" 
           placeholder="이메일" 
@@ -39,7 +39,7 @@
         <input 
           v-model="signupData.password1" 
           
-          v-bind:class="{error : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
+          v-bind:class="{errorText : error.password1, complete:!error.password1&&signupData.password1.length!==0}"
           class="inputs"
           id="password1" 
           type="password"
@@ -55,7 +55,7 @@
           v-model="signupData.password2"
           type="password"
           id="password1-confirm"
-          v-bind:class="{error : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
+          v-bind:class="{errorText : error.password2, complete:!error.password2&&signupData.password2.length!==0}"
           placeholder="비밀번호를 다시 입력해주세요."
           class="inputs"
           required
@@ -67,9 +67,9 @@
       <div class="buttons mt-3">
         <button class="btn signup-button" :class="{disabled: !isSubmit}" @click="clickSignup">가입하기</button>
       </div>
-      <p class="my-3">
-        <span class="items" @click="toLogin">로그인하기</span>
-      </p>
+      <div class="buttons mt-3">
+        <button class="btn signup-button" @click="toLogin">로그인 하러 가기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -135,7 +135,7 @@ export default {
         } else this.error.password1 = false;
     },
     validpassword1(password1) {
-      var va = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
+      var va = /^(?=.*\d)(?=.*)(?=.*[a-zA-Z]).{8,}$/;
       return va.test(password1);
     },
     checkpassword2ationForm() {
@@ -216,7 +216,7 @@ h3 {
 input[type="password"] {
   font-family:sans-serif;
 }
-.error, .error:focus {
+.errorText, .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
 }
 .error-text {
@@ -245,9 +245,10 @@ input[type="password"] {
   background-repeat: repeat;
 }
 .signup-form {
-  margin-top: 2.5vh !important;
+  margin-top:7.5vh !important;
   opacity: 0.9;
   text-align: center;
+  background: #fafafa;
 }
 .items:hover {
   cursor: pointer;
