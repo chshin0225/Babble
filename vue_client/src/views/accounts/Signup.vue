@@ -213,9 +213,6 @@ h3 {
   border-bottom: 2px solid #D6CBBD;
   outline-style: none;
 }
-input[type="password"] {
-  font-family:sans-serif;
-}
 .errorText, .errorText:focus {
   border-bottom: 2px solid rgb(250, 25, 59, 0.7); 
 }
