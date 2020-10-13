@@ -12,7 +12,6 @@
         <div>
           <input @change="change4" type="file" accept="image/gif, image/jpeg, image/png" id="file" name="file" multiple hidden>
           <button v-if="is_OK" class="btn btn-outline-pink" @click="clickUpload()">업로드</button>
-          <!-- <button v-else class="btn btn-outline-pink" @click="clickOK()">확인</button> -->
           <div v-else class="d-flex flex-column"> 
             <v-bottom-sheet v-model="sheet">
               <template v-slot:activator="{ on, attrs }" >
@@ -235,8 +234,6 @@ export default {
 
 .scallop-down{
   height:40px;
-  /* margin-left: auto;
-  margin-right: auto; */
   width:100%;
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;

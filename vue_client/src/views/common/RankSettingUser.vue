@@ -4,9 +4,7 @@
     <!-- 공동양육자 -->
     <div v-if="users.maintainers">
       <div v-if="users.maintainers.length">
-        <h5>공동양육자</h5>
-        <!-- <div v-for="user in users.maintainers" :key="`maintainer_${user.id}`"> -->
-          
+        <h5>공동양육자</h5>          
           <v-list-item 
             class="d-flex align-items-center"
             v-for="userItem in users.maintainers" 

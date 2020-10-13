@@ -1,7 +1,6 @@
 import SERVER from '@/api/api'
 import axios from 'axios'
 import router from '@/router'
-// import Swal from 'sweetalert2'
 
 
 const diaryStore = {

@@ -46,7 +46,6 @@
     <div class="content-box p-3" v-if="photo">
       <div class="photo-content d-flex flex-column justify-content-center">
         <div class="photo-container">
-          <!-- <img src="https://t1.daumcdn.net/tvpot/thumb/s8b90Dh8u7sDgMlccgchys3/thumb.png?ts=1541536764"> -->
           <img :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + photo.image_url + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'">
         </div>
       </div>
@@ -95,7 +94,6 @@
           <div v-for="comment in comments" :key="`comment_${comment.id}`">
             <div>
               <div class="d-flex justify-content-between">
-                <!-- <p class="comment-username">{{comment.user.name}}({{comment.relationship_name}})</p> -->
                 <p class="comment-username">{{comment.user.name}}({{comment.relationship_name}})</p>
                 <div class="d-flex">
                   <p class="comment-time mr-3">{{comment.modify_date |  moment("from", "now")}}</p>
@@ -342,7 +340,6 @@ export default {
   },
   filters: {
     convertDate(val){
-      //let date = new Date((new Date(val)/1000 + new Date(val).getTimezoneOffset() * 60)*1000);
       let date = new Date(val);
       let year = date.getFullYear();
       let month = date.getMonth()+1;
@@ -356,7 +353,6 @@ export default {
       return strDate
     },
     diffDate(val) {
-      //let diff = ((new Date() - (new Date(val))) / 1000) - new Date(val).getTimezoneOffset() * 60;
       let diff = (new Date() - (new Date(val))) / 1000;
       
       if(diff < 60)
@@ -379,8 +375,6 @@ export default {
   },
   mounted() {
     this.findPhoto(this.$route.params.photoId);
-    // this.fetchComments(this.$route.params.photoId);
-    //alert(this.$route.params.photoId);
   }
 }
 </script>
@@ -432,8 +426,6 @@ nav {
 
 .scallop-down{
   height:40px;
-  /* margin-left: auto;
-  margin-right: auto; */
   width:100%;
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;
@@ -446,7 +438,6 @@ nav {
   min-height: 23vh;
   .comment-title {
     font-weight: 500;
-    // color: #FEA59C;
   }
 
   .comment-create {

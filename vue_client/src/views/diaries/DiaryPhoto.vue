@@ -3,32 +3,6 @@
 <div>
   <div v-if="currentBaby">
     <h5 class="main-title text-center color-pink mt-3">{{currentBaby.baby_name}}의 포토카드</h5>
-    <!-- Date Picker -->
-    <!-- <v-row class="d-flex justify-content-center no-gutters">
-      <v-col cols="3" sm="3" class="erase-padding">
-        <v-dialog
-          ref="dialog"
-          v-model="modal"
-          :return-value.sync="date"
-          width="290px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="date"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-              class="centered-date"
-            ></v-text-field>
-          </template>
-          <v-date-picker color="#FEA59C" v-model="date" type="month" scrollable>
-            <v-spacer></v-spacer>
-            <v-btn text color="#9BC7FF" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="#9BC7FF" @click="$refs.dialog.save(date)">OK</v-btn>
-          </v-date-picker>
-        </v-dialog>
-      </v-col>
-    </v-row> -->
 
     <!-- Swiper -->
     <div v-if="photoDiaries" class="mt-5">
@@ -42,7 +16,6 @@
             <div class="p-3 mt-auto">
               <h4 class="diary-text">{{diary.title}}</h4>
             </div>
-            <!-- <img src="https://lh3.googleusercontent.com/proxy/I8VHuGeCKm3Mr0766qrIhVU1CRQCtWKWNhdI-qjWprYYF5Ov20qyr8NmuJR-k6avovYBkit3UERqwGpOLyDJtrYX5GKN3EcFZMkVurpYgz81rzR_tXULTeU72fAoP6Z_tW24KCOrxgWIbb14HITOhg" class="card-img-top " alt="..."> -->
           </div>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>

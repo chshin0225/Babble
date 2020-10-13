@@ -22,15 +22,6 @@
         <label for="up">Really simple input upload:</label>
         <input type="file" @change="fileChange" id="up" ref="file" />
       </div>
-      <!-- <div v-if="tab == 0">
-        <vue-dropzone
-          ref="myVueDropzone"
-          id="dropzone"
-          @vdropzone-success="vfileUploaded"
-          :options="dropzoneOptions"
-        >
-        </vue-dropzone>
-      </div> -->
 
       <footer class="modal-footer">
         <button
@@ -48,25 +39,15 @@
 </template>
 
 <script>
-// import vue2Dropzone from "vue2-dropzone";
-// import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import axios from "axios";
 
 export default {
-  // components: {
-  //   vueDropzone: vue2Dropzone
-  // },
   data() {
     return {
       imageSrc: "",
       command: null,
       show: false,
       tab: 1,
-      // dropzoneOptions: {
-      //   url: "https://httpbin.org/post",
-      //   thumbnailWidth: 200,
-      //   dictDefaultMessage: "UPLOAD A FILE"
-      // }
     };
   },
   computed: {
@@ -117,8 +98,6 @@ export default {
         command: this.command,
         data: {
           src: this.imageSrc
-          // alt: "YOU CAN ADD ALT",
-          // title: "YOU CAN ADD TITLE"
         }
       };
 

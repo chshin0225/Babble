@@ -112,7 +112,6 @@
               </v-btn>
             </v-btn-toggle>
           </v-container>
-          <!-- </div> -->
           <v-btn
             class="mt-6 final-button"
             text
@@ -121,7 +120,6 @@
             @click="clickUpdate"
           >확인</v-btn>
         </v-sheet>
-      <!-- </v-bottom-sheet> -->
     </div>
     
     <div style="height:15vh"></div>
@@ -204,7 +202,6 @@ export default {
   },
   filters: {
     convertDate(val){
-      //let date = new Date((new Date(val)/1000 + new Date(val).getTimezoneOffset() * 60)*1000);
       let date = new Date(val);
       let year = date.getFullYear();
       let month = date.getMonth()+1;
@@ -218,7 +215,6 @@ export default {
       return strDate
     },
     diffDate(val) {
-      //let diff = ((new Date() - (new Date(val))) / 1000) - new Date(val).getTimezoneOffset() * 60;
       let diff = (new Date() - (new Date(val))) / 1000;
       
       if(diff < 60)

@@ -185,12 +185,10 @@ input[type="password"] {
   padding-left: 30px;
 }
 .new-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #A05E58;
   color: #F8F8F8;
 }
 .link-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #5C83B4;
   color: #F8F8F8;
 }

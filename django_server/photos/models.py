@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 from accounts.models import Group, Rank
-# from accounts.models import Group, UserBabyRelationship
 from babies.models import Baby
 
 # Create your models here.
@@ -15,10 +14,8 @@ class Photo(models.Model):
     file_type = models.CharField(max_length=50)
     last_modified = models.DateTimeField()
     size = models.IntegerField()
-    # location = models.CharField(max_length=200, blank=True, null=True)
 
     # 최고권위자 class의 class_id가 1이라는 가정 하에
-    # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_photos')
     create_date = models.DateTimeField(auto_now_add=True)
@@ -53,7 +50,6 @@ class Album(models.Model):
     album_name = models.CharField(max_length=50)
     
     # 최고권위자 class의 class_id가 1이라는 가정 하에
-    # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.SET_DEFAULT, default=owner, related_name='created_albums')
     create_date = models.DateTimeField(auto_now_add=True)

@@ -33,11 +33,6 @@
 </template>
 
 <script>
-/*import { mapActions } from 'vuex'
-import SERVER from '@/api/api'
-import axios from 'axios'
-import router from '@/router'
-import Swal from 'sweetalert2'*/
 export default {
   name: 'PasswordFind',
   data() {
@@ -63,7 +58,6 @@ export default {
     },
   },
   methods: {
-    /*...mapActions('accountStore', ['findPassword']),*/
     checkEmailForm() {
       if ( this.passwordFindData.email.length > 0 && !this.validEmail(this.passwordFindData.email) ) {
         this.error.email = "올바른 이메일 형식이 아니에요"   
@@ -84,62 +78,7 @@ export default {
       if ( this.isSubmit ){
         this.$router.push({name: 'PasswordFindEmail'})
       }
-    },
-    /*sendPasswordEmail(info) {
-      let timerInterval
-        Swal.fire({
-          title: '이메일을 보내는 중입니다.',
-          html: '조금만 기다려주세요',
-          timer: 4000,
-          timerProgressBar: true,
-          onBeforeOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-              const content = Swal.getContent()
-              if (content) {
-                const b = content.querySelector('b')
-                if (b) {
-                  b.textContent = Swal.getTimerLeft()
-                }
-              }
-            }, 100)
-          },
-          onClose: () => {
-            clearInterval(timerInterval)
-          }
-        })               
-      axios.post(SERVER.URL + SERVER.ROUTES.password, info.data, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then (() => {                                    
-          router.push({ name: 'PasswordFindEmail', params: {passwordFindData: this.passwordFindData}})
-        })
-        .catch (() =>{
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: false,
-            onOpen: (toast) => {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-              }
-           })
-           Toast.fire({
-            icon: 'error',
-            title: "이메일이 존재하지 않습니다."
-          })
-        })
-    },*/
-    /*findPassword(passwordFindData) {
-      const info = {
-        data: passwordFindData,
-        location: SERVER.ROUTES.password,
-        // to: '/'
-      }
-      this.sendPasswordEmail(info)
-    },*/
+    }
   },
 }
 </script>
@@ -176,7 +115,6 @@ input[type="password"] {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  /*padding-left: 30px;*/
 }
 .done-button{
   background-color: #FEA59C;
@@ -184,12 +122,10 @@ input[type="password"] {
   width: 100%;
 }
 .done-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #A05E58;
   color: #F8F8F8;
 }
 .disabled, .disabled:hover {
-  /*background-color: rgb(136, 154, 152, 0.25);*/
   background-color: rgb(176, 127, 122, 0.25);
   color: #F8F8F8;
 }

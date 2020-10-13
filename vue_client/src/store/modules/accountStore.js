@@ -80,7 +80,6 @@ const accountStore = {
                   title: "로그인에 성공하였습니다."
                 })
                 dispatch('findMyAccount', null, { root: true })
-                // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
                 if (rootState.invitationToken) {
                   router.push({ name: "InvitationConfirm", params: { token: rootState.invitationToken }})
                 } else {
@@ -124,7 +123,6 @@ const accountStore = {
           axios.post(SERVER.URL + SERVER.ROUTES.babies, enrollData, rootGetters.config)
             .then(() => {
               dispatch('findMyAccount', null, { root: true })
-              // dispatch('findBaby', rootState.myaccount.current_baby, { root: true })
               router.push({ name: 'PhotoList'})
             })
 

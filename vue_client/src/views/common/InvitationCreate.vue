@@ -117,7 +117,6 @@ export default {
   .new-button{
     background-color: #FEA59C;
     color: #F8F8F8;
-    /* width: 100%; */
   }
 
 </style>
