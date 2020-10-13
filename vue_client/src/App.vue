@@ -360,8 +360,8 @@ export default {
 }
 
 .logo-sect img {
-  max-width: 10vw;
-  height: auto;
+  height: 6vh;
+  width: auto;
 }
 /* @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap'); */
 /* @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap'); */
