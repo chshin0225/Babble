@@ -329,8 +329,8 @@ export default {
     if (this.authToken) {
       this.findMyAccount();
       this.findRelationship();
+      this.fetchAccessLog()
     }
-    this.fetchAccessLog()
   },
 };
 </script>

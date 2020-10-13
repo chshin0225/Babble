@@ -59,7 +59,10 @@ class UserDetailView(APIView):
 class BabyAccessView(APIView):
     # 현재 유저의 지난 babble box 접속 데이터 가져오기
     def get(self, request):
-        access_log = BabyAccess.objects.filter(user=request.user).exclude(baby=request.user.current_baby).order_by('-last_access_date')
+        cb = request.user.current_baby
+        if not cb:
+            raise ValueError('아이를 생성하거나 선택해주세요.')
+        access_log = BabyAccess.objects.filter(user=request.user).exclude(baby=cb).order_by('-last_access_date')
         serializer = BabyAccessSerializer(access_log, many=True)
         return Response(serializer.data)
 
