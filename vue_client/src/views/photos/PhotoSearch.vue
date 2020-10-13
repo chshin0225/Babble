@@ -59,8 +59,6 @@ export default {
   name: 'PhotoSearch',
   data() {
     return {
-      // picker: new Date().toISOString().substr(0, 7),
-      // dialog: false,
       searchKeyword : "",
     }
   },
@@ -148,11 +146,6 @@ export default {
     background: #FFFFFF;
   }
 
-  /* .emotion-photo-container {      
-    width: 30vw; 
-    height: 30vw;
-  } */
-
   .emotion-photo-container .photo {
     object-fit: cover;
     object-position: 50% 50%;
@@ -176,14 +169,6 @@ export default {
     bottom: -9999px;
     margin: auto;
   }
-
-
-  /* .photos .photo{
-    border : 1px solid #888888;
-    border-radius: 50%;
-    min-width:30vw;
-    min-height:30vw;
-  } */
 
   .tag-name {
     font-weight: 900;

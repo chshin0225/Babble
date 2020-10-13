@@ -95,7 +95,6 @@ export default {
     padding: 10px;
     padding-left: 10px;
     padding-right: 10px;
-    /*margin-top: 20px;*/
   }
 
   .new-button{

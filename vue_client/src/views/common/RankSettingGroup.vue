@@ -2,9 +2,6 @@
   <div class="mt-2">
     <div >
         <div style="float:right;">
-        <!-- <button class="btn btn-outline-pink" style="">전체선택</button> -->
-        <!-- <button class="btn btn-outline-pink" style="margin-left:6px !important;">그룹추가</button> -->
-
         <v-dialog v-model="dialog" width="70vw">
           <template v-slot:activator="{ on, attrs }">
             <button
@@ -90,9 +87,6 @@
             :key="member.id"
           >
             <v-list-item-avatar>
-              <!-- <v-img
-                :src=""
-              ></v-img> -->
               <v-icon>mdi-account</v-icon>
             </v-list-item-avatar>
 
@@ -231,7 +225,6 @@ div >>> .v-list-group {
 
 }
 
-/* Style the buttons that are used to open and close the accordion panel */
 .accordion {
   background-color: #eee;
   color: #444;
@@ -244,7 +237,6 @@ div >>> .v-list-group {
   transition: 0.4s;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .active, .accordion:hover {
   background-color: #ccc;
 }

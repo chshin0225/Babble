@@ -128,7 +128,6 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import axios from "axios";
 
 import SERVER from '@/api/api'
-// import router from '@/router'
 
 export default {
   name: 'DiaryUpdate',
@@ -152,7 +151,6 @@ export default {
   },
   data() {
     return {
-      // editorText: 'This is initialValue.',
       customToolbar: [
         [{ color: []}],
         ["bold", "italic", "underline"], 

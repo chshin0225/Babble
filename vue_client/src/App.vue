@@ -79,7 +79,6 @@
         </Sidebar>
 
         <router-view></router-view>
-        <!-- <div style="height:100px"></div> -->
         <!-- footer -->
         <div v-if="this.myaccount">
           <div class="footer row no-gutters bg-pink" v-if="authToken != null && this.myaccount.current_baby != null">
@@ -123,8 +122,6 @@
 </template>
 
 <script>
-// import { mutations } from '@/store/index.js'
-// import moment from "moment"
 import { mapState, mapActions } from "vuex";
 import Sidebar from "./views/common/Sidebar.vue";
 import Burger from "./views/common/Burger.vue";
@@ -267,7 +264,6 @@ export default {
     },
     // 페이지 이동
     clickBabblebox() {
-      // mutations.toggleNav
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
       this.$router.push({ name: "Babblebox" });
@@ -292,11 +288,6 @@ export default {
       backdrop.click();
       this.logout();
     },
-    /*clickSettings() {
-      let backdrop = document.querySelector(".sidebar-backdrop");
-      backdrop.click();
-      this.$router.push({ name: "Settings" });
-    },*/
     clickBabySettings() {
       let backdrop = document.querySelector(".sidebar-backdrop");
       backdrop.click();
@@ -363,9 +354,7 @@ export default {
   height: 6vh;
   width: auto;
 }
-/* @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap'); */
+
 @import url("https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap");
 .logo-sect .logo-title {
   font-size: 6vw;
@@ -397,9 +386,6 @@ export default {
 
 .scallop-down{
   height:40px;
-  /* width: 75%;
-  margin-left: auto;
-  margin-right: auto; */
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;
 }
@@ -460,13 +446,10 @@ a:hover {
 
 .profile img,
 .other-profile img {
-  /*max-width: 50px;
-  height: auto;*/
   width: 50px;
   height : 50px;
   border: 1px solid #fea59c;
   border-radius: 50%;
-  /*background-color: white;*/
 }
 
 /*  footer */

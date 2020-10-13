@@ -15,10 +15,7 @@
 
 
 export default {
-  name: 'PhotoMain',
-  /*mounted() {
-    this.$router.push({name: 'PhotoList'})
-  }*/
+  name: 'PhotoMain'
 }
 </script>
 

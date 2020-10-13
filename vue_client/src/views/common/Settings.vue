@@ -1,13 +1,6 @@
 <template>
 
   <div>
-    <!-- <div class="nav">
-      <div class="row no-gutters text-center py-3">
-        <router-link class="menu col-4" :to="{name: 'BabySetting'}">아기 설정</router-link>
-        <router-link class="menu col-4" :to="{name: 'RankSetting'}">그룹 설정</router-link>
-      </div>
-    </div>
-    <router-view></router-view> -->
     <div style="margin-top:15vh; width:100%; text-align:center">
       <img 
         v-if="currentBaby.profile_image"

@@ -110,10 +110,8 @@ class DiaryDetailView(APIView):
 
     def delete(self, request, diary_id):
         diary = get_object_or_404(Diary, id=diary_id)
-        # if diary.creator == request.user:
         diary.delete()
         return Response()
-        # return Response({'detail': '권한이 없습니다.'})
 
     
 class DiaryCommentListView(APIView):

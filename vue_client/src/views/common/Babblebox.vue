@@ -5,7 +5,6 @@
       <h3 class="color-pink font-weight-bold">Babble Box</h3>
       <p>현재 <span class="color-blue font-weight-bold" v-if="myaccount">{{ myaccount.name }}</span>님께서 예뻐해주시는 아기입니다.</p>
     </div>
-    <!-- <div class="scallop-down"></div> -->
     <div class="babbleboxes w-75 mt-3" v-for="babblebox in babbleboxes" :key="`babblebox-${babblebox.id}`">
       <div class="babblebox d-flex justify-content-between my-3">
         <div class="babblebox-info d-flex">
@@ -110,8 +109,6 @@ p {
 
 .scallop-down{
   height:40px;
-  /* margin-left: auto;
-  margin-right: auto; */
   width:100%;
   background: -webkit-gradient(radial, 50% 0, 18, 50% 0, 31, from(#9BC7FF), color-stop(0.49, #9BC7FF), color-stop(0.51, #fff), to(white));
   -webkit-background-size: 49px 100%;

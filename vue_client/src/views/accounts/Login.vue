@@ -32,19 +32,12 @@
         <label for="password"></label>
         <div class="error-text ml-3" v-if="error.password">{{error.password}}</div>
       </div>
-      <!-- <p class="my-3">
-        <span class="items" @click="clickSignup">회원가입하기</span>
-        <span class="items" @click="clickPasswordFind">비밀번호 찾기</span>
-      </p> -->
       <div class="buttons mt-3">
         <button class="btn login-button" :class="{disabled: !isSubmit}" @click="clickLogin">로그인하기</button>
       </div>
       <div class="buttons mt-3">
         <button class="btn btn-blue signup-button" @click="clickSignup">회원가입 하러 가기</button>
       </div>
-      <!-- <div class="d-flex justify-content-end mt-3">
-        <p>회원가입</p>
-      </div> -->
 
       <hr class="divide" />
 
@@ -207,7 +200,6 @@ export default {
   text-align: center;
   opacity: 0.9;
   background: #fafafa;
-  /* border: 1px solid #FEA59C; */
 }
 .container {
   width: 80%;
@@ -264,16 +256,13 @@ export default {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  /*padding-left: 30px;*/
 }
 .login-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #A05E58;
   color: #f8f8f8;
 }
 .disabled,
 .disabled:hover {
-  /* background-color: rgb(136, 154, 152, 0.25); */
   background-color: rgb(176, 127, 122, 0.25);
   color: #f8f8f8;
   cursor: inherit;

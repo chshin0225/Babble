@@ -13,11 +13,6 @@
           <i class="fas fa-calendar-alt fa-lg"></i>
         </router-link>
       </div>
-
-      <!-- 우측 검색 -->
-      <!-- <div>
-        <i class="fas fa-search pointer"></i>
-      </div> -->
     </nav>
 
     <!-- router-view -->

@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 from accounts.models import Group
-# from accounts.models import Group, UserBabyRelationship
 from babies.models import Baby
 from photos.models import Photo
 
@@ -14,7 +13,6 @@ class Diary(models.Model):
     content_html = models.TextField()
     diary_date = models.DateField()
 
-    # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
     owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=owner, related_name='created_diaries')
     create_date = models.DateTimeField(auto_now_add=True)

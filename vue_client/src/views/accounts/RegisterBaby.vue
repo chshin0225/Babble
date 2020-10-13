@@ -252,7 +252,6 @@ h3 {
   padding: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  /*margin-top: 20px;*/
 }
 .new-button{
   background-color: #FEA59C;
@@ -261,7 +260,6 @@ h3 {
 }
 
 .girl-button {
-  /*background-color: #F8F8F8;*/
   border-color: #FEA59C;
   color: #FEA59C;
   width: 49.5%;
@@ -272,7 +270,6 @@ h3 {
   width: 49.5%;
 }
 .boy-button{
-  /*background-color: #F8F8F8;*/
   border-color: #9BC7FF;
   color: #9BC7FF;
   width: 49.5%;
@@ -296,12 +293,10 @@ h3 {
   padding-left: 0px;
 }
 .new-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #A05E58;
   color: #F8F8F8;
 }
 .new-button .disabled, .new-button .disabled:hover {
-  /*background-color: rgb(136, 154, 152, 0.25);*/
   background-color: rgb(176, 127, 122, 0.25);
   color: #F8F8F8;
   cursor: inherit;

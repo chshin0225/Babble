@@ -120,14 +120,6 @@ export default {
     },
 
     clickEditAlbumInfo() {
-      // var albumData = {
-      //   id: this.album.id,
-      //   album_name: this.album.album_name,
-      //   tags: []
-      // }
-      // this.album.album_tags.forEach(tag => {
-      //   albumData.tags.push(tag.tag_name)
-      // })
       this.$router.push({ name: "AlbumInfoEdit", params: { albumId: this.album.id}})
     },
 

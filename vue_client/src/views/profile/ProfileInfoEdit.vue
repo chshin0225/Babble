@@ -1,13 +1,7 @@
 <template>
   <div>
     <div class="text-center mt-5">
-      <!-- <h5 class="main-title text-center color-pink">Profile 변경</h5>
-
-      <div class="profile-image-outline">
-        <img class="profile-image" src="@/assets/test.jpg" />
-      </div> -->
       <div style="width:100%; text-align:center; padding: 0 10vw;">
-      <!-- <img src="http://bit.do/babbleprofile" style="width:50vw; height:50vw; border-radius:50%; border: 5px solid #fea59c;"> -->
       <img 
         v-if="this.profile_image"
         :src="'https://firebasestorage.googleapis.com/v0/b/babble-98541.appspot.com/o/' + this.profile_image + '?alt=media&token=fc508930-5485-426e-8279-932db09009c0'" 
@@ -25,10 +19,8 @@
                 border-radius: 50%;
                 cursor:pointer" 
           @click="clickUpload()">
-        <!-- <router-link :to="{ name: 'ProfilePhotoEdit' }" class="view pointer"> -->
           <input @change="change4" type="file" accept="image/gif, image/jpeg, image/png" id="file" name="file" hidden>
           <img class="photo-edit" style="width: 60%; transform: translate(0%, 30%);" src="@/assets/Camera_r.png"/>
-        <!-- </router-link> -->
       </div>
     </div>
     </div>
@@ -276,16 +268,6 @@ export default {
   width: 70vw;
   border-radius: 50%;
 }
-/*#circle {
-  position: relative;
-  left: 70%;
-  bottom: 20%;
-  width: 20%;
-  height: 20%;
-
-  background-color: #fea59c;
-  border-radius: 50%;
-}*/
 
 .main-title {
   font-size: 1.3rem;
@@ -301,7 +283,6 @@ export default {
 .new-button {
   background-color: #fea59c;
   color: #f8f8f8;
-  /* width: 100%; */
 }
 
 div >>> .v-text-field__slot  {

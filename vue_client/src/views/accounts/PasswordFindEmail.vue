@@ -3,7 +3,6 @@
     <div class="container py-5 mt-5 bg-light-ivory formatting">
       <div class="mt-3">비밀번호 변경 메일이 발송되었습니다.</div>
       <div>이메일을 확인해주세요.</div>
-      <!-- <h5 class="bold">{{ passwordFindData.data.email }}</h5> -->
       <div class="button-container d-flex justify-content-center mt-5 mx-auto">
         <button class="bg-pink btn-pink btn " type="button" @click="resendPasswordEmail(passwordFindData, type)">메일 재발송하기</button>
       </div>
@@ -15,14 +14,10 @@
 </template>
 
 <script>
-//import { mapActions } from 'vuex'
-
-
 export default {
   name: 'PasswordFindEmail',
   data() {
     return {
-      // email: this.$route.params.email,
       passwordFindData: {
         data: this.$route.params.passwordFindData,
         type: "resetPassword"
@@ -30,7 +25,6 @@ export default {
     }
   },
   methods: {
-    //...mapActions("accountStore", ["resendPasswordEmail"]),
     goToSite() {
       let idx = this.passwordFindData.data.email.indexOf('@')
       let site = this.passwordFindData.data.email.slice(idx,)
@@ -53,14 +47,7 @@ button {
   width: 100%;
   color: #F8F8F8;
 }
-/*.pink-btn:hover {
-  background-color: #A05E58;
-  color: #F8F8F8;
-}
-.blue-btn:hover {
-  background-color: #5C83B4;
-  color: #F8F8F8;
-}*/
+
 .bold {
   font-weight: 600;
 }

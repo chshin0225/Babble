@@ -7,9 +7,7 @@ from accounts.serializers import UserSerializer
 from babies.serializers import BabySerializer
 
 class DiaryListSerializer(serializers.ModelSerializer):
-    # baby = BabySerializer(required=False)
     creator = UserSerializer(required=False)
-    # modifier = UserSerializer(required=False)
     relationship_name = serializers.SerializerMethodField('get_relationship_name')
     class Meta:
         model = Diary
@@ -20,16 +18,13 @@ class DiaryListSerializer(serializers.ModelSerializer):
         return relationship_name
 
 class DiarySerializer(serializers.ModelSerializer):
-    # baby = BabySerializer(required=False)
     creator = UserSerializer(required=False)
-    # modifier = UserSerializer(required=False)
     class Meta:
         model = Diary
         fields = '__all__'
 
 class DiaryCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
-    # diary = DiarySerializer(required=False)
     relationship_name = serializers.SerializerMethodField('get_relationship_name')
     class Meta:
         model = DiaryComment

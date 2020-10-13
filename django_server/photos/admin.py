@@ -3,7 +3,6 @@ from .models import Tag, Photo, PhotoComment, PhotoTag, PhotoGroup, Album, Album
 
 # Register your models here.
 admin.site.register(Tag)
-# admin.site.register(Photo)
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
     list_display = ('baby', 'image_url', 'last_modified')

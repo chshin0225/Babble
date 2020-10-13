@@ -2,7 +2,6 @@
   <div class="container">
     <h5 class="main-title text-center color-pink">{{currentBaby.baby_name}}의 신장 기록</h5>
     <line-graph :chart-data="chartdata" :options="options"></line-graph>
-    <!-- <p>{{ heightMeasurementList }}</p> -->
     <v-simple-table class="mt-3">
       <template v-slot:default>
         <thead>

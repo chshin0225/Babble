@@ -123,7 +123,6 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import axios from "axios";
 
 import SERVER from '@/api/api'
-// import router from '@/router'
 
 export default {
   name: 'DiaryCreate',
@@ -146,7 +145,6 @@ export default {
   },
   data() {
     return {
-      // editorText: 'This is initialValue.',
       customToolbar: [
         ["bold", "italic", "underline"], 
         [{ list: "ordered" }, { list: "bullet" }], 
@@ -158,8 +156,6 @@ export default {
           imageResize: {}
         }
       },
-      // babyRecord: {
-      // },
       tempRecord: {
         babyHead: 0,
         babyHeight: 0,
@@ -249,7 +245,6 @@ export default {
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
       this.loading = true
       console.log("HANDLE IMAGE ADDED")
-      // const createData = []
       const promises = []
       const tagPromises = []
       var storageRef = firebase.storage().ref()

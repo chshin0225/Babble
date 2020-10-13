@@ -19,7 +19,6 @@
         label="앨범 제목"
         v-model="albumInfoData.album_name"
       ></v-text-field>
-      <!-- <p>{{ album}}</p> -->
     </div>
 
     <!-- 태그 추가 -->
@@ -77,10 +76,6 @@ export default {
 
   data() {
     return {
-      // albumData: {
-      //   album_name: this.$route.params.albumData.album_name,
-      //   tags: this.$route.parmas.albumData.tags,
-      // },
       tagSearchKeyword: null,
       albumTags: [],
       searchTag: null,

@@ -61,11 +61,7 @@ export default {
     this.fetchPhotos()
   },
   beforeRouteUpdate (to, from, next) {
-    // this.findPost(to.params.postId)
     next()
-    // this.commentCreateData.postId = this.$route.params['postId']
-    // this.fetchComments(to.params.postId)
-    // this.findBook(this.selectedPost.book.id)
   },
 
 
@@ -82,16 +78,11 @@ export default {
 }
 
 .photos img {
-  /* width: 30vw; */
   height: 30vw;
   width: auto;
 }
 
 .photo-container{
-  /* object-fit: cover;
-  object-position: 50% 50%;
-  width: 30vw; 
-  height: 30vw; */
   overflow:hidden;
   margin-right: 2.5vw;
   margin-bottom: 2.5vw;

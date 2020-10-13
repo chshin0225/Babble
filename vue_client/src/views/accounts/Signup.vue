@@ -219,15 +219,12 @@ h3 {
 .error-text {
   color: rgb(250, 25, 59, 0.7);
   text-align: left;
-  /*padding-left: 30px;*/
 }
 .signup-button:hover {
-  /*background-color: #3c755a;*/
   background-color: #A05E58;
   color: #F8F8F8;
 }
 .disabled, .disabled:hover {
-  /*background-color: rgb(136, 154, 152, 0.25);*/
   background-color: rgb(176, 127, 122, 0.25);
   color: #F8F8F8;
   cursor: inherit;

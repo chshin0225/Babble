@@ -41,10 +41,6 @@ class BabyTagView(APIView):
         tags = list(tags)
         tag_count = Counter(tags).most_common(5)
         tags = [tag[0] for tag in tag_count]
-        # print(tag_count)
-        # tags = sorted(tags, key = tags.count, reverse = True) 
-        # print(tags)
-        # tags = list(set(tags))
         serializer = TagListSerializer(tags, many=True)
         return Response(serializer.data)
 
@@ -288,7 +284,6 @@ class PhotoEmotionView(APIView):
         for emotion in emotions:
             if Tag.objects.filter(tag_name=emotion).exists():
                 emotion_tag = get_object_or_404(Tag, tag_name=emotion)
-                # print(emotion_tag.tagged_photos.all())
                 serializer = PhotoListSerializer(emotion_tag.tagged_photos.all().filter(baby=request.user.current_baby), many=True)
                 if serializer.data:
                     return_data.append({
@@ -415,8 +410,6 @@ class AlbumPhotoListView(APIView):
             raise ValueError('아이를 생성하거나 선택해주세요.')
         album = get_object_or_404(Album, id=album_id)
         photos = album.photos.order_by('-last_modified').values_list('id', flat=True)
-        # serializer = SimplePhotoListSerializer(photos, many=True)
-        # return Response(serializer.data)
         return Response({ 'photos': photos })
 
 class AlbumPhotoView(APIView):
@@ -427,12 +420,6 @@ class AlbumPhotoView(APIView):
             raise ValueError('아이를 생성하거나 선택해주세요.')
         album = get_object_or_404(Album, id=album_id)
         relationship = get_object_or_404(UserBabyRelationship, user=request.user, baby=cb)
-        # photos_album = album.photos
-        # photos_tag = Photo.objects.none()
-        # tags = album.album_tags.values()
-        # for tag in tags:
-        #     photos_tag = photos_tag | get_object_or_404(Tag, tag_name=tag['tag_name']).tagged_photos.all()
-        # temp_photos = (photos_album.all() | photos_tag.all().filter(baby=cb)).distinct()
 
         if relationship.rank_id == 3:
             if relationship.group:
@@ -477,16 +464,4 @@ class AlbumPhotoView(APIView):
                 album.cover_photo = album.photos.first().image_url
                 album.save()
 
-        # cover_photo = get_object_or_404(Photo, image_url=album.cover_photo).id
-
-        # 커버 사진으로 지정된 사진이 삭제되는 경우
-        # if cover_photo in request.data['photos']:
-        #     try:
-        #         new_cover_photo = AlbumPhotoRelationship.objects.filter(album=album)[0].photo.image_url
-        #         album.cover_photo = new_cover_photo
-        #     except:
-        #         album.cover_photo = ''
-        #     album.save()
         return Response({"message":"사진(들)이 앨범에서 삭제되었습니다."})
-
-    

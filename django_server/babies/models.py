@@ -2,8 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-# from accounts.models import UserBabyRelationship
-
 # Create your models here.
 class Baby(models.Model):
     baby_name = models.CharField(max_length=50)
@@ -30,10 +28,6 @@ class BabyMeasurement(models.Model):
     height = models.FloatField(blank=True, null=True)
     head_size = models.FloatField(blank=True, null=True)
     measure_date = models.DateField()
-
-    # 최고권위자 class의 class_id가 1이라는 가정 하에
-    # owner = UserBabyRelationship.objects.get(baby=baby, class=1)
-    # owner = 1
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name='created_measurements')
     create_date = models.DateTimeField(auto_now_add=True)
     modifier = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name='modified_measurements')

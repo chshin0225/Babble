@@ -52,14 +52,12 @@ class RankSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class GroupListSerializer(serializers.ModelSerializer):
-    # baby = BabySerializer(required=False)
     class Meta:
         model = Group
         fields = '__all__'
 
 class UserBabyRelationshipSerializer(serializers.ModelSerializer):
     baby = BabySerializer(required=False)
-    # rank = RankSerializer(required=False)
     class Meta:
         model = UserBabyRelationship
         fields = '__all__'
@@ -67,14 +65,11 @@ class UserBabyRelationshipSerializer(serializers.ModelSerializer):
 class UserBabyRelationshipNameSerializer(serializers.ModelSerializer):
     baby = BabySerializer(required=False)
     user = UserSerializer(required=False)
-    # rank = RankSerializer(required=False)
     class Meta:
         model = UserBabyRelationship
         fields = '__all__'
 
 class SimpleUserBabyRelationshipSerializer(serializers.ModelSerializer):
-    # baby = BabySerializer(required=False)
-    # rank = RankSerializer(required=False)
     class Meta:
         model = UserBabyRelationship
         fields = '__all__'

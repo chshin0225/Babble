@@ -52,7 +52,6 @@ export default {
 
 <style scoped>
 .main-title {
-  /* font-size: 1.3rem; */
   font-weight: 900;
   margin-top: 10%;
 }
